@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <script src="https://unpkg.com/vue@next"></script>
+</head>
+<body>
+    <h1>Hello World</h1>
+    <div id="app">
+        <div v-if="showBooks">
+            <p>{{ title }} - {{ author }} - {{ age }}</p>
+        </div>
+        <div v-show="showBooks">showing book</div>
+        <button @click="toggleShowBooks">
+            <span v-if="showBooks">Hide Books</span>
+            <span v-else>Show Books</span>
+        </button>
+        <button v-on:click="age++">increase age</button>
+        <button v-on:click="age--">increase age</button>
+        <div @click="changeTitle('auth bringer')" >change book title</div>
+        <!-- Mouse events -->
+        <div class="box" @mouseover="handleEvent($event, 5)">mouse over (enter)</div>
+        <div class="box" @mouseleave="handleEvent">mouse leave</div>
+        <div class="box" @dblclick="handleEvent">dbl click</div>
+        <div class="box" @mousemove="handleMouseMove"> position {{x}} - {{y}}</div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
