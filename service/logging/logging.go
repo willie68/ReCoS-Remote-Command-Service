@@ -19,6 +19,7 @@ type serviceLogger struct {
 	c          *golf.Client
 }
 
+// Logger to use for all logging
 var Logger serviceLogger
 
 /*

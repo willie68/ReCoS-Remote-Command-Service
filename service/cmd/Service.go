@@ -4,33 +4,24 @@ import (
 	"context"
 	"crypto/md5"
 	"fmt"
-	"io"
 	"net/http"
-	"net/url"
 	"os"
 	"os/signal"
 	"strconv"
 	"strings"
 	"time"
 
-	"wkla.no-ip.biz/go-micro/api/routes"
-	"wkla.no-ip.biz/go-micro/error/serror"
-	"wkla.no-ip.biz/go-micro/health"
+	"wkla.no-ip.biz/remote-desk-service/api/routes"
+	"wkla.no-ip.biz/remote-desk-service/error/serror"
+	"wkla.no-ip.biz/remote-desk-service/health"
 
-	consulApi "github.com/hashicorp/consul/api"
-	"github.com/opentracing/opentracing-go"
-	"github.com/uber/jaeger-client-go"
-	config "wkla.no-ip.biz/go-micro/config"
-
-	jaegercfg "github.com/uber/jaeger-client-go/config"
+	config "wkla.no-ip.biz/remote-desk-service/config"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	"github.com/go-chi/httptracer"
 	"github.com/go-chi/render"
-	"wkla.no-ip.biz/go-micro/api/handler"
-	"wkla.no-ip.biz/go-micro/crypt"
-	clog "wkla.no-ip.biz/go-micro/logging"
+	"wkla.no-ip.biz/remote-desk-service/crypt"
+	clog "wkla.no-ip.biz/remote-desk-service/logging"
 
 	flag "github.com/spf13/pflag"
 )
@@ -39,19 +30,15 @@ import (
 apVersion implementing api version for this service
 */
 const apiVersion = "1"
-const servicename = "gomicro"
+const servicename = "remote-desk-service"
 
 var port int
 var sslport int
-var system string
 var serviceURL string
-var registryURL string
 var apikey string
 var ssl bool
 var configFile string
 var serviceConfig config.Config
-var consulAgent *consulApi.Agent
-var Tracer opentracing.Tracer
 
 func init() {
 	// variables for parameter override
@@ -59,14 +46,11 @@ func init() {
 	clog.Logger.Info("init service")
 	flag.IntVarP(&port, "port", "p", 0, "port of the http server.")
 	flag.IntVarP(&sslport, "sslport", "t", 0, "port of the https server.")
-	flag.StringVarP(&system, "systemid", "s", "", "this is the systemid of this service. Used for the apikey generation")
 	flag.StringVarP(&configFile, "config", "c", config.File, "this is the path and filename to the config file")
 	flag.StringVarP(&serviceURL, "serviceURL", "u", "", "service url from outside")
-	flag.StringVarP(&registryURL, "registryURL", "r", "", "registry url where to connect to consul")
 }
 
 func apiRoutes() *chi.Mux {
-	myHandler := handler.NewSysAPIHandler(serviceConfig.SystemID, apikey)
 	baseURL := fmt.Sprintf("/api/v%s", apiVersion)
 	router := chi.NewRouter()
 	router.Use(
@@ -74,24 +58,11 @@ func apiRoutes() *chi.Mux {
 		middleware.Logger,
 		//middleware.DefaultCompress,
 		middleware.Recoverer,
-		myHandler.Handler,
-		httptracer.Tracer(Tracer, httptracer.Config{
-			ServiceName:    servicename,
-			ServiceVersion: apiVersion,
-			SampleRate:     1,
-			SkipFunc: func(r *http.Request) bool {
-				return false
-				//return r.URL.Path == "/healthz"
-			},
-			Tags: map[string]interface{}{
-				"_dd.measured": 1, // datadog, turn on metrics for http.request stats
-				// "_dd1.sr.eausr": 1, // datadog, event sample rate
-			},
-		}),
 	)
 
 	router.Route("/", func(r chi.Router) {
-		r.Mount(baseURL+"/config", routes.ConfigRoutes())
+		r.Mount(baseURL+"/profiles", routes.ProfilesRoutes())
+		r.Mount(baseURL+"/show", routes.ShowRoutes())
 		r.Mount("/health", health.Routes())
 	})
 	return router
@@ -104,19 +75,6 @@ func healthRoutes() *chi.Mux {
 		middleware.Logger,
 		//middleware.DefaultCompress,
 		middleware.Recoverer,
-		httptracer.Tracer(Tracer, httptracer.Config{
-			ServiceName:    servicename,
-			ServiceVersion: apiVersion,
-			SampleRate:     1,
-			SkipFunc: func(r *http.Request) bool {
-				return false
-				//return r.URL.Path == "/health"
-			},
-			Tags: map[string]interface{}{
-				"_dd.measured": 1, // datadog, turn on metrics for http.request stats
-				// "_dd1.sr.eausr": 1, // datadog, event sample rate
-			},
-		}),
 	)
 
 	router.Route("/", func(r chi.Router) {
@@ -140,22 +98,18 @@ func main() {
 
 	serviceConfig = config.Get()
 	initConfig()
-	initGraylog()
-	var closer io.Closer
-	Tracer, closer = initJaeger(servicename, serviceConfig.OpenTracing)
-	opentracing.SetGlobalTracer(Tracer)
-	defer closer.Close()
+
+	if err := config.InitProfiles(serviceConfig.Profiles); err != nil {
+		clog.Logger.Alertf("can't load profile files: %s", err.Error())
+		os.Exit(1)
+	}
 
 	healthCheckConfig := health.CheckConfig(serviceConfig.HealthCheck)
 
-	health.InitHealthSystem(healthCheckConfig, Tracer)
-
-	if serviceConfig.SystemID == "" {
-		clog.Logger.Fatal("system id not given, can't start! Please use config file or -s parameter")
-	}
+	health.InitHealthSystem(healthCheckConfig)
 
 	gc := crypt.GenerateCertificate{
-		Organization: "EASY SOFTWARE",
+		Organization: "MCS",
 		Host:         "127.0.0.1",
 		ValidFor:     10 * 365 * 24 * time.Hour,
 		IsCA:         false,
@@ -168,17 +122,12 @@ func main() {
 		clog.Logger.Info("ssl active")
 	}
 
-	routes.SystemID = serviceConfig.SystemID
 	apikey = getApikey()
 	routes.APIKey = apikey
-	clog.Logger.Infof("systemid: %s", serviceConfig.SystemID)
 	clog.Logger.Infof("apikey: %s", apikey)
 	clog.Logger.Infof("ssl: %t", ssl)
 	clog.Logger.Infof("serviceURL: %s", serviceConfig.ServiceURL)
-	if serviceConfig.RegistryURL != "" {
-		clog.Logger.Infof("registryURL: %s", serviceConfig.RegistryURL)
-	}
-	clog.Logger.Info("gomicro api routes")
+	clog.Logger.Infof("%s api routes", servicename)
 	router := apiRoutes()
 	walkFunc := func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {
 		clog.Logger.Infof("%s %s", method, route)
@@ -245,10 +194,6 @@ func main() {
 		}()
 	}
 
-	if serviceConfig.RegistryURL != "" {
-		initRegistry()
-	}
-
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
 	<-c
@@ -267,45 +212,6 @@ func main() {
 	os.Exit(0)
 }
 
-func initGraylog() {
-	clog.Logger.GelfURL = serviceConfig.Logging.Gelfurl
-	clog.Logger.GelfPort = serviceConfig.Logging.Gelfport
-	clog.Logger.SystemID = serviceConfig.SystemID
-
-	clog.Logger.InitGelf()
-}
-
-func initRegistry() {
-	//register to consul, if configured
-	consulConfig := consulApi.DefaultConfig()
-	consulURL, err := url.Parse(serviceConfig.RegistryURL)
-	consulConfig.Scheme = consulURL.Scheme
-	consulConfig.Address = fmt.Sprintf("%s:%s", consulURL.Hostname(), consulURL.Port())
-	consulClient, err := consulApi.NewClient(consulConfig)
-	if err != nil {
-		clog.Logger.Alertf("can't connect to consul. %v", err)
-	}
-	consulAgent = consulClient.Agent()
-
-	check := new(consulApi.AgentServiceCheck)
-	check.HTTP = fmt.Sprintf("%s/health/health", serviceConfig.ServiceURL)
-	check.Timeout = (time.Minute * 1).String()
-	check.Interval = (time.Second * 30).String()
-	check.TLSSkipVerify = true
-	serviceDef := &consulApi.AgentServiceRegistration{
-		Name:  servicename,
-		Check: check,
-	}
-
-	err = consulAgent.ServiceRegister(serviceDef)
-
-	if err != nil {
-		clog.Logger.Alertf("could not register to consul. %s", err)
-		time.Sleep(time.Second * 60)
-	}
-
-}
-
 func initConfig() {
 	if port > 0 {
 		serviceConfig.Port = port
@@ -313,40 +219,13 @@ func initConfig() {
 	if sslport > 0 {
 		serviceConfig.Sslport = sslport
 	}
-	if system != "" {
-		serviceConfig.SystemID = system
-	}
 	if serviceURL != "" {
 		serviceConfig.ServiceURL = serviceURL
 	}
 }
 
-func initJaeger(servicename string, config config.OpenTracing) (opentracing.Tracer, io.Closer) {
-
-	cfg := jaegercfg.Configuration{
-		ServiceName: servicename,
-		Sampler: &jaegercfg.SamplerConfig{
-			Type:  "const",
-			Param: 1,
-		},
-		Reporter: &jaegercfg.ReporterConfig{
-			LogSpans:           true,
-			LocalAgentHostPort: config.Host,
-			CollectorEndpoint:  config.Endpoint,
-		},
-	}
-	if (config.Endpoint == "") && (config.Host == "") {
-		cfg.Disabled = true
-	}
-	tracer, closer, err := cfg.NewTracer(jaegercfg.Logger(jaeger.StdLogger))
-	if err != nil {
-		panic(fmt.Sprintf("ERROR: cannot init Jaeger: %v\n", err))
-	}
-	return tracer, closer
-}
-
 func getApikey() string {
-	value := fmt.Sprintf("%s_%s", servicename, serviceConfig.SystemID)
+	value := fmt.Sprintf("%s_%s", servicename, "default")
 	apikey := fmt.Sprintf("%x", md5.Sum([]byte(value)))
 	return strings.ToLower(apikey)
 }

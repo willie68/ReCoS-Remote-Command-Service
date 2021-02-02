@@ -2,15 +2,14 @@ package routes
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"time"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
-	"wkla.no-ip.biz/go-micro/error/serror"
+	"wkla.no-ip.biz/remote-desk-service/error/serror"
 
-	"wkla.no-ip.biz/go-micro/api"
+	"wkla.no-ip.biz/remote-desk-service/api"
 )
 
 // TenantHeader in this header thr right tenant should be inserted
@@ -19,16 +18,13 @@ const timeout = 1 * time.Minute
 //APIKey the apikey of this service
 var APIKey string
 
-//SystemID the systemid of this service
-var SystemID string
-
 /*
 ConfigDescription describres all metadata of a config
 */
 type ConfigDescription struct {
-	StoreID  string `json:"storeid"`
-	TenantID string `json:"tenantID"`
-	Size     int    `json:"size"`
+	StoreID string `json:"storeid"`
+	UserID  string `json:"userID"`
+	Size    int    `json:"size"`
 }
 
 /*
@@ -48,16 +44,17 @@ GetConfigEndpoint getting if a store for a tenant is initialised
 because of the automatic store creation, the value is more likely that data is stored for this tenant
 */
 func GetConfigEndpoint(response http.ResponseWriter, request *http.Request) {
-	tenant := getTenant(request)
-	if tenant == "" {
-		msg := fmt.Sprintf("tenant header %s missing", api.TenantHeader)
-		api.Err(response, request, serror.BadRequest(nil, "missing-tenant", msg))
+	user := getUsername(request)
+	if user == "" {
+		msg := fmt.Sprintf("user header %s missing", api.UserHeader)
+		api.Err(response, request, serror.BadRequest(nil, "missing-user", msg))
 		return
 	}
+
 	c := ConfigDescription{
-		StoreID:  "myNewStore",
-		TenantID: tenant,
-		Size:     1234567,
+		StoreID: "myNewStore",
+		UserID:  user,
+		Size:    1234567,
 	}
 	render.JSON(response, request, c)
 }
@@ -67,47 +64,48 @@ PostConfigEndpoint create a new store for a tenant
 because of the automatic store creation, this method will always return 201
 */
 func PostConfigEndpoint(response http.ResponseWriter, request *http.Request) {
-	tenant := getTenant(request)
-	if tenant == "" {
-		msg := fmt.Sprintf("tenant header %s missing", api.TenantHeader)
-		api.Err(response, request, serror.BadRequest(nil, "missing-tenant", msg))
+	user := getUsername(request)
+	if user == "" {
+		msg := fmt.Sprintf("user header %s missing", api.UserHeader)
+		api.Err(response, request, serror.BadRequest(nil, "missing-user", msg))
 		return
 	}
-	log.Printf("create store for tenant %s", tenant)
+
 	render.Status(request, http.StatusCreated)
-	render.JSON(response, request, tenant)
+	render.JSON(response, request, user)
 }
 
 /*
 DeleteConfigEndpoint deleting store for a tenant, this will automatically delete all data in the store
 */
 func DeleteConfigEndpoint(response http.ResponseWriter, request *http.Request) {
-	tenant := getTenant(request)
-	if tenant == "" {
-		msg := fmt.Sprintf("tenant header %s missing", api.TenantHeader)
-		api.Err(response, request, serror.BadRequest(nil, "missing-tenant", msg))
+	user := getUsername(request)
+	if user == "" {
+		msg := fmt.Sprintf("user header %s missing", api.UserHeader)
+		api.Err(response, request, serror.BadRequest(nil, "missing-user", msg))
 		return
 	}
-	render.JSON(response, request, tenant)
+
+	render.JSON(response, request, user)
 }
 
 /*
 GetConfigSizeEndpoint size of the store for a tenant
 */
 func GetConfigSizeEndpoint(response http.ResponseWriter, request *http.Request) {
-	tenant := getTenant(request)
-	if tenant == "" {
-		msg := fmt.Sprintf("tenant header %s missing", api.TenantHeader)
-		api.Err(response, request, serror.BadRequest(nil, "missing-tenant", msg))
+	user := getUsername(request)
+	if user == "" {
+		msg := fmt.Sprintf("user header %s missing", api.UserHeader)
+		api.Err(response, request, serror.BadRequest(nil, "missing-user", msg))
 		return
 	}
 
-	render.JSON(response, request, tenant)
+	render.JSON(response, request, user)
 }
 
 /*
-getTenant getting the tenant from the request
+getUsername getting the tenant from the request
 */
-func getTenant(req *http.Request) string {
-	return req.Header.Get(api.TenantHeader)
+func getUsername(req *http.Request) string {
+	return req.Header.Get(api.UserHeader)
 }

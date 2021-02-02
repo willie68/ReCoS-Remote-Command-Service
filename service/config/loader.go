@@ -12,7 +12,6 @@ var config = Config{
 	Port:       0,
 	Sslport:    0,
 	ServiceURL: "http://127.0.0.1",
-	SystemID:   "gomicro-service",
 	HealthCheck: HealthCheck{
 		Period: 30,
 	},

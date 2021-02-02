@@ -1,4 +1,4 @@
-module wkla.no-ip.biz/go-micro
+module wkla.no-ip.biz/remote-desk-service
 
 go 1.13
 
@@ -8,11 +8,11 @@ require (
 	github.com/aphistic/sweet v0.3.0 // indirect
 	github.com/armon/go-metrics v0.3.4 // indirect
 	github.com/go-chi/chi v4.1.2+incompatible
-	github.com/go-chi/httptracer v0.2.0
+	github.com/go-chi/httptracer v0.2.0 // indirect
 	github.com/go-chi/render v1.0.1
 	github.com/go-playground/validator/v10 v10.4.1
 	github.com/golang/protobuf v1.4.3 // indirect
-	github.com/hashicorp/consul/api v1.7.0
+	github.com/hashicorp/consul/api v1.7.0 // indirect
 	github.com/hashicorp/go-immutable-radix v1.3.0 // indirect
 	github.com/hashicorp/go-msgpack v1.1.5 // indirect
 	github.com/hashicorp/go-sockaddr v1.0.2 // indirect
@@ -22,9 +22,9 @@ require (
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
 	github.com/mitchellh/mapstructure v1.3.3 // indirect
 	github.com/onsi/ginkgo v1.14.2 // indirect
-	github.com/opentracing/opentracing-go v1.2.0
+	github.com/opentracing/opentracing-go v1.2.0 // indirect
 	github.com/spf13/pflag v1.0.5
-	github.com/uber/jaeger-client-go v2.25.0+incompatible
+	github.com/uber/jaeger-client-go v2.25.0+incompatible // indirect
 	github.com/uber/jaeger-lib v2.4.0+incompatible // indirect
 	go.uber.org/atomic v1.7.0 // indirect
 	golang.org/x/crypto v0.0.0-20201112155050-0c6587e931a9 // indirect

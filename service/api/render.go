@@ -7,7 +7,7 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
 	"github.com/go-playground/validator/v10"
-	"wkla.no-ip.biz/go-micro/error/serror"
+	"wkla.no-ip.biz/remote-desk-service/error/serror"
 )
 
 // Validate validator
@@ -16,14 +16,8 @@ var Validate *validator.Validate
 // TokenHeader in this header the token is expected
 const TokenHeader = "Authorization"
 
-// TenantHeader in this header the tenant is expected
-const TenantHeader = "X-es-tenant"
-
 // UserHeader in this header the username is expected
-const UserHeader = "X-es-username"
-
-// CustomerHeader in this header the customer is expected (only for tenant unspecific requests)
-const CustomerHeader = "X-es-customer"
+const UserHeader = "X-mcs-username"
 
 // Username gets the username of the given request
 func Username(r *http.Request) (string, error) {
@@ -33,26 +27,6 @@ func Username(r *http.Request) (string, error) {
 		return "", serror.BadRequest(nil, "missing-header", msg)
 	}
 	return uid, nil
-}
-
-// TenantID gets the tenant-id of the given request
-func TenantID(r *http.Request) (string, error) {
-	id := r.Header.Get(TenantHeader)
-	if id == "" {
-		msg := fmt.Sprintf("tenant header %s missing", TenantHeader)
-		return "", serror.BadRequest(nil, "missing-tenant", msg)
-	}
-	return id, nil
-}
-
-// CustomerID gets the customer-id of the given request
-func CustomerID(r *http.Request) (string, error) {
-	id := r.Header.Get(CustomerHeader)
-	if id == "" {
-		msg := fmt.Sprintf("customer header %s missing", TenantHeader)
-		return "", serror.BadRequest(nil, "missing-customer", msg)
-	}
-	return id, nil
 }
 
 // Decode decodes and validates an object

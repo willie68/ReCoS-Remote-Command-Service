@@ -5,51 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Learning Vue</title>
     <script src="https://unpkg.com/vue@3.0.0"></script>
-    <style>
-        body {
-            background: #eee;
-            max-width: 960px;
-            margin: 20px auto;
-        }
-
-        p,
-        h3,
-        ul {
-            margin: 0;
-            padding: 0;
-        }
-
-        li {
-            list-style-type: none;
-            background: #fff;
-            margin: 20px auto;
-            padding: 10px 20px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        li.fav {
-            background: #ff9ed2;
-            color: white;
-        }
-    </style>
+    <link rel="stylesheet" href="main.css">
 </head>
 
 <body>
     <h1>Hello, Willie :)</h1>
     <div id="app">
         <div v-if="showBooks">
-            <ul>
-                <li v-for="(book, index) in filteredBooks" :class="{ fav: book.isFav }" @click="toggleFav(book)">
-                    <img :src="book.img" :alt="book.title">
-                    <h3>{{ book.title }}</h3>
-                    <p>{{ book.author }}</p>
-                    <img src="assets/heart.png" width="20" v-if="book.isFav" @click="toggleFav(book)">
-                    <img src="assets/forbidden.png" width="20" v-if="!book.isFav" @click="toggleFav(book)">
-                </li>
-            </ul>
+            <div v-show="filteredBooks.length > 0">
+                <h3>Favorites</h3>
+                <ul>
+                    <li v-for="(book, index) in filteredBooks" :class="{ fav: book.isFav }" @click="toggleFav(book)">
+                        <img :src="book.img" :alt="book.title">
+                        <h3>{{ book.title }}</h3>
+                        <p>{{ book.author }}</p>
+                        <img src="assets/heart.png" width="20" v-if="book.isFav" @click="toggleFav(book)">
+                        <img src="assets/forbidden.png" width="20" v-if="!book.isFav" @click="toggleFav(book)">
+                    </li>
+                </ul>
+            </div>
             <p><br/>All books</p>
             <ul>
                 <li v-for="(book, index) in books" :class="{ fav: book.isFav }" @click="toggleFav(book)">
@@ -70,7 +44,6 @@
             <span v-else>Show books</span>
         </button>
     </div>
-
 
     <script src="app.js"></script>
 </body>

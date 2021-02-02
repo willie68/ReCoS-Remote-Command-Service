@@ -7,8 +7,7 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
-	"github.com/opentracing/opentracing-go"
-	clog "wkla.no-ip.biz/go-micro/logging"
+	clog "wkla.no-ip.biz/remote-desk-service/logging"
 )
 
 var myhealthy bool
@@ -16,7 +15,7 @@ var myhealthy bool
 /*
 This is the healtchcheck you will have to provide.
 */
-func check(tracer opentracing.Tracer) (bool, string) {
+func check() (bool, string) {
 	// TODO implement here your healthcheck.
 	myhealthy = !myhealthy
 	message := ""
@@ -47,16 +46,16 @@ type Msg struct {
 }
 
 // InitHealthSystem initialise the complete health system
-func InitHealthSystem(config CheckConfig, tracer opentracing.Tracer) {
+func InitHealthSystem(config CheckConfig) {
 	period = config.Period
 	clog.Logger.Infof("healthcheck starting with period: %d seconds", period)
 	healthmessage = "service starting"
 	healthy = false
-	doCheck(tracer)
+	doCheck()
 	go func() {
 		background := time.NewTicker(time.Second * time.Duration(period))
 		for _ = range background.C {
-			doCheck(tracer)
+			doCheck()
 		}
 	}()
 }
@@ -64,9 +63,9 @@ func InitHealthSystem(config CheckConfig, tracer opentracing.Tracer) {
 /*
 internal function to process the health check
 */
-func doCheck(tracer opentracing.Tracer) {
+func doCheck() {
 	var msg string
-	healthy, msg = check(tracer)
+	healthy, msg = check()
 	if !healthy {
 		healthmessage = msg
 	} else {
@@ -117,13 +116,4 @@ func GetReadinessEndpoint(response http.ResponseWriter, req *http.Request) {
 			LastCheck: lastChecked.String(),
 		})
 	}
-}
-
-/*
-sendMessage sending a span message to tracer
-*/
-func sendMessage(tracer opentracing.Tracer, message string) {
-	span := tracer.StartSpan("say-hello")
-	println(message)
-	span.Finish()
 }

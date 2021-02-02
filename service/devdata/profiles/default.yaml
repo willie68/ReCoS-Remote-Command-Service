@@ -1,0 +1,19 @@
+name: Default
+description: description for default
+pages:
+    - name: page1
+      columns: 5
+      rows: 5
+      cells:
+        - action1
+actions:
+    - type: SINGLE
+      name: action1
+      title: Action Title
+      description: description for action
+      commands:
+        - type: DELAY
+          name: delay
+          parameters:
+            time: 10
+            timeunit: 1s
