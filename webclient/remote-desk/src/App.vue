@@ -34,7 +34,7 @@
         :key="y"
         :style="{ width: cellWidth + 'px' }"
       >
-        <Action :text="cells[x][y]" :actionurl="actionurl" :actionHeight="cellHeight" :actionWidth="cellWidth"></Action>
+        <Action :text="cells[x][y]" :actionUrl="actionUrl" :actionHeight="cellHeight" :actionWidth="cellWidth" :profile="profileName" :actionName="cells[x][y]"></Action>
       </div>
     </div>
   </div>
@@ -50,8 +50,8 @@ export default {
   },
   data() {
     return {
-      baseurl: "https://localhost:9543/api/v1/show",
-      actionurl: "https://localhost:9543/api/v1/action",
+      baseUrl: "https://localhost:9543/api/v1/show",
+      actionUrl: "https://localhost:9543/api/v1/action",
       title: "remote commands",
       header: "Title me",
       text: "this is a text",
@@ -73,7 +73,10 @@ export default {
     };
   },
   mounted() {
-    fetch(this.baseurl)
+    console.log(window.location.hostname)
+    this.baseUrl = "https://" + window.location.hostname + ":9543" + "/api/v1/show"
+    this.actionUrl = "https://" + window.location.hostname + ":9543" + "/api/v1/action"
+    fetch(this.baseUrl)
       .then((res) => res.json())
       .then((data) => {
         this.items = data.profiles;
@@ -88,7 +91,7 @@ export default {
       this.showModal = !this.showModal;
     },
     changeProfile() {
-      fetch(this.baseurl + "/" + this.profileName)
+      fetch(this.baseUrl + "/" + this.profileName)
         .then((res) => res.json())
         .then((data) => {
           this.activeProfile = data;
@@ -113,7 +116,7 @@ export default {
           if (action) {
             this.cells[x][y] = action.name;
           } else {
-            this.cells[x][y] = ".";
+            this.cells[x][y] = "";
           }
         }
 

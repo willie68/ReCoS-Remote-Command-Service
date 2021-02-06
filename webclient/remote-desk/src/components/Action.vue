@@ -2,13 +2,15 @@
   <div
     class="action"
     :class="{ sale: theme === 'sale' }"
-    :style="{ height: actionHeight + 'px', width: actionWidth + 'px' 
-      , backgroundImage: 'url('+ imageUrl + ')'
+    :style="{
+      height: actionHeight + 'px',
+      width: actionWidth + 'px',
+      backgroundImage: 'url(' + imageUrl + ')',
     }"
-
+    @click="actionClick"
   >
-    <b>{{ text }} {{ actionWidth }} {{ actionHeight }}</b>
-<!--
+    <b>{{ text }} {{ profile }}:{{ actionName }}</b>
+    <!--
         <img
       class="stateimage"
       src="@/assets/point_red.png"
@@ -22,15 +24,54 @@
 <script>
 export default {
   name: "Action",
-  props: ["text", "actionurl", "theme", "actionHeight", "actionWidth"],
+  props: [
+    "text",
+    "actionUrl",
+    "theme",
+    "actionHeight",
+    "actionWidth",
+    "profile",
+    "actionName",
+  ],
   data() {
-      return {
-          imageUrl: "assets/point_red.png",
-      };
+    return {
+      // imageUrl: "assets/point_red.png",
+    };
+  },
+  computed: {
+    imageUrl() {
+      console.log("actionName:" + this.actionName)
+      return this.actionName ? "assets/point_gray.png" : "assets/point_red.png"
+    }
   },
   methods: {
     closeModal() {
       this.$emit("close");
+    },
+    actionClick() {
+      console.log(
+        "action " + this.profile + ":" + this.actionName + " clicked"
+      );
+      if (this.actionName) {
+        var actionPostUrl =
+          this.actionUrl + "/" + this.profile + "/" + this.actionName;
+        var options = {
+          method: "POST",
+          body: JSON.stringify(""),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
+        fetch(actionPostUrl, options)
+          .then((res) => res.json())
+          .then((data) => {
+            this.items = data.profiles;
+            this.profileName = data.profiles[0].name;
+            this.readonly = false;
+            this.changeProfile();
+          })
+          .catch((err) => console.log(err.message));
+      }
     },
   },
 };
