@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"log"
 	"net/http"
 	"strings"
 
@@ -9,7 +10,6 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/api"
 	"wkla.no-ip.biz/remote-desk-service/config"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
-	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
 // ActionRoutes an action for a defined profile
@@ -34,21 +34,14 @@ func PostProfileActionEndpoint(response http.ResponseWriter, request *http.Reque
 		api.Err(response, request, err)
 		return
 	}
-	var action models.Action
+	//	var action models.Action
 	for _, profile := range config.Profiles {
 		if strings.EqualFold(profile.Name, profileName) {
 			// for every action creating the info object
 			for _, action := range profile.Actions {
-				if 
-				actionInfo := models.ActionInfo{
-					Type:        action.Type,
-					Name:        action.Name,
-					Title:       action.Title,
-					Description: action.Description,
-				}
-				uiProfile.Actions = append(uiProfile.Actions, actionInfo)
+				log.Printf("%v\r\n", action)
 			}
-			render.JSON(response, request, uiProfile)
+			render.JSON(response, request, actionName)
 			return
 		}
 	}
