@@ -1,14 +1,9 @@
-name: Default
-description: description for default
+name: Willie
+description: profile for willie
 pages:
     - name: page1
       columns: 5
       rows: 5
-      cells:
-        - action1
-    - name: page2
-      columns: 3
-      rows: 3
       cells:
         - action1
 actions:

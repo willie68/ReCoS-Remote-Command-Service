@@ -8,6 +8,7 @@ require (
 	github.com/aphistic/sweet v0.3.0 // indirect
 	github.com/armon/go-metrics v0.3.4 // indirect
 	github.com/go-chi/chi v4.1.2+incompatible
+	github.com/go-chi/cors v1.1.1 // indirect
 	github.com/go-chi/httptracer v0.2.0 // indirect
 	github.com/go-chi/render v1.0.1
 	github.com/go-playground/validator/v10 v10.4.1
