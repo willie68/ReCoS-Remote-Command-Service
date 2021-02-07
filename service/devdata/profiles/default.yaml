@@ -21,4 +21,3 @@ actions:
           name: delay
           parameters:
             time: 10
-            timeunit: 1s

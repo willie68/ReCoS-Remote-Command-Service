@@ -13,7 +13,7 @@ Type: Delay
 
 Parameter: 
 
-delayTime: time to delay in Seconds
+time: time to delay in Seconds
 
 
 
