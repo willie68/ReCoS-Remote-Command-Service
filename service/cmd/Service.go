@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"wkla.no-ip.biz/remote-desk-service/api/routes"
+	"wkla.no-ip.biz/remote-desk-service/dto"
 	"wkla.no-ip.biz/remote-desk-service/error/serror"
 	"wkla.no-ip.biz/remote-desk-service/health"
 
@@ -74,6 +75,7 @@ func apiRoutes() *chi.Mux {
 	router.Route("/", func(r chi.Router) {
 		r.Mount(baseURL+"/profiles", routes.ProfilesRoutes())
 		r.Mount(baseURL+"/show", routes.ShowRoutes())
+		r.Mount(baseURL+"/action", routes.ActionRoutes())
 		r.Mount("/health", health.Routes())
 	})
 	return router
@@ -115,18 +117,14 @@ func main() {
 		os.Exit(1)
 	}
 
+	if err := dto.InitProfiles(config.Profiles); err != nil {
+		clog.Logger.Alertf("can't create profiles: %s", err.Error())
+		os.Exit(1)
+	}
+
 	healthCheckConfig := health.CheckConfig(serviceConfig.HealthCheck)
 
 	health.InitHealthSystem(healthCheckConfig)
-
-	gc := crypt.GenerateCertificate{
-		Organization: "MCS",
-		Host:         "127.0.0.1",
-		ValidFor:     10 * 365 * 24 * time.Hour,
-		IsCA:         false,
-		EcdsaCurve:   "P384",
-		Ed25519Key:   false,
-	}
 
 	if serviceConfig.Sslport > 0 {
 		ssl = true
@@ -157,6 +155,14 @@ func main() {
 	var sslsrv *http.Server
 	var srv *http.Server
 	if ssl {
+		gc := crypt.GenerateCertificate{
+			Organization: "MCS",
+			Host:         "127.0.0.1",
+			ValidFor:     10 * 365 * 24 * time.Hour,
+			IsCA:         false,
+			EcdsaCurve:   "P384",
+			Ed25519Key:   false,
+		}
 		tlsConfig, err := gc.GenerateTLSConfig()
 		if err != nil {
 			clog.Logger.Alertf("could not create tls config. %s", err.Error())

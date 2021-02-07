@@ -1,14 +1,12 @@
 package routes
 
 import (
-	"log"
 	"net/http"
-	"strings"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
 	"wkla.no-ip.biz/remote-desk-service/api"
-	"wkla.no-ip.biz/remote-desk-service/config"
+	"wkla.no-ip.biz/remote-desk-service/dto"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
 )
 
@@ -34,16 +32,15 @@ func PostProfileActionEndpoint(response http.ResponseWriter, request *http.Reque
 		api.Err(response, request, err)
 		return
 	}
-	//	var action models.Action
-	for _, profile := range config.Profiles {
-		if strings.EqualFold(profile.Name, profileName) {
-			// for every action creating the info object
-			for _, action := range profile.Actions {
-				log.Printf("%v\r\n", action)
-			}
-			render.JSON(response, request, actionName)
-			return
-		}
+	clog.Logger.Debugf("Action: %s:%s", profileName, actionName)
+
+	ok, err := dto.Execute(profileName, actionName)
+	if err != nil {
+		clog.Logger.Debug("Error reading action name: \n" + err.Error())
+		api.Err(response, request, err)
+		return
 	}
+
+	render.JSON(response, request, ok)
 	return
 }

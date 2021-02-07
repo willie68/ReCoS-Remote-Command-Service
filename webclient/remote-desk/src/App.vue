@@ -34,7 +34,14 @@
         :key="y"
         :style="{ width: cellWidth + 'px' }"
       >
-        <Action :text="cells[x][y]" :actionUrl="actionUrl" :actionHeight="cellHeight" :actionWidth="cellWidth" :profile="profileName" :actionName="cells[x][y]"></Action>
+        <Action
+          :text="cells[x][y]"
+          :actionUrl="actionURL"
+          :actionHeight="cellHeight"
+          :actionWidth="cellWidth"
+          :profile="profileName"
+          :actionName="cells[x][y]"
+        ></Action>
       </div>
     </div>
   </div>
@@ -50,8 +57,11 @@ export default {
   },
   data() {
     return {
-      baseUrl: "https://localhost:9543/api/v1/show",
-      actionUrl: "https://localhost:9543/api/v1/action",
+      servicePort: 9180,
+      baseURL:
+        window.location.protocol + "//localhost:" + this.servicePort + "/api/v1/",
+      showURL: this.baseURL + "/show",
+      actionURL: this.baseURL + "/action",
       title: "remote commands",
       header: "Title me",
       text: "this is a text",
@@ -73,10 +83,22 @@ export default {
     };
   },
   mounted() {
-    console.log(window.location.hostname)
-    this.baseUrl = "https://" + window.location.hostname + ":9543" + "/api/v1/show"
-    this.actionUrl = "https://" + window.location.hostname + ":9543" + "/api/v1/action"
-    fetch(this.baseUrl)
+    console.log("service url:" + this.baseURL);
+    this.baseURL =
+      window.location.protocol +
+      "//" +
+      window.location.hostname +
+      ":" +
+      this.servicePort +
+      "/api/v1";
+    this.showURL = this.baseURL + "/show";
+    this.actionURL = this.baseURL + "/action";
+
+    console.log("service url:" + this.baseURL);
+    console.log("ui url:" + this.showURL);
+    console.log("action url:" + this.actionURL);
+
+    fetch(this.showURL)
       .then((res) => res.json())
       .then((data) => {
         this.items = data.profiles;
@@ -91,7 +113,7 @@ export default {
       this.showModal = !this.showModal;
     },
     changeProfile() {
-      fetch(this.baseUrl + "/" + this.profileName)
+      fetch(this.showURL + "/" + this.profileName)
         .then((res) => res.json())
         .then((data) => {
           this.activeProfile = data;
@@ -121,9 +143,9 @@ export default {
         }
 
         this.cellWidth =
-          this.$refs.display.clientWidth / this.activePage.columns;
+          this.$refs.display.clientWidth / this.activePage.columns - 4;
         this.cellHeight =
-          this.$refs.display.clientHeight / this.activePage.rows;
+          this.$refs.display.clientHeight / this.activePage.rows - 4;
       }
     },
   },

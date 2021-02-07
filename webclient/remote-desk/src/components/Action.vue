@@ -9,7 +9,9 @@
     }"
     @click="actionClick"
   >
-    <b>{{ text }} {{ profile }}:{{ actionName }}</b>
+    <b>{{ text }}</b><br/>
+     {{ profile }} <br/>
+     {{ actionName }}<br/>
     <!--
         <img
       class="stateimage"
@@ -41,7 +43,7 @@ export default {
   computed: {
     imageUrl() {
       console.log("actionName:" + this.actionName)
-      return this.actionName ? "assets/point_gray.png" : "assets/point_red.png"
+      return this.actionName ? "assets/point_green.png" : "assets/point_red.png"
     }
   },
   methods: {

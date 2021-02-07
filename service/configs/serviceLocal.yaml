@@ -1,7 +1,7 @@
 # port of the http server
 port: 9180 
 # port of the https server
-sslport: 9543
+sslport: 0
 # this is the servicURL from outside
 serviceURL: http://127.0.0.1:9180
 #sercret file for storing usernames and passwords
