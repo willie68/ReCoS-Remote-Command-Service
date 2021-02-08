@@ -19,7 +19,7 @@ actions:
       name: action1
       title: Action Title Sync
       description: description for action
-      icon: wrench.png
+      icon: trash_can.png
       runone: true
       commands:
         - type: DELAY

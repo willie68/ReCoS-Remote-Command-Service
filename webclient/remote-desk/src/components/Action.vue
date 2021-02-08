@@ -9,8 +9,7 @@
     }"
     @click="actionClick"
   >
-    <span @click="actionClick"
-      ><b>{{ text }}</b
+    <span><b>{{ text }}</b
       ><br />
       {{ actionName }}<br />
     </span>
@@ -82,6 +81,7 @@ export default {
 .action {
   padding: 0px;
   margin: 0px;
+  border: 10px;
   border-radius: 10px;
   text-align: center;
   color: black;

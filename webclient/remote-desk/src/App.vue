@@ -37,8 +37,8 @@
         <Action
           :text="cells[x][y]"
           :actionUrl="actionURL"
-          :actionHeight="cellHeight"
-          :actionWidth="cellWidth"
+          :actionHeight="actionHeight"
+          :actionWidth="actionWidth"
           :profile="profileName"
           :actionName="cells[x][y]"
           :icon="icons[x][y]"
@@ -60,7 +60,10 @@ export default {
     return {
       servicePort: 9280,
       baseURL:
-        window.location.protocol + "//localhost:" + this.servicePort + "/api/v1/",
+        window.location.protocol +
+        "//localhost:" +
+        this.servicePort +
+        "/api/v1/",
       showURL: this.baseURL + "/show",
       actionURL: this.baseURL + "/action",
       title: "remote commands",
@@ -81,6 +84,8 @@ export default {
       cells: [[]],
       cellWidth: 20,
       cellHeight: 20,
+      actionWidth: 16,
+      actionHeight: 16,
     };
   },
   mounted() {
@@ -151,6 +156,8 @@ export default {
           this.$refs.display.clientWidth / this.activePage.columns - 4;
         this.cellHeight =
           this.$refs.display.clientHeight / this.activePage.rows - 4;
+        this.actionWidth = this.cellWidth - 4;
+        this.actionHeight = this.cellHeight - 4;
       }
     },
   },
