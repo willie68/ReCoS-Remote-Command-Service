@@ -1,7 +1,7 @@
 <template>
   <div
     class="action"
-    :class="{ sale: theme === 'sale' }"
+    :class="{ noicon: icon === '', noaction: actionName === '' }"
     :style="{
       height: actionHeight + 'px',
       width: actionWidth + 'px',
@@ -9,17 +9,11 @@
     }"
     @click="actionClick"
   >
-    <b>{{ text }}</b><br/>
-     {{ profile }} <br/>
-     {{ actionName }}<br/>
-    <!--
-        <img
-      class="stateimage"
-      src="@/assets/point_red.png"
-      :width="actionWidth - 10"
-      :height="actionHeight - 10"
-    />
-    -->
+    <span @click="actionClick"
+      ><b>{{ text }}</b
+      ><br />
+      {{ actionName }}<br />
+    </span>
   </div>
 </template>
 
@@ -29,22 +23,29 @@ export default {
   props: [
     "text",
     "actionUrl",
-    "theme",
     "actionHeight",
     "actionWidth",
     "profile",
     "actionName",
+    "icon",
   ],
   data() {
     return {
       // imageUrl: "assets/point_red.png",
+      saveImg: "",
     };
   },
   computed: {
     imageUrl() {
-      console.log("actionName:" + this.actionName)
-      return this.actionName ? "assets/point_green.png" : "assets/point_red.png"
-    }
+      console.log("actionName:" + this.actionName);
+      if (this.actionName) {
+        if (this.saveImg) {
+          return "assets/" + this.saveImg;
+        }
+        return this.icon ? "assets/" + this.icon : "";
+      }
+      return "";
+    },
   },
   methods: {
     closeModal() {
@@ -64,13 +65,11 @@ export default {
             "Content-Type": "application/json",
           },
         };
+        this.saveImg = "check_mark.png";
         fetch(actionPostUrl, options)
           .then((res) => res.json())
           .then((data) => {
-            this.items = data.profiles;
-            this.profileName = data.profiles[0].name;
-            this.readonly = false;
-            this.changeProfile();
+            setTimeout(()  => this.saveImg = "", 3000);
           })
           .catch((err) => console.log(err.message));
       }
@@ -83,32 +82,39 @@ export default {
 .action {
   padding: 0px;
   margin: 0px;
-  background: rgb(21, 32, 160);
   border-radius: 10px;
   text-align: center;
+  color: black;
+  background: darkgray;
   background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: 100% 100%;
+  background-size: contain;
+  background-position: center;
+  justify-content: center;
+  align-items: center;
+  display: flex;
 }
-.stateimage {
-  position: relative;
-  top: 0px;
-  left: 0px;
-}
+
 .action h1 {
   color: #03cfb4;
+  font-style: italic;
   border: none;
   padding: 0;
 }
+
 .action p {
   font-style: normal;
 }
-.action.sale {
-  background: crimson;
-  color: white;
+
+.action.noicon {
+  background: lightgray;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
 }
-.action.sale h1 {
-  background: crimson;
+
+.action.noaction {
+  background: rgb(45, 45, 45);
   color: black;
+  background-size: 100% 100%;
 }
 </style>

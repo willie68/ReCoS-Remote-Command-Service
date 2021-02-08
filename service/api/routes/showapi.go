@@ -87,6 +87,7 @@ func GetUIProfileEndpoint(response http.ResponseWriter, request *http.Request) {
 					Name:        action.Name,
 					Title:       action.Title,
 					Description: action.Description,
+					Icon:        action.Icon,
 				}
 				uiProfile.Actions = append(uiProfile.Actions, actionInfo)
 			}

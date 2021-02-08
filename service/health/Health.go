@@ -17,7 +17,7 @@ This is the healtchcheck you will have to provide.
 */
 func check() (bool, string) {
 	// TODO implement here your healthcheck.
-	myhealthy = !myhealthy
+	myhealthy = true
 	message := ""
 	if myhealthy {
 		clog.Logger.Info("healthy")

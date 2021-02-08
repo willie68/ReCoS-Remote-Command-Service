@@ -48,6 +48,8 @@ type Action struct {
 	Name string `json:"name"`
 	// Title of this action for display
 	Title string `json:"title"`
+	// Title of this action for display
+	Icon string `json:"icon"`
 	// Description of this action for information
 	Description string `json:"description"`
 	// RunOne means only run one instance of this action at one time.

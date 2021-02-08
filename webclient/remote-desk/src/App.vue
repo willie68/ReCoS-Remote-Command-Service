@@ -41,6 +41,7 @@
           :actionWidth="cellWidth"
           :profile="profileName"
           :actionName="cells[x][y]"
+          :icon="icons[x][y]"
         ></Action>
       </div>
     </div>
@@ -131,14 +132,18 @@ export default {
       });
       console.log(this.activePage);
       this.cells = new Array(this.activePage.rows);
+      this.icons = new Array(this.activePage.rows);
       for (let x = 0; x < this.activePage.rows; x++) {
         this.cells[x] = new Array(this.activePage.columns);
+        this.icons[x] = new Array(this.activePage.columns);
         for (let y = 0; y < this.activePage.columns; y++) {
           let action = this.activeProfile.actions[x * this.activePage.rows + y];
           if (action) {
             this.cells[x][y] = action.name;
+            this.icons[x][y] = action.icon;
           } else {
             this.cells[x][y] = "";
+            this.icons[x][y] = "";
           }
         }
 

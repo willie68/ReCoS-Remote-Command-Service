@@ -30,6 +30,7 @@ type ActionInfo struct {
 	Name        string     `json:"name"`
 	Title       string     `json:"title"`
 	Description string     `json:"description"`
+	Icon        string     `json:"icon"`
 }
 
 // PageInfo is all needed info for the action client of a defined profile page
