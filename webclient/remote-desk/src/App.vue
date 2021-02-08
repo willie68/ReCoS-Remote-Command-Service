@@ -57,7 +57,7 @@ export default {
   },
   data() {
     return {
-      servicePort: 9180,
+      servicePort: 9280,
       baseURL:
         window.location.protocol + "//localhost:" + this.servicePort + "/api/v1/",
       showURL: this.baseURL + "/show",

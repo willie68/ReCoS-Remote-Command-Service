@@ -1,5 +1,5 @@
 # port of the http server
-port: 9180 
+port: 9280 
 # port of the https server
 sslport: 0
 # this is the servicURL from outside
