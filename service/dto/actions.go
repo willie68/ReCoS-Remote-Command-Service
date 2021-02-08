@@ -12,6 +12,10 @@ import (
 // Profiles contains all profiles defined for this server
 var Profiles []Profile
 
+type ActionExecutor interface {
+	Execute() (bool, error)
+}
+
 // Profile holding state informations about one profile
 type Profile struct {
 	Name    string
