@@ -3,7 +3,7 @@ package dto
 import (
 	"fmt"
 	"strings"
-	"time"
+	"sync"
 
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
@@ -12,7 +12,8 @@ import (
 // Profiles contains all profiles defined for this server
 var Profiles []Profile
 
-type ActionExecutor interface {
+// CommandExecutor is an interface for executing a command. Every command implementation has to implement this.
+type CommandExecutor interface {
 	Execute() (bool, error)
 }
 
@@ -25,12 +26,17 @@ type Profile struct {
 
 // Action holding status of one action and can execute this action
 type Action struct {
-	Name   string
-	Config models.Action
+	RunOne  bool
+	Name    string
+	Title   string
+	Config  models.Action
+	m       sync.Mutex
+	counter int
 }
 
 // InitProfiles initialse the dto profiles for saving/retrieving status of and executing every action
 func InitProfiles(configProfiles []models.Profile) error {
+	count := 0
 	Profiles = make([]Profile, 0)
 	for _, configProfile := range configProfiles {
 		dtoProfile := Profile{
@@ -40,9 +46,14 @@ func InitProfiles(configProfiles []models.Profile) error {
 		}
 
 		for _, configAction := range configProfile.Actions {
+			count++
+			title := fmt.Sprintf("%s_%d", configAction.Name, count)
 			action := Action{
-				Name:   configAction.Name,
-				Config: configAction,
+				RunOne:  configAction.RunOne,
+				Name:    configAction.Name,
+				Config:  configAction,
+				Title:   title,
+				counter: 0,
 			}
 			dtoProfile.Actions = append(dtoProfile.Actions, action)
 		}
@@ -66,7 +77,7 @@ func Execute(profileName string, actionName string) (bool, error) {
 	return true, nil
 }
 
-func doExecute(action Action) {
+func doExecute(action *Action) {
 	_, err := action.Execute()
 	if err != nil {
 		clog.Logger.Errorf("Error executing action: %v", err)
@@ -84,37 +95,39 @@ func GetProfile(profileName string) (Profile, error) {
 }
 
 // GetAction return the action with the name actionName if present otherwise an error
-func (p *Profile) GetAction(actionName string) (Action, error) {
-	for _, action := range p.Actions {
+func (p *Profile) GetAction(actionName string) (*Action, error) {
+	for index := range p.Actions {
+		action := &p.Actions[index]
 		if strings.EqualFold(action.Name, actionName) {
 			return action, nil
 		}
 	}
-	return Action{}, fmt.Errorf("Action %s not found", actionName)
+	return &Action{}, fmt.Errorf("Action %s not found", actionName)
 }
 
 // Execute an action
 func (a *Action) Execute() (bool, error) {
+	a.m.Lock()
+	a.counter++
+	counter := a.counter
+	a.m.Unlock()
+	if a.RunOne {
+		a.m.Lock()
+		defer a.m.Unlock()
+	}
+	clog.Logger.Debugf("execution action %s_%d", a.Title, counter)
 	switch a.Config.Type {
 	case models.Single:
 		for _, command := range a.Config.Commands {
-			switch command.Type {
-			case models.Delay:
-				{
-					value, found := command.Parameters["time"]
-					if found {
-						delayValue, ok := value.(int)
-						if ok {
-							clog.Logger.Infof("delay with %v seconds", delayValue)
-							time.Sleep(time.Duration(delayValue) * time.Second)
-						} else {
-							clog.Logger.Errorf("time is in wrong format")
-						}
-					} else {
-						clog.Logger.Errorf("time is missing")
-					}
-				}
+			cmdExecutor := GetCommand(command)
+			if cmdExecutor == nil {
+				clog.Logger.Errorf("can't find command with type: %s", command.Type)
 			}
+			ok, err := cmdExecutor.Execute()
+			if err != nil {
+				clog.Logger.Errorf("error executing command: %v", err)
+			}
+			clog.Logger.Debugf("executing command result: %v", ok)
 		}
 	}
 	return true, nil

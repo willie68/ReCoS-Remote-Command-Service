@@ -50,6 +50,9 @@ type Action struct {
 	Title string `json:"title"`
 	// Description of this action for information
 	Description string `json:"description"`
+	// RunOne means only run one instance of this action at one time.
+	// Scheduling more than one execution will lead into a sequentiell execution
+	RunOne bool `json:"runone"`
 	// Commands are the magic behind this
 	Commands []Command `json:"commands"`
 }
@@ -98,6 +101,7 @@ func (a *Action) Copy() Action {
 		Description: a.Description,
 		Title:       a.Title,
 		Type:        a.Type,
+		RunOne:      a.RunOne,
 	}
 	action.Commands = make([]Command, 0)
 	for _, command := range a.Commands {

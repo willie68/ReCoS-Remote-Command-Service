@@ -6,18 +6,64 @@ pages:
       rows: 5
       cells:
         - action1
+        - action2
+        - action3
     - name: page2
       columns: 3
       rows: 3
       cells:
         - action1
+        - action2
 actions:
     - type: SINGLE
       name: action1
-      title: Action Title
+      title: Action Title Sync
       description: description for action
+      runone: true
       commands:
         - type: DELAY
           name: delay
           parameters:
-            time: 10
+            time: 2
+        - type: EXECUTE
+          name: execute
+          parameters:
+            command: echo.bat 
+            args:
+              - "Hello world"
+        - type: DELAY
+          name: delay
+          parameters:
+            time: 1
+    - type: SINGLE
+      name: action2
+      title: Action Title Async
+      description: description for action
+      runone: false
+      commands:
+        - type: DELAY
+          name: delay
+          parameters:
+            time: 2
+        - type: EXECUTE
+          name: execute
+          parameters:
+            command: echo.bat 
+            args: 
+              - "Hello world"
+        - type: DELAY
+          name: delay
+          parameters:
+            time: 1
+    - type: SINGLE
+      name: action3
+      title: Execute go version
+      description: description for action
+      runone: true
+      commands:
+        - type: EXECUTE
+          name: execute
+          parameters:
+            command: go.exe 
+            args:
+              - "version"

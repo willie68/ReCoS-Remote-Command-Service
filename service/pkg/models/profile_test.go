@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"gopkg.in/yaml.v3"
-	"wkla.no-ip.biz/go-micro/pkg/models"
+	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
 func TestNew(t *testing.T) {
