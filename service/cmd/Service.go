@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"wkla.no-ip.biz/remote-desk-service/api"
 	"wkla.no-ip.biz/remote-desk-service/api/routes"
 	"wkla.no-ip.biz/remote-desk-service/dto"
 	"wkla.no-ip.biz/remote-desk-service/error/serror"
@@ -196,6 +197,7 @@ func main() {
 		}()
 	} else {
 		// own http server for the healthchecks
+		router.HandleFunc("/ws", api.ServeWs)
 		srv = &http.Server{
 			Addr:         "0.0.0.0:" + strconv.Itoa(serviceConfig.Port),
 			WriteTimeout: time.Second * 15,
