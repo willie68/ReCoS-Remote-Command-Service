@@ -1,70 +1,92 @@
 name: Default
 description: description for default
 pages:
-    - name: page1
-      columns: 5
-      rows: 5
-      cells:
-        - action1
-        - action2
-        - action3
-    - name: page2
-      columns: 3
-      rows: 3
-      cells:
-        - action1
-        - action2
+  - name: page1
+    columns: 5
+    rows: 5
+    cells:
+      - page2
+      - action1
+      - action2
+      - action3
+  - name: page2
+    columns: 3
+    rows: 3
+    cells:
+      - page1
+      - action1
+      - action2
 actions:
-    - type: SINGLE
-      name: action1
-      title: Action Title Sync
-      description: description for action
-      icon: trash_can.png
-      runone: true
-      commands:
-        - type: DELAY
-          name: delay
-          parameters:
-            time: 2
-        - type: EXECUTE
-          name: execute
-          parameters:
-            command: echo.bat 
-            args:
-              - "Hello world"
-        - type: DELAY
-          name: delay
-          parameters:
-            time: 1
-    - type: SINGLE
-      name: action2
-      title: Action Title Async
-      description: description for action
-      runone: false
-      commands:
-        - type: DELAY
-          name: delay
-          parameters:
-            time: 2
-        - type: EXECUTE
-          name: execute
-          parameters:
-            command: echo.bat 
-            args: 
-              - "Hello world"
-        - type: DELAY
-          name: delay
-          parameters:
-            time: 1
-    - type: SINGLE
-      name: action3
-      title: Execute go version
-      description: description for action
-      runone: true
-      commands:
-        - type: EXECUTE
-          name: execute
-          parameters:
-            command: go.exe 
-            args:
-              - "version"
+  - type: SINGLE
+    name: action1
+    title: Action Title Sync
+    description: description for action
+    icon: trash_can.png
+    runone: true
+    commands:
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 2
+      - type: EXECUTE
+        name: execute
+        parameters:
+          command: echo.bat
+          args:
+            - "Hello world"
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 1
+  - type: SINGLE
+    name: action2
+    title: Action Title Async
+    description: description for action
+    runone: false
+    commands:
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 2
+      - type: EXECUTE
+        name: execute
+        parameters:
+          command: echo.bat
+          args:
+            - "Hello world"
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 1
+  - type: SINGLE
+    name: action3
+    title: Execute go version
+    description: description for action
+    runone: true
+    commands:
+      - type: EXECUTE
+        name: execute
+        parameters:
+          command: go.exe
+          args:
+            - "version"
+  - type: SINGLE
+    name: page1
+    title: Execute Page
+    description: description for page
+    runone: true
+    commands:
+      - type: PAGE
+        name: page
+        parameters:
+          page: page1
+  - type: SINGLE
+    name: page2
+    title: Execute Page
+    description: description for page
+    runone: true
+    commands:
+      - type: PAGE
+        name: page
+        parameters:
+          page: page2

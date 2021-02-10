@@ -40,3 +40,11 @@ type PageInfo struct {
 	Rows    int      `json:"rows"`
 	Cells   []string `json:"cells"`
 }
+
+// Message is a message from the server to the client to update an action
+type Message struct {
+	Action   string `json:"action"`
+	Page     string `json:"page"`
+	ImageURL string `json:"imageurl"`
+	State    int    `json:"state"`
+}

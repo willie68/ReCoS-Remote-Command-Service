@@ -18,6 +18,12 @@ func GetCommand(command models.Command) CommandExecutor {
 				Parameters: command.Parameters,
 			}
 		}
+	case models.PageCommand:
+		{
+			cmdExecutor = &PageCommand{
+				Parameters: command.Parameters,
+			}
+		}
 	}
 	return cmdExecutor
 }

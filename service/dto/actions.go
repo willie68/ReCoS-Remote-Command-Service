@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"strings"
 	"sync"
+	"time"
 
+	"wkla.no-ip.biz/remote-desk-service/api"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
@@ -118,7 +120,14 @@ func (a *Action) Execute() (bool, error) {
 	clog.Logger.Debugf("execution action %s_%d", a.Title, counter)
 	switch a.Config.Type {
 	case models.Single:
-		for _, command := range a.Config.Commands {
+		for index, command := range a.Config.Commands {
+			imageName := fmt.Sprintf("hourglass%d.png", index%4)
+			message := models.Message{
+				Action:   a.Name,
+				ImageURL: imageName,
+				State:    index + 1,
+			}
+			api.SendMessage(message)
 			cmdExecutor := GetCommand(command)
 			if cmdExecutor == nil {
 				clog.Logger.Errorf("can't find command with type: %s", command.Type)
@@ -129,6 +138,21 @@ func (a *Action) Execute() (bool, error) {
 			}
 			clog.Logger.Debugf("executing command result: %v", ok)
 		}
+		message := models.Message{
+			Action:   a.Name,
+			ImageURL: "check_mark.png",
+			State:    0,
+		}
+		api.SendMessage(message)
+		go func() {
+			time.Sleep(3 * time.Second)
+			message := models.Message{
+				Action:   a.Name,
+				ImageURL: "",
+				State:    0,
+			}
+			api.SendMessage(message)
+		}()
 	}
 	return true, nil
 }

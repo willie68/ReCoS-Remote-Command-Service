@@ -64,11 +64,11 @@ export default {
             "Content-Type": "application/json",
           },
         };
-        this.saveImg = "check_mark.png";
+        this.saveImg = "hourglass.png";
         fetch(actionPostUrl, options)
           .then((res) => res.json())
           .then((data) => {
-            setTimeout(()  => this.saveImg = "", 3000);
+            setTimeout(()  => this.saveImg = "", 20000);
           })
           .catch((err) => console.log(err.message));
       }

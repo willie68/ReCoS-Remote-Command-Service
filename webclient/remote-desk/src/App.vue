@@ -1,16 +1,20 @@
 <template>
-  <b>{{ title }}</b>
-  <label> Profile</label>
-  <select v-model="profileName" :disabled="readonly" @change="changeProfile()">
-    <option
-      v-for="item in items"
-      :value="item.name"
-      :key="item.name"
-      v-text="item.name"
-      :title="item.description"
-    ></option>
-  </select>
   <div>
+    <b>{{ title }}</b>
+    <label> Profile</label>
+    <select
+      v-model="profileName"
+      :disabled="readonly"
+      @change="changeProfile()"
+    >
+      <option
+        v-for="item in items"
+        :value="item.name"
+        :key="item.name"
+        v-text="item.name"
+        :title="item.description"
+      ></option>
+    </select>
     <button
       v-for="page in activeProfile.pages"
       :value="page.name"
@@ -20,7 +24,6 @@
       @click="changePage(page.name)"
     ></button>
   </div>
-  <p>{{ cellHeight }} x {{ cellWidth }}</p>
   <div class="display" ref="display">
     <div
       class="row"
@@ -42,6 +45,7 @@
           :profile="profileName"
           :actionName="cells[x][y]"
           :icon="icons[x][y]"
+          :ref="cells[x][y]"
         ></Action>
       </div>
     </div>
@@ -88,6 +92,16 @@ export default {
       actionHeight: 16,
     };
   },
+  computed: {
+    newPageName: {
+      get: function () {
+        return this.pageName;
+      },
+      set: function (newPageName) {
+        this.changePage(newPageName);
+      },
+    },
+  },
   mounted() {
     console.log("service url:" + this.baseURL);
     this.baseURL =
@@ -114,7 +128,47 @@ export default {
       })
       .catch((err) => console.log(err.message));
   },
+  created: function () {
+    this.connectWS();
+  },
   methods: {
+    connectWS() {
+      console.log("Starting connection to WebSocket Server");
+      let that = this;
+      this.connection = new WebSocket(
+        "ws://" + window.location.hostname + ":" + this.servicePort + "/ws"
+      );
+
+      this.connection.onmessage = function (event) {
+        console.log(event.data);
+        //create a JSON object
+        var jsonObject = JSON.parse(event.data);
+        if (jsonObject.action) {
+          if (that.$refs[jsonObject.action]) {
+            console.log("found action");
+            that.$refs[jsonObject.action].saveImg = jsonObject.imageurl;
+            return;
+          }
+        }
+        if (jsonObject.page) {
+          console.log("change page ", jsonObject.page);
+          that.newPageName = jsonObject.page;
+          return;
+        }
+        console.log("action: ", jsonObject.action);
+      };
+
+      this.connection.onopen = function (event) {
+        console.log(event);
+        console.log("Successfully connected to the websocket server...");
+      };
+
+      this.connection.onclose = function (event) {
+        console.log(event);
+        console.log("Connection closed to the websocket server...");
+        setTimeout(() => that.connectWS(), 2000);
+      };
+    },
     toggleModal() {
       this.showModal = !this.showModal;
     },
@@ -129,6 +183,7 @@ export default {
         .catch((err) => console.log(err.message));
     },
     changePage(pageName) {
+      console.log("change page to: ", pageName);
       this.pageName = pageName;
       this.activeProfile.pages.forEach((page) => {
         if (pageName == page.name) {
@@ -142,7 +197,14 @@ export default {
         this.cells[x] = new Array(this.activePage.columns);
         this.icons[x] = new Array(this.activePage.columns);
         for (let y = 0; y < this.activePage.columns; y++) {
-          let action = this.activeProfile.actions[x * this.activePage.rows + y];
+          var action = undefined;
+          let index = x * this.activePage.rows + y;
+          let actionName = this.activePage.cells[index];
+          this.activeProfile.actions.forEach((profileAction, index) => {
+            if (profileAction.name == actionName) {
+              action = profileAction;
+            }
+          });
           if (action) {
             this.cells[x][y] = action.name;
             this.icons[x][y] = action.icon;
@@ -173,9 +235,10 @@ export default {
   color: #71b8ff;
   background: black;
 }
+
 .display {
   position: absolute;
-  top: 50px;
+  top: 24px;
   bottom: 0;
   width: 100%;
   background: black;

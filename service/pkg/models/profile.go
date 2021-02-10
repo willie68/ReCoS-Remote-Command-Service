@@ -67,6 +67,8 @@ const (
 	Delay CommandType = "DELAY"
 	// Execute start an application or shell script and optionally waits for it's finishing
 	Execute = "EXECUTE"
+	// PageCommand sitch to another page
+	PageCommand = "PAGE"
 )
 
 // Command type
