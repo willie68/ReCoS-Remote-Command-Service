@@ -62,7 +62,7 @@ actions:
           time: 1
   - type: SINGLE
     name: pause
-    title: Action Title Async
+    title: Pause
     description: description for action
     runone: false
     commands:

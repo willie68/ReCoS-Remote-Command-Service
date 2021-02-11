@@ -9,10 +9,7 @@
     }"
     @click="actionClick"
   >
-    <span><b>{{ text }}</b
-      ><br />
-      {{ actionName }}<br />
-    </span>
+    <span><b>{{ text }}</b></span>
   </div>
 </template>
 

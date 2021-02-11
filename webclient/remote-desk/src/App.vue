@@ -38,7 +38,7 @@
         :style="{ width: cellWidth + 'px' }"
       >
         <Action
-          :text="cells[x][y]"
+          :text="texts[x][y]"
           :actionUrl="actionURL"
           :actionHeight="actionHeight"
           :actionWidth="actionWidth"
@@ -193,9 +193,11 @@ export default {
       console.log(this.activePage);
       this.cells = new Array(this.activePage.rows);
       this.icons = new Array(this.activePage.rows);
+      this.texts = new Array(this.activePage.rows);
       for (let x = 0; x < this.activePage.rows; x++) {
         this.cells[x] = new Array(this.activePage.columns);
         this.icons[x] = new Array(this.activePage.columns);
+        this.texts[x] = new Array(this.activePage.columns);
         for (let y = 0; y < this.activePage.columns; y++) {
           var action = undefined;
           let index = x * this.activePage.rows + y;
@@ -208,9 +210,11 @@ export default {
           if (action) {
             this.cells[x][y] = action.name;
             this.icons[x][y] = action.icon;
+            this.texts[x][y] = action.title;
           } else {
             this.cells[x][y] = "";
             this.icons[x][y] = "";
+            this.texts[x][y] = "";
           }
         }
 

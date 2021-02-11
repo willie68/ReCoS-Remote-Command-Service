@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"sync"
 
 	"github.com/gorilla/websocket"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
@@ -16,14 +17,62 @@ var (
 			return true
 		},
 	}
-	channel   = make(chan models.Message)
-	connected = false
+
+	Connections = make([]Connection, 0)
+
+	m sync.Mutex
+
+	count = 0
 )
+
+type Connection struct {
+	conn         *websocket.Conn
+	Connected    bool
+	writeChannel chan models.Message
+	index        int
+}
+
+func newConnection(c *websocket.Conn) Connection {
+	m.Lock()
+	count++
+	connection := Connection{
+		conn:         c,
+		Connected:    true,
+		writeChannel: make(chan models.Message),
+		index:        count,
+	}
+	Connections = append(Connections, connection)
+	defer m.Unlock()
+	return connection
+}
+
+func remove(s []Connection, index int) []Connection {
+	s[index] = s[len(s)-1]
+	return s[:len(s)-1]
+}
+
+func (c *Connection) close() {
+	m.Lock()
+	index := -1
+	for i, conn := range Connections {
+		if conn.index == c.index {
+			index = i
+		}
+	}
+	if index > -1 {
+		Connections = remove(Connections, index)
+	}
+	defer m.Unlock()
+	c.Connected = false
+	c.conn.Close()
+}
 
 // SendMessage ssending a message as a string
 func SendMessage(message models.Message) {
-	if connected {
-		channel <- message
+	for _, conn := range Connections {
+		if conn.Connected {
+			conn.writeChannel <- message
+		}
 	}
 }
 
@@ -35,11 +84,13 @@ func ServeWs(w http.ResponseWriter, r *http.Request) {
 		log.Print("upgrade:", err)
 		return
 	}
-	connected = true
-	defer c.Close()
-	go readMessage(c)
+	conn := newConnection(c)
+	defer conn.close()
+
+	go readMessage(&conn)
+
 	for {
-		message := <-channel
+		message := <-conn.writeChannel
 		json, err := json.Marshal(message)
 		if err != nil {
 			clog.Logger.Errorf("json error: %v", err)
@@ -52,16 +103,21 @@ func ServeWs(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 	}
-	connected = false
+	conn.Connected = false
 }
 
-func readMessage(c *websocket.Conn) {
+func readMessage(conn *Connection) {
 	for {
-		mt, message, err := c.ReadMessage()
-		if err != nil {
-			log.Println("read:", err)
+		if conn.Connected {
+			mt, message, err := conn.conn.ReadMessage()
+			if err != nil {
+				log.Println("read:", err)
+				conn.close()
+				break
+			}
+			log.Printf("recv: %d %s", mt, message)
+		} else {
 			break
 		}
-		log.Printf("recv: %d %s", mt, message)
 	}
 }
