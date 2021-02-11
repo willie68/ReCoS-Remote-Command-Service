@@ -9,6 +9,7 @@ pages:
       - action1
       - action2
       - action3
+      - pause
   - name: page2
     columns: 3
     rows: 3
@@ -16,6 +17,7 @@ pages:
       - page1
       - action1
       - action2
+      - pause
 actions:
   - type: SINGLE
     name: action1
@@ -54,6 +56,60 @@ actions:
           command: echo.bat
           args:
             - "Hello world"
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 1
+  - type: SINGLE
+    name: pause
+    title: Action Title Async
+    description: description for action
+    runone: false
+    commands:
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 1
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 1
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 1
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 1
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 1
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 1
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 1
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 1
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 1
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 1
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 1
       - type: DELAY
         name: delay
         parameters:
