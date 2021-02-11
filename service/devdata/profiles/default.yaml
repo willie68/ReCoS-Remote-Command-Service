@@ -68,6 +68,7 @@ actions:
     commands:
       - type: DELAY
         name: delay
+        icon: address_book.png
         parameters:
           time: 1
       - type: DELAY

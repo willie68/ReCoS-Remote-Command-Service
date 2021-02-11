@@ -77,6 +77,8 @@ type Command struct {
 	Type CommandType `json:"type"`
 	// Name is the command
 	Name string `json:"name"`
+	// Icon is the icon to show when this command is executing
+	Icon string `json:"icon"`
 	// Parameters of this command
 	Parameters map[string]interface{} `json:"parameters"`
 }

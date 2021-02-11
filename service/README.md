@@ -127,6 +127,7 @@ name: s the name of the action
 title: the title of the action used by the UI
 description: user defined description of this action
 runone: is true or false. On true, if the action is fired twice, all commands of the first execution must be finished before the second execution will take place. On false, the execution will start directly without checking the action execution state.
+icon: the icon which will be displayed on the cell
 commands: list of commands for execution of this action
 
 ```yaml
@@ -135,6 +136,7 @@ name: action1
 title: Action Title Sync
 description: description for action
 runone: true
+icon: trash_can.png
 commands:
   - type: DELAY
     name: delay
@@ -155,6 +157,13 @@ commands:
 
 
 ### Command
+
+This is the command, which should be executed
+
+type: the type of the command
+name: names the command
+icon: should be the icon that should be displayed when running this command
+paramters: parameters defers from command to command
 
 #### Delay
 
@@ -191,5 +200,19 @@ parameters:
   command: go.exe 
   args:
     - "version"
+```
+
+#### Page
+
+Switch to another page
+
+Parameter:
+page: the name of the page to switch to
+
+```yaml
+type: PAGE
+name: page
+parameters:
+  - page: page2
 ```
 

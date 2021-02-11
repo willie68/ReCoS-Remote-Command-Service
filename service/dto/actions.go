@@ -122,6 +122,9 @@ func (a *Action) Execute() (bool, error) {
 	case models.Single:
 		for index, command := range a.Config.Commands {
 			imageName := fmt.Sprintf("hourglass%d.png", index%4)
+			if command.Icon != "" {
+				imageName = command.Icon
+			}
 			message := models.Message{
 				Action:   a.Name,
 				ImageURL: imageName,
