@@ -204,7 +204,9 @@ parameters:
 
 #### Page
 
-Switch to another page
+Switch to another page.
+
+type: PAGE
 
 Parameter:
 page: the name of the page to switch to
@@ -220,9 +222,13 @@ parameters:
 
 Sending keys to the active application. This command is emulating a keyboard input by sending key strokes of a keyboard to the active application. You can use different keyboard layouts and there are some macros defining special keys.
 
-layout: defining the layout of the keyboard used to send the data. en for english (us) "qwerty" and de for a german "qwertz" keyboard layout. Default is de
+type: KEYS
+
+layout: defining the layout of the keyboard used to send the data. en for English (us) "qwerty" and de for a German "qwertz" keyboard layout. Default is "de"
 
 keys: are the string with the keys used to send. For special keys there are defined special macros. Every macro starts with an "{" and ends than with "}". If you want to send the "{" as a character simply double this. ("{" -> "{{"). 
+
+Another specialized character is the "~" char. It will lead into a 1 second delay between the typing. To get the "~" Character, simple double it.
 
 The following macros are defined: 
 
@@ -257,5 +263,39 @@ name: sendkeys
 parameters:
   layout: de
   keys: "akteon00{enter}"
+```
+
+#### Controlling Application Main Window
+
+With this command, you can control the main window of an application.
+
+type: WINDOWCTRL
+
+Parameter:
+caption: the caption of the application window
+command: the command to execute on this window. Possible values are:
+minimize: for minimizing the application window
+activate: for activating the application window again. (restore it if minimized and active/bring it to front) 
+move  x y: moving the window to the new position x,y
+
+```yaml
+# activate the german calculator program
+- type: WINDOWCTRL
+  name: control window
+  parameters:
+    caption: Rechner 
+    command: activate
+# move it to it's new location
+- type: WINDOWCTRL
+  name: control window
+  parameters:
+    caption: Rechner 
+    command: move 700 300 
+# minimize it
+- type: WINDOWCTRL
+  name: control window
+  parameters:
+    caption: Rechner 
+    command: minimize 
 ```
 

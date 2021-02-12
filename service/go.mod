@@ -3,7 +3,9 @@ module wkla.no-ip.biz/remote-desk-service
 go 1.13
 
 require (
+	github.com/AllenDang/w32 v0.0.0-20180428130237-ad0a36d80adc
 	github.com/HdrHistogram/hdrhistogram-go v1.0.0 // indirect
+	github.com/TheTitanrain/w32 v0.0.0-20200114052255-2654d97dbd3d
 	github.com/aphistic/golf v0.0.0-20180712155816-02c07f170c5a
 	github.com/aphistic/sweet v0.3.0 // indirect
 	github.com/armon/go-metrics v0.3.4 // indirect
@@ -13,6 +15,7 @@ require (
 	github.com/go-chi/render v1.0.1
 	github.com/go-playground/validator/v10 v10.4.1
 	github.com/golang/protobuf v1.4.3 // indirect
+	github.com/gonutz/w32 v1.0.0
 	github.com/gorilla/websocket v1.4.2
 	github.com/hashicorp/consul/api v1.7.0 // indirect
 	github.com/hashicorp/go-immutable-radix v1.3.0 // indirect
@@ -21,6 +24,7 @@ require (
 	github.com/hashicorp/go-uuid v1.0.2 // indirect
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/hashicorp/serf v0.9.5 // indirect
+	github.com/hnakamur/w32syscall v0.0.0-20150329104255-b8b99ed86a56
 	github.com/micmonay/keybd_event v1.1.0
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
 	github.com/mitchellh/mapstructure v1.3.3 // indirect

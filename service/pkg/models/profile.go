@@ -67,10 +67,12 @@ const (
 	Delay CommandType = "DELAY"
 	// Execute start an application or shell script and optionally waits for it's finishing
 	Execute = "EXECUTE"
-	// PageCommand sitch to another page
+	// PageCommand switch to another page
 	PageCommand = "PAGE"
-	// PageCommand sitch to another page
+	// KeysCommand sending key strokes to the active program
 	KeysCommand = "KEYS"
+	// WindowCtrlCommand sending key strokes to the active program
+	WindowCtrlCommand = "WINDOWCTRL"
 )
 
 // Command type

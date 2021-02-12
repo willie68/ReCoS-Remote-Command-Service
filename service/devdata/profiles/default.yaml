@@ -11,7 +11,7 @@ pages:
       - action3
       - pause
       - sendkeys
-      - sendkeys2
+      - window_ctrl
   - name: page2
     columns: 3
     rows: 3
@@ -162,20 +162,47 @@ actions:
       - type: KEYS
         name: sendkeys
         parameters:
-          layout: en
-          keys: "akteon"
+          layout: de
+          keys: "{esc}1+1{enter}"
   - type: SINGLE
-    name: sendkeys2
-    title: Sending some keys 2
-    description: description for page
+    name: window_ctrl
+    title: window_ctrl
+    description: window_ctrl
     runone: true
     commands:
       - type: DELAY
         name: delay
         parameters:
-          time: 5
+          time: 2
+      - type: WINDOWCTRL
+        name: control window
+        parameters:
+          caption: Rechner 
+          command: activate
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 1
       - type: KEYS
         name: sendkeys
         parameters:
           layout: de
-          keys: "akteon00{enter}"
+          keys: "{esc}1+1{enter}"
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 2
+      - type: WINDOWCTRL
+        name: control window
+        parameters:
+          caption: Rechner 
+          command: move 700 300 
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 2
+      - type: WINDOWCTRL
+        name: control window
+        parameters:
+          caption: Rechner 
+          command: minimize

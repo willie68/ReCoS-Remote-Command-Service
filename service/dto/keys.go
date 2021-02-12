@@ -62,6 +62,15 @@ func sendString(value string, kb keybd_event.KeyBonding, layout []utils.KeyItem)
 	macro := make([]rune, 0)
 	for index := 0; index < len(runeValue); index++ {
 		char := runeValue[index]
+		if char == rune('~') {
+			if runeValue[index+1] == rune('~') {
+				index++
+			} else {
+				fmt.Println("\r\nwaiting 1 second")
+				time.Sleep(1 * time.Second)
+				continue
+			}
+		}
 		if char == rune('{') {
 			if runeValue[index+1] == rune('{') {
 				index++

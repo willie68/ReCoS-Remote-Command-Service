@@ -30,6 +30,12 @@ func GetCommand(command models.Command) CommandExecutor {
 				Parameters: command.Parameters,
 			}
 		}
+	case models.WindowCtrlCommand:
+		{
+			cmdExecutor = &WindowCtrlCommand{
+				Parameters: command.Parameters,
+			}
+		}
 	}
 	return cmdExecutor
 }
