@@ -162,6 +162,7 @@ actions:
       - type: KEYS
         name: sendkeys
         parameters:
+          layout: en
           keys: "akteon"
   - type: SINGLE
     name: sendkeys2
@@ -176,8 +177,5 @@ actions:
       - type: KEYS
         name: sendkeys
         parameters:
-          keys:
-            - a
-            - k
-            - to
-            - N
+          layout: de
+          keys: "akteon00{enter}"
