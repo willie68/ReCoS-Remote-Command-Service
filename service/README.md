@@ -213,6 +213,49 @@ page: the name of the page to switch to
 type: PAGE
 name: page
 parameters:
-  - page: page2
+  page: page2
+```
+
+#### Keys
+
+Sending keys to the active application. This command is emulating a keyboard input by sending key strokes of a keyboard to the active application. You can use different keyboard layouts and there are some macros defining special keys.
+
+layout: defining the layout of the keyboard used to send the data. en for english (us) "qwerty" and de for a german "qwertz" keyboard layout. Default is de
+
+keys: are the string with the keys used to send. For special keys there are defined special macros. Every macro starts with an "{" and ends than with "}". If you want to send the "{" as a character simply double this. ("{" -> "{{"). 
+
+The following macros are defined: 
+
+| Macro               | Keyboard key |
+| ------------------- | ------------ |
+| backspace, bs, bksp | backspace    |
+| break               | break        |
+| capslock            | caps lock    |
+| del, delete         | delete       |
+| down                | arrow down   |
+| end                 | end          |
+| enter               | enter        |
+| esc                 | esc          |
+| help                | help         |
+| home                | home         |
+| ins, insert         | insert       |
+| left                | arrow left   |
+| num                 | num lock     |
+| pgdn                | page down    |
+| pgup                | page up      |
+| prtsc               | print screen |
+| right               | arrow right  |
+| scrolllock          | scroll lock  |
+| tab                 | tab          |
+| up                  | arrow up     |
+| f1 .. f12           | function key 1 ... 12 |
+
+
+```yaml
+type: KEYS
+name: sendkeys
+parameters:
+  layout: de
+  keys: "akteon00{enter}"
 ```
 
