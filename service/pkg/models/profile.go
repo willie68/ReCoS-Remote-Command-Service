@@ -69,6 +69,8 @@ const (
 	Execute = "EXECUTE"
 	// PageCommand sitch to another page
 	PageCommand = "PAGE"
+	// PageCommand sitch to another page
+	KeysCommand = "KEYS"
 )
 
 // Command type

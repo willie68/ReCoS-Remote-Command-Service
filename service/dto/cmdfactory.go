@@ -24,6 +24,12 @@ func GetCommand(command models.Command) CommandExecutor {
 				Parameters: command.Parameters,
 			}
 		}
+	case models.KeysCommand:
+		{
+			cmdExecutor = &KeysCommand{
+				Parameters: command.Parameters,
+			}
+		}
 	}
 	return cmdExecutor
 }

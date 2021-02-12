@@ -10,6 +10,8 @@ pages:
       - action2
       - action3
       - pause
+      - sendkeys
+      - sendkeys2
   - name: page2
     columns: 3
     rows: 3
@@ -147,3 +149,35 @@ actions:
         name: page
         parameters:
           page: page2
+  - type: SINGLE
+    name: sendkeys
+    title: Sending some keys
+    description: description for page
+    runone: true
+    commands:
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 5
+      - type: KEYS
+        name: sendkeys
+        parameters:
+          keys: "akteon"
+  - type: SINGLE
+    name: sendkeys2
+    title: Sending some keys 2
+    description: description for page
+    runone: true
+    commands:
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 5
+      - type: KEYS
+        name: sendkeys
+        parameters:
+          keys:
+            - a
+            - k
+            - to
+            - N
