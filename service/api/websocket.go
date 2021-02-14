@@ -107,6 +107,7 @@ func ServeWs(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 	}
+	conn.conn.Close()
 	conn.Connected = false
 }
 

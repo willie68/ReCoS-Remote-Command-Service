@@ -54,20 +54,26 @@ func (d *TimerCommand) Execute(a *Action) (bool, error) {
 			for ; delayValue > 0; delayValue-- {
 				// TODO get this from the config
 				title := fmt.Sprintf(format, delayValue)
+				icon := "point_green.png"
+				if delayValue < 4 {
+					icon = "point_yellow.png"
+				}
 				message := models.Message{
-					Profile: a.Profile,
-					Action:  a.Name,
-					State:   delayValue,
-					Title:   title,
+					Profile:  a.Profile,
+					Action:   a.Name,
+					State:    delayValue,
+					Title:    title,
+					ImageURL: icon,
 				}
 				api.SendMessage(message)
 				time.Sleep(1 * time.Second)
 			}
 			message := models.Message{
-				Profile: a.Profile,
-				Action:  a.Name,
-				State:   0,
-				Title:   finnished,
+				Profile:  a.Profile,
+				Action:   a.Name,
+				State:    0,
+				ImageURL: "point_red.png",
+				Title:    finnished,
 			}
 			api.SendMessage(message)
 			time.Sleep(1 * time.Second)
