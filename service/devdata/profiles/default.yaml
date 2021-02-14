@@ -13,6 +13,8 @@ pages:
       - sendkeys
       - window_ctrl
       - noop
+      - timer
+      - timer2
   - name: page2
     columns: 3
     rows: 3
@@ -230,3 +232,28 @@ actions:
         name: noop
         icon: accesibility.png 
         title: Waiting
+  - type: SINGLE
+    name: timer
+    title: Timer 10 sec
+    description: timer counting down 10 sec
+    icon: alarm_bell.png
+    runone: true
+    commands:
+      - type: TIMER
+        name: timer
+        parameters:
+          time: 10
+          format: noch %ds
+          finished: Fertig
+  - type: SINGLE
+    name: timer2
+    title: Timer 20 sec
+    description: timer counting down 20 sec
+    icon: alarm_bell.png
+    runone: true
+    commands:
+      - type: TIMER
+        name: timer
+        parameters:
+          time: 20
+          format: "%d Sekunden"

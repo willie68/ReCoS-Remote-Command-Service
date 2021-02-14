@@ -200,6 +200,29 @@ parameters:
   time: 2
 ```
 
+#### Timer
+
+Starting a timer with a response every second. You can define the format of the timer message and the message on finish.
+
+Type: TIMER
+
+Parameter: 
+
+time: time to delay in Seconds
+format: the message for the response, defaults %d seconds
+finished: the message at the end of the timer, defaults: finished
+
+Example
+
+```yaml
+type: TIMER
+name: timer
+parameters:
+  time: 10
+  format: noch %ds
+  finished: Fertig
+```
+
 #### Execute
 
 Type: EXECUTE

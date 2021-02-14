@@ -42,6 +42,12 @@ func GetCommand(command models.Command) CommandExecutor {
 				Parameters: command.Parameters,
 			}
 		}
+	case models.Timer:
+		{
+			cmdExecutor = &TimerCommand{
+				Parameters: command.Parameters,
+			}
+		}
 	}
 	return cmdExecutor
 }
