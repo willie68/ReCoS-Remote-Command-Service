@@ -16,7 +16,9 @@ var Profiles []Profile
 
 // CommandExecutor is an interface for executing a command. Every command implementation has to implement this.
 type CommandExecutor interface {
+	Init(a *Action) (bool, error)
 	Execute(a *Action) (bool, error)
+	Stop(a *Action) (bool, error)
 }
 
 // Profile holding state informations about one profile
@@ -28,13 +30,14 @@ type Profile struct {
 
 // Action holding status of one action and can execute this action
 type Action struct {
-	Profile string
-	RunOne  bool
-	Name    string
-	Title   string
-	Config  models.Action
-	m       sync.Mutex
-	counter int
+	Profile  string
+	RunOne   bool
+	Name     string
+	Title    string
+	Config   models.Action
+	m        sync.Mutex
+	counter  int
+	Commands map[string]CommandExecutor
 }
 
 // InitProfiles initialse the dto profiles for saving/retrieving status of and executing every action
@@ -52,12 +55,20 @@ func InitProfiles(configProfiles []models.Profile) error {
 			count++
 			title := fmt.Sprintf("%s_%d", configAction.Name, count)
 			action := Action{
-				Profile: configProfile.Name,
-				RunOne:  configAction.RunOne,
-				Name:    configAction.Name,
-				Config:  configAction,
-				Title:   title,
-				counter: 0,
+				Profile:  configProfile.Name,
+				RunOne:   configAction.RunOne,
+				Name:     configAction.Name,
+				Config:   configAction,
+				Title:    title,
+				counter:  0,
+				Commands: make(map[string]CommandExecutor),
+			}
+			for _, command := range configAction.Commands {
+				commandExecutor := GetCommand(command)
+				if commandExecutor != nil {
+					commandExecutor.Init(&action)
+					action.Commands[command.Name] = commandExecutor
+				}
 			}
 			dtoProfile.Actions = append(dtoProfile.Actions, action)
 		}
@@ -141,7 +152,8 @@ func (a *Action) Execute() (bool, error) {
 				State:    index + 1,
 			}
 			api.SendMessage(message)
-			cmdExecutor := GetCommand(command)
+			//cmdExecutor := GetCommand(command)
+			cmdExecutor := a.Commands[command.Name]
 			if cmdExecutor == nil {
 				clog.Logger.Errorf("can't find command with type: %s", command.Type)
 			}

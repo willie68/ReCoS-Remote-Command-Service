@@ -14,6 +14,16 @@ type ExecuteCommand struct {
 	Parameters map[string]interface{}
 }
 
+// Init the command
+func (e *ExecuteCommand) Init(a *Action) (bool, error) {
+	return true, nil
+}
+
+// Stop the command
+func (e *ExecuteCommand) Stop(a *Action) (bool, error) {
+	return true, nil
+}
+
 // Execute the command
 func (e *ExecuteCommand) Execute(a *Action) (bool, error) {
 	value, found := e.Parameters["command"]

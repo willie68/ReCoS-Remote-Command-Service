@@ -9,12 +9,24 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
-// TimerCommand is a command to execute a delay. Using time for getting the ttime in seconds to delay the execution.
+// TimerCommand is a command to start a timer. Using time for getting the time in seconds.
+// For formatting the response the parameters fomat and finished are responsible.
+// Use %d for inserting the actual time to wait.
 type TimerCommand struct {
 	Parameters map[string]interface{}
 }
 
-// Execute a delay in the actual context
+// Init a timer in the actual context
+func (d *TimerCommand) Init(a *Action) (bool, error) {
+	return true, nil
+}
+
+// Stop a timer in the actual context
+func (d *TimerCommand) Stop(a *Action) (bool, error) {
+	return true, nil
+}
+
+// Execute a timer in the actual context
 func (d *TimerCommand) Execute(a *Action) (bool, error) {
 	value, found := d.Parameters["format"]
 	format := "%d seconds"

@@ -13,6 +13,16 @@ type PageCommand struct {
 	Parameters map[string]interface{}
 }
 
+// Init the command
+func (p *PageCommand) Init(a *Action) (bool, error) {
+	return true, nil
+}
+
+// Stop the command
+func (p *PageCommand) Stop(a *Action) (bool, error) {
+	return true, nil
+}
+
 // Execute the command
 func (p *PageCommand) Execute(a *Action) (bool, error) {
 	value, found := p.Parameters["page"]

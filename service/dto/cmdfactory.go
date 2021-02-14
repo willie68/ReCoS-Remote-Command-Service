@@ -48,6 +48,12 @@ func GetCommand(command models.Command) CommandExecutor {
 				Parameters: command.Parameters,
 			}
 		}
+	case models.Clock:
+		{
+			cmdExecutor = &ClockCommand{
+				Parameters: command.Parameters,
+			}
+		}
 	}
 	return cmdExecutor
 }

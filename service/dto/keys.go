@@ -11,10 +11,21 @@ import (
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
 )
 
-// KeysCommand is a command to switch to another page.
-// Using "page" for the page name
+// KeysCommand is a command to send keystroke to the active application.
+// parameters: layout for the keyboard layout: en or de
+// keys: string with the keys to press. Using macros for special keys, see sendMacro methode.
 type KeysCommand struct {
 	Parameters map[string]interface{}
+}
+
+// Init the command
+func (p *KeysCommand) Init(a *Action) (bool, error) {
+	return true, nil
+}
+
+// Stop the command
+func (p *KeysCommand) Stop(a *Action) (bool, error) {
+	return true, nil
 }
 
 // Execute the command

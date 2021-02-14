@@ -77,6 +77,8 @@ const (
 	Noop = "NOOP"
 	// Timer is a count down timer, just showing the count down time in the title
 	Timer = "TIMER"
+	// Clock is a clock
+	Clock = "CLOCK"
 )
 
 // Command type

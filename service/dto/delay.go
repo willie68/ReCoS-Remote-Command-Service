@@ -12,6 +12,16 @@ type DelayCommand struct {
 	Parameters map[string]interface{}
 }
 
+// Init a delay in the actual context
+func (d *DelayCommand) Init(a *Action) (bool, error) {
+	return true, nil
+}
+
+// Stop a delay in the actual context
+func (d *DelayCommand) Stop(a *Action) (bool, error) {
+	return true, nil
+}
+
 // Execute a delay in the actual context
 func (d *DelayCommand) Execute(a *Action) (bool, error) {
 	value, found := d.Parameters["time"]

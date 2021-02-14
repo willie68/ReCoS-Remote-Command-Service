@@ -11,12 +11,21 @@ import (
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
 )
 
-// go get github.com/TheTitanrain/w32
-// WindowCtrlCommand	 is a command to execute a program or batch file.
+// WindowCtrlCommand is a command to execute a program or batch file.
 // Using "command" for getting the command line to execute.
 // Using "args" for optional parameters
 type WindowCtrlCommand struct {
 	Parameters map[string]interface{}
+}
+
+// Init the command
+func (e *WindowCtrlCommand) Init(a *Action) (bool, error) {
+	return true, nil
+}
+
+// Stop the command
+func (e *WindowCtrlCommand) Stop(a *Action) (bool, error) {
+	return true, nil
 }
 
 // Execute the command

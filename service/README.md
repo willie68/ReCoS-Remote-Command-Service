@@ -223,6 +223,25 @@ parameters:
   finished: Fertig
 ```
 
+#### Clock
+
+Just a simple textual clock.
+
+Type: CLOCK
+
+Parameter: 
+
+format: the format of the clock in Golang format syntax, defaults: 15:04:05
+
+Example
+
+```yaml
+type: CLOCK
+name: clock
+parameters:
+  format: "15:04:05 02 Jan 06"
+```
+
 #### Execute
 
 Type: EXECUTE
