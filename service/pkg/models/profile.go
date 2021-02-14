@@ -34,6 +34,8 @@ type ActionType string
 const (
 	//Single is a simple single shot. Normally displayed as a button. Simply one action
 	Single ActionType = "SINGLE"
+	//Display is only showing title and icon, you can't click on it
+	Display = "DISPLAY"
 	//Toggle has a state, true or false and on every change it does an individual action
 	Toggle = "TOGGLE"
 	//MultiStage is an action which has more than 2 states and step to the next stage on every execution. After the last stage it return to the first one

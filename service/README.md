@@ -122,7 +122,10 @@ An action is the part which defines, what to do if a cell is triggered.
 
 The following parameters are used:
 
-type: SINLGE is a single shot action. The action is always starting the command list. TOGGLE is an action with two states, just like a on/off switch. For each transition you can define an own command list. MULTISTAGE is the third option. Here you can define 3 or more stages, and you every stage you can define the status and a command list, which is fired on activating this stage. As you can see, TOGGLE is a Multiswitch with 2 Stages.
+type: **SINGLE** is a single shot action. The action is always starting the command list. 
+**DISPLAY** is a display only cell. It will only show Text, Icons but you can't interact with it.
+**TOGGLE** is an action with two states, just like a on/off switch. For each transition you can define an own command list. 
+**MULTISTAGE** is the third option. Here you can define 3 or more stages, and you every stage you can define the status and a command list, which is fired on activating this stage. As you can see, TOGGLE is a Multiswitch with 2 Stages.
 name: s the name of the action
 title: the title of the action used by the UI
 description: user defined description of this action

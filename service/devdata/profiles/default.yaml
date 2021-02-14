@@ -250,7 +250,7 @@ actions:
     name: timer2
     title: Timer 20 sec
     description: timer counting down 20 sec
-    icon: alarm_bell.png
+    icon: time_frame.png
     runone: true
     commands:
       - type: TIMER
@@ -258,7 +258,7 @@ actions:
         parameters:
           time: 20
           format: "%d Sekunden"
-  - type: SINGLE
+  - type: DISPLAY
     name: clock
     title: Clock
     description: timer counting down 20 sec
