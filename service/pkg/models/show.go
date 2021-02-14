@@ -49,4 +49,5 @@ type Message struct {
 	ImageURL string `json:"imageurl"`
 	Title    string `json:"title"`
 	State    int    `json:"state"`
+	Command  string `json:"command"`
 }

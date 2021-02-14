@@ -148,6 +148,10 @@ export default {
     connectWS() {
       console.log("Starting connection to WebSocket Server");
       let that = this;
+      if (this.connection) {
+        this.connection.close(1000, "Work complete")
+        this.connection = undefined
+      }
       this.connection = new WebSocket(
         "ws://" + window.location.hostname + ":" + this.servicePort + "/ws"
       );
@@ -177,11 +181,17 @@ export default {
       this.connection.onopen = function (event) {
         console.log(event);
         console.log("Successfully connected to the websocket server...");
+        var message = { profile: that.profileName, command: "change" };
+        that.connection.send(JSON.stringify(message));
       };
 
       this.connection.onclose = function (event) {
         console.log(event);
         console.log("Connection closed to the websocket server...");
+        if (that.connection) {
+          that.connection.close(1000, "Work complete")
+          that.connection = undefined
+        }
         setTimeout(() => that.connectWS(), 2000);
       };
     },
@@ -192,6 +202,8 @@ export default {
       fetch(this.showURL + "/" + this.profileName)
         .then((res) => res.json())
         .then((data) => {
+          var message = { profile: this.profileName, command: "change" };
+          this.connection.send(JSON.stringify(message));
           this.activeProfile = data;
           this.activePage = this.activeProfile.pages[0];
           this.changePage(this.activePage.name);

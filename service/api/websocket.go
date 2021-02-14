@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strings"
 	"sync"
 
 	"github.com/gorilla/websocket"
@@ -30,6 +31,7 @@ type Connection struct {
 	Connected    bool
 	writeChannel chan models.Message
 	index        int
+	profile      string
 }
 
 func newConnection(c *websocket.Conn) Connection {
@@ -71,7 +73,9 @@ func (c *Connection) close() {
 func SendMessage(message models.Message) {
 	for _, conn := range Connections {
 		if conn.Connected {
-			conn.writeChannel <- message
+			if strings.EqualFold(message.Profile, conn.profile) {
+				conn.writeChannel <- message
+			}
 		}
 	}
 }
@@ -96,7 +100,7 @@ func ServeWs(w http.ResponseWriter, r *http.Request) {
 			clog.Logger.Errorf("json error: %v", err)
 			continue
 		}
-		clog.Logger.Infof("sending a message to the client: %s", message)
+		//clog.Logger.Infof("sending a message to the client: %s", message)
 		err = c.WriteMessage(websocket.TextMessage, []byte(json))
 		if err != nil {
 			clog.Logger.Errorf("write error: %v", err)
@@ -112,10 +116,26 @@ func readMessage(conn *Connection) {
 			mt, message, err := conn.conn.ReadMessage()
 			if err != nil {
 				log.Println("read:", err)
-				conn.close()
+				(*conn).close()
 				break
 			}
-			log.Printf("recv: %d %s", mt, message)
+			var myMessage models.Message
+			err = json.Unmarshal(message, &myMessage)
+			if err != nil {
+				clog.Logger.Errorf("json unmarshal: %v", err)
+			}
+			if myMessage.Command == "change" {
+				if !strings.EqualFold(myMessage.Profile, conn.profile) {
+					index := 0
+					for i, lconn := range Connections {
+						if lconn.index == conn.index {
+							index = i
+						}
+					}
+					Connections[index].profile = myMessage.Profile
+				}
+			}
+			clog.Logger.Infof("recv: %d %s", mt, message)
 		} else {
 			break
 		}
