@@ -143,19 +143,21 @@ export default {
         console.log(event.data);
         //create a JSON object
         var jsonObject = JSON.parse(event.data);
-        if (jsonObject.action) {
-          if (that.$refs[jsonObject.action]) {
-            console.log("found action");
-            that.$refs[jsonObject.action].saveImg = jsonObject.imageurl;
+        if (jsonObject.profile == that.profileName) {
+          if (jsonObject.action) {
+            if (that.$refs[jsonObject.action]) {
+              console.log("found action");
+              that.$refs[jsonObject.action].saveImg = jsonObject.imageurl;
+              return;
+            }
+          }
+          if (jsonObject.page) {
+            console.log("change page ", jsonObject.page);
+            that.newPageName = jsonObject.page;
             return;
           }
+          console.log("action: ", jsonObject.action);
         }
-        if (jsonObject.page) {
-          console.log("change page ", jsonObject.page);
-          that.newPageName = jsonObject.page;
-          return;
-        }
-        console.log("action: ", jsonObject.action);
       };
 
       this.connection.onopen = function (event) {

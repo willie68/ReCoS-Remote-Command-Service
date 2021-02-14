@@ -13,7 +13,7 @@ type DelayCommand struct {
 }
 
 // Execute a delay in the actual context
-func (d *DelayCommand) Execute() (bool, error) {
+func (d *DelayCommand) Execute(a *Action) (bool, error) {
 	value, found := d.Parameters["time"]
 	if found {
 		delayValue, ok := value.(int)

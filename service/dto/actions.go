@@ -16,7 +16,7 @@ var Profiles []Profile
 
 // CommandExecutor is an interface for executing a command. Every command implementation has to implement this.
 type CommandExecutor interface {
-	Execute() (bool, error)
+	Execute(a *Action) (bool, error)
 }
 
 // Profile holding state informations about one profile
@@ -28,6 +28,7 @@ type Profile struct {
 
 // Action holding status of one action and can execute this action
 type Action struct {
+	Profile string
 	RunOne  bool
 	Name    string
 	Title   string
@@ -51,6 +52,7 @@ func InitProfiles(configProfiles []models.Profile) error {
 			count++
 			title := fmt.Sprintf("%s_%d", configAction.Name, count)
 			action := Action{
+				Profile: configProfile.Name,
 				RunOne:  configAction.RunOne,
 				Name:    configAction.Name,
 				Config:  configAction,
@@ -126,6 +128,7 @@ func (a *Action) Execute() (bool, error) {
 				imageName = command.Icon
 			}
 			message := models.Message{
+				Profile:  a.Profile,
 				Action:   a.Name,
 				ImageURL: imageName,
 				State:    index + 1,
@@ -135,13 +138,14 @@ func (a *Action) Execute() (bool, error) {
 			if cmdExecutor == nil {
 				clog.Logger.Errorf("can't find command with type: %s", command.Type)
 			}
-			ok, err := cmdExecutor.Execute()
+			ok, err := cmdExecutor.Execute(a)
 			if err != nil {
 				clog.Logger.Errorf("error executing command: %v", err)
 			}
 			clog.Logger.Debugf("executing command result: %v", ok)
 		}
 		message := models.Message{
+			Profile:  a.Profile,
 			Action:   a.Name,
 			ImageURL: "check_mark.png",
 			State:    0,
@@ -150,6 +154,7 @@ func (a *Action) Execute() (bool, error) {
 		go func() {
 			time.Sleep(3 * time.Second)
 			message := models.Message{
+				Profile:  a.Profile,
 				Action:   a.Name,
 				ImageURL: "",
 				State:    0,

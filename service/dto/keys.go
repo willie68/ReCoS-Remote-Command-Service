@@ -18,7 +18,7 @@ type KeysCommand struct {
 }
 
 // Execute the command
-func (p *KeysCommand) Execute() (bool, error) {
+func (p *KeysCommand) Execute(a *Action) (bool, error) {
 	kb, err := keybd_event.NewKeyBonding()
 	if err != nil {
 		clog.Logger.Errorf("error: %v", err)

@@ -14,12 +14,13 @@ type PageCommand struct {
 }
 
 // Execute the command
-func (p *PageCommand) Execute() (bool, error) {
+func (p *PageCommand) Execute(a *Action) (bool, error) {
 	value, found := p.Parameters["page"]
 	if found {
 		cmdValue, ok := value.(string)
 		if ok {
 			message := models.Message{
+				Profile:  a.Profile,
 				Page:     cmdValue,
 				ImageURL: "check_mark.png",
 				State:    0,

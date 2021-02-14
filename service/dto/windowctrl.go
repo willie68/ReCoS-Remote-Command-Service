@@ -20,7 +20,7 @@ type WindowCtrlCommand struct {
 }
 
 // Execute the command
-func (e *WindowCtrlCommand) Execute() (bool, error) {
+func (e *WindowCtrlCommand) Execute(a *Action) (bool, error) {
 
 	value, found := e.Parameters["caption"]
 	if !found {

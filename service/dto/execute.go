@@ -15,7 +15,7 @@ type ExecuteCommand struct {
 }
 
 // Execute the command
-func (e *ExecuteCommand) Execute() (bool, error) {
+func (e *ExecuteCommand) Execute(a *Action) (bool, error) {
 	value, found := e.Parameters["command"]
 	if found {
 		cmdValue, ok := value.(string)
