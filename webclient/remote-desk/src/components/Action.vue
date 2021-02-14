@@ -9,7 +9,9 @@
     }"
     @click="actionClick"
   >
-    <span><b>{{ text }}</b></span>
+    <span
+      ><b>{{ title }}</b></span
+    >
   </div>
 </template>
 
@@ -29,6 +31,7 @@ export default {
     return {
       // imageUrl: "assets/point_red.png",
       saveImg: "",
+      saveTitle: "",
     };
   },
   computed: {
@@ -39,6 +42,16 @@ export default {
           return "assets/" + this.saveImg;
         }
         return this.icon ? "assets/" + this.icon : "";
+      }
+      return "";
+    },
+    title() {
+      console.log("actionName:" + this.actionName);
+      if (this.actionName) {
+        if (this.saveTitle) {
+          return this.saveTitle;
+        }
+        return this.text;
       }
       return "";
     },
@@ -65,7 +78,7 @@ export default {
         fetch(actionPostUrl, options)
           .then((res) => res.json())
           .then((data) => {
-            setTimeout(()  => this.saveImg = "", 20000);
+            setTimeout(() => (this.saveImg = ""), 20000);
           })
           .catch((err) => console.log(err.message));
       }

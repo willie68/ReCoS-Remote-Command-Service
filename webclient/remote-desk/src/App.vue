@@ -148,6 +148,7 @@ export default {
             if (that.$refs[jsonObject.action]) {
               console.log("found action");
               that.$refs[jsonObject.action].saveImg = jsonObject.imageurl;
+              that.$refs[jsonObject.action].saveTitle = jsonObject.title;
               return;
             }
           }

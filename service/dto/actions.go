@@ -127,10 +127,15 @@ func (a *Action) Execute() (bool, error) {
 			if command.Icon != "" {
 				imageName = command.Icon
 			}
+			title := ""
+			if command.Title != "" {
+				title = command.Title
+			}
 			message := models.Message{
 				Profile:  a.Profile,
 				Action:   a.Name,
 				ImageURL: imageName,
+				Title:    title,
 				State:    index + 1,
 			}
 			api.SendMessage(message)
@@ -148,6 +153,7 @@ func (a *Action) Execute() (bool, error) {
 			Profile:  a.Profile,
 			Action:   a.Name,
 			ImageURL: "check_mark.png",
+			Title:    "",
 			State:    0,
 		}
 		api.SendMessage(message)
@@ -157,6 +163,7 @@ func (a *Action) Execute() (bool, error) {
 				Profile:  a.Profile,
 				Action:   a.Name,
 				ImageURL: "",
+				Title:    "",
 				State:    0,
 			}
 			api.SendMessage(message)

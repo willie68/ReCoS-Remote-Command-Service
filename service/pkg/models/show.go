@@ -47,5 +47,6 @@ type Message struct {
 	Action   string `json:"action"`
 	Page     string `json:"page"`
 	ImageURL string `json:"imageurl"`
+	Title    string `json:"title"`
 	State    int    `json:"state"`
 }

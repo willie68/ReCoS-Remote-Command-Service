@@ -163,7 +163,8 @@ This is the command, which should be executed
 type: the type of the command
 name: names the command
 icon: should be the icon that should be displayed when running this command
-paramters: parameters defers from command to command
+title: should be the text that should be displayed when running this command
+parameters: parameters defers from command to command
 
 #### Delay
 
@@ -299,3 +300,4 @@ move  x y: moving the window to the new position x,y
     command: minimize 
 ```
 
+​	

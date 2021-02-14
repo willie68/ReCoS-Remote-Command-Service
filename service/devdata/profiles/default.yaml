@@ -71,50 +71,62 @@ actions:
       - type: DELAY
         name: delay
         icon: address_book.png
+        title: step 1
         parameters:
           time: 1
       - type: DELAY
         name: delay
+        title: step 2
         parameters:
           time: 1
       - type: DELAY
         name: delay
+        title: step 3
         parameters:
           time: 1
       - type: DELAY
         name: delay
+        title: step 4
         parameters:
           time: 1
       - type: DELAY
         name: delay
+        title: step 5
         parameters:
           time: 1
       - type: DELAY
         name: delay
+        title: step 6
         parameters:
           time: 1
       - type: DELAY
         name: delay
+        title: step 7
         parameters:
           time: 1
       - type: DELAY
         name: delay
+        title: step 8
         parameters:
           time: 1
       - type: DELAY
         name: delay
+        title: step 9
         parameters:
           time: 1
       - type: DELAY
         name: delay
+        title: step 10
         parameters:
           time: 1
       - type: DELAY
         name: delay
+        title: step 11
         parameters:
           time: 1
       - type: DELAY
         name: delay
+        title: step 12
         parameters:
           time: 1
   - type: SINGLE

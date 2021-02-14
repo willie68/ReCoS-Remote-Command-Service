@@ -83,6 +83,8 @@ type Command struct {
 	Name string `json:"name"`
 	// Icon is the icon to show when this command is executing
 	Icon string `json:"icon"`
+	// Title is the title to show when this command is executing
+	Title string `json:"title"`
 	// Parameters of this command
 	Parameters map[string]interface{} `json:"parameters"`
 }
@@ -137,8 +139,10 @@ func (p *Page) Copy() Page {
 // Copy make a deep copy of this action
 func (c *Command) Copy() Command {
 	command := Command{
-		Name: c.Name,
-		Type: c.Type,
+		Name:  c.Name,
+		Type:  c.Type,
+		Icon:  c.Icon,
+		Title: c.Title,
 	}
 	var buf bytes.Buffer
 	enc := gob.NewEncoder(&buf)
