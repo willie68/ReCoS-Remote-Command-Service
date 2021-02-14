@@ -12,6 +12,7 @@ pages:
       - pause
       - sendkeys
       - window_ctrl
+      - noop
   - name: page2
     columns: 3
     rows: 3
@@ -218,3 +219,14 @@ actions:
         parameters:
           caption: Rechner 
           command: minimize
+  - type: SINGLE
+    name: noop
+    title: Do nothing
+    description: do nothing
+    icon: alarm_bell.png
+    runone: true
+    commands:
+      - type: NOOP
+        name: noop
+        icon: accesibility.png 
+        title: Waiting

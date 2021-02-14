@@ -122,6 +122,7 @@ func (a *Action) Execute() (bool, error) {
 	clog.Logger.Debugf("execution action %s_%d", a.Title, counter)
 	switch a.Config.Type {
 	case models.Single:
+		lastTitle := ""
 		for index, command := range a.Config.Commands {
 			imageName := fmt.Sprintf("hourglass%d.png", index%4)
 			if command.Icon != "" {
@@ -130,6 +131,7 @@ func (a *Action) Execute() (bool, error) {
 			title := ""
 			if command.Title != "" {
 				title = command.Title
+				lastTitle = title
 			}
 			message := models.Message{
 				Profile:  a.Profile,
@@ -153,7 +155,7 @@ func (a *Action) Execute() (bool, error) {
 			Profile:  a.Profile,
 			Action:   a.Name,
 			ImageURL: "check_mark.png",
-			Title:    "",
+			Title:    lastTitle,
 			State:    0,
 		}
 		api.SendMessage(message)

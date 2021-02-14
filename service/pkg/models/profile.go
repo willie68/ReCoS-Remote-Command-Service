@@ -73,6 +73,8 @@ const (
 	KeysCommand = "KEYS"
 	// WindowCtrlCommand sending key strokes to the active program
 	WindowCtrlCommand = "WINDOWCTRL"
+	// NoopCommand is a command with no operation, but the possibility to change text and icon
+	Noop = "NOOP"
 )
 
 // Command type

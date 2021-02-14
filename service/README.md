@@ -166,6 +166,23 @@ icon: should be the icon that should be displayed when running this command
 title: should be the text that should be displayed when running this command
 parameters: parameters defers from command to command
 
+#### No Operation
+
+Do nothing.
+
+Type: NOOP
+
+Parameter:  none
+
+Example
+
+```yaml
+type: DELAY
+name: delay
+icon: accesibility.png 
+title: Do Nothing
+```
+
 #### Delay
 
 Type: DELAY

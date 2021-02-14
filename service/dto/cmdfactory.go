@@ -6,6 +6,12 @@ import "wkla.no-ip.biz/remote-desk-service/pkg/models"
 func GetCommand(command models.Command) CommandExecutor {
 	var cmdExecutor CommandExecutor
 	switch command.Type {
+	case models.Noop:
+		{
+			cmdExecutor = &NoopCommand{
+				Parameters: command.Parameters,
+			}
+		}
 	case models.Delay:
 		{
 			cmdExecutor = &DelayCommand{
