@@ -5,6 +5,7 @@ import (
 	"time"
 
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
+	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
 // DelayCommand is a command to execute a delay. Using time for getting the ttime in seconds to delay the execution.
@@ -23,7 +24,7 @@ func (d *DelayCommand) Stop(a *Action) (bool, error) {
 }
 
 // Execute a delay in the actual context
-func (d *DelayCommand) Execute(a *Action) (bool, error) {
+func (d *DelayCommand) Execute(a *Action, requestMessage models.Message) (bool, error) {
 	value, found := d.Parameters["time"]
 	if found {
 		delayValue, ok := value.(int)

@@ -17,7 +17,7 @@ var Profiles []Profile
 // CommandExecutor is an interface for executing a command. Every command implementation has to implement this.
 type CommandExecutor interface {
 	Init(a *Action) (bool, error)
-	Execute(a *Action) (bool, error)
+	Execute(a *Action, requestMessage models.Message) (bool, error)
 	Stop(a *Action) (bool, error)
 }
 
@@ -79,7 +79,7 @@ func InitProfiles(configProfiles []models.Profile) error {
 }
 
 // Execute an action from a profile
-func Execute(profileName string, actionName string) (bool, error) {
+func Execute(profileName string, actionName string, message models.Message) (bool, error) {
 	profile, err := GetProfile(profileName)
 	if err != nil {
 		return false, err
@@ -88,12 +88,12 @@ func Execute(profileName string, actionName string) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	go doExecute(action)
+	go doExecute(action, message)
 	return true, nil
 }
 
-func doExecute(action *Action) {
-	_, err := action.Execute()
+func doExecute(action *Action, message models.Message) {
+	_, err := action.Execute(message)
 	if err != nil {
 		clog.Logger.Errorf("Error executing action: %v", err)
 	}
@@ -121,7 +121,7 @@ func (p *Profile) GetAction(actionName string) (*Action, error) {
 }
 
 // Execute an action
-func (a *Action) Execute() (bool, error) {
+func (a *Action) Execute(requestMessage models.Message) (bool, error) {
 	a.m.Lock()
 	a.counter++
 	counter := a.counter
@@ -157,7 +157,7 @@ func (a *Action) Execute() (bool, error) {
 			if cmdExecutor == nil {
 				clog.Logger.Errorf("can't find command with type: %s", command.Type)
 			}
-			ok, err := cmdExecutor.Execute(a)
+			ok, err := cmdExecutor.Execute(a, requestMessage)
 			if err != nil {
 				clog.Logger.Errorf("error executing command: %v", err)
 			}

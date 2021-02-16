@@ -27,7 +27,7 @@ func (d *TimerCommand) Stop(a *Action) (bool, error) {
 }
 
 // Execute a timer in the actual context
-func (d *TimerCommand) Execute(a *Action) (bool, error) {
+func (d *TimerCommand) Execute(a *Action, requestMessage models.Message) (bool, error) {
 	value, found := d.Parameters["format"]
 	format := "%d seconds"
 	if found {

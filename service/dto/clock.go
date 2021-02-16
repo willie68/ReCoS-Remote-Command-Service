@@ -63,6 +63,6 @@ func (c *ClockCommand) Stop(a *Action) (bool, error) {
 }
 
 // Execute a delay in the actual context
-func (d *ClockCommand) Execute(a *Action) (bool, error) {
+func (d *ClockCommand) Execute(a *Action, requestMessage models.Message) (bool, error) {
 	return true, nil
 }

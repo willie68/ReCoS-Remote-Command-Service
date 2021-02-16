@@ -9,6 +9,7 @@ import (
 	"github.com/micmonay/keybd_event"
 	"wkla.no-ip.biz/remote-desk-service/internal/utils"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
+	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
 // KeysCommand is a command to send keystroke to the active application.
@@ -29,7 +30,7 @@ func (p *KeysCommand) Stop(a *Action) (bool, error) {
 }
 
 // Execute the command
-func (p *KeysCommand) Execute(a *Action) (bool, error) {
+func (p *KeysCommand) Execute(a *Action, requestMessage models.Message) (bool, error) {
 	kb, err := keybd_event.NewKeyBonding()
 	if err != nil {
 		clog.Logger.Errorf("error: %v", err)

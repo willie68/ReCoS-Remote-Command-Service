@@ -5,6 +5,7 @@ import (
 	"os/exec"
 
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
+	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
 // ExecuteCommand is a command to execute a program or batch file.
@@ -25,7 +26,7 @@ func (e *ExecuteCommand) Stop(a *Action) (bool, error) {
 }
 
 // Execute the command
-func (e *ExecuteCommand) Execute(a *Action) (bool, error) {
+func (e *ExecuteCommand) Execute(a *Action, requestMessage models.Message) (bool, error) {
 	value, found := e.Parameters["command"]
 	if found {
 		cmdValue, ok := value.(string)

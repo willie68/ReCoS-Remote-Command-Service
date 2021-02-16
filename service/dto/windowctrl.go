@@ -9,6 +9,7 @@ import (
 	"github.com/TheTitanrain/w32"
 	"github.com/hnakamur/w32syscall"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
+	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
 // WindowCtrlCommand is a command to execute a program or batch file.
@@ -29,7 +30,7 @@ func (e *WindowCtrlCommand) Stop(a *Action) (bool, error) {
 }
 
 // Execute the command
-func (e *WindowCtrlCommand) Execute(a *Action) (bool, error) {
+func (e *WindowCtrlCommand) Execute(a *Action, requestMessage models.Message) (bool, error) {
 
 	value, found := e.Parameters["caption"]
 	if !found {
@@ -60,7 +61,6 @@ func (e *WindowCtrlCommand) Execute(a *Action) (bool, error) {
 	return internalDoWork(caption, cmdValue)
 }
 
-// github.com/gonutz/w32
 func internalDoWork(caption string, command string) (bool, error) {
 	command = strings.ToLower(strings.TrimSpace(command))
 	err := w32syscall.EnumWindows(func(hwnd syscall.Handle, lparam uintptr) bool {

@@ -7,6 +7,7 @@ import (
 
 	"github.com/kbinani/screenshot"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
+	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
 // ScreenshotCommand is a command to do a sceen shot and store this into the filesystem
@@ -25,7 +26,7 @@ func (s *ScreenshotCommand) Stop(a *Action) (bool, error) {
 }
 
 // Execute a delay in the actual context
-func (s *ScreenshotCommand) Execute(a *Action) (bool, error) {
+func (s *ScreenshotCommand) Execute(a *Action, requestMessage models.Message) (bool, error) {
 	value, found := s.Parameters["saveto"]
 	if !found {
 		return false, fmt.Errorf("Folder is missing")

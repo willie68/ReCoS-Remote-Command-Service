@@ -8,6 +8,7 @@
       backgroundImage: 'url(' + imageUrl + ')',
     }"
     @click="actionClick"
+    @dblclick="actionDblClick"
   >
     <span
       ><b>{{ title }}</b></span
@@ -78,7 +79,30 @@ export default {
           this.actionUrl + "/" + this.profile + "/" + this.actionName;
         var options = {
           method: "POST",
-          body: JSON.stringify(""),
+          body: JSON.stringify({ profile: this.profile, action: this.actionName, page: this.page, command: "click" }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
+        this.saveImg = "hourglass.png";
+        fetch(actionPostUrl, options)
+          .then((res) => res.json())
+          .then((data) => {
+            setTimeout(() => (this.saveImg = ""), 20000);
+          })
+          .catch((err) => console.log(err.message));
+      }
+    },
+    actionDblClick() {
+      console.log(
+        "action " + this.profile + ":" + this.actionName + " clicked"
+      );
+      if (this.actionName) {
+        var actionPostUrl =
+          this.actionUrl + "/" + this.profile + "/" + this.actionName;
+        var options = {
+          method: "POST",
+          body: JSON.stringify({ profile: this.profile, action: this.actionName, page: this.page, command: "dblclick" }),
           headers: {
             "Content-Type": "application/json",
           },

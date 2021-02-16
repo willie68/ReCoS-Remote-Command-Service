@@ -24,7 +24,7 @@ func (p *PageCommand) Stop(a *Action) (bool, error) {
 }
 
 // Execute the command
-func (p *PageCommand) Execute(a *Action) (bool, error) {
+func (p *PageCommand) Execute(a *Action, requestMessage models.Message) (bool, error) {
 	value, found := p.Parameters["page"]
 	if found {
 		cmdValue, ok := value.(string)
