@@ -362,4 +362,22 @@ move  x y: moving the window to the new position x,y
     command: minimize 
 ```
 
-​	
+#### Screenshot, making a screenshot
+
+With this command, you can take a screenshot. 
+
+type: SCREENSHOT
+
+Parameter:
+saveto: the folder, where the screen shot will be saved. Format is `screen_<#number>_<display>.png`
+display: optional, the number of the display, if you want to store screen shot of every display please use -1. Getting the right display, simply do a screen shot with display = -1. Than look at the screen shots and look in the name at the last number of the right image. That is your display.
+
+```yaml
+type: SCREENSHOT
+name: screenshot
+parameters:
+  saveto: e:/temp/screenshot
+  display: 1
+```
+
+#### 

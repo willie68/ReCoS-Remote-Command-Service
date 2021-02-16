@@ -9,11 +9,14 @@ require (
 	github.com/aphistic/golf v0.0.0-20180712155816-02c07f170c5a
 	github.com/aphistic/sweet v0.3.0 // indirect
 	github.com/armon/go-metrics v0.3.4 // indirect
+	github.com/fogleman/gg v1.3.0
+	github.com/gen2brain/shm v0.0.0-20200228170931-49f9650110c5 // indirect
 	github.com/go-chi/chi v4.1.2+incompatible
 	github.com/go-chi/cors v1.1.1
 	github.com/go-chi/httptracer v0.2.0 // indirect
 	github.com/go-chi/render v1.0.1
 	github.com/go-playground/validator/v10 v10.4.1
+	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/golang/protobuf v1.4.3 // indirect
 	github.com/gonutz/w32 v1.0.0
 	github.com/gorilla/websocket v1.4.2
@@ -25,6 +28,8 @@ require (
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/hashicorp/serf v0.9.5 // indirect
 	github.com/hnakamur/w32syscall v0.0.0-20150329104255-b8b99ed86a56
+	github.com/kbinani/screenshot v0.0.0-20191211154542-3a185f1ce18f
+	github.com/lxn/win v0.0.0-20201111105847-2a20daff6a55 // indirect
 	github.com/micmonay/keybd_event v1.1.0
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
 	github.com/mitchellh/mapstructure v1.3.3 // indirect
@@ -33,8 +38,10 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/uber/jaeger-client-go v2.25.0+incompatible // indirect
 	github.com/uber/jaeger-lib v2.4.0+incompatible // indirect
+	github.com/vova616/screenshot v0.0.0-20191005130345-da36db2560ab
 	go.uber.org/atomic v1.7.0 // indirect
 	golang.org/x/crypto v0.0.0-20201112155050-0c6587e931a9 // indirect
+	golang.org/x/image v0.0.0-20210216034530-4410531fe030 // indirect
 	golang.org/x/net v0.0.0-20201110031124-69a78807bb2b // indirect
 	golang.org/x/sys v0.0.0-20201112073958-5cba982894dd // indirect
 	golang.org/x/text v0.3.4 // indirect

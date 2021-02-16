@@ -16,6 +16,7 @@ pages:
       - timer
       - timer2
       - clock
+      - screenshot
   - name: page2
     columns: 3
     rows: 3
@@ -231,7 +232,6 @@ actions:
     commands:
       - type: NOOP
         name: noop
-        icon: accesibility.png 
         title: Waiting
   - type: SINGLE
     name: timer
@@ -268,3 +268,15 @@ actions:
         name: clock
         parameters:
           format: "15:04:05\r\n02 Jan 06"
+  - type: SINGLE
+    name: screenshot
+    title: Screenshot
+    description: doing a screenshot
+    icon: monitor.png
+    runone: true
+    commands:
+      - type: SCREENSHOT
+        name: screenshot
+        parameters:
+          saveto: e:/temp/screenshot
+          display: 1

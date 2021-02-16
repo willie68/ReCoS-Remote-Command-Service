@@ -81,6 +81,8 @@ const (
 	Timer = "TIMER"
 	// Clock is a clock
 	Clock = "CLOCK"
+	// Screenshot saving to the file system
+	Screenshot = "SCREENSHOT"
 )
 
 // Command type
