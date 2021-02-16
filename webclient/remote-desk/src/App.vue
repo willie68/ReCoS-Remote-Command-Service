@@ -280,7 +280,7 @@ export default {
   background: black;
 }
 .row {
-  display: block;
+  display: flex;
 }
 .col {
   display: inline-block;
