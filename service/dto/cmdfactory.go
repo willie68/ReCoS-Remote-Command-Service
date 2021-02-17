@@ -36,12 +36,6 @@ func GetCommand(command models.Command) CommandExecutor {
 				Parameters: command.Parameters,
 			}
 		}
-	case models.WindowCtrlCommand:
-		{
-			cmdExecutor = &WindowCtrlCommand{
-				Parameters: command.Parameters,
-			}
-		}
 	case models.Timer:
 		{
 			cmdExecutor = &TimerCommand{
@@ -60,6 +54,9 @@ func GetCommand(command models.Command) CommandExecutor {
 				Parameters: command.Parameters,
 			}
 		}
+	}
+	if cmdExecutor == nil {
+		cmdExecutor = GetOSCommand(command)
 	}
 	return cmdExecutor
 }
