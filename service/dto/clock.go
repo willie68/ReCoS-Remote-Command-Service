@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"wkla.no-ip.biz/remote-desk-service/api"
-	clog "wkla.no-ip.biz/remote-desk-service/logging"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
@@ -21,7 +20,6 @@ type ClockCommand struct {
 
 // Init a delay in the actual context
 func (c *ClockCommand) Init(a *Action) (bool, error) {
-	clog.Logger.Info("initialising the clock")
 	c.action = a
 	c.stop = false
 	c.ticker = time.NewTicker(1 * time.Second)
@@ -63,6 +61,6 @@ func (c *ClockCommand) Stop(a *Action) (bool, error) {
 }
 
 // Execute a delay in the actual context
-func (d *ClockCommand) Execute(a *Action, requestMessage models.Message) (bool, error) {
+func (c *ClockCommand) Execute(a *Action, requestMessage models.Message) (bool, error) {
 	return true, nil
 }

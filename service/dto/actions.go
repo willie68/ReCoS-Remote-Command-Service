@@ -134,6 +134,7 @@ func (a *Action) Execute(requestMessage models.Message) (bool, error) {
 	switch a.Config.Type {
 	case models.Single:
 		lastTitle := ""
+		sendPostMessage := true
 		for index, command := range a.Config.Commands {
 			imageName := fmt.Sprintf("hourglass%d.png", index%4)
 			if command.Icon != "" {
@@ -162,26 +163,44 @@ func (a *Action) Execute(requestMessage models.Message) (bool, error) {
 				clog.Logger.Errorf("error executing command: %v", err)
 			}
 			clog.Logger.Debugf("executing command result: %v", ok)
+			sendPostMessage = sendPostMessage && ok
 		}
-		message := models.Message{
-			Profile:  a.Profile,
-			Action:   a.Name,
-			ImageURL: "check_mark.png",
-			Title:    lastTitle,
-			State:    0,
-		}
-		api.SendMessage(message)
-		go func() {
-			time.Sleep(3 * time.Second)
+		if sendPostMessage {
+
 			message := models.Message{
 				Profile:  a.Profile,
 				Action:   a.Name,
-				ImageURL: "",
-				Title:    "",
+				ImageURL: "check_mark.png",
+				Title:    lastTitle,
 				State:    0,
 			}
 			api.SendMessage(message)
-		}()
+			go func() {
+				time.Sleep(3 * time.Second)
+				message := models.Message{
+					Profile:  a.Profile,
+					Action:   a.Name,
+					ImageURL: "",
+					Title:    "",
+					State:    0,
+				}
+				api.SendMessage(message)
+			}()
+		}
 	}
 	return true, nil
+}
+
+func IsSingleClick(message models.Message) bool {
+	if message.Command == "" {
+		return false
+	}
+	return message.Command == "click"
+}
+
+func IsDblClick(message models.Message) bool {
+	if message.Command == "" {
+		return false
+	}
+	return message.Command == "dblclick"
 }

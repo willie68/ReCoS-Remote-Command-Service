@@ -37,9 +37,9 @@ export default {
       console.log("actionName:" + this.actionName);
       if (this.actionName) {
         if (this.saveImg) {
-          return "assets/" + this.saveImg;
+          return this.buildImageSrc(this.saveImg);
         }
-        return this.icon ? "assets/" + this.icon : "";
+        return this.icon ? this.buildImageSrc(this.icon) : "";
       }
       return "";
     },
@@ -57,6 +57,15 @@ export default {
   methods: {
     closeModal() {
       this.$emit("close");
+    },
+    buildImageSrc(data) {
+      if (data.startsWith("/")) {
+        return data;
+      }
+      if (data.startsWith("data:")) {
+        return data;
+      }
+      return "assets/" + data;
     },
   },
 };

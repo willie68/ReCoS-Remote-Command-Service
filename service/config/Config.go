@@ -14,6 +14,8 @@ type Config struct {
 	HealthCheck HealthCheck `yaml:"healthcheck"`
 
 	Profiles string `yaml:"profiles"`
+
+	ExternalConfig map[string]interface{} `yaml:"extconfig"`
 }
 
 // HealthCheck configuration for the health check system

@@ -11,3 +11,9 @@ healthcheck:
     period: 30
 
 profiles: ./devdata/profiles
+
+extconfig:
+    openhardwaremonitor:
+        url: http://127.0.0.1:12999/data.json
+        updateperiod: 5
+        

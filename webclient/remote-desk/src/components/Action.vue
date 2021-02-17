@@ -40,7 +40,7 @@ export default {
       console.log("actionName:" + this.actionName);
       if (this.actionName) {
         if (this.saveImg) {
-          return this.buildImageSrc(this.saveImg)
+          return this.buildImageSrc(this.saveImg);
         }
         return this.icon ? this.buildImageSrc(this.icon) : "";
       }
@@ -63,12 +63,12 @@ export default {
     },
     buildImageSrc(data) {
       if (data.startsWith("/")) {
-        return data
+        return data;
       }
       if (data.startsWith("data:")) {
-        return data
+        return data;
       }
-      return "assets/" + data
+      return "assets/" + data;
     },
     actionClick() {
       console.log(
@@ -79,7 +79,12 @@ export default {
           this.actionUrl + "/" + this.profile + "/" + this.actionName;
         var options = {
           method: "POST",
-          body: JSON.stringify({ profile: this.profile, action: this.actionName, page: this.page, command: "click" }),
+          body: JSON.stringify({
+            profile: this.profile,
+            action: this.actionName,
+            page: this.page,
+            command: "click",
+          }),
           headers: {
             "Content-Type": "application/json",
           },
@@ -102,7 +107,12 @@ export default {
           this.actionUrl + "/" + this.profile + "/" + this.actionName;
         var options = {
           method: "POST",
-          body: JSON.stringify({ profile: this.profile, action: this.actionName, page: this.page, command: "dblclick" }),
+          body: JSON.stringify({
+            profile: this.profile,
+            action: this.actionName,
+            page: this.page,
+            command: "dblclick",
+          }),
           headers: {
             "Content-Type": "application/json",
           },

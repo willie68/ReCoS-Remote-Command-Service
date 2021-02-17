@@ -16,6 +16,7 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/dto"
 	"wkla.no-ip.biz/remote-desk-service/error/serror"
 	"wkla.no-ip.biz/remote-desk-service/health"
+	"wkla.no-ip.biz/remote-desk-service/pkg/osdependent"
 
 	config "wkla.no-ip.biz/remote-desk-service/config"
 
@@ -240,6 +241,12 @@ func initConfig() {
 	}
 	if serviceURL != "" {
 		serviceConfig.ServiceURL = serviceURL
+	}
+
+	err := osdependent.InitOSDependend(serviceConfig)
+	if err != nil {
+		clog.Logger.Alertf("error starting os dependend worker: %s", err.Error())
+		os.Exit(1)
 	}
 }
 

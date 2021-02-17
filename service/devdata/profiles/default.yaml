@@ -17,6 +17,7 @@ pages:
       - timer2
       - clock
       - screenshot
+      - cpuload
   - name: page2
     columns: 3
     rows: 3
@@ -280,3 +281,16 @@ actions:
         parameters:
           saveto: e:/temp/screenshot
           display: 1
+  - type: DISPLAY
+    name: cpuload
+    title: cpu
+    description: cpu usage
+    runone: true
+    commands:
+      - type: HARDWAREMONITOR
+        name: cpu
+        parameters:
+          sensor: "CPU/Intel Core i7-6820HQ/Load/CPU Total"
+          format: "%0.1f"
+          display: text
+          

@@ -83,6 +83,8 @@ const (
 	Clock = "CLOCK"
 	// Screenshot saving to the file system
 	Screenshot = "SCREENSHOT"
+	// HardwareMonitorCommand
+	HardwareMonitorCommand = "HARDWAREMONITOR"
 )
 
 // Command type

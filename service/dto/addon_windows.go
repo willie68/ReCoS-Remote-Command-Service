@@ -14,6 +14,12 @@ func GetOSCommand(command models.Command) CommandExecutor {
 				Parameters: command.Parameters,
 			}
 		}
+	case models.HardwareMonitorCommand:
+		{
+			cmdExecutor = &HardwareMonitorCommand{
+				Parameters: command.Parameters,
+			}
+		}
 	}
 	return cmdExecutor
 }
