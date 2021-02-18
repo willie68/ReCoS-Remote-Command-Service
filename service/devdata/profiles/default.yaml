@@ -291,7 +291,7 @@ actions:
         name: cpu
         parameters:
           sensor: "CPU/Intel Core i7-6820HQ/Temperature/CPU Package"
-          format: "%0.1f"
+          format: "%0.1f °C"
           display: text
           ymin: 30
           ymax: 80
