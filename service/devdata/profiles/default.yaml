@@ -290,7 +290,7 @@ actions:
       - type: HARDWAREMONITOR
         name: cpu
         parameters:
-          sensor: "CPU/Intel Core i7-6820HQ/Load/CPU Total"
-          format: "%0.1f"
+          sensor: "CPU/Intel Core i7-10750H/Load/CPU Total"
+          format: "%0.1f %%"
           display: text
           
