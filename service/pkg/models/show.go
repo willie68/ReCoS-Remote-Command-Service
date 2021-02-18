@@ -48,6 +48,7 @@ type Message struct {
 	Page     string `json:"page"`
 	ImageURL string `json:"imageurl"`
 	Title    string `json:"title"`
+	Text     string `json:"text"`
 	State    int    `json:"state"`
 	Command  string `json:"command"`
 }

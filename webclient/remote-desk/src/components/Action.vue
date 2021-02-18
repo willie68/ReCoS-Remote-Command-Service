@@ -10,9 +10,10 @@
     @click="actionClick"
     @dblclick="actionDblClick"
   >
-    <span
-      ><b>{{ title }}</b></span
-    >
+    <div>
+      <p class="title">{{ mytitle }}</p>
+      <p class="text">{{ mytext }}</p>
+    </div>
   </div>
 </template>
 
@@ -20,6 +21,7 @@
 export default {
   name: "Action",
   props: [
+    "title",
     "text",
     "actionUrl",
     "actionHeight",
@@ -33,6 +35,7 @@ export default {
       // imageUrl: "assets/point_red.png",
       saveImg: "",
       saveTitle: "",
+      saveText: "",
     };
   },
   computed: {
@@ -46,13 +49,22 @@ export default {
       }
       return "";
     },
-    title() {
+    mytitle() {
       console.log("actionName:" + this.actionName);
       if (this.actionName) {
         if (this.saveTitle) {
           return this.saveTitle;
         }
-        return this.text;
+        return this.title;
+      }
+      return "";
+    },
+    mytext() {
+      console.log("actionName:" + this.actionName);
+      if (this.actionName) {
+        if (this.saveText) {
+          return this.saveText;
+        }
       }
       return "";
     },
@@ -145,6 +157,26 @@ export default {
   justify-content: center;
   align-items: center;
   display: flex;
+}
+
+.action .title {
+  color: #000;
+  font-size: 16px;
+  font-weight: bold;
+  text-shadow: -1px 1px 2px #fff, 
+  1px 1px 2px #fff, 
+  1px -1px 0 #fff,
+    -1px -1px 0 #fff;
+}
+
+.action .text {
+  color: #000;
+  font-size: 16px;
+  font-weight: bold;
+  text-shadow: -1px 1px 2px #fff, 
+  1px 1px 2px #fff, 
+  1px -1px 0 #fff,
+    -1px -1px 0 #fff;
 }
 
 .action h1 {

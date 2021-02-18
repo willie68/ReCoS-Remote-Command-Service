@@ -1,6 +1,6 @@
 <template>
   <div
-    class="action"
+    class="acdisplay"
     :class="{ noicon: icon === '', noaction: actionName === '' }"
     :style="{
       height: actionHeight + 'px',
@@ -8,9 +8,10 @@
       backgroundImage: 'url(' + imageUrl + ')',
     }"
   >
-    <span
-      ><b>{{ title }}</b></span
-    >
+    <div>
+      <p class="title">{{ mytitle }}</p>
+      <p class="text">{{ mytext }}</p>
+    </div>
   </div>
 </template>
 
@@ -18,6 +19,7 @@
 export default {
   name: "Display",
   props: [
+    "title",
     "text",
     "actionHeight",
     "actionWidth",
@@ -30,6 +32,7 @@ export default {
       // imageUrl: "assets/point_red.png",
       saveImg: "",
       saveTitle: "",
+      saveText: "",
     };
   },
   computed: {
@@ -43,13 +46,22 @@ export default {
       }
       return "";
     },
-    title() {
+    mytitle() {
       console.log("actionName:" + this.actionName);
       if (this.actionName) {
         if (this.saveTitle) {
           return this.saveTitle;
         }
-        return this.text;
+        return this.title;
+      }
+      return "";
+    },
+    mytext() {
+      console.log("actionName:" + this.actionName);
+      if (this.actionName) {
+        if (this.saveText) {
+          return this.saveText;
+        }
       }
       return "";
     },
@@ -72,7 +84,7 @@ export default {
 </script>
 
 <style>
-.action {
+.acdisplay {
   padding: 0px;
   margin: 0px;
   border: 10px;
@@ -88,25 +100,40 @@ export default {
   display: flex;
 }
 
-.action h1 {
+.acdisplay .title {
+  color: #000;
+  font-size: 16px;
+  font-weight: bold;
+  text-shadow: -1px 1px 2px #fff, 1px 1px 2px #fff, 1px -1px 0 #fff,
+    -1px -1px 0 #fff;
+}
+
+.acdisplay .text {
+  color: #000;
+  font-size: 16px;
+  font-weight: bold;
+  text-shadow: -1px 1px 2px #fff, 1px 1px 2px #fff, 1px -1px 0 #fff,
+    -1px -1px 0 #fff;
+}
+.acdisplay h1 {
   color: #03cfb4;
   font-style: italic;
   border: none;
   padding: 0;
 }
 
-.action p {
+.acdisplay p {
   font-style: normal;
 }
 
-.action.noicon {
+.acdisplay.noicon {
   background: lightgray;
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
 }
 
-.action.noaction {
+.acdisplay.noaction {
   background: rgb(45, 45, 45);
   color: black;
   background-size: 100% 100%;

@@ -44,6 +44,7 @@ type HardwareMonitorCommand struct {
 	yMaxValue  float64
 	yDelta     float64
 	color      color.Color
+	textonly   bool
 }
 
 // Init nothing
@@ -91,6 +92,18 @@ func (d *HardwareMonitorCommand) Init(a *Action) (bool, error) {
 	}
 	d.color = color
 
+	value, ok = d.Parameters["display"]
+	if !ok {
+		d.textonly = true
+	} else {
+		display := strings.ToLower(value.(string))
+		switch display {
+		case "text":
+			d.textonly = true
+		case "both":
+			d.textonly = false
+		}
+	}
 	d.action = a
 	d.stop = false
 	d.ticker = time.NewTicker(1 * time.Second)
@@ -114,6 +127,16 @@ func (d *HardwareMonitorCommand) Init(a *Action) (bool, error) {
 						temp = sensor.Value
 						value = sensor.ValueStr
 					}
+				}
+				if d.textonly {
+					message := models.Message{
+						Profile: d.action.Profile,
+						Action:  d.action.Name,
+						Text:    value,
+						State:   0,
+					}
+					api.SendMessage(message)
+					continue
 				}
 				d.temps = append(d.temps, temp)
 				if len(d.temps) > measurepoints {
@@ -194,7 +217,7 @@ func (d *HardwareMonitorCommand) SendPNG(value string) {
 		Profile:  d.action.Profile,
 		Action:   d.action.Name,
 		ImageURL: image,
-		Title:    value,
+		Text:     value,
 		State:    0,
 	}
 	api.SendMessage(message)

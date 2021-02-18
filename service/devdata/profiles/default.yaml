@@ -17,6 +17,7 @@ pages:
       - timer2
       - clock
       - screenshot
+      - cputemp
       - cpuload
   - name: page2
     columns: 3
@@ -26,6 +27,12 @@ pages:
       - action1
       - action2
       - pause
+  - name: hardware
+    columns: 3
+    rows: 3
+    cells:
+      - cputemp
+      - cpuload
 actions:
   - type: SINGLE
     name: action1
@@ -282,10 +289,11 @@ actions:
           saveto: e:/temp/screenshot
           display: 1
   - type: DISPLAY
-    name: cpuload
-    title: cpu
-    description: cpu usage
+    name: cputemp
+    title: cpu Temp
+    description: cpu temp
     runone: true
+    icon: company.png
     commands:
       - type: HARDWAREMONITOR
         name: cpu
@@ -295,4 +303,18 @@ actions:
           display: text
           ymin: 30
           ymax: 80
-          color: "#ff0000"
+          color: "#ffff00"
+  - type: DISPLAY
+    name: cpuload
+    title: cpu load
+    description: cpu usage
+    runone: true
+    icon: company.png
+    commands:
+      - type: HARDWAREMONITOR
+        name: cpu
+        parameters:
+          sensor: "CPU/Intel Core i7-6820HQ/Load/CPU Total"
+          format: "%0.1f °C"
+          display: both
+          color: "#ffff00"

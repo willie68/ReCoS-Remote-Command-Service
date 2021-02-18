@@ -38,7 +38,7 @@
         :style="{ width: cellWidth + 'px' }"
       >
         <Action
-          :text="texts[x][y]"
+          :title="texts[x][y]"
           :actionUrl="actionURL"
           :actionHeight="actionHeight"
           :actionWidth="actionWidth"
@@ -49,7 +49,7 @@
           v-if="types[x][y] == 'SINGLE'"
         ></Action>
         <Display
-          :text="texts[x][y]"
+          :title="texts[x][y]"
           :actionHeight="actionHeight"
           :actionWidth="actionWidth"
           :profile="profileName"
@@ -166,6 +166,7 @@ export default {
               // console.log("found action");
               that.$refs[jsonObject.action].saveImg = jsonObject.imageurl;
               that.$refs[jsonObject.action].saveTitle = jsonObject.title;
+              that.$refs[jsonObject.action].saveText = jsonObject.text;
               return;
             }
           }
