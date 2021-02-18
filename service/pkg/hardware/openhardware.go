@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 	"sync"
 	"time"
@@ -54,7 +55,7 @@ func InitOpenHardwareMonitor(extconfig map[string]interface{}) error {
 				for _, sensor := range OpenHardwareMonitorInstance.Sensorlist {
 					clog.Logger.Infof("found sensor with name: %s", sensor.GetFullSensorName())
 				}
-
+				writingSensorList(OpenHardwareMonitorInstance.Sensorlist)
 				go func() {
 					for {
 						select {
@@ -145,6 +146,34 @@ func (o *OpenHardwareMonitor) updateSensorList() error {
 	defer o.m.Unlock()
 	o.Sensorlist = sensors
 	return nil
+}
+
+func writingSensorList(sensorlist []models.Sensor) {
+	f, err := os.Create("sensorlist.txt")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	_, err = f.WriteString("Sensor full name;Category;Hardware;Type;Sensor name;Value (e.g.)\r\n")
+	if err != nil {
+		fmt.Println(err)
+		f.Close()
+		return
+	}
+
+	for _, sensor := range sensorlist {
+		_, err := f.WriteString(fmt.Sprintf("%s;%s;%s;%s;%s;%s\r\n", sensor.GetFullSensorName(), sensor.Categorie, sensor.Hardwarename, sensor.Type, sensor.Name, sensor.ValueStr))
+		if err != nil {
+			fmt.Println(err)
+			f.Close()
+			return
+		}
+	}
+	err = f.Close()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 }
 
 func string2SensorCategorie(value string) models.SensorCategorie {

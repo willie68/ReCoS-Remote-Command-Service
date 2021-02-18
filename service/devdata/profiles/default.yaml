@@ -290,7 +290,7 @@ actions:
           display: 1
   - type: DISPLAY
     name: cputemp
-    title: cpu Temp
+    title: CPU Temp
     description: cpu temp
     runone: true
     icon: company.png
@@ -306,7 +306,7 @@ actions:
           color: "#ffff00"
   - type: DISPLAY
     name: cpuload
-    title: cpu load
+    title: CPU Load
     description: cpu usage
     runone: true
     icon: company.png
