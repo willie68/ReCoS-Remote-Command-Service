@@ -5,6 +5,8 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/json"
+	"fmt"
+	"image/color"
 	"image/png"
 	"strings"
 	"time"
@@ -16,7 +18,20 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
-// HardwareMonitorCommand is a command to do nothing.
+const measurepoints = 100
+const imageWidth = measurepoints
+const imageHeight = measurepoints
+
+// HardwareMonitorCommand This command connects to the openhardwaremonitor application on windows.
+// With this you can get different sensors of your computer. For using the webserver of the openhardwaremonitor
+// app, you have to add another external configuration into the main service configuration.
+// This command has the following parameters:
+// sensor: the sensor name like given above.
+// format: the format string for the textual representation
+// display: text, graph,  text shows only the textual representation, graph shows both
+// ymin: the value for the floor of the graph
+// ymax: the value for the bottom of the graph
+// color: color of the graph
 type HardwareMonitorCommand struct {
 	Parameters map[string]interface{}
 	action     *Action
@@ -25,11 +40,57 @@ type HardwareMonitorCommand struct {
 	done       chan bool
 	temps      []float64
 	sensors    []models.Sensor
+	yMinValue  float64
+	yMaxValue  float64
+	yDelta     float64
+	color      color.Color
 }
 
 // Init nothing
 func (d *HardwareMonitorCommand) Init(a *Action) (bool, error) {
-	d.temps = make([]float64, 72)
+	d.temps = make([]float64, measurepoints)
+	value, ok := d.Parameters["ymin"]
+	if !ok {
+		d.yMinValue = 0
+	} else {
+		switch v := value.(type) {
+		case int:
+			d.yMinValue = float64(v)
+		case float32:
+			d.yMinValue = float64(v)
+		case float64:
+			d.yMinValue = v
+		}
+	}
+
+	value, ok = d.Parameters["ymax"]
+	if !ok {
+		d.yMaxValue = 100
+	} else {
+		switch v := value.(type) {
+		case int:
+			d.yMaxValue = float64(v)
+		case float32:
+			d.yMaxValue = float64(v)
+		case float64:
+			d.yMaxValue = v
+		}
+	}
+	d.yDelta = d.yMaxValue - d.yMinValue
+
+	value, ok = d.Parameters["color"]
+	if !ok {
+		d.color = color.RGBA{
+			R: 255, G: 0, B: 0, A: 0,
+		}
+	}
+	color, err := parseHexColor(value.(string))
+	if err != nil {
+		clog.Logger.Errorf("error in getting sensors: %v", err)
+		return false, err
+	}
+	d.color = color
+
 	d.action = a
 	d.stop = false
 	d.ticker = time.NewTicker(1 * time.Second)
@@ -55,9 +116,8 @@ func (d *HardwareMonitorCommand) Init(a *Action) (bool, error) {
 					}
 				}
 				d.temps = append(d.temps, temp)
-				if len(d.temps) > 72 {
+				if len(d.temps) > measurepoints {
 					d.temps = d.temps[1:]
-
 				}
 				d.SendPNG(value)
 			}
@@ -90,33 +150,25 @@ func (d *HardwareMonitorCommand) Execute(a *Action, requestMessage models.Messag
 
 // SendPNG sending this array to the client
 func (d *HardwareMonitorCommand) SendPNG(value string) {
-	dc := gg.NewContext(72, 72)
-	dc.SetRGB(1, 0, 0)
-	//dc.DrawRectangle(0, 0, 72, 72)
+	dc := gg.NewContext(imageWidth, imageHeight)
+	dc.SetColor(d.color)
 	dc.InvertY()
 	dc.MoveTo(0, 0)
 	xLast := 0.0
 	for index, temp := range d.temps {
-		var x float64
-		var y float64
-		x = float64(index)
-		y = (72.0 / 100.0) * temp
+		x, y := d.projectPoint(float64(index), temp)
 		dc.LineTo(x, y)
 		xLast = x
 	}
 	dc.LineTo(xLast, 0)
 	dc.LineTo(0, 0)
 	dc.Stroke()
-
-	dc.SetRGB(0.7, 0, 0)
+	dc.SetColor(d.color)
 	dc.MoveTo(0, 0)
 	xLast = 0.0
 	for index, temp := range d.temps {
-		var x float64
-		var y float64
-		x = float64(index)
-		y = (72.0 / 100.0) * temp
-		dc.LineTo(x, y-1)
+		x, y := d.projectPoint(float64(index), temp)
+		dc.LineTo(x, y-1.0)
 		xLast = x
 	}
 	dc.LineTo(xLast, 0)
@@ -146,4 +198,34 @@ func (d *HardwareMonitorCommand) SendPNG(value string) {
 		State:    0,
 	}
 	api.SendMessage(message)
+}
+
+func (d *HardwareMonitorCommand) projectPoint(x float64, y float64) (xDest float64, yDest float64) {
+	xDest = x
+
+	if y < d.yMinValue {
+		yDest = 0
+	} else if y > d.yMaxValue {
+		yDest = d.yMaxValue
+	} else {
+		yDest = (float64(imageHeight) / d.yDelta) * (y - d.yMinValue)
+	}
+	return
+}
+
+func parseHexColor(s string) (c color.RGBA, err error) {
+	c.A = 0xff
+	switch len(s) {
+	case 7:
+		_, err = fmt.Sscanf(s, "#%02x%02x%02x", &c.R, &c.G, &c.B)
+	case 4:
+		_, err = fmt.Sscanf(s, "#%1x%1x%1x", &c.R, &c.G, &c.B)
+		// Double the hex digits:
+		c.R *= 17
+		c.G *= 17
+		c.B *= 17
+	default:
+		err = fmt.Errorf("invalid length, must be 7 or 4")
+	}
+	return
 }

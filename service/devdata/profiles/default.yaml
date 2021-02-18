@@ -290,7 +290,9 @@ actions:
       - type: HARDWAREMONITOR
         name: cpu
         parameters:
-          sensor: "CPU/Intel Core i7-6820HQ/Load/CPU Total"
+          sensor: "CPU/Intel Core i7-6820HQ/Temperature/CPU Package"
           format: "%0.1f"
           display: text
-          
+          ymin: 30
+          ymax: 80
+          color: "#ff0000"
