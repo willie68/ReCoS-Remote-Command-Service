@@ -27,13 +27,13 @@
   <div class="display" ref="display">
     <div
       class="row"
-      v-for="(row, x) in cells"
+      v-for="(row, x) in cellactions"
       :key="x"
       :style="{ height: cellHeight + 'px' }"
     >
       <div
         class="col"
-        v-for="(col, y) in cells[x]"
+        v-for="(col, y) in cellactions[x]"
         :key="y"
         :style="{ width: cellWidth + 'px' }"
       >
@@ -43,9 +43,9 @@
           :actionHeight="actionHeight"
           :actionWidth="actionWidth"
           :profile="profileName"
-          :actionName="cells[x][y]"
+          :actionName="cellactions[x][y].name"
           :icon="cellactions[x][y].icon"
-          :ref="cells[x][y]"
+          :ref="cellactions[x][y].name"
           :fontsize="cellactions[x][y].fontsize"
           :fontcolor="cellactions[x][y].fontcolor"
           :outlined="cellactions[x][y].outlined"
@@ -56,9 +56,9 @@
           :actionHeight="actionHeight"
           :actionWidth="actionWidth"
           :profile="profileName"
-          :actionName="cells[x][y]"
+          :actionName="cellactions[x][y].name"
           :icon="cellactions[x][y].icon"
-          :ref="cells[x][y]"
+          :ref="cellactions[x][y].name"
           :fontsize="cellactions[x][y].fontsize"
           :fontcolor="cellactions[x][y].fontcolor"
           :outlined="cellactions[x][y].outlined"
@@ -104,7 +104,6 @@ export default {
       activeProfile: {},
       pageName: "",
       activePage: {},
-      cells: [[]],
       cellactions: [[]],
       cellWidth: 20,
       cellHeight: 20,
@@ -227,10 +226,8 @@ export default {
         }
       });
       console.log(this.activePage);
-      this.cells = new Array(this.activePage.rows);
       this.cellactions = new Array(this.activePage.rows);
       for (let x = 0; x < this.activePage.rows; x++) {
-        this.cells[x] = new Array(this.activePage.columns);
         this.cellactions[x] = new Array(this.activePage.columns);
         for (let y = 0; y < this.activePage.columns; y++) {
           var action = undefined;
@@ -242,10 +239,8 @@ export default {
             }
           });
           if (action) {
-            this.cells[x][y] = action.name;
             this.cellactions[x][y] = action;
           } else {
-            this.cells[x][y] = "";
             this.cellactions[x][y] = {};
           }
         }
