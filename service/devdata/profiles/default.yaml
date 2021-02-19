@@ -39,6 +39,9 @@ actions:
     title: Action Title Sync
     description: description for action
     icon: trash_can.png
+    fontsize: 10
+    fontcolor: "#FF0000"
+    outlined: true
     runone: true
     commands:
       - type: DELAY

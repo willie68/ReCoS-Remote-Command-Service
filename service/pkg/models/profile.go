@@ -54,6 +54,12 @@ type Action struct {
 	Icon string `json:"icon"`
 	// Description of this action for information
 	Description string `json:"description"`
+	// Fontsize size of the title and text font
+	Fontsize int `json:"fontsize"`
+	// Fontcolor color of the title and text font
+	Fontcolor string `json:"fontcolor"`
+	// Outlined the font of the title and text font
+	Outlined bool `json:"outlined"`
 	// RunOne means only run one instance of this action at one time.
 	// Scheduling more than one execution will lead into a sequentiell execution
 	RunOne bool `json:"runone"`

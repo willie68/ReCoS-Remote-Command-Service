@@ -11,8 +11,8 @@
     @dblclick="actionDblClick"
   >
     <div>
-      <p class="title">{{ mytitle }}</p>
-      <p class="text">{{ mytext }}</p>
+      <p class="title" :style="textStyle">{{ mytitle }}</p>
+      <p class="text" :style="textStyle">{{ mytext }}</p>
     </div>
   </div>
 </template>
@@ -29,6 +29,9 @@ export default {
     "profile",
     "actionName",
     "icon",
+    "fontsize",
+    "fontcolor",
+    "outlined",
   ],
   data() {
     return {
@@ -39,6 +42,13 @@ export default {
     };
   },
   computed: {
+    textStyle() {
+      return {
+        fontSize: this.fontsize ? this.fontsize + "px" : "14px",
+        color: this.fontcolor ? this.fontcolor : "black",
+        textShadow: this.outlined ? "-1px 1px 2px #fff, 1px 1px 2px #fff, 1px -1px 0 #fff, -1px -1px 0 #fff" : ""
+      };
+    },
     imageUrl() {
       console.log("actionName:" + this.actionName);
       if (this.actionName) {
@@ -163,20 +173,12 @@ export default {
   color: #000;
   font-size: 16px;
   font-weight: bold;
-  text-shadow: -1px 1px 2px #fff, 
-  1px 1px 2px #fff, 
-  1px -1px 0 #fff,
-    -1px -1px 0 #fff;
 }
 
 .action .text {
   color: #000;
   font-size: 16px;
   font-weight: bold;
-  text-shadow: -1px 1px 2px #fff, 
-  1px 1px 2px #fff, 
-  1px -1px 0 #fff,
-    -1px -1px 0 #fff;
 }
 
 .action h1 {

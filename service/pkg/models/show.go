@@ -31,6 +31,9 @@ type ActionInfo struct {
 	Title       string     `json:"title"`
 	Description string     `json:"description"`
 	Icon        string     `json:"icon"`
+	Fontsize    int        `json:"fontsize"`
+	Fontcolor   string     `json:"fontcolor"`
+	Outlined    bool       `json:"outlined"`
 }
 
 // PageInfo is all needed info for the action client of a defined profile page

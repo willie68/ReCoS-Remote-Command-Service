@@ -122,22 +122,28 @@ An action is the part which defines, what to do if a cell is triggered.
 
 The following parameters are used:
 
-type: **SINGLE** is a single shot action. The action is always starting the command list. 
+`type`: **SINGLE** is a single shot action. The action is always starting the command list. 
 **DISPLAY** is a display only cell. It will only show Text, Icons but you can't interact with it.
 **TOGGLE** is an action with two states, just like a on/off switch. For each transition you can define an own command list. 
 **MULTISTAGE** is the third option. Here you can define 3 or more stages, and you every stage you can define the status and a command list, which is fired on activating this stage. As you can see, TOGGLE is a Multiswitch with 2 Stages.
-name: s the name of the action
+`name`: s the name of the action
 title: the title of the action used by the UI
-description: user defined description of this action
-runone: is true or false. On true, if the action is fired twice, all commands of the first execution must be finished before the second execution will take place. On false, the execution will start directly without checking the action execution state.
-icon: the icon which will be displayed on the cell
-commands: list of commands for execution of this action
+`description`: user defined description of this action
+`runone`: is true or false. On true, if the action is fired twice, all commands of the first execution must be finished before the second execution will take place. On false, the execution will start directly without checking the action execution state.
+`icon`: the icon which will be displayed on the cell
+`fontsize`: the size of the title and the text, defaults to 14
+`fontcolor`: the color of the title and the text, defaults to black
+`outlined`: true or false, sometime reading a black text on a black ground is a little bit difficult. lining out can help.
+`commands`: list of commands for execution of this action
 
 ```yaml
 type: SINGLE
 name: action1
 title: Action Title Sync
 description: description for action
+fontsize: 10
+fontcolor: "#FF0000"
+outlined: true
 runone: true
 icon: trash_can.png
 commands:

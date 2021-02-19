@@ -17,6 +17,7 @@ import (
 
 type OpenHardwareMonitor struct {
 	baseURL    string
+	Connected  bool
 	periode    int
 	lastError  error
 	Sensorlist []models.Sensor
@@ -31,51 +32,60 @@ var once sync.Once
 // InitOpenHardwareMonitor initialise the open hardware monitor connection
 func InitOpenHardwareMonitor(extconfig map[string]interface{}) error {
 	var err error
-	once.Do(func() {
-		value, ok := extconfig["openhardwaremonitor"]
-		if ok {
-			config := value.(map[string]interface{})
-			if config != nil {
-				clog.Logger.Info("found config")
-				url, ok := config["url"].(string)
-				if !ok {
-					err = fmt.Errorf("can't find url to connect to. %s", url)
-				}
-				updatePeriod, ok := config["updateperiod"].(int)
-				if !ok {
-					updatePeriod = 5
-				}
-				OpenHardwareMonitorInstance = OpenHardwareMonitor{
-					periode: updatePeriod,
-					baseURL: url,
-					ticker:  time.NewTicker(time.Duration(updatePeriod) * time.Second),
-					done:    make(chan bool),
-				}
-				err = OpenHardwareMonitorInstance.updateSensorList()
-				for _, sensor := range OpenHardwareMonitorInstance.Sensorlist {
-					clog.Logger.Infof("found sensor with name: %s", sensor.GetFullSensorName())
-				}
-				writingSensorList(OpenHardwareMonitorInstance.Sensorlist)
-				go func() {
-					for {
-						select {
-						case <-OpenHardwareMonitorInstance.done:
-							return
-						case <-OpenHardwareMonitorInstance.ticker.C:
-							OpenHardwareMonitorInstance.lastError = OpenHardwareMonitorInstance.updateSensorList()
-						}
-					}
-				}()
+	value, ok := extconfig["openhardwaremonitor"]
+	if ok {
+		config := value.(map[string]interface{})
+		if config != nil {
+			clog.Logger.Info("found config")
+			url, ok := config["url"].(string)
+			if !ok {
+				err = fmt.Errorf("can't find url to connect to. %s", url)
+			}
+			updatePeriod, ok := config["updateperiod"].(int)
+			if !ok {
+				updatePeriod = 5
+			}
+			OpenHardwareMonitorInstance = OpenHardwareMonitor{
+				periode:   updatePeriod,
+				Connected: false,
+				baseURL:   url,
+				ticker:    time.NewTicker(time.Duration(updatePeriod) * time.Second),
+				done:      make(chan bool),
 			}
 		}
-	})
+	}
 	return err
+}
+
+func (o *OpenHardwareMonitor) Connect() error {
+	err := OpenHardwareMonitorInstance.updateSensorList()
+	if err != nil {
+		return err
+	}
+	for _, sensor := range OpenHardwareMonitorInstance.Sensorlist {
+		clog.Logger.Infof("found sensor with name: %s", sensor.GetFullSensorName())
+	}
+	writingSensorList(OpenHardwareMonitorInstance.Sensorlist)
+	go func() {
+		for {
+			select {
+			case <-OpenHardwareMonitorInstance.done:
+				return
+			case <-OpenHardwareMonitorInstance.ticker.C:
+				OpenHardwareMonitorInstance.lastError = OpenHardwareMonitorInstance.updateSensorList()
+			}
+		}
+	}()
+	return nil
 }
 
 // GetSensorList getting a sensor list from openhardwaremonitor
 func (o *OpenHardwareMonitor) GetSensorList() ([]models.Sensor, error) {
 	o.m.Lock()
 	defer o.m.Unlock()
+	if !o.Connected {
+		clog.Logger.Debug("no connection")
+	}
 	return o.Sensorlist, o.lastError
 }
 
@@ -88,9 +98,11 @@ func (o *OpenHardwareMonitor) GetPeriod() int {
 func (o *OpenHardwareMonitor) updateSensorList() error {
 	response, err := http.Get(o.baseURL)
 	if err != nil {
+		o.Connected = false
 		return fmt.Errorf("error getting sensor values. %v", err)
 	}
 	defer response.Body.Close()
+	o.Connected = true
 	var target map[string]interface{}
 	err = json.NewDecoder(response.Body).Decode(&target)
 	if err != nil {
