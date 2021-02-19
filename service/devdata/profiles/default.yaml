@@ -27,6 +27,7 @@ pages:
       - action1
       - action2
       - pause
+      - clock
   - name: hardware
     columns: 3
     rows: 3
@@ -274,6 +275,8 @@ actions:
     title: Clock
     description: timer counting down 20 sec
     runone: true
+    outlined: false
+    fontcolor: white
     commands:
       - type: CLOCK
         name: clock
@@ -297,6 +300,7 @@ actions:
     description: cpu temp
     runone: true
     icon: company.png
+    outlined: true
     commands:
       - type: HARDWAREMONITOR
         name: cpu
@@ -313,6 +317,8 @@ actions:
     description: cpu usage
     runone: true
     icon: company.png
+    outlined: false
+    fontcolor: white
     commands:
       - type: HARDWAREMONITOR
         name: cpu
