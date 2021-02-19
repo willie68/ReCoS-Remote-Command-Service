@@ -303,10 +303,10 @@ actions:
         parameters:
           sensor: "CPU/Intel Core i7-6820HQ/Temperature/CPU Package"
           format: "%0.1f °C"
-          display: text
+          display: both
           ymin: 30
           ymax: 80
-          color: "#ffff00"
+          color: "#00ff00"
   - type: DISPLAY
     name: cpuload
     title: CPU Load
@@ -318,6 +318,6 @@ actions:
         name: cpu
         parameters:
           sensor: "CPU/Intel Core i7-6820HQ/Load/CPU Total"
-          format: "%0.1f °C"
+          format: "%0.1f %"
           display: both
           color: "#ffff00"
