@@ -84,7 +84,7 @@ func (o *OpenHardwareMonitor) GetSensorList() ([]models.Sensor, error) {
 	o.m.Lock()
 	defer o.m.Unlock()
 	if !o.Connected {
-		clog.Logger.Debug("no connection")
+		return make([]models.Sensor, 0), nil
 	}
 	return o.Sensorlist, o.lastError
 }
