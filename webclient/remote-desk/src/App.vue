@@ -49,7 +49,7 @@
           :fontsize="cellactions[x][y].fontsize"
           :fontcolor="cellactions[x][y].fontcolor"
           :outlined="cellactions[x][y].outlined"
-          v-if="cellactions[x][y].type == 'SINGLE'"
+          v-if="(cellactions[x][y].type == 'SINGLE') || (cellactions[x][y].type == 'MULTI') "
         ></Action>
         <Display
           :title="cellactions[x][y].title"
@@ -163,12 +163,12 @@ export default {
       );
 
       this.connection.onmessage = function (event) {
-        // console.log(event.data);
         // create a JSON object
         var jsonObject = JSON.parse(event.data);
         if (jsonObject.profile == that.profileName) {
           if (jsonObject.action) {
             if (that.$refs[jsonObject.action]) {
+              console.log(event.data);
               // console.log("found action");
               that.$refs[jsonObject.action].saveImg = jsonObject.imageurl;
               that.$refs[jsonObject.action].saveTitle = jsonObject.title;

@@ -38,8 +38,8 @@ const (
 	Display = "DISPLAY"
 	//Toggle has a state, true or false and on every change it does an individual action
 	Toggle = "TOGGLE"
-	//MultiStage is an action which has more than 2 states and step to the next stage on every execution. After the last stage it return to the first one
-	MultiStage = "MULTISTAGE"
+	//Multi is an action which has more than 2 states and step to the next stage on every execution. After the last stage it return to the first one
+	Multi = "MULTI"
 )
 
 // Action type
@@ -65,6 +65,8 @@ type Action struct {
 	RunOne bool `json:"runone"`
 	// Commands are the magic behind this
 	Commands []Command `json:"commands"`
+	// Actions are the actions to execute behind a multi action button
+	Actions []string `json:"actions"`
 }
 
 // CommandType the command type
