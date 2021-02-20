@@ -16,7 +16,7 @@
       ></option>
     </select>
     <button
-      v-for="page in activeProfile.pages"
+      v-for="page in toolbarPages"
       :value="page.name"
       :key="page.name"
       v-text="page.name"
@@ -49,7 +49,10 @@
           :fontsize="cellactions[x][y].fontsize"
           :fontcolor="cellactions[x][y].fontcolor"
           :outlined="cellactions[x][y].outlined"
-          v-if="(cellactions[x][y].type == 'SINGLE') || (cellactions[x][y].type == 'MULTI') "
+          v-if="
+            cellactions[x][y].type == 'SINGLE' ||
+            cellactions[x][y].type == 'MULTI'
+          "
         ></Action>
         <Display
           :title="cellactions[x][y].title"
@@ -120,6 +123,21 @@ export default {
         this.changePage(newPageName);
       },
     },
+    toolbarPages: {
+      get: function () {
+        var a = [];
+        if (this.activeProfile) {
+          if (this.activeProfile.pages) {
+            this.activeProfile.pages.forEach((page) => {
+              if (page.toolbar != "hide") {
+                a.push(page);
+              }
+            });
+          }
+        }
+        return a;
+      },
+    },
   },
   mounted() {
     console.log("service url:" + this.baseURL);
@@ -155,8 +173,8 @@ export default {
       console.log("Starting connection to WebSocket Server");
       let that = this;
       if (this.connection) {
-        this.connection.close(1000, "Work complete")
-        this.connection = undefined
+        this.connection.close(1000, "Work complete");
+        this.connection = undefined;
       }
       this.connection = new WebSocket(
         "ws://" + window.location.hostname + ":" + this.servicePort + "/ws"
@@ -196,8 +214,8 @@ export default {
         console.log(event);
         console.log("Connection closed to the websocket server...");
         if (that.connection) {
-          that.connection.close(1000, "Work complete")
-          that.connection = undefined
+          that.connection.close(1000, "Work complete");
+          that.connection = undefined;
         }
         setTimeout(() => that.connectWS(), 2000);
       };

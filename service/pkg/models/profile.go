@@ -17,6 +17,13 @@ type Profile struct {
 	Actions []Action `json:"actions"`
 }
 
+type ToolbarType string
+
+const (
+	ToolbarShow ToolbarType = "show"
+	ToolbarHide             = "hide"
+)
+
 // Page is the most visible part of this. Every Page is organised in Rows and Columns. And with this every cell is a place for holding an action
 type Page struct {
 	Name string `json:"name"`
@@ -24,6 +31,8 @@ type Page struct {
 	Columns int `json:"columns"`
 	// Rows of this page
 	Rows int `json:"rows"`
+	// Rows of this page
+	Toolbar ToolbarType `json:"toolbar"`
 	// Cells are the ui container for the actions, only the action id will be used here
 	Cells []string `json:"cells"`
 }

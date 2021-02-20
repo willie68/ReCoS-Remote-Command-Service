@@ -73,6 +73,7 @@ func GetUIProfileEndpoint(response http.ResponseWriter, request *http.Request) {
 					Name:    page.Name,
 					Columns: page.Columns,
 					Rows:    page.Rows,
+					Toolbar: page.Toolbar,
 					Cells:   make([]string, 0),
 				}
 				for _, cell := range page.Cells {
