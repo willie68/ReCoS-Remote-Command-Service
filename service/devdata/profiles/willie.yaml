@@ -1,18 +1,66 @@
 name: Willie
 description: profile for willie
 pages:
-    - name: page1
-      columns: 5
-      rows: 5
-      cells:
-        - action1
+  - name: page1
+    columns: 2
+    rows: 2
+    cells:
+      - action1
+      - clock
+      - cpuload
+      - cputemp
 actions:
-    - type: SINGLE
-      name: action1
-      title: Action Title
-      description: description for action
-      commands:
-        - type: DELAY
-          name: delay
-          parameters:
-            time: 10
+  - type: SINGLE
+    name: action1
+    title: Action Title
+    description: description for action
+    commands:
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 10
+  - type: DISPLAY
+    name: cputemp
+    title: CPU Temp
+    description: cpu temp
+    runone: true
+    icon: company.png
+    outlined: true
+    commands:
+      - type: HARDWAREMONITOR
+        name: cpu
+        parameters:
+          sensor: "CPU/Intel Core i7-10750H/Temperature/CPU Package"
+          format: "%0.1f °C"
+          display: both
+          ymin: 30
+          ymax: 80
+          color: "#00ff00"
+  - type: DISPLAY
+    name: cpuload
+    title: CPU Load
+    description: cpu usage
+    runone: true
+    icon: company.png
+    outlined: false
+    fontcolor: white
+    commands:
+      - type: HARDWAREMONITOR
+        name: cpu
+        parameters:
+          sensor: "CPU/Intel Core i7-10750H/Load/CPU Total"
+          format: "%0.1f %"
+          display: both
+          color: "#ffff00"
+  - type: DISPLAY
+    name: clock
+    title: Clock
+    description: timer counting down 20 sec
+    runone: true
+    outlined: false
+    fontcolor: white
+    commands:
+      - type: CLOCK
+        name: clock
+        parameters:
+          format: "15:04:05\r\n02 Jan 06"

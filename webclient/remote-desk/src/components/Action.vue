@@ -167,6 +167,7 @@ export default {
   justify-content: center;
   align-items: center;
   display: flex;
+  transition: background-image 1s ease-in-out;
 }
 
 .action .title {

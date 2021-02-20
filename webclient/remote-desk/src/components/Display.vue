@@ -1,14 +1,14 @@
 <template>
   <div
     class="acdisplay"
-    :class="{ noicon: icon === '', noaction: actionName === '' }"
+    :class="{ noaction: actionName === '' }"
     :style="{
       height: actionHeight + 'px',
       width: actionWidth + 'px',
-      backgroundImage: 'url(' + imageUrl + ')',
     }"
   >
-    <div>
+    <img class="acimage" :src="imageUrl" />
+    <div class="textbox">
       <p class="title" :style="textStyle">{{ mytitle }}</p>
       <p class="text" :style="textStyle">{{ mytext }}</p>
     </div>
@@ -43,7 +43,9 @@ export default {
       return {
         fontSize: this.fontsize ? this.fontsize + "px" : "14px",
         color: this.fontcolor ? this.fontcolor : "black",
-        textShadow: this.outlined ? "-1px 1px 2px #fff, 1px 1px 2px #fff, 1px -1px 0 #fff, -1px -1px 0 #fff" : ""
+        textShadow: this.outlined
+          ? "-1px 1px 2px #fff, 1px 1px 2px #fff, 1px -1px 0 #fff, -1px -1px 0 #fff"
+          : "",
       };
     },
     imageUrl() {
@@ -101,19 +103,31 @@ export default {
   border-radius: 10px;
   text-align: center;
   color: black;
-  background: darkgray;
+  background: black;
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
   justify-content: center;
   align-items: center;
   display: flex;
+  transition: background-image 1s linear;
+}
+
+.acdisplay .acimage {
+   widht: 80%;
+   height: 80%;
+}
+
+.acdisplay .textbox {
+  position: absolute;
 }
 
 .acdisplay .title {
   color: #000;
   font-size: 16px;
   font-weight: bold;
+  position: relative;
+
 }
 
 .acdisplay .text {

@@ -136,17 +136,17 @@ func (c *ClockCommand) SendPNG(value string) {
 
 	deg = float64(6.0 * minute)
 	dc.MoveTo(halfWidth-(math.Sin(deg2Rad(deg))*2), halfHeight-(math.Cos(deg2Rad(deg))*2))
-	dc.LineTo(halfWidth+(math.Sin(deg2Rad(deg))*(halfWidth-2)), halfHeight+(math.Cos(deg2Rad(deg))*(halfHeight-2)))
+	dc.LineTo(halfWidth+(math.Sin(deg2Rad(deg))*(halfWidth-10)), halfHeight+(math.Cos(deg2Rad(deg))*(halfHeight-10)))
 
 	dc.Stroke()
 
 	dc.SetColor(colorArHour)
-	dc.SetLineWidth(5.0)
+	dc.SetLineWidth(6.0)
 	hour := now.Hour()
 
 	deg = float64(30.0*hour + (minute / 2))
 	dc.MoveTo(halfWidth-(math.Sin(deg2Rad(deg))*2), halfHeight-(math.Cos(deg2Rad(deg))*2))
-	dc.LineTo(halfWidth+(math.Sin(deg2Rad(deg))*(halfWidth-10-tickLength)), halfHeight+(math.Cos(deg2Rad(deg))*(halfHeight-10-tickLength)))
+	dc.LineTo(halfWidth+(math.Sin(deg2Rad(deg))*(halfWidth*1/2)), halfHeight+(math.Cos(deg2Rad(deg))*(halfHeight*1/2)))
 
 	dc.Stroke()
 
