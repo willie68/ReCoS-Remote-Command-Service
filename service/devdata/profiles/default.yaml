@@ -1,0 +1,329 @@
+name: Default
+description: description for default
+pages:
+  - name: page1
+    columns: 5
+    rows: 5
+    cells:
+      - page2
+      - action1
+      - action2
+      - action3
+      - pause
+      - sendkeys
+      - window_ctrl
+      - noop
+      - timer
+      - timer2
+      - clock
+      - screenshot
+      - cputemp
+      - cpuload
+  - name: page2
+    columns: 3
+    rows: 3
+    cells:
+      - page1
+      - action1
+      - action2
+      - pause
+      - clock
+  - name: hardware
+    columns: 3
+    rows: 3
+    cells:
+      - cputemp
+      - cpuload
+actions:
+  - type: SINGLE
+    name: action1
+    title: Action Title Sync
+    description: description for action
+    icon: trash_can.png
+    fontsize: 10
+    fontcolor: "#FF0000"
+    outlined: true
+    runone: true
+    commands:
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 2
+      - type: EXECUTE
+        name: execute
+        parameters:
+          command: echo.bat
+          args:
+            - "Hello world"
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 1
+  - type: SINGLE
+    name: action2
+    title: Action Title Async
+    description: description for action
+    runone: false
+    commands:
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 2
+      - type: EXECUTE
+        name: execute
+        parameters:
+          command: echo.bat
+          args:
+            - "Hello world"
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 1
+  - type: SINGLE
+    name: pause
+    title: Pause
+    description: description for action
+    runone: false
+    commands:
+      - type: DELAY
+        name: delay
+        icon: address_book.png
+        title: step 1
+        parameters:
+          time: 1
+      - type: DELAY
+        name: delay
+        title: step 2
+        parameters:
+          time: 1
+      - type: DELAY
+        name: delay
+        title: step 3
+        parameters:
+          time: 1
+      - type: DELAY
+        name: delay
+        title: step 4
+        parameters:
+          time: 1
+      - type: DELAY
+        name: delay
+        title: step 5
+        parameters:
+          time: 1
+      - type: DELAY
+        name: delay
+        title: step 6
+        parameters:
+          time: 1
+      - type: DELAY
+        name: delay
+        title: step 7
+        parameters:
+          time: 1
+      - type: DELAY
+        name: delay
+        title: step 8
+        parameters:
+          time: 1
+      - type: DELAY
+        name: delay
+        title: step 9
+        parameters:
+          time: 1
+      - type: DELAY
+        name: delay
+        title: step 10
+        parameters:
+          time: 1
+      - type: DELAY
+        name: delay
+        title: step 11
+        parameters:
+          time: 1
+      - type: DELAY
+        name: delay
+        title: step 12
+        parameters:
+          time: 1
+  - type: SINGLE
+    name: action3
+    title: Execute go version
+    description: description for action
+    runone: true
+    commands:
+      - type: EXECUTE
+        name: execute
+        parameters:
+          command: go.exe
+          args:
+            - "version"
+  - type: SINGLE
+    name: page1
+    title: Execute Page
+    description: description for page
+    runone: true
+    commands:
+      - type: PAGE
+        name: page
+        parameters:
+          page: page1
+  - type: SINGLE
+    name: page2
+    title: Execute Page
+    description: description for page
+    runone: true
+    commands:
+      - type: PAGE
+        name: page
+        parameters:
+          page: page2
+  - type: SINGLE
+    name: sendkeys
+    title: Sending some keys
+    description: description for page
+    runone: true
+    commands:
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 5
+      - type: KEYS
+        name: sendkeys
+        parameters:
+          layout: de
+          keys: "{esc}1+1{enter}"
+  - type: SINGLE
+    name: window_ctrl
+    title: window_ctrl
+    description: window_ctrl
+    runone: true
+    commands:
+      - type: DELAY
+        name: delay1
+        parameters:
+          time: 2
+      - type: WINDOWCTRL
+        name: control window
+        parameters:
+          caption: Rechner 
+          command: activate
+      - type: DELAY
+        name: delay2
+        parameters:
+          time: 1
+      - type: KEYS
+        name: sendkeys
+        parameters:
+          layout: de
+          keys: "{esc}1+1{enter}"
+      - type: DELAY
+        name: delay3
+        parameters:
+          time: 2
+      - type: WINDOWCTRL
+        name: control window
+        parameters:
+          caption: Rechner 
+          command: move 700 300 
+      - type: DELAY
+        name: delay4
+        parameters:
+          time: 2
+      - type: WINDOWCTRL
+        name: control window
+        parameters:
+          caption: Rechner 
+          command: minimize
+  - type: SINGLE
+    name: noop
+    title: Do nothing
+    description: do nothing
+    icon: alarm_bell.png
+    runone: true
+    commands:
+      - type: NOOP
+        name: noop
+        title: Waiting
+  - type: SINGLE
+    name: timer
+    title: Timer 10 sec
+    description: timer counting down 10 sec
+    icon: alarm_bell.png
+    runone: true
+    commands:
+      - type: TIMER
+        name: timer
+        parameters:
+          time: 10
+          format: noch %ds
+          finished: Fertig
+  - type: SINGLE
+    name: timer2
+    title: Timer 20 sec
+    description: timer counting down 20 sec
+    icon: time_frame.png
+    runone: true
+    commands:
+      - type: TIMER
+        name: timer
+        parameters:
+          time: 20
+          format: "%d Sekunden"
+  - type: DISPLAY
+    name: clock
+    title: Clock
+    description: timer counting down 20 sec
+    runone: true
+    outlined: false
+    fontcolor: white
+    commands:
+      - type: CLOCK
+        name: clock
+        parameters:
+          format: "15:04:05\r\n02 Jan 06"
+  - type: SINGLE
+    name: screenshot
+    title: Screenshot
+    description: doing a screenshot
+    icon: monitor.png
+    runone: true
+    commands:
+      - type: SCREENSHOT
+        name: screenshot
+        parameters:
+          saveto: e:/temp/screenshot
+          display: 1
+  - type: DISPLAY
+    name: cputemp
+    title: CPU Temp
+    description: cpu temp
+    runone: true
+    icon: company.png
+    outlined: true
+    commands:
+      - type: HARDWAREMONITOR
+        name: cpu
+        parameters:
+          sensor: "CPU/Intel Core i7-6820HQ/Temperature/CPU Package"
+          format: "%0.1f °C"
+          display: both
+          ymin: 30
+          ymax: 80
+          color: "#00ff00"
+  - type: DISPLAY
+    name: cpuload
+    title: CPU Load
+    description: cpu usage
+    runone: true
+    icon: company.png
+    outlined: false
+    fontcolor: white
+    commands:
+      - type: HARDWAREMONITOR
+        name: cpu
+        parameters:
+          sensor: "CPU/Intel Core i7-6820HQ/Load/CPU Total"
+          format: "%0.1f %"
+          display: both
+          color: "#ffff00"
