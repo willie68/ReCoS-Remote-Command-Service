@@ -22,6 +22,7 @@ type ClockCommand struct {
 	ticker     *time.Ticker
 	done       chan bool
 	format     string
+	analog     bool
 }
 
 const clockImageWidth = 200
@@ -40,9 +41,20 @@ func (c *ClockCommand) Init(a *Action) (bool, error) {
 	c.action = a
 	c.stop = false
 	c.ticker = time.NewTicker(1 * time.Second)
-	c.done = make(chan bool)
-	value, found := c.Parameters["format"]
 	c.format = "15:04:05"
+	c.analog = false
+
+	value, found := c.Parameters["analog"]
+	if found {
+		var ok bool
+		c.analog, ok = value.(bool)
+		if !ok {
+			return false, fmt.Errorf("Analog is in wrong format. Please use boolean as format")
+		}
+	}
+
+	c.done = make(chan bool)
+	value, found = c.Parameters["format"]
 	if found {
 		var ok bool
 		c.format, ok = value.(string)
@@ -57,7 +69,9 @@ func (c *ClockCommand) Init(a *Action) (bool, error) {
 				return
 			case t := <-c.ticker.C:
 				title := t.Format(c.format)
-				/*
+				if c.analog {
+					c.SendPNG(title)
+				} else {
 					message := models.Message{
 						Profile: a.Profile,
 						Action:  a.Name,
@@ -65,8 +79,7 @@ func (c *ClockCommand) Init(a *Action) (bool, error) {
 						Title:   title,
 					}
 					api.SendMessage(message)
-				*/
-				c.SendPNG(title)
+				}
 			}
 		}
 	}()

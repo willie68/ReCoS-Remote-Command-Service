@@ -17,6 +17,13 @@ type Profile struct {
 	Actions []Action `json:"actions"`
 }
 
+type ToolbarType string
+
+const (
+	ToolbarShow ToolbarType = "show"
+	ToolbarHide             = "hide"
+)
+
 // Page is the most visible part of this. Every Page is organised in Rows and Columns. And with this every cell is a place for holding an action
 type Page struct {
 	Name string `json:"name"`
@@ -24,6 +31,8 @@ type Page struct {
 	Columns int `json:"columns"`
 	// Rows of this page
 	Rows int `json:"rows"`
+	// Rows of this page
+	Toolbar ToolbarType `json:"toolbar"`
 	// Cells are the ui container for the actions, only the action id will be used here
 	Cells []string `json:"cells"`
 }
@@ -38,8 +47,8 @@ const (
 	Display = "DISPLAY"
 	//Toggle has a state, true or false and on every change it does an individual action
 	Toggle = "TOGGLE"
-	//MultiStage is an action which has more than 2 states and step to the next stage on every execution. After the last stage it return to the first one
-	MultiStage = "MULTISTAGE"
+	//Multi is an action which has more than 2 states and step to the next stage on every execution. After the last stage it return to the first one
+	Multi = "MULTI"
 )
 
 // Action type
@@ -65,6 +74,8 @@ type Action struct {
 	RunOne bool `json:"runone"`
 	// Commands are the magic behind this
 	Commands []Command `json:"commands"`
+	// Actions are the actions to execute behind a multi action button
+	Actions []string `json:"actions"`
 }
 
 // CommandType the command type
@@ -89,7 +100,7 @@ const (
 	Clock = "CLOCK"
 	// Screenshot saving to the file system
 	Screenshot = "SCREENSHOT"
-	// HardwareMonitorCommand
+	// HardwareMonitorCommand showing hardware sensor data
 	HardwareMonitorCommand = "HARDWAREMONITOR"
 )
 
@@ -132,10 +143,18 @@ func (a *Action) Copy() Action {
 		Title:       a.Title,
 		Type:        a.Type,
 		RunOne:      a.RunOne,
+		Icon:        a.Icon,
+		Fontsize:    a.Fontsize,
+		Fontcolor:   a.Fontcolor,
+		Outlined:    a.Outlined,
 	}
 	action.Commands = make([]Command, 0)
 	for _, command := range a.Commands {
 		action.Commands = append(action.Commands, command.Copy())
+	}
+	action.Actions = make([]string, 0)
+	for _, actionName := range a.Actions {
+		action.Actions = append(action.Actions, actionName)
 	}
 	return action
 }
@@ -146,6 +165,7 @@ func (p *Page) Copy() Page {
 		Name:    p.Name,
 		Columns: p.Columns,
 		Rows:    p.Rows,
+		Toolbar: p.Toolbar,
 	}
 	page.Cells = make([]string, 0)
 	for _, cell := range p.Cells {

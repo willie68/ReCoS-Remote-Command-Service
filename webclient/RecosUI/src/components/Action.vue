@@ -32,6 +32,7 @@ export default {
     "fontsize",
     "fontcolor",
     "outlined",
+    "actionType",
   ],
   data() {
     return {
@@ -50,7 +51,6 @@ export default {
       };
     },
     imageUrl() {
-      console.log("actionName:" + this.actionName);
       if (this.actionName) {
         if (this.saveImg) {
           return this.buildImageSrc(this.saveImg);
@@ -60,7 +60,6 @@ export default {
       return "";
     },
     mytitle() {
-      console.log("actionName:" + this.actionName);
       if (this.actionName) {
         if (this.saveTitle) {
           return this.saveTitle;
@@ -70,7 +69,6 @@ export default {
       return "";
     },
     mytext() {
-      console.log("actionName:" + this.actionName);
       if (this.actionName) {
         if (this.saveText) {
           return this.saveText;
@@ -112,10 +110,15 @@ export default {
           },
         };
         this.saveImg = "hourglass.png";
+        let that = this
         fetch(actionPostUrl, options)
           .then((res) => res.json())
           .then((data) => {
-            setTimeout(() => (this.saveImg = ""), 20000);
+            console.log(that.actionType)
+            if (that.actionType != "MULTI") {
+              console.log("set timeout")
+              setTimeout(() => (that.saveImg = ""), 20000);
+            }
           })
           .catch((err) => console.log(err.message));
       }

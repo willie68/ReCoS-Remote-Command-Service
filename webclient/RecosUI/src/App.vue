@@ -16,7 +16,7 @@
       ></option>
     </select>
     <button
-      v-for="page in activeProfile.pages"
+      v-for="page in toolbarPages"
       :value="page.name"
       :key="page.name"
       v-text="page.name"
@@ -49,7 +49,11 @@
           :fontsize="cellactions[x][y].fontsize"
           :fontcolor="cellactions[x][y].fontcolor"
           :outlined="cellactions[x][y].outlined"
-          v-if="cellactions[x][y].type == 'SINGLE'"
+          :actionType="cellactions[x][y].type"
+          v-if="
+            cellactions[x][y].type == 'SINGLE' ||
+            cellactions[x][y].type == 'MULTI'
+          "
         ></Action>
         <Display
           :title="cellactions[x][y].title"
@@ -89,7 +93,7 @@ export default {
         "/api/v1/",
       showURL: this.baseURL + "/show",
       actionURL: this.baseURL + "/action",
-      title: "remote commands",
+      title: "ReCoS",
       header: "Title me",
       text: "this is a text",
       showModal: false,
@@ -118,6 +122,21 @@ export default {
       },
       set: function (newPageName) {
         this.changePage(newPageName);
+      },
+    },
+    toolbarPages: {
+      get: function () {
+        var a = [];
+        if (this.activeProfile) {
+          if (this.activeProfile.pages) {
+            this.activeProfile.pages.forEach((page) => {
+              if (page.toolbar != "hide") {
+                a.push(page);
+              }
+            });
+          }
+        }
+        return a;
       },
     },
   },
@@ -155,20 +174,20 @@ export default {
       console.log("Starting connection to WebSocket Server");
       let that = this;
       if (this.connection) {
-        this.connection.close(1000, "Work complete")
-        this.connection = undefined
+        this.connection.close(1000, "Work complete");
+        this.connection = undefined;
       }
       this.connection = new WebSocket(
         "ws://" + window.location.hostname + ":" + this.servicePort + "/ws"
       );
 
       this.connection.onmessage = function (event) {
-        // console.log(event.data);
         // create a JSON object
         var jsonObject = JSON.parse(event.data);
         if (jsonObject.profile == that.profileName) {
           if (jsonObject.action) {
             if (that.$refs[jsonObject.action]) {
+              console.log(event.data);
               // console.log("found action");
               that.$refs[jsonObject.action].saveImg = jsonObject.imageurl;
               that.$refs[jsonObject.action].saveTitle = jsonObject.title;
@@ -196,8 +215,8 @@ export default {
         console.log(event);
         console.log("Connection closed to the websocket server...");
         if (that.connection) {
-          that.connection.close(1000, "Work complete")
-          that.connection = undefined
+          that.connection.close(1000, "Work complete");
+          that.connection = undefined;
         }
         setTimeout(() => that.connectWS(), 2000);
       };

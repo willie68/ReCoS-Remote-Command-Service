@@ -22,6 +22,7 @@ pages:
   - name: page2
     columns: 3
     rows: 3
+    toolbar: hide
     cells:
       - page1
       - action1
@@ -282,6 +283,7 @@ actions:
         name: clock
         parameters:
           format: "15:04:05\r\n02 Jan 06"
+          analog: true
   - type: SINGLE
     name: screenshot
     title: Screenshot

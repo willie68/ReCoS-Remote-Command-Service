@@ -37,7 +37,9 @@ type Action struct {
 	Config   models.Action
 	m        sync.Mutex
 	counter  int
+	State    int
 	Commands map[string]CommandExecutor
+	Actions  []string
 }
 
 // InitProfiles initialse the dto profiles for saving/retrieving status of and executing every action
@@ -62,6 +64,11 @@ func InitProfiles(configProfiles []models.Profile) error {
 				Title:    title,
 				counter:  0,
 				Commands: make(map[string]CommandExecutor),
+				Actions:  configAction.Actions,
+				State:    -1,
+			}
+			if len(action.Actions) > 0 {
+				action.State = 0
 			}
 			for _, command := range configAction.Commands {
 				commandExecutor := GetCommand(command)
@@ -133,62 +140,85 @@ func (a *Action) Execute(requestMessage models.Message) (bool, error) {
 	clog.Logger.Debugf("execution action %s_%d", a.Title, counter)
 	switch a.Config.Type {
 	case models.Single:
-		lastTitle := ""
-		sendPostMessage := true
-		for index, command := range a.Config.Commands {
-			imageName := fmt.Sprintf("hourglass%d.png", index%4)
-			if command.Icon != "" {
-				imageName = command.Icon
-			}
-			title := ""
-			if command.Title != "" {
-				title = command.Title
-				lastTitle = title
-			}
-			message := models.Message{
-				Profile:  a.Profile,
-				Action:   a.Name,
-				ImageURL: imageName,
-				Title:    title,
-				State:    index + 1,
-			}
-			api.SendMessage(message)
-			//cmdExecutor := GetCommand(command)
-			cmdExecutor := a.Commands[command.Name]
-			if cmdExecutor == nil {
-				clog.Logger.Errorf("can't find command with type: %s", command.Type)
-			}
-			ok, err := cmdExecutor.Execute(a, requestMessage)
-			if err != nil {
-				clog.Logger.Errorf("error executing command: %v", err)
-			}
-			clog.Logger.Debugf("executing command result: %v", ok)
-			sendPostMessage = sendPostMessage && ok
-		}
-		if sendPostMessage {
-
-			message := models.Message{
-				Profile:  a.Profile,
-				Action:   a.Name,
-				ImageURL: "check_mark.png",
-				Title:    lastTitle,
-				State:    0,
-			}
-			api.SendMessage(message)
-			go func() {
-				time.Sleep(3 * time.Second)
-				message := models.Message{
-					Profile:  a.Profile,
-					Action:   a.Name,
-					ImageURL: "",
-					Title:    "",
-					State:    0,
-				}
-				api.SendMessage(message)
-			}()
-		}
+		doWorkSingle(a, a, requestMessage)
+	case models.Multi:
+		doWorkMulti(a, requestMessage)
 	}
 	return true, nil
+}
+
+func doWorkMulti(a *Action, requestMessage models.Message) (bool, error) {
+	profile, err := GetProfile(a.Profile)
+	if err != nil {
+		return false, err
+	}
+	workingAction, err := profile.GetAction(a.Actions[a.State])
+	if err != nil {
+		return false, err
+	}
+	doWorkSingle(workingAction, a, requestMessage)
+	a.State++
+	if a.State >= len(a.Actions) {
+		a.State = 0
+	}
+	return true, nil
+}
+
+func doWorkSingle(a *Action, sendingAction *Action, requestMessage models.Message) {
+	lastTitle := ""
+	sendPostMessage := true
+	for index, command := range a.Config.Commands {
+		imageName := fmt.Sprintf("hourglass%d.png", index%4)
+		if command.Icon != "" {
+			imageName = command.Icon
+		}
+		title := ""
+		if command.Title != "" {
+			title = command.Title
+			lastTitle = title
+		}
+		message := models.Message{
+			Profile:  sendingAction.Profile,
+			Action:   sendingAction.Name,
+			ImageURL: imageName,
+			Title:    title,
+			State:    index + 1,
+		}
+		api.SendMessage(message)
+		//cmdExecutor := GetCommand(command)
+		cmdExecutor := a.Commands[command.Name]
+		if cmdExecutor == nil {
+			clog.Logger.Errorf("can't find command with type: %s", command.Type)
+		}
+		ok, err := cmdExecutor.Execute(sendingAction, requestMessage)
+		if err != nil {
+			clog.Logger.Errorf("error executing command: %v", err)
+		}
+		clog.Logger.Debugf("executing command result: %v", ok)
+		sendPostMessage = sendPostMessage && ok
+	}
+	if sendPostMessage {
+		message := models.Message{
+			Profile:  sendingAction.Profile,
+			Action:   sendingAction.Name,
+			ImageURL: "check_mark.png",
+			Title:    lastTitle,
+			State:    0,
+		}
+		api.SendMessage(message)
+		go func() {
+			time.Sleep(3 * time.Second)
+			message := models.Message{
+				Profile:  sendingAction.Profile,
+				Action:   sendingAction.Name,
+				ImageURL: a.Config.Icon,
+				Title:    "",
+				Text:     a.Config.Title,
+				State:    sendingAction.State,
+			}
+			api.SendMessage(message)
+		}()
+	}
 }
 
 func IsSingleClick(message models.Message) bool {

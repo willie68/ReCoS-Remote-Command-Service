@@ -1,8 +1,10 @@
 # Remote Command Service, ReCoS
 
-Remote Command Service, for executing scripts remotely but secure.
+Remote Command Service, for executing scripts remotely but secure. This project consists of 2 components. One is the service, a small go based microservice, which delivers all the funktionality behind the UI. This service is responsible for the execution of the different actions. The other project is the UI Web Component, builded with VUE as the main UI Framework. 
 
-# Profileconfiguration
+# Service
+
+## Profileconfiguration
 
 Every profile has it's own configuration file. This file is written in yaml and has the following sections:
 
@@ -89,7 +91,7 @@ actions:
 
 
 
-## Page
+### Page
 
 A page is a view component mainly showing with rows and columns. Each of this cells will than visualize an action. The cells list will link to an action by name in the action list. The index of an action of a cell is calculated as 
 
@@ -97,10 +99,11 @@ A page is a view component mainly showing with rows and columns. Each of this ce
 
 parameters:
 
-name: The name of the page
-columns: Number of columns on the page
-rows: Number of rows on the page
-cells: List of names of the action per cell
+`name`: The name of the page
+`columns`: Number of columns on the page
+`rows`: Number of rows on the page
+`toolbar`: `show`, this page will appear in the toolbar to directly switch to, `hide`, if this page should appear in the toolbar. With the page command you can switch to this page.
+`cells`: List of names of the action per cell
 
 Example:
 
@@ -116,16 +119,15 @@ cells:
 
 
 
-## Action
+### Action
 
 An action is the part which defines, what to do if a cell is triggered. 
 
 The following parameters are used:
 
 `type`: **SINGLE** is a single shot action. The action is always starting the command list. 
-**DISPLAY** is a display only cell. It will only show Text, Icons but you can't interact with it.
-**TOGGLE** is an action with two states, just like a on/off switch. For each transition you can define an own command list. 
-**MULTISTAGE** is the third option. Here you can define 3 or more stages, and you every stage you can define the status and a command list, which is fired on activating this stage. As you can see, TOGGLE is a Multiswitch with 2 Stages.
+**DISPLAY** is a display only cell. It will only show Text, Icons, or images, but you can't interact with it.
+**MULTI** is the third option. Here you can define 3 or more stages, and you every stage you can define the status and a command list, which is fired on activating this stage. As you can see, a simple on/off switch is a Multi with 2 Stages.
 `name`: s the name of the action
 title: the title of the action used by the UI
 `description`: user defined description of this action
@@ -135,6 +137,21 @@ title: the title of the action used by the UI
 `fontcolor`: the color of the title and the text, defaults to black
 `outlined`: true or false, sometime reading a black text on a black ground is a little bit difficult. lining out can help.
 `commands`: list of commands for execution of this action
+`actions`: only apply in a MULTI action. For every stage there should be the name of the action which will be called, when the stage is executed. If a stage is executed, the icon of the last executed action (stage) will be displayed as the icon of the multi action and the title will be displayed on the text line. Example for a multi action:
+
+```yaml
+type: MULTI
+name: action2
+title: Multi Action
+description: description for action
+icon: hand_share.png
+actions:
+ - action2_1
+ - action2_2
+ - action2_3
+```
+
+Example for a single action:
 
 ```yaml
 type: SINGLE
@@ -165,7 +182,7 @@ commands:
 
 
 
-### Command
+#### Command
 
 This is the command, which should be executed
 
@@ -175,13 +192,13 @@ icon: should be the icon that should be displayed when running this command
 title: should be the text that should be displayed when running this command
 parameters: parameters defers from command to command
 
-#### No Operation
+##### No Operation
 
 Do nothing.
 
-Type: NOOP
+`Type`: NOOP
 
-Parameter:  none
+`Parameter`:  none
 
 Example
 
@@ -192,13 +209,13 @@ icon: accesibility.png
 title: Do Nothing
 ```
 
-#### Delay
+##### Delay
 
-Type: DELAY
+`Type`: DELAY
 
-Parameter: 
+`Parameter`: 
 
-time: time to delay in Seconds
+`time`: time to delay in Seconds
 
 Example
 
@@ -209,17 +226,17 @@ parameters:
   time: 2
 ```
 
-#### Timer
+##### Timer
 
 Starting a timer with a response every second. You can define the format of the timer message and the message on finish.
 
-Type: TIMER
+`Type`: TIMER
 
-Parameter: 
+`Parameter`: 
 
-time: time to delay in Seconds
-format: the message for the response, defaults %d seconds
-finished: the message at the end of the timer, defaults: finished
+`time`: time to delay in Seconds
+`format`: the message for the response, defaults %d seconds
+`finished`: the message at the end of the timer, defaults: finished
 
 Example
 
@@ -232,15 +249,16 @@ parameters:
   finished: Fertig
 ```
 
-#### Clock
+##### Clock
 
 Just a simple textual clock.
 
-Type: CLOCK
+`Type`: CLOCK
 
-Parameter: 
+`Parameter`: 
 
-format: the format of the clock in Golang format syntax, defaults: 15:04:05
+`format`: the format of the clock in Golang format syntax, defaults: 15:04:05
+`analog`: true or false, shows an analog clock
 
 Example
 
@@ -251,7 +269,7 @@ parameters:
   format: "15:04:05 02 Jan 06"
 ```
 
-#### Execute
+##### Execute
 
 Type: EXECUTE
 
@@ -271,7 +289,7 @@ parameters:
     - "version"
 ```
 
-#### Page
+##### Page
 
 Switch to another page.
 
@@ -287,7 +305,7 @@ parameters:
   page: page2
 ```
 
-#### Keys
+##### Keys
 
 Sending keys to the active application. This command is emulating a keyboard input by sending key strokes of a keyboard to the active application. You can use different keyboard layouts and there are some macros defining special keys.
 
@@ -334,7 +352,7 @@ parameters:
   keys: "akteon00{enter}"
 ```
 
-#### Controlling Application Main Window
+##### Controlling Application Main Window
 
 With this command, you can control the main window of an application.
 
@@ -368,7 +386,7 @@ move  x y: moving the window to the new position x,y
     command: minimize 
 ```
 
-#### Screenshot, making a screenshot
+##### Screenshot, making a screenshot
 
 With this command, you can take a screenshot. 
 
@@ -386,7 +404,7 @@ parameters:
   display: 1
 ```
 
-#### Hardware monitor
+##### Hardware monitor
 
 This command connects to the openhardwaremonitor application on windows. With this you can get different sensors of your computer. For using the webserver of the openhardwaremonitor app, you have to add another external configurationinto the main service configuration. The url is the url to the app webserver added with data.json. the `updateperiod` is the update time in seconds. 
 
@@ -460,3 +478,7 @@ parameters:
   ymax: 80
   color: "#ff0000"
 ```
+
+# UI
+
+As this project is in an early development stage, i have nothing to show here. But if you like, you can simply checkout the develop branch, starting 2 Instances of Visual Studio Code, one with the frontend, one with the service backend. Than start the backend server in VS, and same for the frontend (npm run serve). After some hacking with configuration you may be able to see something. :-) Good Luck to you.
