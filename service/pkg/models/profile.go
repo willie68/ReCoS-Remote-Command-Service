@@ -100,7 +100,7 @@ const (
 	Clock = "CLOCK"
 	// Screenshot saving to the file system
 	Screenshot = "SCREENSHOT"
-	// HardwareMonitorCommand
+	// HardwareMonitorCommand showing hardware sensor data
 	HardwareMonitorCommand = "HARDWAREMONITOR"
 )
 
@@ -143,10 +143,18 @@ func (a *Action) Copy() Action {
 		Title:       a.Title,
 		Type:        a.Type,
 		RunOne:      a.RunOne,
+		Icon:        a.Icon,
+		Fontsize:    a.Fontsize,
+		Fontcolor:   a.Fontcolor,
+		Outlined:    a.Outlined,
 	}
 	action.Commands = make([]Command, 0)
 	for _, command := range a.Commands {
 		action.Commands = append(action.Commands, command.Copy())
+	}
+	action.Actions = make([]string, 0)
+	for _, actionName := range a.Actions {
+		action.Actions = append(action.Actions, actionName)
 	}
 	return action
 }
@@ -157,6 +165,7 @@ func (p *Page) Copy() Page {
 		Name:    p.Name,
 		Columns: p.Columns,
 		Rows:    p.Rows,
+		Toolbar: p.Toolbar,
 	}
 	page.Cells = make([]string, 0)
 	for _, cell := range p.Cells {

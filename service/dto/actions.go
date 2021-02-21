@@ -17,7 +17,7 @@ var Profiles []Profile
 // CommandExecutor is an interface for executing a command. Every command implementation has to implement this.
 type CommandExecutor interface {
 	Init(a *Action) (bool, error)
-	Execute(a *Action, sendingAction *Action, requestMessage models.Message) (bool, error)
+	Execute(a *Action, requestMessage models.Message) (bool, error)
 	Stop(a *Action) (bool, error)
 }
 
@@ -152,15 +152,15 @@ func doWorkMulti(a *Action, requestMessage models.Message) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	a.State++
-	if a.State >= len(a.Actions) {
-		a.State = 0
-	}
 	workingAction, err := profile.GetAction(a.Actions[a.State])
 	if err != nil {
 		return false, err
 	}
 	doWorkSingle(workingAction, a, requestMessage)
+	a.State++
+	if a.State >= len(a.Actions) {
+		a.State = 0
+	}
 	return true, nil
 }
 
@@ -190,7 +190,7 @@ func doWorkSingle(a *Action, sendingAction *Action, requestMessage models.Messag
 		if cmdExecutor == nil {
 			clog.Logger.Errorf("can't find command with type: %s", command.Type)
 		}
-		ok, err := cmdExecutor.Execute(a, requestMessage)
+		ok, err := cmdExecutor.Execute(sendingAction, requestMessage)
 		if err != nil {
 			clog.Logger.Errorf("error executing command: %v", err)
 		}
@@ -211,9 +211,10 @@ func doWorkSingle(a *Action, sendingAction *Action, requestMessage models.Messag
 			message := models.Message{
 				Profile:  sendingAction.Profile,
 				Action:   sendingAction.Name,
-				ImageURL: "",
+				ImageURL: a.Config.Icon,
 				Title:    "",
-				State:    0,
+				Text:     a.Config.Title,
+				State:    sendingAction.State,
 			}
 			api.SendMessage(message)
 		}()

@@ -49,6 +49,7 @@
           :fontsize="cellactions[x][y].fontsize"
           :fontcolor="cellactions[x][y].fontcolor"
           :outlined="cellactions[x][y].outlined"
+          :actionType="cellactions[x][y].type"
           v-if="
             cellactions[x][y].type == 'SINGLE' ||
             cellactions[x][y].type == 'MULTI'

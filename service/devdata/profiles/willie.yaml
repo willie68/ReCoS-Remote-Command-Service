@@ -29,27 +29,37 @@ actions:
     actions:
       - action2_1
       - action2_2
+      - action2_3
   - type: SINGLE
     name: action2_1
-    title: Action Title
+    title: Action 1 Title
     description: description for action
     icon: hand_thumbsup.png
     commands:
       - type: DELAY
         name: delay
         parameters:
-          time: 10
+          time: 2
   - type: SINGLE
     name: action2_2
-    title: Action Title
+    title: Action 2 Title
     description: description for action
     icon: hand_thumbsdown.png
     commands:
       - type: DELAY
         name: delay
         parameters:
-          time: 10
-
+          time: 2
+  - type: SINGLE
+    name: action2_3
+    title: Action 3 Title
+    description: description for action
+    icon: hand_point.png
+    commands:
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 2
   - type: SINGLE
     name: action1
     title: Action Title
