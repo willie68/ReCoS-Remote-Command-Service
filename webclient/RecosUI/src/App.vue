@@ -93,7 +93,7 @@ export default {
         "/api/v1/",
       showURL: this.baseURL + "/show",
       actionURL: this.baseURL + "/action",
-      title: "remote commands",
+      title: "ReCoS",
       header: "Title me",
       text: "this is a text",
       showModal: false,
