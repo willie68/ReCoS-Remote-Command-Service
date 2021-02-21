@@ -17,3 +17,5 @@
 service/sensorlist.txt
 
 service/cmd/__debug_bin
+
+**/node_modules/**
