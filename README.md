@@ -137,6 +137,21 @@ title: the title of the action used by the UI
 `fontcolor`: the color of the title and the text, defaults to black
 `outlined`: true or false, sometime reading a black text on a black ground is a little bit difficult. lining out can help.
 `commands`: list of commands for execution of this action
+`actions`: only apply in a MULTI action. For every stage there should be the name of the action which will be called, when the stage is executed. If a stage is executed, the icon of the last executed action (stage) will be displayed as the icon of the multi action and the title will be displayed on the text line. Example for a multi action:
+
+```yaml
+type: MULTI
+name: action2
+title: Multi Action
+description: description for action
+icon: hand_share.png
+actions:
+ - action2_1
+ - action2_2
+ - action2_3
+```
+
+Example for a single action:
 
 ```yaml
 type: SINGLE
@@ -181,9 +196,9 @@ parameters: parameters defers from command to command
 
 Do nothing.
 
-Type: NOOP
+`Type`: NOOP
 
-Parameter:  none
+`Parameter`:  none
 
 Example
 
@@ -196,11 +211,11 @@ title: Do Nothing
 
 ##### Delay
 
-Type: DELAY
+`Type`: DELAY
 
-Parameter: 
+`Parameter`: 
 
-time: time to delay in Seconds
+`time`: time to delay in Seconds
 
 Example
 
@@ -215,13 +230,13 @@ parameters:
 
 Starting a timer with a response every second. You can define the format of the timer message and the message on finish.
 
-Type: TIMER
+`Type`: TIMER
 
-Parameter: 
+`Parameter`: 
 
-time: time to delay in Seconds
-format: the message for the response, defaults %d seconds
-finished: the message at the end of the timer, defaults: finished
+`time`: time to delay in Seconds
+`format`: the message for the response, defaults %d seconds
+`finished`: the message at the end of the timer, defaults: finished
 
 Example
 
@@ -238,11 +253,12 @@ parameters:
 
 Just a simple textual clock.
 
-Type: CLOCK
+`Type`: CLOCK
 
-Parameter: 
+`Parameter`: 
 
-format: the format of the clock in Golang format syntax, defaults: 15:04:05
+`format`: the format of the clock in Golang format syntax, defaults: 15:04:05
+`analog`: true or false, shows an analog clock
 
 Example
 
