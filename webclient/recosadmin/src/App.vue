@@ -1,17 +1,16 @@
 <template>
-  <HelloWorld> </HelloWorld>
-  <InputText v-model="val"></InputText>
-  <h6>{{ val }}</h6>
+  <Page msg="Welcome to Your Vue.js App"/>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import Page from './components/Page.vue'
+
 export default {
-  name: "RecosAdmin",
+  name: 'recosadmin',
   components: {
-    HelloWorld,
-  },
-};
+    Page
+  }
+}
 </script>
 
 <style>
