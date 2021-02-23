@@ -1,20 +1,18 @@
 <template>
   <el-container>
     <el-container>
-      <el-header
-        >Header
-
-        <el-button type="text" @click="dialogFormVisible = true"
-          >Login</el-button
-        >
+      <el-header height="70px">
+        <div><b>ReCoS Admin</b></div>
+        <div class="settings">
+          <el-button round  size="small" icon="el-icon-user" @click="dialogFormVisible = true">Login</el-button>
+          <el-button round  size="small" icon="el-icon-setting" @click="dialogFormVisible = true"></el-button>
+        </div>
       </el-header>
       <el-container>
         <el-aside width="200px">Aside</el-aside>
-        <el-main>Main</el-main>
+        <el-main height="700px">Main</el-main>
       </el-container>
-      <el-footer
-        >ReCoS - Remote Command Service (C) 2021 Wifried Klaas</el-footer
-      >
+      <el-footer height="30px">ReCoS - Remote Command Service (C) 2021 Wifried Klaas</el-footer>
     </el-container>
   </el-container>
 
@@ -58,19 +56,28 @@ export default {
 </script>
 
 <style scoped>
-.el-header,
+.settings {
+  text-align: right;
+}
+
+.el-header {
+  background-color: #b3c0d1;
+  color: #333;
+  text-align: left;
+  line-height: 20px;
+}
 .el-footer {
   background-color: #b3c0d1;
   color: #333;
-  text-align: center;
-  line-height: 60px;
+  text-align: right;
+  line-height: 30px;
 }
 
 .el-aside {
   background-color: #d3dce6;
   color: #333;
   text-align: center;
-  line-height: 200px;
+  line-height: 300px;
 }
 
 .el-main {
@@ -78,17 +85,5 @@ export default {
   color: #333;
   text-align: center;
   line-height: 400px;
-}
-
-body > .el-container {
-}
-
-.el-container:nth-child(5) .el-aside,
-.el-container:nth-child(6) .el-aside {
-  line-height: 260px;
-}
-
-.el-container:nth-child(7) .el-aside {
-  line-height: 320px;
 }
 </style>
