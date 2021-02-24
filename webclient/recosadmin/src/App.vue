@@ -1,16 +1,16 @@
 <template>
-  <Page msg="Welcome to Your Vue.js App"/>
+  <Page></Page>
+  <h6>{{ val }}</h6>
 </template>
 
 <script>
-import Page from './components/Page.vue'
-
+import Page from "./components/Page.vue";
 export default {
-  name: 'recosadmin',
+  name: "RecosAdmin",
   components: {
-    Page
-  }
-}
+    Page,
+  },
+};
 </script>
 
 <style>
@@ -20,5 +20,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  margin-top: 60px;
 }
 </style>
