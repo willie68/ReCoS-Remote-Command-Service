@@ -29,9 +29,18 @@
       </Toolbar>
       <Splitter style="height: 400px">
         <SplitterPanel :size="20">
+          <Accordion>
+            <AccordionTab
+              v-for="(profilename, x) in profiles"
+              :key="x"
+              :header="profilename"
+              >{{ x }}
+            </AccordionTab>
+          </Accordion>
+        </SplitterPanel>
+        <SplitterPanel :size="80"> Panel 2 
           <ProfileAccordion></ProfileAccordion>
         </SplitterPanel>
-        <SplitterPanel :size="80"> Panel 2 </SplitterPanel>
       </Splitter>
     </div>
   </div>
@@ -52,6 +61,7 @@ export default {
     return {
       showPwd: false,
       pwdType: "password",
+      profiles: [],
       items: [
         {
           label: "Update",
@@ -136,6 +146,29 @@ export default {
     toggle(event) {
       this.$refs.menu.toggle(event);
     },
+  },
+  mounted() {},
+  created() {
+    let that = this;
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type === "baseURL") {
+        console.log(`Updating to ${state.baseURL}`);
+        that.profileURL = state.baseURL + "/profiles";
+        console.log("page profiles url:" + that.profileURL);
+
+        fetch(that.profileURL)
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data)
+            that.profiles = data;
+            console.log(that.profiles)
+          })
+          .catch((err) => console.log(err.message));
+      }
+    });
+  },
+  beforeUnmount() {
+    this.unsubscribe();
   },
 };
 </script>

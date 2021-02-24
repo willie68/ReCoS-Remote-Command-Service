@@ -8,10 +8,25 @@
 import Page from "./components/Page.vue";
 import AppFooter from "./components/AppFooter.vue";
 export default {
-  name: "RecosAdmin",
+  data() {
+    return {
+      name: "RecosAdmin",
+    };
+  },
   components: {
     Page,
     AppFooter,
+  },
+  mounted() {
+    let servicePort = this.$store.state.servicePort;
+    let basepath =
+      window.location.protocol +
+      "//" +
+      window.location.hostname +
+      ":" +
+      servicePort +
+      "/api/v1";
+    this.$store.commit("baseURL", basepath);
   },
 };
 </script>
