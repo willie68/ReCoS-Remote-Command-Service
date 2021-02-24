@@ -1,14 +1,17 @@
 <template>
   <Page></Page>
   <h6>{{ val }}</h6>
+  <AppFooter></AppFooter>
 </template>
 
 <script>
 import Page from "./components/Page.vue";
+import AppFooter from "./components/AppFooter.vue";
 export default {
   name: "RecosAdmin",
   components: {
     Page,
+    AppFooter,
   },
 };
 </script>
@@ -20,6 +23,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>

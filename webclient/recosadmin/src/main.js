@@ -10,6 +10,12 @@ import InputText from 'primevue/inputtext';
 import Toolbar from "primevue/toolbar";
 import Button from "primevue/button";
 import Password from 'primevue/password';
+import SplitButton from 'primevue/splitbutton';
+import Panel from 'primevue/panel';
+import Menu from 'primevue/menu';
+import Splitter from 'primevue/splitter';
+import SplitterPanel from 'primevue/splitterpanel';
+
 
 
 const app = createApp(App)
@@ -17,8 +23,13 @@ const app = createApp(App)
 app.use(PrimeVue, {ripple: true})
 app.component('Toolbar', Toolbar);
 app.component('Button', Button);
+app.component('SplitButton', SplitButton);
 app.component('Dialog', Dialog);
 app.component('InputText', InputText);
 app.component('Password', Password);
+app.component('Panel', Panel);
+app.component('Menu', Menu);
+app.component('Splitter', Splitter);
+app.component('SplitterPanel', SplitterPanel);
 
 app.mount('#app')
