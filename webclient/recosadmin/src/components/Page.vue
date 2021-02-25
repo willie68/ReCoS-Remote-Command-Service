@@ -29,17 +29,39 @@
       </Toolbar>
       <Splitter style="height: 400px">
         <SplitterPanel :size="20">
-          <Accordion>
+          <Accordion @tab-open="openProfile">
             <AccordionTab
               v-for="(profilename, x) in profiles"
               :key="x"
               :header="profilename"
-              >{{ x }}
+            >
+              <Listbox
+                style="
+                  border: 0;
+                  width: 100%;
+                  height: 100%;
+                  margin: 0;
+                  padding: 0;
+                "
+                v-model="selectedPage"
+                :options="activeProfile.pages"
+                optionLabel="name"
+              >
+                <template #option="slotProps">
+                  <Toolbar>
+                    <template #left> {{ slotProps.option.name }} </template>
+                    <template #right>
+                      <i class="pi pi-th-large" style="fontsize: 2rem"></i>
+                    </template>
+                  </Toolbar>
+                  <div></div>
+                </template>
+              </Listbox>
             </AccordionTab>
           </Accordion>
         </SplitterPanel>
-        <SplitterPanel :size="80"> Panel 2 
-          <ProfileAccordion></ProfileAccordion>
+        <SplitterPanel :size="80">
+          <PageSettings :page="activePage"></PageSettings>
         </SplitterPanel>
       </Splitter>
     </div>
@@ -47,12 +69,12 @@
 </template>
 
 <script>
-import ProfileAccordion from "./ProfileAccordion.vue";
+import PageSettings from "./PageSettings.vue";
 
 export default {
   name: "Page",
   components: {
-    ProfileAccordion,
+    PageSettings,
   },
   props: {
     msg: String,
@@ -86,6 +108,11 @@ export default {
           },
         },
       ],
+      activeProfile: {
+        name: "",
+        pages: [],
+      },
+      activePage: { name: "" },
       profileitems: [
         {
           label: "Options",
@@ -134,7 +161,31 @@ export default {
       ],
     };
   },
+  computed: {
+    selectedPage: {
+      get: function () {
+        return this.activePage;
+      },
+      set: function (newPage) {
+        if (newPage) {
+          this.activePage = newPage;
+        }
+      },
+    },
+  },
   methods: {
+    openProfile(e) {
+      console.log(e);
+      this.profileName = this.profiles[e.index];
+      fetch(this.profileURL + "/" + this.profileName)
+        .then((res) => res.json())
+        .then((data) => {
+          this.activeProfile = data;
+          this.activePage = this.activeProfile.pages[0];
+          console.log(this.activeProfile);
+        })
+        .catch((err) => console.log(err.message));
+    },
     togglePwdView() {
       this.showPwd = !this.showPwd;
       if (this.showPwd) {
@@ -159,9 +210,9 @@ export default {
         fetch(that.profileURL)
           .then((res) => res.json())
           .then((data) => {
-            console.log(data)
+            console.log(data);
             that.profiles = data;
-            console.log(that.profiles)
+            console.log(that.profiles);
           })
           .catch((err) => console.log(err.message));
       }
@@ -176,5 +227,9 @@ export default {
 <style>
 .p-button {
   margin-bottom: 0.5rem;
+}
+
+.p-listbox {
+  border: 0;
 }
 </style>

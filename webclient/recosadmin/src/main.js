@@ -18,7 +18,8 @@ import Splitter from 'primevue/splitter'
 import SplitterPanel from 'primevue/splitterpanel'
 import Accordion from 'primevue/accordion'
 import AccordionTab from 'primevue/accordiontab'
-
+import Listbox from 'primevue/listbox'
+import InputNumber from 'primevue/inputnumber'
 
 const store = createStore({
     state () {
@@ -54,5 +55,7 @@ app.component('Splitter', Splitter)
 app.component('SplitterPanel', SplitterPanel)
 app.component('Accordion', Accordion)
 app.component('AccordionTab', AccordionTab)
+app.component('Listbox', Listbox)
+app.component('InputNumber', InputNumber)
 
 app.mount('#app')
