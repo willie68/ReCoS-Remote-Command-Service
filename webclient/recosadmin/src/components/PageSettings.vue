@@ -1,5 +1,8 @@
 <template>
-  <Panel :header="page.name">
+  <Panel>
+    <template #header>
+        <b>{{ page.name }}</b>
+    </template>
     <template #icons>
       <Button class="p-panel-header-icon p-link p-mr-2" @click="toggle">
         <span class="pi pi-cog"></span>
@@ -8,25 +11,36 @@
     </template>
 
     <div class="p-fluid p-formgrid p-grid">
-      <div class="p-field p-grid">
+      <div class="p-field p-col">
         <label for="name">name</label>
-        <InputText id="name" type="text" v-model="name" style="width: 200px;"/>
+        <InputText id="name" type="text" v-model="name" />
       </div>
-      <div class="p-field p-grid">
+      <div class="p-field p-col">
         <label for="rows">rows</label>
-        <InputNumber id="rows" v-model="rows" style="width: 100px;"/>
+        <InputNumber id="rows" showButtons v-model="rows" :min="1" :max="10" />
       </div>
-      <div class="p-field p-grid">
+      <div class="p-field p-col">
         <label for="columns">columns</label>
-        <InputNumber id="columns" v-model="columns" style="width: 100px;" />
+        <InputNumber
+          id="columns"
+          showButtons
+          v-model="columns"
+          :min="1"
+          :max="10"
+        />
       </div>
     </div>
   </Panel>
+  <ButtonPanel :rows="rows" :columns="columns"></ButtonPanel>
 </template>
 
 <script>
+import ButtonPanel from "./ButtonPanel.vue";
 export default {
   name: "PageSettings",
+  components: {
+    ButtonPanel,
+  },
   props: {
     page: {},
   },
@@ -92,15 +106,12 @@ export default {
   mounted() {},
   created() {},
   watch: {
-    page (page)  {
-      console.log("page changed")
-      this.name = page.name
-      this.rows = page.rows
-      this.columns = page.columns
+    page(page) {
+      console.log("page changed");
+      this.name = page.name;
+      this.rows = page.rows;
+      this.columns = page.columns;
     },
   },
 };
 </script>
-
-<style scoped>
-</style>

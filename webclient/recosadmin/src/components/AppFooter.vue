@@ -2,7 +2,7 @@
   <div class="layout-footer">
     <div class="layout-footer-left">
       <span
-        >ReCoS Admin - Remote Command Service - (C) 2012 Wilfried Klaas</span
+        >ReCoS Admin - Remote Command Service - (C) 2021 Wilfried Klaas</span
       >
     </div>
   </div>
@@ -10,6 +10,9 @@
 
 <style scoped>
 .layout-footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
   font-size: 1rem;
   padding: 2rem;
   background-color: var(--surface-a);

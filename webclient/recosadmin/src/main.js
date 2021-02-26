@@ -1,11 +1,13 @@
 import { createApp } from 'vue'
 import { createStore } from 'vuex'
 import App from './App.vue'
-import 'primeflex/primeflex.css'
+
+import PrimeVue from 'primevue/config'
+
 import "primevue/resources/themes/saga-blue/theme.css"
 import "primevue/resources/primevue.min.css"
 import "primeicons/primeicons.css"
-import PrimeVue from 'primevue/config'
+import 'primeflex/primeflex.css'
 import Dialog from 'primevue/dialog'
 import InputText from 'primevue/inputtext'
 import Toolbar from "primevue/toolbar"
@@ -20,6 +22,9 @@ import Accordion from 'primevue/accordion'
 import AccordionTab from 'primevue/accordiontab'
 import Listbox from 'primevue/listbox'
 import InputNumber from 'primevue/inputnumber'
+import Badge from 'primevue/badge'
+import BadgeDirective from 'primevue/badgedirective'
+import ScrollPanel from 'primevue/scrollpanel';
 
 const store = createStore({
     state () {
@@ -41,6 +46,7 @@ const store = createStore({
 
 const app = createApp(App)
 
+app.directive('badge', BadgeDirective)
 app.use(store)
 app.use(PrimeVue, {ripple: true})
 app.component('Toolbar', Toolbar)
@@ -57,5 +63,8 @@ app.component('Accordion', Accordion)
 app.component('AccordionTab', AccordionTab)
 app.component('Listbox', Listbox)
 app.component('InputNumber', InputNumber)
+app.component('Badge', Badge)
+app.component('BadgeDirective', BadgeDirective)
+app.component('ScrollPanel', ScrollPanel)
 
 app.mount('#app')

@@ -1,6 +1,5 @@
 <template>
   <Page></Page>
-  <h6>{{ val }}</h6>
   <AppFooter></AppFooter>
 </template>
 
@@ -32,6 +31,14 @@ export default {
 </script>
 
 <style>
+html {
+    font-size: 14px;
+}
+
+body {
+  margin: 0px;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

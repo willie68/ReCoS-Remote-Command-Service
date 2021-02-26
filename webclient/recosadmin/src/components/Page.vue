@@ -1,71 +1,52 @@
 <template>
-  <div class="layout-content">
-    <div class="content-section implementation">
-      <Toolbar>
-        <template #left>
-          <h1>ReCoS Admin</h1>
-        </template>
+  <Toolbar>
+    <template #left>
+      <b>ReCoS Admin</b>
+    </template>
 
-        <template #right>
-          <span class="p-input-icon-right">
-            Kennwort
-            <InputText ref="pwd" v-model="pwd" :type="pwdType"></InputText>
-            <i class="pi pi-eye-slash" @click="togglePwdView()" />
-            <i
-              v-if="!showPwd"
-              class="pi pi-eye-slash"
-              @click="togglePwdView()"
-            />
-            <i v-if="showPwd" class="pi pi-eye" @click="togglePwdView()" />
-          </span>
-          <SplitButton
-            label="Save"
-            icon="pi pi-check"
-            :model="items"
-            class="p-button-warning"
-          ></SplitButton>
-          <Button icon="pi pi-cog" class="p-mr-1" />
-        </template>
-      </Toolbar>
-      <Splitter style="height: 400px">
-        <SplitterPanel :size="20">
-          <Accordion @tab-open="openProfile">
-            <AccordionTab
-              v-for="(profilename, x) in profiles"
-              :key="x"
-              :header="profilename"
-            >
-              <Listbox
-                style="
-                  border: 0;
-                  width: 100%;
-                  height: 100%;
-                  margin: 0;
-                  padding: 0;
-                "
-                v-model="selectedPage"
-                :options="activeProfile.pages"
-                optionLabel="name"
-              >
-                <template #option="slotProps">
-                  <Toolbar>
-                    <template #left> {{ slotProps.option.name }} </template>
-                    <template #right>
-                      <i class="pi pi-th-large" style="fontsize: 2rem"></i>
-                    </template>
-                  </Toolbar>
-                  <div></div>
+    <template #right>
+      <span class="p-input-icon-right">
+        Password
+        <InputText ref="pwd" v-model="pwd" :type="pwdType"></InputText>
+        <i class="pi pi-eye-slash" @click="togglePwdView()" />
+        <i v-if="!showPwd" class="pi pi-eye-slash" @click="togglePwdView()" />
+        <i v-if="showPwd" class="pi pi-eye" @click="togglePwdView()" />
+      </span>
+      <SplitButton
+        label="Save"
+        icon="pi pi-check"
+        :model="items"
+        class="p-button-warning"
+      ></SplitButton>
+      <Button icon="pi pi-cog" class="p-mr-1" />
+    </template>
+  </Toolbar>
+  <Splitter style="height: 500px">
+    <SplitterPanel :size="20">
+      <Accordion @tab-open="openProfile">
+        <AccordionTab
+          v-for="(profilename, x) in profiles"
+          :key="x"
+          :header="profilename"
+        >
+        <div           
+          v-for="(page, y) in activeProfile.pages"
+          :key="y"
+        >
+              <Toolbar>
+                <template #left> {{ page.name  }} </template>
+                <template #right>
+                  <i class="pi pi-th-large"></i>
                 </template>
-              </Listbox>
-            </AccordionTab>
-          </Accordion>
-        </SplitterPanel>
-        <SplitterPanel :size="80">
-          <PageSettings :page="activePage"></PageSettings>
-        </SplitterPanel>
-      </Splitter>
-    </div>
-  </div>
+              </Toolbar>
+        </div>
+        </AccordionTab>
+      </Accordion>
+    </SplitterPanel>
+    <SplitterPanel :size="80">
+      <PageSettings :page="activePage"></PageSettings>
+    </SplitterPanel>
+  </Splitter>
 </template>
 
 <script>
@@ -81,6 +62,7 @@ export default {
   },
   data() {
     return {
+      pwd: "",
       showPwd: false,
       pwdType: "password",
       profiles: [],
@@ -225,11 +207,4 @@ export default {
 </script>
 
 <style>
-.p-button {
-  margin-bottom: 0.5rem;
-}
-
-.p-listbox {
-  border: 0;
-}
 </style>
