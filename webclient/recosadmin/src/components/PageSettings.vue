@@ -1,7 +1,7 @@
 <template>
   <Panel>
     <template #header>
-        <b>{{ page.name }}</b>
+        <b>{{ profile.name }} # {{ page.name }}</b>
     </template>
     <template #icons>
       <Button class="p-panel-header-icon p-link p-mr-2" @click="toggle">
@@ -31,7 +31,7 @@
       </div>
     </div>
   </Panel>
-  <ButtonPanel :rows="rows" :columns="columns"></ButtonPanel>
+  <ButtonPanel :rows="rows" :columns="columns" :actions="profile.actions" :page="page"></ButtonPanel>
 </template>
 
 <script>
@@ -43,6 +43,7 @@ export default {
   },
   props: {
     page: {},
+    profile: {name: ""},
   },
   data() {
     return {
@@ -107,7 +108,6 @@ export default {
   created() {},
   watch: {
     page(page) {
-      console.log("page changed");
       this.name = page.name;
       this.rows = page.rows;
       this.columns = page.columns;

@@ -32,6 +32,7 @@
         <div           
           v-for="(page, y) in activeProfile.pages"
           :key="y"
+          @click="changePage(page)"
         >
               <Toolbar>
                 <template #left> {{ page.name  }} </template>
@@ -44,7 +45,7 @@
       </Accordion>
     </SplitterPanel>
     <SplitterPanel :size="80">
-      <PageSettings :page="activePage"></PageSettings>
+      <PageSettings :page="activePage" :profile="activeProfile"></PageSettings>
     </SplitterPanel>
   </Splitter>
 </template>
@@ -157,7 +158,7 @@ export default {
   },
   methods: {
     openProfile(e) {
-      console.log(e);
+      console.log("open profile:" + e);
       this.profileName = this.profiles[e.index];
       fetch(this.profileURL + "/" + this.profileName)
         .then((res) => res.json())
@@ -179,6 +180,9 @@ export default {
     toggle(event) {
       this.$refs.menu.toggle(event);
     },
+    changePage(page) {
+      this.selectedPage = page
+    }
   },
   mounted() {},
   created() {
