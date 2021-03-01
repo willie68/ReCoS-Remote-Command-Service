@@ -1,7 +1,22 @@
 <template>
-  <Toolbar>
+  <Toolbar class="p-pb-1 p-pt-1">
     <template #left>
       <b>ReCoS Admin</b>
+      <p class="p-ml-6">Profiles:</p>
+      <Dropdown
+        class="p-ml-1"
+        v-model="activeProfileName"
+        :options="profiles"
+        placeholder="Select a Profile"
+      />
+      <p class="p-ml-6">Pages:</p>
+      <Dropdown
+        class="p-ml-1"
+        v-model="activePage"
+        :options="activeProfile.pages"
+        optionLabel="name"
+        placeholder="Select a Page"
+      />
     </template>
 
     <template #right>
@@ -23,26 +38,15 @@
   </Toolbar>
   <Splitter style="height: 500px">
     <SplitterPanel :size="20">
-      <Accordion @tab-open="openProfile">
-        <AccordionTab
-          v-for="(profilename, x) in profiles"
-          :key="x"
-          :header="profilename"
-        >
-        <div           
-          v-for="(page, y) in activeProfile.pages"
-          :key="y"
-          @click="changePage(page)"
-        >
-              <Toolbar>
-                <template #left> {{ page.name  }} </template>
-                <template #right>
-                  <i class="pi pi-th-large"></i>
-                </template>
-              </Toolbar>
-        </div>
-        </AccordionTab>
-      </Accordion>
+      <Panel header="Actions">
+        <template #icons>
+          <button class="p-panel-header-icon p-link p-mr-2" @click="toggle">
+            <span class="pi pi-cog"></span>
+          </button>
+          <Menu id="config_menu" ref="menu" :model="items" :popup="true" />
+        </template>
+        
+      </Panel>
     </SplitterPanel>
     <SplitterPanel :size="80">
       <PageSettings :page="activePage" :profile="activeProfile"></PageSettings>
@@ -67,6 +71,7 @@ export default {
       showPwd: false,
       pwdType: "password",
       profiles: [],
+      profileName: "",
       items: [
         {
           label: "Update",
@@ -91,10 +96,7 @@ export default {
           },
         },
       ],
-      activeProfile: {
-        name: "",
-        pages: [],
-      },
+      activeProfile: {},
       activePage: { name: "" },
       profileitems: [
         {
@@ -145,6 +147,24 @@ export default {
     };
   },
   computed: {
+    activeProfileName: {
+      get: function () {
+        return this.profileName;
+      },
+      set: function (newProfile) {
+        if (newProfile) {
+          this.profileName = newProfile;
+          fetch(this.profileURL + "/" + this.profileName)
+            .then((res) => res.json())
+            .then((data) => {
+              this.activeProfile = data;
+              this.activePage = this.activeProfile.pages[0];
+              console.log(this.activeProfile);
+            })
+            .catch((err) => console.log(err.message));
+        }
+      },
+    },
     selectedPage: {
       get: function () {
         return this.activePage;
@@ -181,8 +201,8 @@ export default {
       this.$refs.menu.toggle(event);
     },
     changePage(page) {
-      this.selectedPage = page
-    }
+      this.selectedPage = page;
+    },
   },
   mounted() {},
   created() {
@@ -198,6 +218,7 @@ export default {
           .then((data) => {
             console.log(data);
             that.profiles = data;
+            that.activeProfileName = that.profiles[0];
             console.log(that.profiles);
           })
           .catch((err) => console.log(err.message));

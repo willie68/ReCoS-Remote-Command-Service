@@ -25,6 +25,8 @@ import InputNumber from 'primevue/inputnumber'
 import Badge from 'primevue/badge'
 import BadgeDirective from 'primevue/badgedirective'
 import ScrollPanel from 'primevue/scrollpanel';
+import Dropdown from 'primevue/dropdown'
+
 
 const store = createStore({
     state () {
@@ -66,5 +68,6 @@ app.component('InputNumber', InputNumber)
 app.component('Badge', Badge)
 app.component('BadgeDirective', BadgeDirective)
 app.component('ScrollPanel', ScrollPanel)
+app.component('Dropdown', Dropdown)
 
 app.mount('#app')
