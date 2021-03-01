@@ -14,13 +14,14 @@ import (
 // ProfilesRoutes getting all routes for the profile endpoint
 func ProfilesRoutes() *chi.Mux {
 	router := chi.NewRouter()
-	router.Get("/", GetProfilesEndpoint)
-	router.Get("/{profileName}", GetProfileEndpoint)
+	router.Get("/", GetProfiles)
+	router.Get("/{profileName}", GetProfile)
+	router.Get("/{profileName}/actions", GetProfileActions)
 	return router
 }
 
-// GetProfilesEndpoint getting all profile names
-func GetProfilesEndpoint(response http.ResponseWriter, request *http.Request) {
+// GetProfiles getting all profile names
+func GetProfiles(response http.ResponseWriter, request *http.Request) {
 	// user := getUsername(request)
 	// if user == "" {
 	// 	msg := fmt.Sprintf("user header %s missing", api.UserHeader)
@@ -35,8 +36,31 @@ func GetProfilesEndpoint(response http.ResponseWriter, request *http.Request) {
 	render.JSON(response, request, profileNames)
 }
 
-// GetProfileEndpoint getting all profile names
-func GetProfileEndpoint(response http.ResponseWriter, request *http.Request) {
+// GetProfile getting a profile
+func GetProfile(response http.ResponseWriter, request *http.Request) {
+	// user := getUsername(request)
+	// if user == "" {
+	// 	msg := fmt.Sprintf("user header %s missing", api.UserHeader)
+	// 	api.Err(response, request, serror.BadRequest(nil, "missing-user", msg))
+	// 	return
+	// }
+
+	profileName, err := api.Param(request, "profileName")
+	if err != nil {
+		clog.Logger.Debug("Error reading profile name: \n" + err.Error())
+		api.Err(response, request, err)
+		return
+	}
+	for _, profile := range config.Profiles {
+		if strings.EqualFold(profile.Name, profileName) {
+			render.JSON(response, request, profile)
+			return
+		}
+	}
+}
+
+// GetProfileActions getting all profile names
+func GetProfileActions(response http.ResponseWriter, request *http.Request) {
 	// user := getUsername(request)
 	// if user == "" {
 	// 	msg := fmt.Sprintf("user header %s missing", api.UserHeader)
