@@ -48,6 +48,12 @@ func GetCommand(command models.Command) CommandExecutor {
 				Parameters: command.Parameters,
 			}
 		}
+	case models.Stopwatch:
+		{
+			cmdExecutor = &StopwatchCommand{
+				Parameters: command.Parameters,
+			}
+		}
 	case models.Screenshot:
 		{
 			cmdExecutor = &ScreenshotCommand{

@@ -20,6 +20,7 @@ pages:
       - screenshot
       - cputemp
       - cpuload
+      - stopwatch
   - name: page2
     description: clocks only
     columns: 3
@@ -332,3 +333,17 @@ actions:
           format: "%0.1f %"
           display: both
           color: "#ffff00"
+  - type: SINGLE
+    name: stopwatch
+    title: Stopwatch
+    description: simple stop watch
+    icon: timer.png
+    runone: true
+    outlined: true
+    fontcolor: black
+    commands:
+      - type: STOPWATCH
+        name: stp1
+        parameters:
+          format: "Mom: %0m:%0s "
+        

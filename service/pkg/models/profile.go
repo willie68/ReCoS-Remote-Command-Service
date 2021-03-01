@@ -100,6 +100,8 @@ const (
 	Timer = "TIMER"
 	// Clock is a clock
 	Clock = "CLOCK"
+	// Stopwatch is a stopwatch with seconds
+	Stopwatch = "STOPWATCH"
 	// Screenshot saving to the file system
 	Screenshot = "SCREENSHOT"
 	// HardwareMonitorCommand showing hardware sensor data

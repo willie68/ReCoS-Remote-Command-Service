@@ -4,28 +4,36 @@
       <b>ReCoS Admin</b>
       <p class="p-ml-6">Profiles:</p>
       <Dropdown
-        class="p-ml-1"
+        class="p-ml-1 dropdownwidth"
         v-model="activeProfileName"
         :options="profiles"
         placeholder="Select a Profile"
       />
-      <Button icon="pi pi-plus" class="p-mr-0" />
-      <Button icon="pi pi-trash" class="p-mr-0 p-button-danger" />
+      <SplitButton
+        v-tooltip="'Edit'"
+        icon="pi pi-pencil"
+        :model="profileMenuItems"
+        class="p-button-warning"
+      ></SplitButton>
 
-      <p class="p-ml-6">Pages:</p>
+      <p class="p-ml-2">Pages:</p>
       <Dropdown
-        class="p-ml-1"
+        class="p-ml-1 dropdownwidth"
         v-model="activePage"
         :options="activeProfile.pages"
         optionLabel="name"
         placeholder="Select a Page"
       />
-      <Button icon="pi pi-plus" class="p-mr-0" />
-      <Button icon="pi pi-trash" class="p-mr-0 p-button-danger" />
+      <SplitButton
+        v-tooltip="'Edit'"
+        icon="pi pi-pencil"
+        :model="pageMenuItems"
+        class="p-button-warning"
+      ></SplitButton>
 
-      <p class="p-ml-6">Actions:</p>
+      <p class="p-ml-2">Actions:</p>
       <Dropdown
-        class="p-ml-1"
+        class="p-ml-1 dropdownwidth"
         v-model="selectedAction"
         :options="activeProfile.actions"
         optionLabel="name"
@@ -163,6 +171,27 @@ export default {
         },
       ],
       selectedAction: {},
+      profileMenuItems: [
+        {
+          label: "Add",
+          icon: "pi pi-plus",
+        },
+        {
+          label: "Delete",
+          icon: "pi pi-trash",
+          class: "p-button-warning"
+        }
+      ],
+      pageMenuItems: [
+        {
+          label: "Add",
+          icon: "pi pi-plus",
+        },
+        {
+          label: "Delete",
+          icon: "pi pi-trash",
+        }
+      ],
       actionMenuItems: [
         {
           label: "Add",
@@ -264,5 +293,9 @@ export default {
 .p-panel-content {
   margin: 0px;
   padding: 0px !important; 
+}
+
+.dropdownwidth {
+  min-width: 12em;
 }
 </style>
