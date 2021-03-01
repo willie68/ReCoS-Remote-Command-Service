@@ -27,6 +27,8 @@ const (
 // Page is the most visible part of this. Every Page is organised in Rows and Columns. And with this every cell is a place for holding an action
 type Page struct {
 	Name string `json:"name"`
+	// Description of this action for information
+	Description string `json:"description"`
 	// Columns of this page
 	Columns int `json:"columns"`
 	// Rows of this page
@@ -110,6 +112,8 @@ type Command struct {
 	Type CommandType `json:"type"`
 	// Name is the command
 	Name string `json:"name"`
+	// Description of this action for information
+	Description string `json:"description"`
 	// Icon is the icon to show when this command is executing
 	Icon string `json:"icon"`
 	// Title is the title to show when this command is executing

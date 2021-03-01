@@ -69,7 +69,19 @@ func (c *Connection) close() {
 	c.conn.Close()
 }
 
-// SendMessage ssending a message as a string
+// HasConnectionWithProfile checks if there is a client connected which has his profile active
+func HasConnectionWithProfile(profile string) bool {
+	for _, conn := range Connections {
+		if conn.Connected {
+			if strings.EqualFold(profile, conn.profile) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+// SendMessage sending a message as a string
 func SendMessage(message models.Message) {
 	for _, conn := range Connections {
 		if conn.Connected {

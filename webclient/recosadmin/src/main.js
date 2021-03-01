@@ -26,6 +26,8 @@ import Badge from 'primevue/badge'
 import BadgeDirective from 'primevue/badgedirective'
 import ScrollPanel from 'primevue/scrollpanel';
 import Dropdown from 'primevue/dropdown'
+import Tooltip from 'primevue/tooltip';
+import Fieldset from 'primevue/fieldset';
 
 
 const store = createStore({
@@ -49,6 +51,7 @@ const store = createStore({
 const app = createApp(App)
 
 app.directive('badge', BadgeDirective)
+app.directive('tooltip', Tooltip)
 app.use(store)
 app.use(PrimeVue, {ripple: true})
 app.component('Toolbar', Toolbar)
@@ -69,5 +72,6 @@ app.component('Badge', Badge)
 app.component('BadgeDirective', BadgeDirective)
 app.component('ScrollPanel', ScrollPanel)
 app.component('Dropdown', Dropdown)
+app.component('Fieldset', Fieldset)
 
 app.mount('#app')

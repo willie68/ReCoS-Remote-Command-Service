@@ -68,17 +68,19 @@ func (c *ClockCommand) Init(a *Action) (bool, error) {
 			case <-c.done:
 				return
 			case t := <-c.ticker.C:
-				title := t.Format(c.format)
-				if c.analog {
-					c.SendPNG(title)
-				} else {
-					message := models.Message{
-						Profile: a.Profile,
-						Action:  a.Name,
-						State:   1,
-						Title:   title,
+				if api.HasConnectionWithProfile(a.Profile) {
+					title := t.Format(c.format)
+					if c.analog {
+						c.SendPNG(title)
+					} else {
+						message := models.Message{
+							Profile: a.Profile,
+							Action:  a.Name,
+							State:   1,
+							Title:   title,
+						}
+						api.SendMessage(message)
 					}
-					api.SendMessage(message)
 				}
 			}
 		}

@@ -1,11 +1,5 @@
 <template>
-  <div class="layout-footer">
-    <div class="layout-footer-left">
-      <span
-        >ReCoS Admin - Remote Command Service - (C) 2021 Wilfried Klaas</span
-      >
-    </div>
-  </div>
+    <div style="text-align: center">ReCoS Admin - Remote Command Service - (C) 2021 Wilfried Klaas</div>
 </template>
 
 <style scoped>

@@ -2,6 +2,7 @@ name: Default
 description: description for default
 pages:
   - name: page1
+    description: big button list
     columns: 5
     rows: 5
     cells:
@@ -20,6 +21,7 @@ pages:
       - cputemp
       - cpuload
   - name: page2
+    description: clocks only
     columns: 3
     rows: 3
     toolbar: hide
@@ -30,6 +32,7 @@ pages:
       - pause
       - clock
   - name: hardware
+    description: hardware statistics only
     columns: 3
     rows: 3
     cells:

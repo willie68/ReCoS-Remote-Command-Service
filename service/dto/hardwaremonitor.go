@@ -127,21 +127,23 @@ func (d *HardwareMonitorCommand) Init(a *Action) (bool, error) {
 						value = sensor.ValueStr
 					}
 				}
-				if d.textonly {
-					message := models.Message{
-						Profile: d.action.Profile,
-						Action:  d.action.Name,
-						Text:    value,
-						State:   0,
-					}
-					api.SendMessage(message)
-					continue
-				}
 				d.temps = append(d.temps, temp)
 				if len(d.temps) > measurepoints {
 					d.temps = d.temps[1:]
 				}
-				d.SendPNG(value)
+				if api.HasConnectionWithProfile(a.Profile) {
+					if d.textonly {
+						message := models.Message{
+							Profile: d.action.Profile,
+							Action:  d.action.Name,
+							Text:    value,
+							State:   0,
+						}
+						api.SendMessage(message)
+						continue
+					}
+					d.SendPNG(value)
+				}
 			}
 		}
 	}()

@@ -70,11 +70,12 @@ func GetUIProfileEndpoint(response http.ResponseWriter, request *http.Request) {
 			// for every page creating the info object
 			for _, page := range profile.Pages {
 				pageInfo := models.PageInfo{
-					Name:    page.Name,
-					Columns: page.Columns,
-					Rows:    page.Rows,
-					Toolbar: page.Toolbar,
-					Cells:   make([]string, 0),
+					Name:        page.Name,
+					Description: page.Description,
+					Columns:     page.Columns,
+					Rows:        page.Rows,
+					Toolbar:     page.Toolbar,
+					Cells:       make([]string, 0),
 				}
 				for _, cell := range page.Cells {
 					pageInfo.Cells = append(pageInfo.Cells, cell)

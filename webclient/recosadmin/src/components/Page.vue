@@ -9,6 +9,9 @@
         :options="profiles"
         placeholder="Select a Profile"
       />
+      <Button icon="pi pi-plus" class="p-mr-0" />
+      <Button icon="pi pi-trash" class="p-mr-0 p-button-danger" />
+
       <p class="p-ml-6">Pages:</p>
       <Dropdown
         class="p-ml-1"
@@ -17,6 +20,24 @@
         optionLabel="name"
         placeholder="Select a Page"
       />
+      <Button icon="pi pi-plus" class="p-mr-0" />
+      <Button icon="pi pi-trash" class="p-mr-0 p-button-danger" />
+
+      <p class="p-ml-6">Actions:</p>
+      <Dropdown
+        class="p-ml-1"
+        v-model="selectedAction"
+        :options="activeProfile.actions"
+        optionLabel="name"
+        placeholder="Select an action"
+      />
+      <SplitButton
+        v-tooltip="'Edit'"
+        icon="pi pi-pencil"
+        :model="actionMenuItems"
+        class="p-button-warning"
+      ></SplitButton>
+
     </template>
 
     <template #right>
@@ -38,15 +59,12 @@
   </Toolbar>
   <Splitter style="height: 500px">
     <SplitterPanel :size="20">
-      <Panel header="Actions">
-        <template #icons>
-          <button class="p-panel-header-icon p-link p-mr-2" @click="toggle">
-            <span class="pi pi-cog"></span>
-          </button>
-          <Menu id="config_menu" ref="menu" :model="items" :popup="true" />
-        </template>
-        
-      </Panel>
+        <Fieldset :legend="'Profile: '+ activeProfile.name" :toggleable="true">
+        {{ activeProfile.description }}
+        </Fieldset>
+        <Fieldset :legend="'Page: '+ activePage.name" :toggleable="true">
+        {{ activePage.description }}
+        </Fieldset>
     </SplitterPanel>
     <SplitterPanel :size="80">
       <PageSettings :page="activePage" :profile="activeProfile"></PageSettings>
@@ -144,6 +162,17 @@ export default {
           ],
         },
       ],
+      selectedAction: {},
+      actionMenuItems: [
+        {
+          label: "Add",
+          icon: "pi pi-plus",
+        },
+        {
+          label: "Delete",
+          icon: "pi pi-trash",
+        }
+      ],
     };
   },
   computed: {
@@ -232,4 +261,8 @@ export default {
 </script>
 
 <style>
+.p-panel-content {
+  margin: 0px;
+  padding: 0px !important; 
+}
 </style>
