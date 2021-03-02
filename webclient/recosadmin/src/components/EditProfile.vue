@@ -67,7 +67,6 @@ export default {
   },
   watch: {
     visible(visible) {
-      console.log("EditProfile visible changed");
       this.dialogProfileVisible = visible;
     },
     profile(profile) {

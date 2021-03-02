@@ -16,6 +16,7 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/dto"
 	"wkla.no-ip.biz/remote-desk-service/error/serror"
 	"wkla.no-ip.biz/remote-desk-service/health"
+	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 	"wkla.no-ip.biz/remote-desk-service/pkg/osdependent"
 
 	config "wkla.no-ip.biz/remote-desk-service/config"
@@ -50,7 +51,7 @@ func init() {
 	clog.Logger.Info("init service")
 	flag.IntVarP(&port, "port", "p", 0, "port of the http server.")
 	flag.IntVarP(&sslport, "sslport", "t", 0, "port of the https server.")
-	flag.StringVarP(&configFile, "config", "c", config.File, "this is the path and filename to the config file")
+	flag.StringVarP(&configFile, "config", "c", "", "this is the path and filename to the config file")
 	flag.StringVarP(&serviceURL, "serviceURL", "u", "", "service url from outside")
 }
 
@@ -105,7 +106,27 @@ func main() {
 	flag.Parse()
 
 	serror.Service = servicename
+	if configFile == "" {
+		configFolder, err := config.GetDefaultConfigFolder()
+		if err != nil {
+			clog.Logger.Alertf("can't load config file: %s", err.Error())
+			os.Exit(1)
+		}
+		configFolder = fmt.Sprintf("%s/service/", configFolder)
+		err = os.MkdirAll(configFolder, os.ModePerm)
+		if err != nil {
+			clog.Logger.Alertf("can't load config file: %s", err.Error())
+			os.Exit(1)
+		}
+		configFile = configFolder + "/service.yaml"
+
+		if _, err := os.Stat(configFile); os.IsNotExist(err) {
+			config.SaveConfig(configFolder, config.DefaulConfig)
+		}
+	}
+
 	config.File = configFile
+
 	if err := config.Load(); err != nil {
 		clog.Logger.Alertf("can't load config file: %s", err.Error())
 		os.Exit(1)
@@ -115,8 +136,39 @@ func main() {
 	initConfig()
 
 	if err := config.InitProfiles(serviceConfig.Profiles); err != nil {
-		clog.Logger.Alertf("can't load profile files: %s", err.Error())
-		os.Exit(1)
+		if !os.IsNotExist(err) {
+			clog.Logger.Alertf("can't load profile files: %s", err.Error())
+			os.Exit(1)
+		}
+		profileFolder, err := config.GetProfileFolder(serviceConfig.Profiles)
+		if err != nil {
+			clog.Logger.Alertf("can't load profile files: %s", err.Error())
+			os.Exit(1)
+		}
+		err = os.MkdirAll(profileFolder, os.ModePerm)
+		if err != nil {
+			clog.Logger.Alertf("can't load profile files: %s", err.Error())
+			os.Exit(1)
+		}
+	}
+
+	if len(config.Profiles) == 0 {
+		newProfile := models.Profile{
+			Name:        "Default",
+			Description: "This is the default profile",
+			Pages:       make([]models.Page, 0),
+		}
+		newProfile.Pages = append(newProfile.Pages, models.Page{
+			Name:        "Default",
+			Description: "This is the default page",
+			Rows:        5,
+			Columns:     3,
+		})
+		if err := config.SaveProfile(newProfile); err != nil {
+			clog.Logger.Alertf("can't create profiles: %s", err.Error())
+			os.Exit(1)
+		}
+		config.Profiles = append(config.Profiles, newProfile)
 	}
 
 	if err := dto.InitProfiles(config.Profiles); err != nil {

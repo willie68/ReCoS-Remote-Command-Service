@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -8,15 +10,17 @@ import (
 	"github.com/go-chi/render"
 	"wkla.no-ip.biz/remote-desk-service/api"
 	"wkla.no-ip.biz/remote-desk-service/config"
+	"wkla.no-ip.biz/remote-desk-service/error/serror"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
+	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
 // ProfilesRoutes getting all routes for the profile endpoint
 func ProfilesRoutes() *chi.Mux {
 	router := chi.NewRouter()
 	router.Get("/", GetProfiles)
+	router.Post("/", PostProfile)
 	router.Get("/{profileName}", GetProfile)
-	router.Get("/{profileName}/actions", GetProfileActions)
 	return router
 }
 
@@ -59,25 +63,26 @@ func GetProfile(response http.ResponseWriter, request *http.Request) {
 	}
 }
 
-// GetProfileActions getting all profile names
-func GetProfileActions(response http.ResponseWriter, request *http.Request) {
-	// user := getUsername(request)
-	// if user == "" {
-	// 	msg := fmt.Sprintf("user header %s missing", api.UserHeader)
-	// 	api.Err(response, request, serror.BadRequest(nil, "missing-user", msg))
-	// 	return
-	// }
+// PostProfile create a new profile
+func PostProfile(response http.ResponseWriter, request *http.Request) {
+	user := getUsername(request)
+	if user == "" {
+		msg := fmt.Sprintf("user header %s missing", api.UserHeader)
+		api.Err(response, request, serror.BadRequest(nil, "missing-user", msg))
+		return
+	}
 
-	profileName, err := api.Param(request, "profileName")
+	decoder := json.NewDecoder(request.Body)
+	var profile models.Profile
+	err := decoder.Decode(&profile)
 	if err != nil {
-		clog.Logger.Debug("Error reading profile name: \n" + err.Error())
+		clog.Logger.Debug("Error reading json body:" + err.Error())
 		api.Err(response, request, err)
 		return
 	}
-	for _, profile := range config.Profiles {
-		if strings.EqualFold(profile.Name, profileName) {
-			render.JSON(response, request, profile)
-			return
-		}
-	}
+
+	
+
+	render.Status(request, http.StatusCreated)
+	render.JSON(response, request, user)
 }

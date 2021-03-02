@@ -168,10 +168,11 @@ func (a *Action) Copy() Action {
 // Copy make a deep copy of this action
 func (p *Page) Copy() Page {
 	page := Page{
-		Name:    p.Name,
-		Columns: p.Columns,
-		Rows:    p.Rows,
-		Toolbar: p.Toolbar,
+		Name:        p.Name,
+		Columns:     p.Columns,
+		Description: p.Description,
+		Rows:        p.Rows,
+		Toolbar:     p.Toolbar,
 	}
 	page.Cells = make([]string, 0)
 	for _, cell := range p.Cells {
@@ -183,10 +184,11 @@ func (p *Page) Copy() Page {
 // Copy make a deep copy of this action
 func (c *Command) Copy() Command {
 	command := Command{
-		Name:  c.Name,
-		Type:  c.Type,
-		Icon:  c.Icon,
-		Title: c.Title,
+		Name:        c.Name,
+		Description: c.Description,
+		Type:        c.Type,
+		Icon:        c.Icon,
+		Title:       c.Title,
 	}
 	var buf bytes.Buffer
 	enc := gob.NewEncoder(&buf)
