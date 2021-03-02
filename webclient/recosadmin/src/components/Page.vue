@@ -25,12 +25,8 @@
         optionLabel="name"
         placeholder="Select a Page"
       />
-      <SplitButton
-        v-tooltip="'Edit'"
-        icon="pi pi-pencil"
-        :model="pageMenuItems"
-        class="p-button-warning"
-      ></SplitButton>
+      <Button icon="pi pi-plus" @click="newPage" class="p-ml-1" />
+      <Button icon="pi pi-trash" class="p-button-warning" />
 
       <p class="p-ml-2">Actions:</p>
       <Dropdown
@@ -195,16 +191,6 @@ export default {
           class: "p-button-warning",
         },
       ],
-      pageMenuItems: [
-        {
-          label: "Add",
-          icon: "pi pi-plus",
-        },
-        {
-          label: "Delete",
-          icon: "pi pi-trash",
-        },
-      ],
       actionMenuItems: [
         {
           label: "Add",
@@ -250,6 +236,16 @@ export default {
     },
   },
   methods: {
+    newPage() {
+      this.activePage = {
+        name: "Your Name Here",
+        description: "Your description here",
+        rows: 3,
+        columns: 5,
+      }
+      this.activeProfile.pages.push(this.activePage)
+      this.selectedPage = this.activePage
+    },
     openProfile(e) {
       console.log("open profile:" + e);
       this.profileName = this.profiles[e.index];
