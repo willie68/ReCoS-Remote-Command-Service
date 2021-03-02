@@ -276,7 +276,7 @@ export default {
     changePage(page) {
       this.selectedPage = page;
     },
-    saveProfile: function (profile) {
+    saveProfile(profile) {
       console.log("Save profile:" + profile.name + "#" + profile.description)
       this.dialogProfileVisible = false
     },

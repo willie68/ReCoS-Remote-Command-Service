@@ -12,6 +12,7 @@
             type="text"
             v-model="editProfile.name"
             class="p-ml-2"
+            :disabled="edit" 
           />
         </div>
       </div>
@@ -46,8 +47,9 @@ export default {
   name: "EditProfile",
   components: {},
   props: {
-    profile: String,
+    profile: {},
     visible: Boolean,
+    edit: Boolean,
   },
   data() {
     return {
@@ -67,6 +69,9 @@ export default {
     visible(visible) {
       console.log("EditProfile visible changed");
       this.dialogProfileVisible = visible;
+    },
+    profile(profile) {
+      this.editProfile = profile;
     },
   },
 };
