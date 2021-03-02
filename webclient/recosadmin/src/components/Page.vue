@@ -14,6 +14,7 @@
         icon="pi pi-pencil"
         :model="profileMenuItems"
         class="p-button-warning"
+        @click="dialogProfileVisible = true"
       ></SplitButton>
 
       <p class="p-ml-2">Pages:</p>
@@ -45,7 +46,6 @@
         :model="actionMenuItems"
         class="p-button-warning"
       ></SplitButton>
-
     </template>
 
     <template #right>
@@ -67,26 +67,39 @@
   </Toolbar>
   <Splitter style="height: 500px">
     <SplitterPanel :size="20">
-        <Fieldset :legend="'Profile: '+ activeProfile.name" :toggleable="true">
+      <div class="p-pb-2 p-pt-2"><b>Descriptions</b></div>
+      <Fieldset
+        :legend="'Profile: ' + activeProfile.name"
+        :toggleable="true"
+        class="p-pt-2"
+      >
         {{ activeProfile.description }}
-        </Fieldset>
-        <Fieldset :legend="'Page: '+ activePage.name" :toggleable="true">
+      </Fieldset>
+      <Fieldset :legend="'Page: ' + activePage.name" :toggleable="true">
         {{ activePage.description }}
-        </Fieldset>
+      </Fieldset>
     </SplitterPanel>
     <SplitterPanel :size="80">
       <PageSettings :page="activePage" :profile="activeProfile"></PageSettings>
     </SplitterPanel>
   </Splitter>
+
+  <EditProfile
+    :visible="dialogProfileVisible"
+    v-on:save="saveProfile"
+    v-on:cancel="this.dialogProfileVisible = false"
+  ></EditProfile>
 </template>
 
 <script>
 import PageSettings from "./PageSettings.vue";
+import EditProfile from "./EditProfile.vue";
 
 export default {
   name: "Page",
   components: {
     PageSettings,
+    EditProfile,
   },
   props: {
     msg: String,
@@ -179,8 +192,8 @@ export default {
         {
           label: "Delete",
           icon: "pi pi-trash",
-          class: "p-button-warning"
-        }
+          class: "p-button-warning",
+        },
       ],
       pageMenuItems: [
         {
@@ -190,7 +203,7 @@ export default {
         {
           label: "Delete",
           icon: "pi pi-trash",
-        }
+        },
       ],
       actionMenuItems: [
         {
@@ -200,8 +213,10 @@ export default {
         {
           label: "Delete",
           icon: "pi pi-trash",
-        }
+        },
       ],
+      dialogProfileVisible: false,
+      editProfile: { name: "", description: "" },
     };
   },
   computed: {
@@ -261,6 +276,10 @@ export default {
     changePage(page) {
       this.selectedPage = page;
     },
+    saveProfile: function (profile) {
+      console.log("Save profile:" + profile.name + "#" + profile.description)
+      this.dialogProfileVisible = false
+    },
   },
   mounted() {},
   created() {
@@ -292,7 +311,7 @@ export default {
 <style>
 .p-panel-content {
   margin: 0px;
-  padding: 0px !important; 
+  padding: 0px !important;
 }
 
 .dropdownwidth {

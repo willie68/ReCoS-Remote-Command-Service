@@ -28,6 +28,7 @@ import ScrollPanel from 'primevue/scrollpanel';
 import Dropdown from 'primevue/dropdown'
 import Tooltip from 'primevue/tooltip';
 import Fieldset from 'primevue/fieldset';
+import Textarea from 'primevue/textarea';
 
 
 const store = createStore({
@@ -73,5 +74,6 @@ app.component('BadgeDirective', BadgeDirective)
 app.component('ScrollPanel', ScrollPanel)
 app.component('Dropdown', Dropdown)
 app.component('Fieldset', Fieldset)
+app.component('Textarea', Textarea)
 
 app.mount('#app')

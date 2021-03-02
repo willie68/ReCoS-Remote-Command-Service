@@ -7,10 +7,10 @@ import (
 	"math"
 	"time"
 
-	"github.com/davidscholberg/go-durationfmt"
 	"github.com/fogleman/gg"
 	"golang.org/x/image/bmp"
 	"wkla.no-ip.biz/remote-desk-service/api"
+	"wkla.no-ip.biz/remote-desk-service/internal"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
