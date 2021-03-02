@@ -10,6 +10,7 @@ import (
 	"github.com/go-chi/render"
 	"wkla.no-ip.biz/remote-desk-service/api"
 	"wkla.no-ip.biz/remote-desk-service/config"
+	"wkla.no-ip.biz/remote-desk-service/dto"
 	"wkla.no-ip.biz/remote-desk-service/error/serror"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
@@ -81,8 +82,25 @@ func PostProfile(response http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	
+	if config.HasProfile(profile.Name) {
+		msg := fmt.Sprintf("profile already exists: %s", profile.Name)
+		api.Err(response, request, serror.BadRequest(nil, "profile-exists", msg))
+		return
+	}
+
+	err = config.SaveProfile(profile)
+	if err != nil {
+		clog.Logger.Debug("Error saving profile:" + err.Error())
+		api.Err(response, request, err)
+		return
+	}
+
+	go func() {
+		if err := dto.ReinitProfiles(config.Profiles); err != nil {
+			clog.Logger.Alertf("can't create profiles: %s", err.Error())
+		}
+	}()
 
 	render.Status(request, http.StatusCreated)
-	render.JSON(response, request, user)
+	render.JSON(response, request, profile)
 }

@@ -345,5 +345,5 @@ actions:
       - type: STOPWATCH
         name: stp1
         parameters:
-          format: "Mom: %0m:%0s: "
+          format: "Mom: %0m:%0s"
         

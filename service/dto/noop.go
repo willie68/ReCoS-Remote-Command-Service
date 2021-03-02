@@ -24,5 +24,5 @@ func (d *NoopCommand) Stop(a *Action) (bool, error) {
 func (d *NoopCommand) Execute(a *Action, requestMessage models.Message) (bool, error) {
 	if IsSingleClick(requestMessage) {
 	}
-	return false, nil
+	return true, nil
 }

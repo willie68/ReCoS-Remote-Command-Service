@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"image/png"
 	"os"
+	"time"
 
 	"github.com/kbinani/screenshot"
+	"wkla.no-ip.biz/remote-desk-service/api"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
@@ -50,6 +52,7 @@ func (s *ScreenshotCommand) Execute(a *Action, requestMessage models.Message) (b
 	n := screenshot.NumActiveDisplays()
 
 	for i := 0; i < n; i++ {
+		names := ""
 		if (display == i) || (display == -1) {
 			bounds := screenshot.GetDisplayBounds(i)
 
@@ -70,8 +73,30 @@ func (s *ScreenshotCommand) Execute(a *Action, requestMessage models.Message) (b
 			file, _ := os.Create(filename)
 			defer file.Close()
 			png.Encode(file, img)
+			names = names + filename + "\r\n"
 		}
+		message := models.Message{
+			Profile:  a.Profile,
+			Action:   a.Name,
+			ImageURL: "check_mark.png",
+			Title:    "done",
+			Text:     names,
+			State:    0,
+		}
+		api.SendMessage(message)
+		go func() {
+			time.Sleep(3 * time.Second)
+			message := models.Message{
+				Profile:  a.Profile,
+				Action:   a.Name,
+				ImageURL: a.Config.Icon,
+				Title:    a.Config.Title,
+				Text:     "",
+				State:    0,
+			}
+			api.SendMessage(message)
+		}()
 	}
 
-	return true, nil
+	return false, nil
 }

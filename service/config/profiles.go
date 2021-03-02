@@ -83,3 +83,13 @@ func SaveProfile(profile models.Profile) error {
 	}
 	return errors.New("Profile already exists")
 }
+
+// HasProfile chacking if a profile is already defined
+func HasProfile(profileName string) bool {
+	for _, profile := range Profiles {
+		if strings.EqualFold(profileName, profile.Name) {
+			return true
+		}
+	}
+	return false
+}

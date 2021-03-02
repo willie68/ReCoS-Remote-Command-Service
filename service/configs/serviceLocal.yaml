@@ -10,7 +10,7 @@ secretfile:
 healthcheck:
     period: 30
 
-profiles: ./profiles
+profiles: ./devdata/profiles
 
 extconfig:
     openhardwaremonitor:
