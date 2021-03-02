@@ -22,6 +22,7 @@ func ProfilesRoutes() *chi.Mux {
 	router.Get("/", GetProfiles)
 	router.Post("/", PostProfile)
 	router.Get("/{profileName}", GetProfile)
+	router.Delete("/{profileName}", DeleteProfile)
 	return router
 }
 
@@ -96,6 +97,7 @@ func PostProfile(response http.ResponseWriter, request *http.Request) {
 	}
 
 	go func() {
+		config.AddProfile(profile)
 		if err := dto.ReinitProfiles(config.Profiles); err != nil {
 			clog.Logger.Alertf("can't create profiles: %s", err.Error())
 		}
@@ -103,4 +105,37 @@ func PostProfile(response http.ResponseWriter, request *http.Request) {
 
 	render.Status(request, http.StatusCreated)
 	render.JSON(response, request, profile)
+}
+
+// DeleteProfile getting a profile
+func DeleteProfile(response http.ResponseWriter, request *http.Request) {
+	user := getUsername(request)
+	if user == "" {
+		msg := fmt.Sprintf("user header %s missing", api.UserHeader)
+		api.Err(response, request, serror.BadRequest(nil, "missing-user", msg))
+		return
+	}
+
+	profileName, err := api.Param(request, "profileName")
+	if err != nil {
+		clog.Logger.Debug("Error reading profile name: \n" + err.Error())
+		api.Err(response, request, err)
+		return
+	}
+	for _, profile := range config.Profiles {
+		if strings.EqualFold(profile.Name, profileName) {
+			dto.CloseProfile(profileName)
+			profile, err := config.DeleteProfile(profileName)
+			if err != nil {
+				clog.Logger.Debug("Error deleting profile: \n" + err.Error())
+				api.Err(response, request, err)
+				return
+			}
+			render.JSON(response, request, profile)
+			return
+		}
+	}
+	msg := fmt.Sprintf("profile not found: %s", profileName)
+	api.Err(response, request, serror.BadRequest(nil, "missing-profile", msg))
+	return
 }
