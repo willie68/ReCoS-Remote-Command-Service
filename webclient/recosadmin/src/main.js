@@ -24,11 +24,14 @@ import Listbox from 'primevue/listbox'
 import InputNumber from 'primevue/inputnumber'
 import Badge from 'primevue/badge'
 import BadgeDirective from 'primevue/badgedirective'
-import ScrollPanel from 'primevue/scrollpanel';
+import ScrollPanel from 'primevue/scrollpanel'
 import Dropdown from 'primevue/dropdown'
-import Tooltip from 'primevue/tooltip';
-import Fieldset from 'primevue/fieldset';
-import Textarea from 'primevue/textarea';
+import Tooltip from 'primevue/tooltip'
+import Fieldset from 'primevue/fieldset'
+import Textarea from 'primevue/textarea'
+import TabView from 'primevue/tabview'
+import TabPanel from 'primevue/tabpanel'
+
 
 
 const store = createStore({
@@ -75,5 +78,7 @@ app.component('ScrollPanel', ScrollPanel)
 app.component('Dropdown', Dropdown)
 app.component('Fieldset', Fieldset)
 app.component('Textarea', Textarea)
+app.component('TabView', TabView)
+app.component('TabPanel', TabPanel)
 
 app.mount('#app')
