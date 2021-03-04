@@ -1,7 +1,7 @@
 <template>
   <TabView>
-    <TabPanel header="Actions"> 
-      <Actions :profile="profile"></Actions> </TabPanel>
+    <TabPanel header="Actions" > 
+      <Actions :profile="profile" class="p-mt-0 p-pt-0 p-pb-0"></Actions> </TabPanel>
     <TabPanel header="Pages">
       <Pages :profile="profile"></Pages>
     </TabPanel>

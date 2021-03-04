@@ -1,5 +1,6 @@
 <template>
-  <Toolbar>
+  <Toolbar class="p-mt-0 p-pt-0 p-pb-0">
+    <template #left>
     <p class="p-ml-2">Pages:</p>
     <Dropdown
       class="p-ml-1 dropdownwidth"
@@ -25,6 +26,7 @@
       :model="actionMenuItems"
       class="p-button-warning"
     ></SplitButton>
+    </template>
   </Toolbar>
   <Splitter style="height: 500px">
     <SplitterPanel :size="20">
