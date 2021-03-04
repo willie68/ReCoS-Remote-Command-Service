@@ -19,6 +19,8 @@ type Config struct {
 
 	SecretFile string `yaml:"secretfile"`
 
+	Password string `yaml:"password"`
+
 	HealthCheck HealthCheck `yaml:"healthcheck"`
 
 	Profiles string `yaml:"profiles"`

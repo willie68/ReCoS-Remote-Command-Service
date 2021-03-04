@@ -7,6 +7,9 @@ serviceURL: http://127.0.0.1:9280
 #sercret file for storing usernames and passwords
 secretfile:
 
+#admin password for the admin interface
+password: recosadmin
+
 healthcheck:
     period: 30
 

@@ -32,14 +32,13 @@ import Textarea from 'primevue/textarea'
 import TabView from 'primevue/tabview'
 import TabPanel from 'primevue/tabpanel'
 
-
-
 const store = createStore({
     state () {
       return {
         count: 0,      
         servicePort: 9280,
         baseURL: window.location.protocol + "//localhost:9280/api/v1/",
+        password: "",
       }
     },
     mutations: {
@@ -48,6 +47,9 @@ const store = createStore({
       },
       baseURL (state, baseurl) {
           state.baseURL = baseurl
+      },
+      password (state, password) {
+        state.password = password
       }
     }
   })

@@ -1,31 +1,16 @@
 <template>
   <Toolbar class="p-mt-0 p-pt-0 p-pb-0">
     <template #left>
-    <p class="p-ml-2">Pages:</p>
-    <Dropdown
-      class="p-ml-1 dropdownwidth"
-      v-model="activePage"
-      :options="profile.pages"
-      optionLabel="name"
-      placeholder="Select a Page"
-    />
-    <Button icon="pi pi-plus" @click="newPage" class="p-ml-1" />
-    <Button icon="pi pi-trash" class="p-button-warning" />
-
-    <p class="p-ml-2">Actions:</p>
-    <Dropdown
-      class="p-ml-1 dropdownwidth"
-      v-model="selectedAction"
-      :options="profile.actions"
-      optionLabel="name"
-      placeholder="Select an action"
-    />
-    <SplitButton
-      v-tooltip="'Edit'"
-      icon="pi pi-pencil"
-      :model="actionMenuItems"
-      class="p-button-warning"
-    ></SplitButton>
+      <p class="p-ml-2">Pages:</p>
+      <Dropdown
+        class="p-ml-1 dropdownwidth"
+        v-model="activePage"
+        :options="profile.pages"
+        optionLabel="name"
+        placeholder="Select a Page"
+      />
+      <Button icon="pi pi-plus" @click="newPage" class="p-ml-1" />
+      <Button icon="pi pi-trash" class="p-button-warning" />
     </template>
   </Toolbar>
   <Splitter style="height: 500px">
@@ -129,7 +114,7 @@ export default {
     changePage(page) {
       this.selectedPage = page;
     },
- },
+  },
   mounted() {},
   created() {
     //    this.unsubscribe = this.$store.subscribe((mutation, state) => {

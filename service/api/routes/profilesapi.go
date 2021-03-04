@@ -28,12 +28,6 @@ func ProfilesRoutes() *chi.Mux {
 
 // GetProfiles getting all profile names
 func GetProfiles(response http.ResponseWriter, request *http.Request) {
-	// user := getUsername(request)
-	// if user == "" {
-	// 	msg := fmt.Sprintf("user header %s missing", api.UserHeader)
-	// 	api.Err(response, request, serror.BadRequest(nil, "missing-user", msg))
-	// 	return
-	// }
 	var profileNames []string
 	profileNames = make([]string, 0)
 	for _, profile := range config.Profiles {
@@ -44,13 +38,6 @@ func GetProfiles(response http.ResponseWriter, request *http.Request) {
 
 // GetProfile getting a profile
 func GetProfile(response http.ResponseWriter, request *http.Request) {
-	// user := getUsername(request)
-	// if user == "" {
-	// 	msg := fmt.Sprintf("user header %s missing", api.UserHeader)
-	// 	api.Err(response, request, serror.BadRequest(nil, "missing-user", msg))
-	// 	return
-	// }
-
 	profileName, err := api.Param(request, "profileName")
 	if err != nil {
 		clog.Logger.Debug("Error reading profile name: \n" + err.Error())
@@ -67,16 +54,16 @@ func GetProfile(response http.ResponseWriter, request *http.Request) {
 
 // PostProfile create a new profile
 func PostProfile(response http.ResponseWriter, request *http.Request) {
-	user := getUsername(request)
-	if user == "" {
-		msg := fmt.Sprintf("user header %s missing", api.UserHeader)
-		api.Err(response, request, serror.BadRequest(nil, "missing-user", msg))
+	err := api.CheckPassword(request)
+	if err != nil {
+		clog.Logger.Debug("no pwd header:" + err.Error())
+		api.Err(response, request, err)
 		return
 	}
 
 	decoder := json.NewDecoder(request.Body)
 	var profile models.Profile
-	err := decoder.Decode(&profile)
+	err = decoder.Decode(&profile)
 	if err != nil {
 		clog.Logger.Debug("Error reading json body:" + err.Error())
 		api.Err(response, request, err)
@@ -109,10 +96,10 @@ func PostProfile(response http.ResponseWriter, request *http.Request) {
 
 // DeleteProfile getting a profile
 func DeleteProfile(response http.ResponseWriter, request *http.Request) {
-	user := getUsername(request)
-	if user == "" {
-		msg := fmt.Sprintf("user header %s missing", api.UserHeader)
-		api.Err(response, request, serror.BadRequest(nil, "missing-user", msg))
+	err := api.CheckPassword(request)
+	if err != nil {
+		clog.Logger.Debug("no pwd header:" + err.Error())
+		api.Err(response, request, err)
 		return
 	}
 

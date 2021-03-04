@@ -1,7 +1,8 @@
 <template>
-  <TabView>
-    <TabPanel header="Actions" > 
-      <Actions :profile="profile" class="p-mt-0 p-pt-0 p-pb-0"></Actions> </TabPanel>
+  <TabView class="tabview-custom">
+    <TabPanel header="Actions" class="tabpanel-custom">
+      <Actions :profile="profile"></Actions>
+    </TabPanel>
     <TabPanel header="Pages">
       <Pages :profile="profile"></Pages>
     </TabPanel>
@@ -10,7 +11,8 @@
 
 <script>
 import Actions from "./Actions.vue";
-import Pages  from "./Pages.vue";
+import Pages from "./Pages.vue";
+
 export default {
   name: "Profile",
   components: {
@@ -20,6 +22,12 @@ export default {
   props: {
     profile: {},
   },
-
-}
+};
 </script>
+
+<style>
+.tabview-custom .p-tabview-panels {
+  margin: 0;
+  padding: 0 !important;
+}
+</style>

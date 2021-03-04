@@ -21,7 +21,7 @@
     <template #right>
       <span class="p-input-icon-right">
         Password
-        <InputText ref="pwd" v-model="pwd" :type="pwdType"></InputText>
+        <InputText ref="pwd" v-model="password" :type="pwdType" name="password"></InputText>
         <i class="pi pi-eye-slash" @click="togglePwdView()" />
         <i v-if="!showPwd" class="pi pi-eye-slash" @click="togglePwdView()" />
         <i v-if="showPwd" class="pi pi-eye" @click="togglePwdView()" />
@@ -83,7 +83,10 @@ export default {
       set: function (newProfile) {
         if (newProfile) {
           this.profileName = newProfile;
-          fetch(this.profileURL + "/" + this.profileName)
+          fetch(this.profileURL + "/" + this.profileName, {
+            method: "GET",
+            headers: { "X-mcs-password": this.$store.state.password },
+          })
             .then((res) => res.json())
             .then((data) => {
               this.activeProfile = data;
@@ -91,6 +94,16 @@ export default {
               console.log(this.activeProfile);
             })
             .catch((err) => console.log(err.message));
+        }
+      },
+    },
+    password: {
+      get: function () {
+        return this.$store.state.password;
+      },
+      set: function (newPassword) {
+        if (newPassword) {
+          this.$store.commit("password", newPassword);
         }
       },
     },
