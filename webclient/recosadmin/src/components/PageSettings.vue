@@ -1,5 +1,5 @@
 <template>
-  <Panel>
+  <Panel class="page-panel-custom">
     <template #header>
         <b>{{ profile.name }} # {{ page.name }}</b>
     </template>
@@ -115,3 +115,12 @@ export default {
   },
 };
 </script>
+
+
+<style>
+.page-panel-custom .p-panel-header {
+    margin: 0px;
+    padding: 2px !important;
+}
+
+</style>

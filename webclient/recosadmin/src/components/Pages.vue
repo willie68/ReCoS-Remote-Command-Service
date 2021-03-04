@@ -1,31 +1,29 @@
 <template>
-  <Toolbar class="p-mt-0 p-pt-0 p-pb-0">
-    <template #left>
-      <p class="p-ml-2">Pages:</p>
-      <Dropdown
-        class="p-ml-1 dropdownwidth"
-        v-model="activePage"
-        :options="profile.pages"
-        optionLabel="name"
-        placeholder="Select a Page"
-      />
-      <Button icon="pi pi-plus" @click="newPage" class="p-ml-1" />
-      <Button icon="pi pi-trash" class="p-button-warning" />
-    </template>
-  </Toolbar>
   <Splitter style="height: 500px">
     <SplitterPanel :size="20">
-      <div class="p-pb-2 p-pt-2"><b>Descriptions</b></div>
-      <Fieldset
-        :legend="'Profile: ' + profile.name"
-        :toggleable="true"
-        class="p-pt-2"
-      >
-        {{ profile.description }}
-      </Fieldset>
-      <Fieldset :legend="'Page: ' + activePage.name" :toggleable="true">
-        {{ activePage.description }}
-      </Fieldset>
+      <Panel header="Pages" class="pages-panel-custom">
+        <template #icons>
+          <button
+            class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
+            @click="toggle"
+          >
+            <span class="pi pi-plus"></span>
+          </button>
+          <button
+            class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
+            @click="toggle"
+          >
+            <span class="pi pi-trash"></span>
+          </button>
+        </template>
+        <Listbox
+          v-model="activePage"
+          :options="profile.pages"
+          optionLabel="name"
+          listStyle="max-height:440px"
+        >
+        </Listbox>
+      </Panel>
     </SplitterPanel>
     <SplitterPanel :size="80">
       <PageSettings :page="activePage" :profile="profile"></PageSettings>
@@ -46,32 +44,6 @@ export default {
   },
   data() {
     return {
-      profileName: "",
-      items: [
-        {
-          label: "Update",
-          icon: "pi pi-refresh",
-        },
-        {
-          label: "Delete",
-          icon: "pi pi-times",
-        },
-        {
-          label: "Vue Website",
-          icon: "pi pi-external-link",
-          command: () => {
-            window.location.href = "https://vuejs.org/";
-          },
-        },
-        {
-          label: "Upload",
-          icon: "pi pi-upload",
-          command: () => {
-            window.location.hash = "/fileupload";
-          },
-        },
-      ],
-      selectedAction: {},
       activePage: {},
       actionMenuItems: [
         {
@@ -137,4 +109,10 @@ export default {
 .dropdownwidth {
   min-width: 12em;
 }
+
+.pages-panel-custom .p-panel-header {
+    margin: 0px;
+    padding: 2px !important;
+}
+
 </style>

@@ -26,7 +26,7 @@
       </Panel>
     </SplitterPanel>
     <SplitterPanel :size="80">
-      <PageSettings :page="activePage" :profile="profile"></PageSettings>
+      <div>{{ activeAction.name }} </div>
     </SplitterPanel>
   </Splitter>
 </template>
