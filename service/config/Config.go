@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strings"
 
 	"gopkg.in/yaml.v3"
 )
@@ -20,6 +21,11 @@ type Config struct {
 	SecretFile string `yaml:"secretfile"`
 
 	Password string `yaml:"password"`
+
+	WebClient   string `yaml:"webclient"`
+	AdminClient string `yaml:"adminclient"`
+
+	Icons string `yaml:"icons"`
 
 	HealthCheck HealthCheck `yaml:"healthcheck"`
 
@@ -41,7 +47,9 @@ var DefaulConfig = Config{
 	HealthCheck: HealthCheck{
 		Period: 30,
 	},
-	Profiles: "${configdir}/profiles",
+	Profiles:    "${configdir}/profiles",
+	WebClient:   "${configdir}/webclient",
+	AdminClient: "${configdir}/webadmin",
 	ExternalConfig: map[string]interface{}{
 		"openhardwaremonitor": map[string]interface{}{
 			"url":          "http://127.0.0.1:12999/data.json",
@@ -81,4 +89,15 @@ func GetDefaultConfigFolder() (string, error) {
 		return "", err
 	}
 	return configFolder, nil
+}
+
+func ReplaceConfigdir(s string) (string, error) {
+	if strings.Contains(s, "${configdir}") {
+		configFolder, err := GetDefaultConfigFolder()
+		if err != nil {
+			return "", err
+		}
+		return strings.Replace(s, "${configdir}", configFolder, -1), nil
+	}
+	return s, nil
 }

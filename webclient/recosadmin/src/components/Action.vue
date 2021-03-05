@@ -1,20 +1,5 @@
 <template>
   <Panel :header="activeAction.name" class="action-panel-custom">
-    <template #icons>
-      <button
-        class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
-        @click="toggle"
-      >
-        <span class="pi pi-plus"></span>
-      </button>
-      <button
-        class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
-        @click="toggle"
-      >
-        <span class="pi pi-trash"></span>
-      </button>
-    </template>
-
     <div class="p-fluid p-formgrid p-grid">
       <div class="p-field p-col">
         <label for="name">Name</label>
@@ -36,7 +21,19 @@
       </div>
       <div class="p-field p-col">
         <label for="icon">Icon</label>
-        <InputText id="icon" type="text" v-model="activeAction.icon" />
+        <Dropdown
+          id="icon"
+          v-model="activeAction.icon"
+          :options="iconlist"
+          placeholder="select a icon"
+        >
+          <template #option="slotProps">
+            <div class="icon-item">
+              <img :src="'assets/' + slotProps.option" />
+              <div>{{ slotProps.option }}</div>
+            </div>
+          </template>
+        </Dropdown>
       </div>
       <div class="p-field p-col">
         <label for="fontsize">Font size</label>
@@ -70,18 +67,32 @@
         <Checkbox id="runone" v-model="activeAction.runone" :binary="true" />
       </div>
     </div>
-    <div class="p-fluid p-formgrid p-grid">
-      <div class="p-field p-col">
-        <label for="description">Description</label>
-        <InputText id="description" type="text" v-model="activeAction.description" />
+    <div class="p-fluid">
+      <div class="p-field p-grid">
+        <label for="description" class="p-col-6 p-mb-2 p-md-2 p-mb-md-0"
+          >Description</label
+        >
+        <div class="p-col-12 p-md-10">
+          <InputText
+            id="description"
+            type="text"
+            v-model="activeAction.description"
+          />
+        </div>
       </div>
     </div>
+    <Commands :action="activeAction"/>
   </Panel>
 </template>
 
 <script>
+import Commands from "./Commands.vue"
+
 export default {
   name: "Action",
+  components: {
+    Commands,
+  },
   props: {
     action: {},
   },
@@ -111,12 +122,33 @@ export default {
         { name: "44", value: 44 },
         { name: "48", value: 48 },
       ],
+      iconlist: [],
+      activeCommand: {},
     };
   },
   watch: {
     action(action) {
       this.activeAction = action;
     },
+  },
+  mounted() {},
+  created() {
+    let that = this;
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type === "baseURL") {
+        that.iconurl = state.baseURL + "/config/icons";
+        fetch(that.iconurl)
+          .then((res) => res.json())
+          .then((data) => {
+            //console.log(data);
+            that.iconlist = data;
+          })
+          .catch((err) => console.log(err.message));
+      }
+    });
+  },
+  beforeUnmount() {
+    this.unsubscribe();
   },
 };
 </script>
@@ -125,5 +157,7 @@ export default {
 .action-panel-custom .p-panel-header {
   margin: 0px;
   padding: 2px !important;
+  text-align: center;
+  height: 34px;
 }
 </style>

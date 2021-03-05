@@ -10,6 +10,10 @@ secretfile:
 #admin password for the admin interface
 password: recosadmin
 
+webclient: ./devdata/webclient
+adminclient: ./devdata/webadmin
+icons: ./devdata/webclient/assets
+
 healthcheck:
     period: 30
 

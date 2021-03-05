@@ -141,7 +141,8 @@ export default {
     },
   },
   mounted() {
-    console.log("service url:" + this.baseURL);
+    this.servicePort = 9280;
+    console.log("service url: " + this.baseURL);
     this.baseURL =
       window.location.protocol +
       "//" +
@@ -165,8 +166,8 @@ export default {
         this.changeProfile();
       })
       .catch((err) => console.log(err.message));
-  },
-  created: function () {
+
+    console.log("trying ws connection");
     this.connectWS();
   },
   methods: {

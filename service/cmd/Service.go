@@ -76,11 +76,20 @@ func apiRoutes() *chi.Mux {
 	)
 
 	router.Route("/", func(r chi.Router) {
+		r.Mount(baseURL+"/config", routes.ConfigRoutes())
 		r.Mount(baseURL+"/profiles", routes.ProfilesRoutes())
 		r.Mount(baseURL+"/show", routes.ShowRoutes())
 		r.Mount(baseURL+"/action", routes.ActionRoutes())
 		r.Mount("/health", health.Routes())
 	})
+
+	// Create a route along /files that will serve contents from
+	// the ./data/ folder.
+	webFilesDir := http.Dir(config.Get().WebClient)
+	FileServer(router, "/webclient", webFilesDir)
+
+	adminFilesDir := http.Dir(config.Get().AdminClient)
+	FileServer(router, "/webadmin", adminFilesDir)
 	return router
 }
 
@@ -97,6 +106,27 @@ func healthRoutes() *chi.Mux {
 		r.Mount("/", health.Routes())
 	})
 	return router
+}
+
+// FileServer conveniently sets up a http.FileServer handler to serve
+// static files from a http.FileSystem.
+func FileServer(r chi.Router, path string, root http.FileSystem) {
+	if strings.ContainsAny(path, "{}*") {
+		panic("FileServer does not permit any URL parameters.")
+	}
+
+	if path != "/" && path[len(path)-1] != '/' {
+		r.Get(path, http.RedirectHandler(path+"/", 301).ServeHTTP)
+		path += "/"
+	}
+	path += "*"
+
+	r.Get(path, func(w http.ResponseWriter, r *http.Request) {
+		rctx := chi.RouteContext(r.Context())
+		pathPrefix := strings.TrimSuffix(rctx.RoutePattern(), "/*")
+		fs := http.StripPrefix(pathPrefix, http.FileServer(root))
+		fs.ServeHTTP(w, r)
+	})
 }
 
 func main() {
@@ -140,12 +170,7 @@ func main() {
 			clog.Logger.Alertf("can't load profile files: %s", err.Error())
 			os.Exit(1)
 		}
-		profileFolder, err := config.GetProfileFolder(serviceConfig.Profiles)
-		if err != nil {
-			clog.Logger.Alertf("can't load profile files: %s", err.Error())
-			os.Exit(1)
-		}
-		err = os.MkdirAll(profileFolder, os.ModePerm)
+		err = os.MkdirAll(serviceConfig.Profiles, os.ModePerm)
 		if err != nil {
 			clog.Logger.Alertf("can't load profile files: %s", err.Error())
 			os.Exit(1)
@@ -186,7 +211,6 @@ func main() {
 	}
 
 	apikey = getApikey()
-	routes.APIKey = apikey
 	clog.Logger.Infof("apikey: %s", apikey)
 	clog.Logger.Infof("ssl: %t", ssl)
 	clog.Logger.Infof("serviceURL: %s", serviceConfig.ServiceURL)
@@ -295,7 +319,32 @@ func initConfig() {
 		serviceConfig.ServiceURL = serviceURL
 	}
 
-	err := osdependent.InitOSDependend(serviceConfig)
+	if serviceConfig.AdminClient == "" {
+		serviceConfig.AdminClient = config.DefaulConfig.AdminClient
+	}
+
+	if serviceConfig.WebClient == "" {
+		serviceConfig.WebClient = config.DefaulConfig.WebClient
+	}
+
+	var err error
+	serviceConfig.Profiles, err = config.ReplaceConfigdir(serviceConfig.Profiles)
+	if err != nil {
+		clog.Logger.Alertf("error starting os dependend worker: %s", err.Error())
+		os.Exit(1)
+	}
+	serviceConfig.AdminClient, err = config.ReplaceConfigdir(serviceConfig.AdminClient)
+	if err != nil {
+		clog.Logger.Alertf("error starting os dependend worker: %s", err.Error())
+		os.Exit(1)
+	}
+	serviceConfig.WebClient, err = config.ReplaceConfigdir(serviceConfig.WebClient)
+	if err != nil {
+		clog.Logger.Alertf("error starting os dependend worker: %s", err.Error())
+		os.Exit(1)
+	}
+
+	err = osdependent.InitOSDependend(serviceConfig)
 	if err != nil {
 		clog.Logger.Alertf("error starting os dependend worker: %s", err.Error())
 		os.Exit(1)
