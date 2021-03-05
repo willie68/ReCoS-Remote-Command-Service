@@ -29,7 +29,7 @@
             v-model="activeCommand"
             :options="action.commands"
             optionLabel="name"
-            listStyle="max-height:440px"
+            listStyle="max-height:240px"
           >
           </Listbox>
         </Panel>

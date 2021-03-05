@@ -272,7 +272,7 @@ export default {
                 // console.log("missing action (" + x + "," + y + ") " + index);
                 this.cellactions[x][y] = {
                   type: "DISPLAY",
-                  title: "action not defined",
+                  title: "Action not defined",
                   name: "none",
                   fontcolor: "#FF0000",
                 };
