@@ -182,13 +182,24 @@ func main() {
 			Name:        "Default",
 			Description: "This is the default profile",
 			Pages:       make([]models.Page, 0),
+			Actions: make([]models.Action, 0),
 		}
 		newProfile.Pages = append(newProfile.Pages, models.Page{
 			Name:        "Default",
 			Description: "This is the default page",
 			Rows:        5,
 			Columns:     3,
+			Toolbar:     models.ToolbarShow,
+			Cells:       make([]string, 0),
 		})
+
+		newProfile.Actions = append(newProfile.Actions, models.Action{
+			Type: models.Display,
+			Name: "Clock",
+			Title: "Clock",
+			
+		})
+
 		if err := config.SaveProfile(newProfile); err != nil {
 			clog.Logger.Alertf("can't create profiles: %s", err.Error())
 			os.Exit(1)

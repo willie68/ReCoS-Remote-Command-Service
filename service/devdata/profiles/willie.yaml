@@ -19,8 +19,31 @@ pages:
       - action2_1
       - action2_2
       - action2
-
 actions:
+  - type: SINGLE
+    name: action1
+    title: short delay
+    description: Just a short delay
+    icon: hourglass_begin.png
+    fontsize: 10
+    fontcolor: "#FF0000"
+    outlined: true
+    runone: true
+    commands:
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 2
+      - type: EXECUTE
+        name: execute
+        parameters:
+          command: echo.bat
+          args:
+            - "Hello world"
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 1
   - type: MULTI
     name: action2
     title: Multi Action
@@ -60,15 +83,6 @@ actions:
         name: delay
         parameters:
           time: 2
-  - type: SINGLE
-    name: action1
-    title: Action Title
-    description: description for action
-    commands:
-      - type: DELAY
-        name: delay
-        parameters:
-          time: 10
   - type: DISPLAY
     name: cputemp
     title: CPU Temp
