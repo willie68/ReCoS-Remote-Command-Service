@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import PageSettings from "./PageSettings.vue";
+import PageSettings from "./PageSettings.vue"
 
 export default {
   name: "Pages",

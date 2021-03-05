@@ -31,6 +31,8 @@ import Fieldset from 'primevue/fieldset'
 import Textarea from 'primevue/textarea'
 import TabView from 'primevue/tabview'
 import TabPanel from 'primevue/tabpanel'
+import ColorPicker from 'primevue/colorpicker'
+import Checkbox from 'primevue/checkbox'
 
 const store = createStore({
     state () {
@@ -82,5 +84,7 @@ app.component('Fieldset', Fieldset)
 app.component('Textarea', Textarea)
 app.component('TabView', TabView)
 app.component('TabPanel', TabPanel)
+app.component('ColorPicker', ColorPicker)
+app.component('Checkbox', Checkbox)
 
 app.mount('#app')

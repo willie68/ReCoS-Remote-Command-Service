@@ -26,14 +26,19 @@
       </Panel>
     </SplitterPanel>
     <SplitterPanel :size="80">
-      <div>{{ activeAction.name }} </div>
+      <Action :action="activeAction"></Action>
     </SplitterPanel>
   </Splitter>
 </template>
 
 <script>
+import Action from "./Action.vue"
+
 export default {
   name: "Actions",
+  components: {
+    Action,
+  },
   props: {
     profile: {},
   },
@@ -41,6 +46,11 @@ export default {
     return {
       activeAction: {},
     };
+  },
+ watch: {
+    profile(profile) {
+      this.activeAction = profile.actions[0]
+    },
   },
 };
 </script>
