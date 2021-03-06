@@ -4,18 +4,20 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
-var CommandTypes = [...]models.CommandTypeInfo{
+var CommandTypes = []models.CommandTypeInfo{
 	DelayCommandTypeInfo,
 	ExecuteCommandTypeInfo,
 	PageCommandTypeInfo,
 	KeysCommandTypeInfo,
-	WindowCtrlCommandTypeInfo,
 	NoopCommandTypeInfo,
 	TimerCommandTypeInfo,
 	ClockCommandTypeInfo,
 	StopwatchCommandTypeInfo,
 	ScreenshotCommandTypeInfo,
-	HardwareMonitorCommandTypeInfo,
+}
+
+func InitCommand() {
+	InitOSCommand()
 }
 
 // GetCommand return the command worker class responsible for executing the command definition

@@ -3,6 +3,11 @@ package dto
 
 import "wkla.no-ip.biz/remote-desk-service/pkg/models"
 
+func InitOSCommand() {
+	CommandTypes = append(CommandTypes, WindowCtrlCommandTypeInfo)
+	CommandTypes = append(CommandTypes, HardwareMonitorCommandTypeInfo)
+}
+
 // GetOSCommand return the command worker class responsible for executing the command definition
 // THis one is only for windows specific commands
 func GetOSCommand(command models.Command) CommandExecutor {

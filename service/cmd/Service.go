@@ -182,7 +182,7 @@ func main() {
 			Name:        "Default",
 			Description: "This is the default profile",
 			Pages:       make([]models.Page, 0),
-			Actions: make([]models.Action, 0),
+			Actions:     make([]models.Action, 0),
 		}
 		newProfile.Pages = append(newProfile.Pages, models.Page{
 			Name:        "Default",
@@ -194,10 +194,9 @@ func main() {
 		})
 
 		newProfile.Actions = append(newProfile.Actions, models.Action{
-			Type: models.Display,
-			Name: "Clock",
+			Type:  models.Display,
+			Name:  "Clock",
 			Title: "Clock",
-			
 		})
 
 		if err := config.SaveProfile(newProfile); err != nil {
@@ -360,6 +359,8 @@ func initConfig() {
 		clog.Logger.Alertf("error starting os dependend worker: %s", err.Error())
 		os.Exit(1)
 	}
+
+	dto.InitCommand()
 }
 
 func getApikey() string {

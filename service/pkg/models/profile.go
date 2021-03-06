@@ -91,7 +91,18 @@ type CommandTypeInfo struct {
 	// Description of this action for information
 	Description string `json:"description"`
 	// Parameters describes the needed parameters
-	Parameters map[string]interface{}
+	Parameters []CommandParameterInfo `json:"parameter"`
+}
+
+type CommandParameterInfo struct {
+	// Name is the command
+	Name string `json:"name"`
+	// Type is the type of an command
+	Type string `json:"type"`
+	// Description of this action for information
+	Description string `json:"description"`
+	// List is a enumeration of possible values
+	List []string `json:"list"`
 }
 
 // Command type

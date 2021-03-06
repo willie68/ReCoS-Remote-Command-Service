@@ -15,7 +15,7 @@ import (
 )
 
 // StopwatchCommandTypeInfo is a stopwatch with seconds
-var StopwatchCommandTypeInfo = models.CommandTypeInfo{"STOPWATCH", "Stopwatch", "stopwatch for measuring time", make(map[string]interface{})}
+var StopwatchCommandTypeInfo = models.CommandTypeInfo{"STOPWATCH", "Stopwatch", "stopwatch for measuring time", []models.CommandParameterInfo{}}
 
 // StopwatchCommand is a command to simulate a stopwatch.
 type StopwatchCommand struct {

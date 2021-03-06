@@ -15,7 +15,9 @@ import (
 )
 
 // ClockCommandTypeInfo is a clock
-var ClockCommandTypeInfo = models.CommandTypeInfo{"CLOCK", "Clock", "displaying a nice clock", make(map[string]interface{})}
+var ClockCommandTypeInfo = models.CommandTypeInfo{"CLOCK", "Clock", "displaying a nice clock", []models.CommandParameterInfo{
+	{"format", "string", "Format string for formatting the clock", make([]string, 0)},
+}}
 
 // ClockCommand is a command to execute a delay. Using time for getting the ttime in seconds to delay the execution.
 type ClockCommand struct {

@@ -18,7 +18,7 @@ import (
 )
 
 // HardwareMonitorCommandTypeInfo showing hardware sensor data
-var HardwareMonitorCommandTypeInfo = models.CommandTypeInfo{"HARDWAREMONITOR", "HardwareMonitor", "getting data from the hardware sensors", make(map[string]interface{})}
+var HardwareMonitorCommandTypeInfo = models.CommandTypeInfo{"HARDWAREMONITOR", "HardwareMonitor", "getting data from the hardware sensors", []models.CommandParameterInfo{}}
 
 const measurepoints = 100
 const imageWidth = measurepoints

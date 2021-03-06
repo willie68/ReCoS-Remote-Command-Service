@@ -13,7 +13,7 @@ import (
 )
 
 // KeysCommandTypeInfo sending key strokes to the active program
-var KeysCommandTypeInfo = models.CommandTypeInfo{"KEYS", "Keys", "typing on a virtual keyboard", make(map[string]interface{})}
+var KeysCommandTypeInfo = models.CommandTypeInfo{"KEYS", "Keys", "typing on a virtual keyboard", []models.CommandParameterInfo{}}
 
 // KeysCommand is a command to send keystroke to the active application.
 // parameters: layout for the keyboard layout: en or de
