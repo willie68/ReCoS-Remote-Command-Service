@@ -8,13 +8,13 @@ import "wkla.no-ip.biz/remote-desk-service/pkg/models"
 func GetOSCommand(command models.Command) CommandExecutor {
 	var cmdExecutor CommandExecutor
 	switch command.Type {
-	case models.WindowCtrlCommand:
+	case WindowCtrlCommandTypeInfo.Type:
 		{
 			cmdExecutor = &WindowCtrlCommand{
 				Parameters: command.Parameters,
 			}
 		}
-	case models.HardwareMonitorCommand:
+	case HardwareMonitorCommandTypeInfo.Type:
 		{
 			cmdExecutor = &HardwareMonitorCommand{
 				Parameters: command.Parameters,

@@ -17,6 +17,9 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
+// HardwareMonitorCommandTypeInfo showing hardware sensor data
+var HardwareMonitorCommandTypeInfo = models.CommandTypeInfo{"HARDWAREMONITOR", "HardwareMonitor", "getting data from the hardware sensors", make(map[string]interface{})}
+
 const measurepoints = 100
 const imageWidth = measurepoints
 const imageHeight = measurepoints

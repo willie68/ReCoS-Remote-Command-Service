@@ -8,6 +8,9 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
+// ExecuteCommandTypeInfo start an application or shell script and optionally waits for it's finishing
+var ExecuteCommandTypeInfo = models.CommandTypeInfo{"EXECUTE", "Execute", "Executes an application", make(map[string]interface{})}
+
 // ExecuteCommand is a command to execute a program or batch file.
 // Using "command" for getting the command line to execute.
 // Using "args" for optional parameters

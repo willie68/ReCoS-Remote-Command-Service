@@ -9,6 +9,9 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
+// TimerCommandTypeInfo is a count down timer, just showing the count down time in the title
+var TimerCommandTypeInfo = models.CommandTypeInfo{"TIMER", "Timer", "starting a count down timer", make(map[string]interface{})}
+
 // TimerCommand is a command to start a timer. Using time for getting the time in seconds.
 // For formatting the response the parameters fomat and finished are responsible.
 // Use %d for inserting the actual time to wait.

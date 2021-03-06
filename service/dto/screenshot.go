@@ -12,6 +12,9 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
+// ScreenshotCommandTypeInfo saving to the file system
+var ScreenshotCommandTypeInfo = models.CommandTypeInfo{"SCREENSHOT", "Screenshot", "taking a Screenshot from the actual screen content, and save it to the filesystem", make(map[string]interface{})}
+
 // ScreenshotCommand is a command to do a sceen shot and store this into the filesystem
 type ScreenshotCommand struct {
 	Parameters map[string]interface{}

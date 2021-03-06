@@ -1,60 +1,76 @@
 package dto
 
-import "wkla.no-ip.biz/remote-desk-service/pkg/models"
+import (
+	"wkla.no-ip.biz/remote-desk-service/pkg/models"
+)
+
+var CommandTypes = [...]models.CommandTypeInfo{
+	DelayCommandTypeInfo,
+	ExecuteCommandTypeInfo,
+	PageCommandTypeInfo,
+	KeysCommandTypeInfo,
+	WindowCtrlCommandTypeInfo,
+	NoopCommandTypeInfo,
+	TimerCommandTypeInfo,
+	ClockCommandTypeInfo,
+	StopwatchCommandTypeInfo,
+	ScreenshotCommandTypeInfo,
+	HardwareMonitorCommandTypeInfo,
+}
 
 // GetCommand return the command worker class responsible for executing the command definition
 func GetCommand(command models.Command) CommandExecutor {
 	var cmdExecutor CommandExecutor
 	switch command.Type {
-	case models.Noop:
+	case NoopCommandTypeInfo.Type:
 		{
 			cmdExecutor = &NoopCommand{
 				Parameters: command.Parameters,
 			}
 		}
-	case models.Delay:
+	case DelayCommandTypeInfo.Type:
 		{
 			cmdExecutor = &DelayCommand{
 				Parameters: command.Parameters,
 			}
 		}
-	case models.Execute:
+	case ExecuteCommandTypeInfo.Type:
 		{
 			cmdExecutor = &ExecuteCommand{
 				Parameters: command.Parameters,
 			}
 		}
-	case models.PageCommand:
+	case PageCommandTypeInfo.Type:
 		{
 			cmdExecutor = &PageCommand{
 				Parameters: command.Parameters,
 			}
 		}
-	case models.KeysCommand:
+	case KeysCommandTypeInfo.Type:
 		{
 			cmdExecutor = &KeysCommand{
 				Parameters: command.Parameters,
 			}
 		}
-	case models.Timer:
+	case TimerCommandTypeInfo.Type:
 		{
 			cmdExecutor = &TimerCommand{
 				Parameters: command.Parameters,
 			}
 		}
-	case models.Clock:
+	case ClockCommandTypeInfo.Type:
 		{
 			cmdExecutor = &ClockCommand{
 				Parameters: command.Parameters,
 			}
 		}
-	case models.Stopwatch:
+	case StopwatchCommandTypeInfo.Type:
 		{
 			cmdExecutor = &StopwatchCommand{
 				Parameters: command.Parameters,
 			}
 		}
-	case models.Screenshot:
+	case ScreenshotCommandTypeInfo.Type:
 		{
 			cmdExecutor = &ScreenshotCommand{
 				Parameters: command.Parameters,

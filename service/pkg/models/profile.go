@@ -83,31 +83,6 @@ type Action struct {
 // CommandType the command type
 type CommandType string
 
-const (
-	// Delay dalay further execution a defined time
-	Delay CommandType = "DELAY"
-	// Execute start an application or shell script and optionally waits for it's finishing
-	Execute = "EXECUTE"
-	// PageCommand switch to another page
-	PageCommand = "PAGE"
-	// KeysCommand sending key strokes to the active program
-	KeysCommand = "KEYS"
-	// WindowCtrlCommand sending key strokes to the active program
-	WindowCtrlCommand = "WINDOWCTRL"
-	// Noop is a command with no operation, but the possibility to change text and icon
-	Noop = "NOOP"
-	// Timer is a count down timer, just showing the count down time in the title
-	Timer = "TIMER"
-	// Clock is a clock
-	Clock = "CLOCK"
-	// Stopwatch is a stopwatch with seconds
-	Stopwatch = "STOPWATCH"
-	// Screenshot saving to the file system
-	Screenshot = "SCREENSHOT"
-	// HardwareMonitorCommand showing hardware sensor data
-	HardwareMonitorCommand = "HARDWAREMONITOR"
-)
-
 type CommandTypeInfo struct {
 	// Type is the type of an command
 	Type CommandType `json:"type"`
@@ -117,20 +92,6 @@ type CommandTypeInfo struct {
 	Description string `json:"description"`
 	// Parameters describes the needed parameters
 	Parameters map[string]interface{}
-}
-
-var CommandTypes = [...]CommandTypeInfo{
-	{Delay, "Delay", "Setting up a short delay", make(map[string]interface{})},
-	{Execute, "Execute", "Executes an application", make(map[string]interface{})},
-	{PageCommand, "Page", "switching to another page", make(map[string]interface{})},
-	{KeysCommand, "Keys", "typing on a virtual keyboard", make(map[string]interface{})},
-	{WindowCtrlCommand, "WindowCtrl", "controlling windows on the desktop", make(map[string]interface{})},
-	{Noop, "Noop", "do nothing", make(map[string]interface{})},
-	{Timer, "Timer", "starting a count down timer", make(map[string]interface{})},
-	{Clock, "Clock", "displaying a nice clock", make(map[string]interface{})},
-	{Stopwatch, "Stopwatch", "stopwatch for measuring time", make(map[string]interface{})},
-	{Screenshot, "Screenshot", "taking a Screenshot from the actual screen content, and save it to the filesystem", make(map[string]interface{})},
-	{HardwareMonitorCommand, "HardwareMonitor", "getting data from the hardware sensors", make(map[string]interface{})},
 }
 
 // Command type

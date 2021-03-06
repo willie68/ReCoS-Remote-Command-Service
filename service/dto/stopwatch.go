@@ -10,9 +10,12 @@ import (
 	"github.com/fogleman/gg"
 	"golang.org/x/image/bmp"
 	"wkla.no-ip.biz/remote-desk-service/api"
-	"wkla.no-ip.biz/remote-desk-service/internal"
+	durationfmt "wkla.no-ip.biz/remote-desk-service/internal"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
+
+// StopwatchCommandTypeInfo is a stopwatch with seconds
+var StopwatchCommandTypeInfo = models.CommandTypeInfo{"STOPWATCH", "Stopwatch", "stopwatch for measuring time", make(map[string]interface{})}
 
 // StopwatchCommand is a command to simulate a stopwatch.
 type StopwatchCommand struct {

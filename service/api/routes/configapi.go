@@ -9,7 +9,7 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
 	"wkla.no-ip.biz/remote-desk-service/config"
-	"wkla.no-ip.biz/remote-desk-service/pkg/models"
+	"wkla.no-ip.biz/remote-desk-service/dto"
 )
 
 var icons []string
@@ -52,5 +52,5 @@ func GetIcons(response http.ResponseWriter, request *http.Request) {
 GetCommands list of all possible command types
 */
 func GetCommands(response http.ResponseWriter, request *http.Request) {
-	render.JSON(response, request, models.CommandTypes)
+	render.JSON(response, request, dto.CommandTypes)
 }

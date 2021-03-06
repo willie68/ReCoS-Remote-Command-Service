@@ -14,6 +14,9 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
+// ClockCommandTypeInfo is a clock
+var ClockCommandTypeInfo = models.CommandTypeInfo{"CLOCK", "Clock", "displaying a nice clock", make(map[string]interface{})}
+
 // ClockCommand is a command to execute a delay. Using time for getting the ttime in seconds to delay the execution.
 type ClockCommand struct {
 	Parameters map[string]interface{}
