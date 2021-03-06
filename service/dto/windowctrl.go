@@ -14,7 +14,10 @@ import (
 )
 
 // WindowCtrlCommandTypeInfo sending key strokes to the active program
-var WindowCtrlCommandTypeInfo = models.CommandTypeInfo{"WINDOWCTRL", "WindowCtrl", "controlling windows on the desktop", []models.CommandParameterInfo{}}
+var WindowCtrlCommandTypeInfo = models.CommandTypeInfo{"WINDOWCTRL", "WindowCtrl", "controlling windows on the desktop", []models.CommandParameterInfo{
+	{"caption", "string", "the caption of the application window", make([]string, 0)},
+	{"command", "string", "the command to execute on this window. Possible values are: minimize, activate, move  x y", make([]string, 0)},
+}}
 
 // WindowCtrlCommand is a command to execute a program or batch file.
 // Using "command" for getting the command line to execute.

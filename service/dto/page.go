@@ -8,7 +8,9 @@ import (
 )
 
 // PageCommandTypeInfo switch to another page
-var PageCommandTypeInfo = models.CommandTypeInfo{"PAGE", "Page", "switching to another page", []models.CommandParameterInfo{}}
+var PageCommandTypeInfo = models.CommandTypeInfo{"PAGE", "Page", "switching to another page", []models.CommandParameterInfo{
+	{"page", "string", "name of the page to switch to", make([]string, 0)},
+}}
 
 // PageCommand is a command to switch to another page.
 // Using "page" for the page name
