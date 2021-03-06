@@ -9,6 +9,7 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
 	"wkla.no-ip.biz/remote-desk-service/config"
+	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
 var icons []string
@@ -19,11 +20,12 @@ ConfigRoutes getting all routes for the config endpoint
 func ConfigRoutes() *chi.Mux {
 	router := chi.NewRouter()
 	router.Get("/icons", GetIcons)
+	router.Get("/commands", GetCommands)
 	return router
 }
 
 /*
-GetIcons size of the store for a tenant
+GetIcons list of all possible icon names
 */
 func GetIcons(response http.ResponseWriter, request *http.Request) {
 	icons = make([]string, 0)
@@ -34,7 +36,7 @@ func GetIcons(response http.ResponseWriter, request *http.Request) {
 			pathNames = strings.Split(path, "\\")
 		}
 		icon := pathNames[len(pathNames)-1]
-		if strings.HasSuffix(icon,".png") {
+		if strings.HasSuffix(icon, ".png") {
 			icons = append(icons, icon)
 		}
 		return nil
@@ -44,4 +46,11 @@ func GetIcons(response http.ResponseWriter, request *http.Request) {
 	}
 
 	render.JSON(response, request, icons)
+}
+
+/*
+GetCommands list of all possible command types
+*/
+func GetCommands(response http.ResponseWriter, request *http.Request) {
+	render.JSON(response, request, models.CommandTypes)
 }

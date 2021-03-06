@@ -1,6 +1,6 @@
 <template>
-  <Splitter style="height: 500px">
-    <SplitterPanel :size="20">
+  <Splitter :style="{ height: splitterHeight, }">
+    <SplitterPanel :size="20" style="height: 100%;">
       <Panel header="Actions" class="actions-panel-custom">
         <template #icons>
           <button
@@ -20,7 +20,7 @@
           v-model="activeAction"
           :options="profile.actions"
           optionLabel="name"
-          listStyle="max-height:440px"
+          listStyle="height: 100%"
         >
         </Listbox>
       </Panel>
@@ -45,6 +45,7 @@ export default {
   data() {
     return {
       activeAction: {},
+      splitterHeight: "600px",
     };
   },
  watch: {
@@ -56,8 +57,21 @@ export default {
 </script>
 
 <style>
+.actions-panel-custom {
+    height: 100%;
+}
+
 .actions-panel-custom .p-panel-header {
     margin: 0px;
     padding: 2px !important;
+}
+
+.actions-panel-custom .p-panel-content {
+    margin: 0px;
+    padding: 2px !important;
+    height: 100%;
+}
+.p-toggleable-content {
+    height: 100%;
 }
 </style>

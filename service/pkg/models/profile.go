@@ -108,6 +108,31 @@ const (
 	HardwareMonitorCommand = "HARDWAREMONITOR"
 )
 
+type CommandTypeInfo struct {
+	// Type is the type of an command
+	Type CommandType `json:"type"`
+	// Name is the command
+	Name string `json:"name"`
+	// Description of this action for information
+	Description string `json:"description"`
+	// Parameters describes the needed parameters
+	Parameters map[string]interface{}
+}
+
+var CommandTypes = [...]CommandTypeInfo{
+	{Delay, "Delay", "Setting up a short delay", make(map[string]interface{})},
+	{Execute, "Execute", "Executes an application", make(map[string]interface{})},
+	{PageCommand, "Page", "switching to another page", make(map[string]interface{})},
+	{KeysCommand, "Keys", "typing on a virtual keyboard", make(map[string]interface{})},
+	{WindowCtrlCommand, "WindowCtrl", "controlling windows on the desktop", make(map[string]interface{})},
+	{Noop, "Noop", "do nothing", make(map[string]interface{})},
+	{Timer, "Timer", "starting a count down timer", make(map[string]interface{})},
+	{Clock, "Clock", "displaying a nice clock", make(map[string]interface{})},
+	{Stopwatch, "Stopwatch", "stopwatch for measuring time", make(map[string]interface{})},
+	{Screenshot, "Screenshot", "taking a Screenshot from the actual screen content, and save it to the filesystem", make(map[string]interface{})},
+	{HardwareMonitorCommand, "HardwareMonitor", "getting data from the hardware sensors", make(map[string]interface{})},
+}
+
 // Command type
 type Command struct {
 	// Type is the type of an command

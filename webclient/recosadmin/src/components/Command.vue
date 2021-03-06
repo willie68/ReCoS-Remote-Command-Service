@@ -13,10 +13,11 @@
         <label for="rows">Type</label>
         <Dropdown
           v-model="activeCommand.type"
-          :options="enumCommandTypes"
+          :options="commandtypes"
           placeholder="select a type"
           optionLabel="name"
           optionValue="type"
+          editable
         />
       </div>
       <div class="p-field p-col">
@@ -64,11 +65,15 @@ export default {
     return {
       activeCommand: {},
       iconlist: [],
+      commandtypes: [],
     };
   },
   watch: {
     command(command) {
-      this.activeCommand = command;
+      if (command) {
+        console.log("changing command to" + command.name);
+        this.activeCommand = command;
+      }
     },
   },
   created() {
@@ -81,6 +86,15 @@ export default {
           .then((data) => {
             //console.log(data);
             that.iconlist = data;
+          })
+          .catch((err) => console.log(err.message));
+
+        that.iconurl = state.baseURL + "/config/commands";
+        fetch(that.iconurl)
+          .then((res) => res.json())
+          .then((data) => {
+            //console.log(data);
+            that.commandtypes = data;
           })
           .catch((err) => console.log(err.message));
       }

@@ -35,7 +35,7 @@
         </Panel>
       </SplitterPanel>
       <SplitterPanel :size="80">
-        <Command commd="activeCommand"/>
+        <Command :command="activeCommand"/>
       </SplitterPanel>
     </Splitter>
 </template>
