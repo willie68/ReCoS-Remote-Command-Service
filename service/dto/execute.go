@@ -10,8 +10,8 @@ import (
 
 // ExecuteCommandTypeInfo start an application or shell script and optionally waits for it's finishing
 var ExecuteCommandTypeInfo = models.CommandTypeInfo{"EXECUTE", "Execute", "Executes an application", []models.CommandParameterInfo{
-	{"command", "string", "the command to execute", make([]string, 0)},
-	{"args", "[]string", "a list of arguments", make([]string, 0)},
+	{"command", "string", "the command to execute", "", make([]string, 0)},
+	{"args", "[]string", "a list of arguments", "", make([]string, 0)},
 }}
 
 // ExecuteCommand is a command to execute a program or batch file.

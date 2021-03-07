@@ -53,12 +53,63 @@
     </div>
     <div>Command parameter for type {{ activeCommandType.name }}</div>
     <div class="p-fluid">
-      <div class="p-field p-grid" v-for="(param, x) in activeCommandType.parameter" :key="x">
-        <label :for="param.name" class="p-col-12 p-mb-2 p-ml-2 p-md-2 p-mb-md-0"
+      <div
+        class="p-field p-grid"
+        v-for="(param, x) in activeCommandType.parameter"
+        :key="x"
+      >
+        <label
+          :for="param.name"
+          class="p-col-12 p-mb-2 p-ml-2 p-md-2 p-mb-md-0"
           >{{ param.name }}</label
         >
-        <div class="p-col-12 p-md-9">
-          <InputText :id="param.name" type="text" v-model="activeCommand.parameters[param.name]"/>
+        <div class="p-col-12 p-md-8">
+          <InputText
+            v-if="param.type == 'string' && param.list.length == 0"
+            :id="param.name"
+            type="text"
+            v-tooltip="param.description"
+            v-model="activeCommand.parameters[param.name]"
+          />
+          <Dropdown
+            v-if="param.type == 'string' && param.list.length > 0"
+            :id="param.name"
+            :options="param.list"
+            v-tooltip="param.description"
+            v-model="activeCommand.parameters[param.name]"
+            :placeholder="param.unit"
+          />
+          <InputNumber
+            v-if="param.type == 'int'"
+            :id="param.name"
+            type="text"
+            mode="decimal"
+            showButtons
+            :suffix="param.unit"
+            v-tooltip="param.description"
+            v-model="activeCommand.parameters[param.name]"
+          />
+          <Checkbox
+            v-if="param.type == 'bool'"
+            :id="param.name"
+            v-tooltip="param.description"
+            v-model="activeCommand.parameters[param.name]"
+            :binary="true"
+          />
+          <Textarea
+            v-if="param.type == '[]string'"
+            :id="param.name"
+            v-tooltip="param.description"
+            v-model="activeCommand.parameters[param.name]"
+          />
+          <ColorPicker
+            v-if="param.type == 'color'"
+            :id="param.name"
+            :inline="false"
+            defaultColor="#00FF00"
+            v-tooltip="param.description"
+            v-model="activeCommand.parameters[param.name]"
+          />
         </div>
       </div>
     </div>
