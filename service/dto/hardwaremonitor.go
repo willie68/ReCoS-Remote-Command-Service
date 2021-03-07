@@ -128,6 +128,18 @@ func (d *HardwareMonitorCommand) Init(a *Action) (bool, error) {
 					clog.Logger.Errorf("error in getting sensors: %v", err)
 				}
 				d.sensors = sensors
+				index := -1
+				for x, parameter := range HardwareMonitorCommandTypeInfo.Parameters {
+					if parameter.Name == "sensor" {
+						index = x
+					}
+				}
+				if len(d.sensors) != len(HardwareMonitorCommandTypeInfo.Parameters[index].List) {
+					HardwareMonitorCommandTypeInfo.Parameters[index].List = make([]string, 0)
+					for _, sensor := range d.sensors {
+						HardwareMonitorCommandTypeInfo.Parameters[index].List = append(HardwareMonitorCommandTypeInfo.Parameters[index].List, sensor.GetFullSensorName())
+					}
+				}
 				sensorname := d.Parameters["sensor"].(string)
 				var temp float64
 				var value string
