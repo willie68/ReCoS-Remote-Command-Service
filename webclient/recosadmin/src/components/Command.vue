@@ -39,15 +39,26 @@
     </div>
     <div class="p-fluid">
       <div class="p-field p-grid">
-        <label for="description" class="p-col-6 p-mb-2 p-md-2 p-mb-md-0"
+        <label for="description" class="p-col-6 p-mb-2 p-ml-2 p-md-2 p-mb-md-0"
           >Description</label
         >
-        <div class="p-col-12 p-md-10">
+        <div class="p-col-12 p-md-9">
           <InputText
             id="description"
             type="text"
             v-model="activeCommand.description"
           />
+        </div>
+      </div>
+    </div>
+    <div>Command parameter for type {{ activeCommandType.name }}</div>
+    <div class="p-fluid">
+      <div class="p-field p-grid" v-for="(param, x) in activeCommandType.parameter" :key="x">
+        <label :for="param.name" class="p-col-12 p-mb-2 p-ml-2 p-md-2 p-mb-md-0"
+          >{{ param.name }}</label
+        >
+        <div class="p-col-12 p-md-9">
+          <InputText :id="param.name" type="text" v-model="activeCommand.parameters[param.name]"/>
         </div>
       </div>
     </div>
@@ -66,14 +77,28 @@ export default {
       activeCommand: {},
       iconlist: [],
       commandtypes: [],
+      activeCommandType: {},
     };
   },
   watch: {
     command(command) {
       if (command) {
-        console.log("changing command to" + command.name);
+        console.log("changing command to " + command.name);
         this.activeCommand = command;
       }
+    },
+    activeCommand: {
+      deep: true,
+      handler(newCommand) {
+        if (newCommand.type) {
+          this.commandtypes.forEach((commandType) => {
+            if (commandType.type === newCommand.type) {
+              this.activeCommandType = commandType;
+              console.log("changing active command type to " + newCommand.type);
+            }
+          });
+        }
+      },
     },
   },
   created() {
