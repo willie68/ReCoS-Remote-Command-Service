@@ -140,6 +140,8 @@ actions:
           command: go.exe
           args:
             - "version"
+            - "help"
+            - "doit"
   - type: SINGLE
     name: clocks
     title: Clocks

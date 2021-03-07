@@ -101,6 +101,8 @@ type CommandParameterInfo struct {
 	Type string `json:"type"`
 	// Description of this action for information
 	Description string `json:"description"`
+	// Name is the command
+	Unit string `json:"unit"`
 	// List is a enumeration of possible values
 	List []string `json:"list"`
 }
