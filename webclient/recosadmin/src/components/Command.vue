@@ -51,7 +51,7 @@
         </div>
       </div>
     </div>
-    <div>Command parameter for type {{ activeCommandType.name }}</div>
+    <div class="p-pb-3">Command parameter for type {{ activeCommandType.name }}</div>
     <div class="p-fluid">
       <div
         class="p-field p-grid"
