@@ -24,7 +24,7 @@ DefaultGroupName={#MyAppName}
 LicenseFile=..\LICENSE
 InfoAfterFile=..\README.md
 OutputDir=.\dist
-OutputBaseFilename=setup
+OutputBaseFilename=recos-setup
 SetupIconFile=..\webclient\RecosUI\public\favicon.ico
 Compression=lzma
 SolidCompression=yes
@@ -38,7 +38,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "..\service\recos-serice.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\service\recos-service.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\service\devdata\webclient\*"; DestDir: "{userappdata}\ReCoS\webclient"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "..\service\devdata\webadmin\*"; DestDir: "{userappdata}\ReCoS\webadmin"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
