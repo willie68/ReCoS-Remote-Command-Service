@@ -143,6 +143,7 @@ export default {
     activeCommand: {
       deep: true,
       handler(newCommand) {
+        console.log("changing active command " +JSON.stringify(newCommand));
         if (newCommand.type) {
           this.commandtypes.forEach((commandType) => {
             if (commandType.type === newCommand.type) {
@@ -151,6 +152,7 @@ export default {
             }
           });
         }
+        this.$emit("change", this.activeCommand);
       },
     },
   },

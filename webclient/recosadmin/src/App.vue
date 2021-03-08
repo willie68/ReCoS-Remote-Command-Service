@@ -26,7 +26,7 @@
           v-model="password"
           :type="pwdType"
           name="password"
-          :class="{ passwordOK: isPwdOK , passwordMissing: !isPwdOK}"
+          :class="{ passwordOK: isPwdOK, passwordMissing: !isPwdOK }"
         />
         <i class="pi pi-eye-slash" @click="togglePwdView()" />
         <i v-if="!showPwd" class="pi pi-eye-slash" @click="togglePwdView()" />
@@ -76,6 +76,14 @@ export default {
           label: "Delete",
           icon: "pi pi-trash",
           class: "p-button-warning",
+        },
+        {
+          label: "Export",
+          icon: "pi pi-cloud-download",
+          class: "p-button-warning",
+          command: () => {
+            this.exportProfile();
+          },
         },
       ],
       dialogProfileVisible: false,
@@ -186,6 +194,10 @@ export default {
     saveProfile(profile) {
       console.log("Save profile:" + profile.name + "#" + profile.description);
       this.dialogProfileVisible = false;
+    },
+    exportProfile() {
+      console.log("export profile: " + this.activeProfileName);
+      window.open(this.profileURL + "/" + this.activeProfileName + "/export");
     },
   },
 };

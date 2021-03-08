@@ -84,6 +84,13 @@ func Err(w http.ResponseWriter, r *http.Request, err error) {
 	render.JSON(w, r, apierr)
 }
 
+// NotFound writes an error response
+func NotFound(w http.ResponseWriter, r *http.Request, typ string, object string) {
+	apierr := serror.NotFound(typ, object, nil)
+	render.Status(r, apierr.Code)
+	render.JSON(w, r, apierr)
+}
+
 func init() {
 	Validate = validator.New()
 }

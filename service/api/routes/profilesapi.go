@@ -1,13 +1,17 @@
 package routes
 
 import (
+	"archive/zip"
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"strings"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
+	"gopkg.in/yaml.v3"
 	"wkla.no-ip.biz/remote-desk-service/api"
 	"wkla.no-ip.biz/remote-desk-service/api/handler"
 	"wkla.no-ip.biz/remote-desk-service/config"
@@ -24,6 +28,7 @@ func ProfilesRoutes() *chi.Mux {
 	router.With(handler.AuthCheck()).Post("/", PostProfile)
 	router.Get("/{profileName}", GetProfile)
 	router.With(handler.AuthCheck()).Delete("/{profileName}", DeleteProfile)
+	router.Get("/{profileName}/export", GetExportProfile)
 	return router
 }
 
@@ -110,6 +115,7 @@ func DeleteProfile(response http.ResponseWriter, request *http.Request) {
 		api.Err(response, request, err)
 		return
 	}
+
 	for _, profile := range config.Profiles {
 		if strings.EqualFold(profile.Name, profileName) {
 			dto.CloseProfile(profileName)
@@ -123,7 +129,66 @@ func DeleteProfile(response http.ResponseWriter, request *http.Request) {
 			return
 		}
 	}
-	msg := fmt.Sprintf("profile not found: %s", profileName)
-	api.Err(response, request, serror.BadRequest(nil, "missing-profile", msg))
+
+	api.NotFound(response, request, "profile", profileName)
 	return
+}
+
+// GetExportProfile getting a profile
+func GetExportProfile(response http.ResponseWriter, request *http.Request) {
+	profileName, err := api.Param(request, "profileName")
+	if err != nil {
+		clog.Logger.Debug("Error reading profile name: \n" + err.Error())
+		api.Err(response, request, err)
+		return
+	}
+
+	profile, ok := getProfile(profileName)
+	if !ok {
+		clog.Logger.Debugf("Profile %s not found", profileName)
+		api.NotFound(response, request, "profile", profileName)
+		return
+	}
+
+	// Create a buffer to write our archive to.
+	buf := new(bytes.Buffer)
+
+	// Create a new zip archive.
+	w := zip.NewWriter(buf)
+
+	filename := fmt.Sprintf("%s.yaml", profileName)
+	body, err := yaml.Marshal(profile)
+	if err != nil {
+		clog.Logger.Debug("Error reading profile: \n" + err.Error())
+		api.Err(response, request, err)
+		return
+	}
+
+	f, err := w.Create(filename)
+	if err != nil {
+		log.Fatal(err)
+	}
+	_, err = f.Write(body)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Make sure to check the error on Close.
+	err = w.Close()
+	if err != nil {
+		clog.Logger.Debug("Error writing profile: \n" + err.Error())
+		api.Err(response, request, err)
+		return
+	}
+	response.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s.zip\"", profileName))
+	render.Data(response, request, buf.Bytes())
+}
+
+func getProfile(profileName string) (models.Profile, bool) {
+	for _, profile := range config.Profiles {
+		if strings.EqualFold(profile.Name, profileName) {
+			return profile, true
+		}
+	}
+	return models.Profile{}, false
 }
