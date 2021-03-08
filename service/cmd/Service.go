@@ -12,13 +12,13 @@ import (
 	"time"
 
 	"wkla.no-ip.biz/remote-desk-service/api"
+	"wkla.no-ip.biz/remote-desk-service/api/handler"
 	"wkla.no-ip.biz/remote-desk-service/api/routes"
 	"wkla.no-ip.biz/remote-desk-service/dto"
 	"wkla.no-ip.biz/remote-desk-service/error/serror"
 	"wkla.no-ip.biz/remote-desk-service/health"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 	"wkla.no-ip.biz/remote-desk-service/pkg/osdependent"
-	"wkla.no-ip.biz/remote-desk-service/api/handler"
 
 	config "wkla.no-ip.biz/remote-desk-service/config"
 
@@ -86,10 +86,20 @@ func apiRoutes() *chi.Mux {
 
 	// Create a route along /files that will serve contents from
 	// the ./data/ folder.
-	webFilesDir := http.Dir(config.Get().WebClient)
+	webClientAppDir, err := config.ReplaceConfigdir(config.Get().WebClient)
+	if err != nil {
+		clog.Logger.Alertf("can't load web client files: %s", err.Error())
+	}
+	clog.Logger.Infof("webclient: using folder: %s", webClientAppDir)
+	webFilesDir := http.Dir(webClientAppDir)
 	FileServer(router, "/webclient", webFilesDir)
 
-	adminFilesDir := http.Dir(config.Get().AdminClient)
+	webAdminAppDir, err := config.ReplaceConfigdir(config.Get().AdminClient)
+	if err != nil {
+		clog.Logger.Alertf("can't load web admin files: %s", err.Error())
+	}
+	clog.Logger.Infof("webadmin: using folder: %s", webAdminAppDir)
+	adminFilesDir := http.Dir(webAdminAppDir)
 	FileServer(router, "/webadmin", adminFilesDir)
 	return router
 }
