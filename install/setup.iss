@@ -3,9 +3,9 @@
 
 #define MyAppName "ReCoS"
 #define MyAppVersion "0.5"
-#define MyAppPublisher "MCS Media COmputer Software"
+#define MyAppPublisher "MCS Media Computer Software"
 #define MyAppURL "https://www.wk-music.de"
-#define MyAppExeName "recos-serice.exe"
+#define MyAppExeName "recos-service.exe"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
