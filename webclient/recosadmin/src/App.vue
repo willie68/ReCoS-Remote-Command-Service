@@ -10,13 +10,13 @@
         placeholder="Select a Profile"
       />
       <SplitButton
-        v-tooltip="'Edit'"
-        icon="pi pi-pencil"
+        v-tooltip="'Save'"
+        icon="pi pi-save"
         :model="profileMenuItems"
         class="p-button-warning"
-        @click="dialogProfileVisible = true"
+        @click="saveProfile()"
       ></SplitButton>
-      <div v-if="profileDirty"> *</div>
+      <div v-if="profileDirty">*</div>
     </template>
 
     <template #right>
@@ -44,6 +44,7 @@
     v-on:save="saveProfile"
     v-on:cancel="this.dialogProfileVisible = false"
   ></EditProfile>
+  <Toast position="top-right" />
 </template>
 
 <script>
@@ -94,23 +95,23 @@ export default {
   computed: {
     activeProfileName: {
       get: function () {
-        return this.profileName
+        return this.profileName;
       },
       set: function (newProfile) {
         if (newProfile) {
-          let that = this
-          this.profileName = newProfile
+          let that = this;
+          this.profileName = newProfile;
           fetch(this.profileURL + "/" + this.profileName, {
             method: "GET",
-            headers: this.$store.state.authheader
+            headers: this.$store.state.authheader,
           })
             .then((res) => res.json())
             .then((data) => {
-              that.activeProfile = data
-              that.profileDirty = false
-              console.log("profile dirty: "+ that.profileDirty)
+              that.activeProfile = data;
+              that.profileDirty = false;
+              console.log("profile dirty: " + that.profileDirty);
             })
-            .catch((err) => console.log(err.message))
+            .catch((err) => console.log(err.message));
         }
       },
     },
@@ -154,7 +155,6 @@ export default {
     this.$store.commit("baseURL", basepath);
     console.log(`Updating to ${basepath}`);
     let that = this;
-
     that.profileURL = basepath + "/profiles";
     console.log("page profiles url:" + that.profileURL);
 
@@ -177,9 +177,39 @@ export default {
         this.pwdType = "password";
       }
     },
-    saveProfile(profile) {
-      console.log("Save profile:" + profile.name + "#" + profile.description);
+    saveProfile() {
+      console.log("Save profile:" + this.activeProfile.name);
       this.dialogProfileVisible = false;
+      fetch(this.profileURL + "/" + this.activeProfile.name, {
+        method: "PUT",
+        body: JSON.stringify(this.activeProfile),
+        headers: new Headers({
+          "Content-Type": "application/json",
+          Authorization: `Basic ${btoa(`admin:${this.$store.state.password}`)}`,
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            response.json().then((err) => {
+            console.log(err)
+            this.$toast.add({
+              severity: "error",
+              summary: "Delete",
+              detail: err.message,
+              life: 3000,
+            })
+            })
+          }
+        })
+        .catch((err) => {
+          console.log(err.message);
+          this.$toast.add({
+            severity: "warn",
+            summary: "Delete",
+            detail: err.message,
+            life: 3000,
+          });
+        });
     },
     exportProfile() {
       console.log("export profile: " + this.activeProfileName);
