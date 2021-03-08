@@ -16,6 +16,7 @@
         class="p-button-warning"
         @click="dialogProfileVisible = true"
       ></SplitButton>
+      <div v-if="profileDirty"> *</div>
     </template>
 
     <template #right>
@@ -65,8 +66,8 @@ export default {
       isPwdOK: false,
       profiles: [],
       activeProfile: {},
+      profileDirty: false,
       profileName: "",
-      activePage: { name: "" },
       profileMenuItems: [
         {
           label: "Add",
@@ -93,26 +94,23 @@ export default {
   computed: {
     activeProfileName: {
       get: function () {
-        return this.profileName;
+        return this.profileName
       },
       set: function (newProfile) {
         if (newProfile) {
-          this.profileName = newProfile;
+          let that = this
+          this.profileName = newProfile
           fetch(this.profileURL + "/" + this.profileName, {
             method: "GET",
-            headers: new Headers({
-              Authorization: `Basic ${btoa(
-                `admin:${this.$store.state.password}`
-              )}`,
-            }),
+            headers: this.$store.state.authheader
           })
             .then((res) => res.json())
             .then((data) => {
-              this.activeProfile = data;
-              this.activePage = this.activeProfile.pages[0];
-              console.log(this.activeProfile);
+              that.activeProfile = data
+              that.profileDirty = false
+              console.log("profile dirty: "+ that.profileDirty)
             })
-            .catch((err) => console.log(err.message));
+            .catch((err) => console.log(err.message))
         }
       },
     },
@@ -171,18 +169,6 @@ export default {
       .catch((err) => console.log(err.message));
   },
   methods: {
-    openProfile(e) {
-      console.log("open profile:" + e);
-      this.profileName = this.profiles[e.index];
-      fetch(this.profileURL + "/" + this.profileName)
-        .then((res) => res.json())
-        .then((data) => {
-          this.activeProfile = data;
-          this.activePage = this.activeProfile.pages[0];
-          console.log(this.activeProfile);
-        })
-        .catch((err) => console.log(err.message));
-    },
     togglePwdView() {
       this.showPwd = !this.showPwd;
       if (this.showPwd) {
@@ -198,6 +184,21 @@ export default {
     exportProfile() {
       console.log("export profile: " + this.activeProfileName);
       window.open(this.profileURL + "/" + this.activeProfileName + "/export");
+    },
+  },
+  watch: {
+    profile(newProfile) {
+      if (newProfile) {
+        console.log("changing profile to " + newProfile.name);
+        this.activeProfile = newProfile;
+      }
+    },
+    activeProfile: {
+      deep: true,
+      handler(newProfile) {
+        console.log("app: changing profile " + newProfile.name);
+        this.profileDirty = true;
+      },
     },
   },
 };
@@ -226,5 +227,9 @@ body {
 
 .passwordMissing {
   background: lightcoral !important;
+}
+
+.profiledirty {
+  background: lightsalmon;
 }
 </style>

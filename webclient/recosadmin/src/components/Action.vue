@@ -81,7 +81,7 @@
         </div>
       </div>
     </div>
-    <Commands :action="activeAction"/>
+    <Commands :action="activeAction" v-if="activeAction.type !=`MULTI`"/>
   </Panel>
 </template>
 

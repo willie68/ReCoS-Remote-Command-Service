@@ -1,6 +1,6 @@
 <template>
-  <Splitter :style="{ height: splitterHeight, }">
-    <SplitterPanel :size="20" style="height: 100%;">
+  <Splitter :style="{ height: splitterHeight }">
+    <SplitterPanel :size="20" style="height: 100%">
       <Panel header="Actions" class="actions-panel-custom">
         <template #icons>
           <button
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import Action from "./Action.vue"
+import Action from "./Action.vue";
 
 export default {
   name: "Actions",
@@ -48,9 +48,9 @@ export default {
       splitterHeight: "600px",
     };
   },
- watch: {
+  watch: {
     profile(profile) {
-      this.activeAction = profile.actions[0]
+      this.activeAction = profile.actions[0];
     },
   },
 };
@@ -58,20 +58,20 @@ export default {
 
 <style>
 .actions-panel-custom {
-    height: 100%;
+  height: 100%;
 }
 
 .actions-panel-custom .p-panel-header {
-    margin: 0px;
-    padding: 2px !important;
+  margin: 0px;
+  padding: 2px !important;
 }
 
 .actions-panel-custom .p-panel-content {
-    margin: 0px;
-    padding: 2px !important;
-    height: 100%;
+  margin: 0px;
+  padding: 2px !important;
+  height: 100%;
 }
 .p-toggleable-content {
-    height: 100%;
+  height: 100%;
 }
 </style>
