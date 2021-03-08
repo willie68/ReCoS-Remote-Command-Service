@@ -1,10 +1,12 @@
 # Remote Command Service, ReCoS
 
-Remote Command Service, for executing scripts remotely but secure. This project consists of 2 components. One is the service, a small go based microservice, which delivers all the funktionality behind the UI. This service is responsible for the execution of the different actions. The other project is the UI Web Component, builded with VUE as the main UI Framework. 
-
-# Preface
+Remote Command Service, for executing scripts remotely but secure. This project consists of 2 components. One is the service, a small go based microservice, which delivers all the functionality behind the UI. This service is responsible for the execution of the different actions. The other project is the UI Web Component, build on top of VUE as the main UI Framework. 
 
 # Installation
+
+I'll created a simple installer with inno setup for install the pre release. After installation you have to start the service itself. It's called `recos-service.exe`. Nothing else to do here. After the sevice is up, simply go to the web page http://localhost:9280/webadmin for the admin client. 
+
+For the normal execution client please use http://localhost:9280/webclient. On other machines simply change localhost to the ip of the computer where the service is running.
 
 # ReCoS Admin - Web Admin Interface
 
