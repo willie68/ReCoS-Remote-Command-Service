@@ -18,6 +18,7 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/health"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 	"wkla.no-ip.biz/remote-desk-service/pkg/osdependent"
+	"wkla.no-ip.biz/remote-desk-service/api/handler"
 
 	config "wkla.no-ip.biz/remote-desk-service/config"
 
@@ -335,6 +336,10 @@ func initConfig() {
 
 	if serviceConfig.WebClient == "" {
 		serviceConfig.WebClient = config.DefaulConfig.WebClient
+	}
+
+	if serviceConfig.Password != "" {
+		handler.AuthenticationConfig.Password = serviceConfig.Password
 	}
 
 	var err error

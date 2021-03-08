@@ -21,7 +21,13 @@
     <template #right>
       <span class="p-input-icon-right">
         Password
-        <InputText ref="pwd" v-model="password" :type="pwdType" name="password"></InputText>
+        <InputText
+          ref="pwd"
+          v-model="password"
+          :type="pwdType"
+          name="password"
+          :class="{ passwordOK: isPwdOK , passwordMissing: !isPwdOK}"
+        />
         <i class="pi pi-eye-slash" @click="togglePwdView()" />
         <i v-if="!showPwd" class="pi pi-eye-slash" @click="togglePwdView()" />
         <i v-if="showPwd" class="pi pi-eye" @click="togglePwdView()" />
@@ -56,6 +62,7 @@ export default {
       pwd: "",
       showPwd: false,
       pwdType: "password",
+      isPwdOK: false,
       profiles: [],
       activeProfile: {},
       profileName: "",
@@ -85,7 +92,11 @@ export default {
           this.profileName = newProfile;
           fetch(this.profileURL + "/" + this.profileName, {
             method: "GET",
-            headers: { "X-mcs-password": this.$store.state.password },
+            headers: new Headers({
+              Authorization: `Basic ${btoa(
+                `admin:${this.$store.state.password}`
+              )}`,
+            }),
           })
             .then((res) => res.json())
             .then((data) => {
@@ -103,7 +114,24 @@ export default {
       },
       set: function (newPassword) {
         if (newPassword) {
-          this.$store.commit("password", newPassword);
+          let that = this;
+          that.isPwdOK = false;
+          fetch(this.$store.state.baseURL + "/config/check", {
+            method: "GET",
+            headers: new Headers({
+              Authorization: `Basic ${btoa(`admin:${newPassword}`)}`,
+            }),
+          })
+            .then((response) => {
+              if (response.ok) {
+                console.log("authentication check ok");
+                that.isPwdOK = true;
+                that.$store.commit("password", newPassword);
+              }
+            })
+            .catch((err) => {
+              console.log(err.message);
+            });
         }
       },
     },
@@ -178,5 +206,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+
+.passwordOK {
+  background: lightgreen !important;
+}
+
+.passwordMissing {
+  background: lightcoral !important;
 }
 </style>
