@@ -33,6 +33,8 @@ import TabView from 'primevue/tabview'
 import TabPanel from 'primevue/tabpanel'
 import ColorPicker from 'primevue/colorpicker'
 import Checkbox from 'primevue/checkbox'
+import ToastService from 'primevue/toastservice'
+import Toast from 'primevue/toast'
 
 const store = createStore({
     state () {
@@ -64,6 +66,7 @@ app.directive('badge', BadgeDirective)
 app.directive('tooltip', Tooltip)
 app.use(store)
 app.use(PrimeVue, {ripple: true})
+app.use(ToastService);
 app.component('Toolbar', Toolbar)
 app.component('Button', Button)
 app.component('SplitButton', SplitButton)
@@ -88,5 +91,6 @@ app.component('TabView', TabView)
 app.component('TabPanel', TabPanel)
 app.component('ColorPicker', ColorPicker)
 app.component('Checkbox', Checkbox)
+app.component('Toast', Toast)
 
 app.mount('#app')

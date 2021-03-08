@@ -210,7 +210,7 @@ func main() {
 			Title: "Clock",
 		})
 
-		if err := config.SaveProfile(newProfile); err != nil {
+		if err := config.SaveProfileFile(newProfile); err != nil {
 			clog.Logger.Alertf("can't create profiles: %s", err.Error())
 			os.Exit(1)
 		}

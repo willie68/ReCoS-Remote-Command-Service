@@ -65,8 +65,8 @@ func InitProfiles(folder string) error {
 	return nil
 }
 
-// SaveProfile saving the profile
-func SaveProfile(profile models.Profile) error {
+// SaveProfileFile saving the profile
+func SaveProfileFile(profile models.Profile) error {
 	filename := fmt.Sprintf("%s/%s.yaml", profileFolder, profile.Name)
 	if _, err := os.Stat(filename); os.IsNotExist(err) {
 		// everything is ok, so please serialise the profile
@@ -82,6 +82,22 @@ func SaveProfile(profile models.Profile) error {
 		return nil
 	}
 	return errors.New("Profile already exists")
+}
+
+// UpdateProfileFile saving the profile
+func UpdateProfileFile(profile models.Profile) error {
+	filename := fmt.Sprintf("%s/%s.yaml", profileFolder, profile.Name)
+	// everything is ok, so please serialise the profile
+	f, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	err = yaml.NewEncoder(f).Encode(profile)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // HasProfile chacking if a profile is already defined
@@ -100,6 +116,17 @@ func AddProfile(profile models.Profile) error {
 		return errors.New("Profile already exists")
 	}
 	Profiles = append(Profiles, profile)
+	return nil
+}
+
+// UpdateProfile adding a profile to the profile list
+func UpdateProfile(profile models.Profile) error {
+	if HasProfile(profile.Name) {
+		Profiles = append(Profiles, profile)
+		return nil
+	}
+	DeleteProfile(profile.Name)
+	AddProfile(profile)
 	return nil
 }
 

@@ -261,7 +261,7 @@ func doWorkSingle(a *Action, sendingAction *Action, requestMessage models.Messag
 
 // Close an action will close/stop all dedicated commands
 func (a *Action) Close() error {
-	if a.Config.Type == models.Single {
+	if (a.Config.Type == models.Single) || (a.Config.Type == models.Display) {
 		a.m.Lock()
 		clog.Logger.Debugf("close action %s", a.Title)
 
@@ -269,7 +269,8 @@ func (a *Action) Close() error {
 			//cmdExecutor := GetCommand(command)
 			cmdExecutor := a.Commands[command.Name]
 			if cmdExecutor == nil {
-				clog.Logger.Errorf("can't find command with type: %s", command.Type)
+				clog.Logger.Errorf("can't find command: %s, (%s)", command.Name, command.Type)
+				continue
 			}
 			_, err := cmdExecutor.Stop(a)
 			if err != nil {

@@ -1,14 +1,12 @@
 package api
 
 import (
-	"errors"
 	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
 	"github.com/go-playground/validator/v10"
-	"wkla.no-ip.biz/remote-desk-service/config"
 	"wkla.no-ip.biz/remote-desk-service/error/serror"
 )
 
@@ -32,19 +30,6 @@ func Username(r *http.Request) (string, error) {
 		return "", serror.BadRequest(nil, "missing-header", msg)
 	}
 	return uid, nil
-}
-
-// CheckPassword gets the username of the given request
-func CheckPassword(r *http.Request) error {
-	uid := r.Header.Get(PwdHeader)
-	if uid == "" {
-		msg := fmt.Sprintf("password header missing: %s", PwdHeader)
-		return serror.BadRequest(nil, "missing-header", msg)
-	}
-	if uid != config.Get().Password {
-		return serror.Forbidden(errors.New("wrong or missing password"))
-	}
-	return nil
 }
 
 // Decode decodes and validates an object

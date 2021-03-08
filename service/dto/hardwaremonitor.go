@@ -174,6 +174,8 @@ func (d *HardwareMonitorCommand) Init(a *Action) (bool, error) {
 
 // Stop nothing
 func (d *HardwareMonitorCommand) Stop(a *Action) (bool, error) {
+	d.stop = true
+	d.done <- true
 	return true, nil
 }
 

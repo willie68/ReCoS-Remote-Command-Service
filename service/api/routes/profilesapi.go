@@ -26,6 +26,7 @@ func ProfilesRoutes() *chi.Mux {
 	router := chi.NewRouter()
 	router.Get("/", GetProfiles)
 	router.With(handler.AuthCheck()).Post("/", PostProfile)
+	router.With(handler.AuthCheck()).Put("/{profileName}", PutProfile)
 	router.Get("/{profileName}", GetProfile)
 	router.With(handler.AuthCheck()).Delete("/{profileName}", DeleteProfile)
 	router.Get("/{profileName}/export", GetExportProfile)
@@ -60,16 +61,9 @@ func GetProfile(response http.ResponseWriter, request *http.Request) {
 
 // PostProfile create a new profile
 func PostProfile(response http.ResponseWriter, request *http.Request) {
-	err := api.CheckPassword(request)
-	if err != nil {
-		clog.Logger.Debug("no pwd header:" + err.Error())
-		api.Err(response, request, err)
-		return
-	}
-
 	decoder := json.NewDecoder(request.Body)
 	var profile models.Profile
-	err = decoder.Decode(&profile)
+	err := decoder.Decode(&profile)
 	if err != nil {
 		clog.Logger.Debug("Error reading json body:" + err.Error())
 		api.Err(response, request, err)
@@ -82,7 +76,7 @@ func PostProfile(response http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	err = config.SaveProfile(profile)
+	err = config.SaveProfileFile(profile)
 	if err != nil {
 		clog.Logger.Debug("Error saving profile:" + err.Error())
 		api.Err(response, request, err)
@@ -100,15 +94,51 @@ func PostProfile(response http.ResponseWriter, request *http.Request) {
 	render.JSON(response, request, profile)
 }
 
-// DeleteProfile getting a profile
-func DeleteProfile(response http.ResponseWriter, request *http.Request) {
-	err := api.CheckPassword(request)
+// PutProfile create a new profile
+func PutProfile(response http.ResponseWriter, request *http.Request) {
+	profileName, err := api.Param(request, "profileName")
 	if err != nil {
-		clog.Logger.Debug("no pwd header:" + err.Error())
+		clog.Logger.Debug("Error reading profile name: \n" + err.Error())
 		api.Err(response, request, err)
 		return
 	}
 
+	decoder := json.NewDecoder(request.Body)
+	var profile models.Profile
+	err = decoder.Decode(&profile)
+	if err != nil {
+		clog.Logger.Debug("Error reading json body:" + err.Error())
+		api.Err(response, request, err)
+		return
+	}
+
+	if profileName != profile.Name {
+		msg := fmt.Sprintf("profile names not equal: %s != %s", profileName, profile.Name)
+		clog.Logger.Debug(msg)
+		api.Err(response, request, serror.BadRequest(nil, "profile-name", msg))
+		return
+	}
+
+	err = config.UpdateProfileFile(profile)
+	if err != nil {
+		clog.Logger.Debug("Error saving profile:" + err.Error())
+		api.Err(response, request, err)
+		return
+	}
+
+	go func() {
+		dto.CloseProfile(profile.Name)
+		config.UpdateProfile(profile)
+		if err := dto.ReinitProfiles(config.Profiles); err != nil {
+			clog.Logger.Alertf("can't create profiles: %s", err.Error())
+		}
+	}()
+
+	render.JSON(response, request, profile)
+}
+
+// DeleteProfile getting a profile
+func DeleteProfile(response http.ResponseWriter, request *http.Request) {
 	profileName, err := api.Param(request, "profileName")
 	if err != nil {
 		clog.Logger.Debug("Error reading profile name: \n" + err.Error())
