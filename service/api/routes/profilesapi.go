@@ -9,6 +9,7 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
 	"wkla.no-ip.biz/remote-desk-service/api"
+	"wkla.no-ip.biz/remote-desk-service/api/handler"
 	"wkla.no-ip.biz/remote-desk-service/config"
 	"wkla.no-ip.biz/remote-desk-service/dto"
 	"wkla.no-ip.biz/remote-desk-service/error/serror"
@@ -20,9 +21,9 @@ import (
 func ProfilesRoutes() *chi.Mux {
 	router := chi.NewRouter()
 	router.Get("/", GetProfiles)
-	router.Post("/", PostProfile)
+	router.With(handler.AuthCheck()).Post("/", PostProfile)
 	router.Get("/{profileName}", GetProfile)
-	router.Delete("/{profileName}", DeleteProfile)
+	router.With(handler.AuthCheck()).Delete("/{profileName}", DeleteProfile)
 	return router
 }
 

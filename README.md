@@ -2,6 +2,16 @@
 
 Remote Command Service, for executing scripts remotely but secure. This project consists of 2 components. One is the service, a small go based microservice, which delivers all the funktionality behind the UI. This service is responsible for the execution of the different actions. The other project is the UI Web Component, builded with VUE as the main UI Framework. 
 
+# Preface
+
+# Installation
+
+# ReCoS Admin - Web Admin Interface
+
+Writing to the service will be protected with a password. You can set this password in the service configuration. The default password is `recosadmin`. The username is `admin`. (But will not need this, until you try to access the Service interfaces directly)
+
+To deactivate password check simply add an empty password to the configuration.
+
 # Service
 
 ## Profileconfiguration

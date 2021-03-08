@@ -51,7 +51,9 @@
         </div>
       </div>
     </div>
-    <div class="p-pb-3">Command parameter for type {{ activeCommandType.name }}</div>
+    <div class="p-pb-3">
+      Command parameter for type {{ activeCommandType.name }}
+    </div>
     <div class="p-fluid">
       <div
         class="p-field p-grid"
@@ -165,8 +167,9 @@ export default {
           })
           .catch((err) => console.log(err.message));
 
-        that.iconurl = state.baseURL + "/config/commands";
-        fetch(that.iconurl)
+        let url = state.baseURL + "/config/commands";
+        console.log("pwd: " + btoa(`admin:${this.$store.state.password}`));
+        fetch(url)
           .then((res) => res.json())
           .then((data) => {
             //console.log(data);
@@ -175,6 +178,8 @@ export default {
           .catch((err) => console.log(err.message));
       }
     });
+  },
+  methods: {
   },
   beforeUnmount() {
     this.unsubscribe();
