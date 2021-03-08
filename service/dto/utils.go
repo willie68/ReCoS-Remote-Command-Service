@@ -3,6 +3,7 @@ package dto
 import (
 	"fmt"
 	"image/color"
+	"math"
 	"strings"
 )
 
@@ -24,4 +25,12 @@ func parseHexColor(s string) (c color.RGBA, err error) {
 		err = fmt.Errorf("invalid length, must be 7 or 4")
 	}
 	return
+}
+
+func deg2Rad(deg float64) float64 {
+	return deg * (math.Pi / 180.0)
+}
+
+func rad2Deg(rad float64) float64 {
+	return rad * (180.0 / math.Pi)
 }

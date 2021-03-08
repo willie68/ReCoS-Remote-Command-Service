@@ -19,3 +19,7 @@ service/sensorlist.txt
 service/cmd/__debug_bin
 
 **/node_modules/**
+
+3rd party/openhardwaremonitor-v0.9.6/OpenHardwareMonitor/
+
+3rd party/open-cue-service/

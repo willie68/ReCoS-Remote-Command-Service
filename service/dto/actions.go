@@ -1,18 +1,21 @@
 package dto
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 	"sync"
 	"time"
 
 	"wkla.no-ip.biz/remote-desk-service/api"
+	"wkla.no-ip.biz/remote-desk-service/config"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
 // Profiles contains all profiles defined for this server
 var Profiles []Profile
+var count int
 
 // CommandExecutor is an interface for executing a command. Every command implementation has to implement this.
 type CommandExecutor interface {
@@ -44,9 +47,22 @@ type Action struct {
 
 // InitProfiles initialse the dto profiles for saving/retrieving status of and executing every action
 func InitProfiles(configProfiles []models.Profile) error {
-	count := 0
 	Profiles = make([]Profile, 0)
 	for _, configProfile := range configProfiles {
+		dtoProfile, err := InitProfile(configProfile.Name)
+		if err == nil {
+			Profiles = append(Profiles, dtoProfile)
+		}
+	}
+	return nil
+}
+
+// InitProfile initialse the dto profiles for saving/retrieving status of and executing every action
+func InitProfile(profileName string) (Profile, error) {
+	for _, configProfile := range config.Profiles {
+		if profileName != configProfile.Name {
+			continue
+		}
 		dtoProfile := Profile{
 			Name:    configProfile.Name,
 			Config:  configProfile,
@@ -79,8 +95,30 @@ func InitProfiles(configProfiles []models.Profile) error {
 			}
 			dtoProfile.Actions = append(dtoProfile.Actions, action)
 		}
+		return dtoProfile, nil
+	}
+	return Profile{}, errors.New("profile not found")
+}
 
-		Profiles = append(Profiles, dtoProfile)
+// ReinitProfiles reinitialse the dto profiles
+func ReinitProfiles(configProfiles []models.Profile) error {
+	for _, profile := range Profiles {
+		CloseProfile(profile.Name)
+	}
+	InitProfiles(configProfiles)
+	return nil
+}
+
+// CloseProfile closes a profiles
+func CloseProfile(profileName string) error {
+	actualProfile, err := GetProfile(profileName)
+	if err == nil {
+		for _, action := range actualProfile.Actions {
+			actualAction, err := actualProfile.GetAction(action.Name)
+			if err == nil {
+				actualAction.Close()
+			}
+		}
 	}
 	return nil
 }
@@ -212,13 +250,38 @@ func doWorkSingle(a *Action, sendingAction *Action, requestMessage models.Messag
 				Profile:  sendingAction.Profile,
 				Action:   sendingAction.Name,
 				ImageURL: a.Config.Icon,
-				Title:    "",
-				Text:     a.Config.Title,
+				Title:    a.Config.Title,
+				Text:     "",
 				State:    sendingAction.State,
 			}
 			api.SendMessage(message)
 		}()
 	}
+}
+
+// Close an action will close/stop all dedicated commands
+func (a *Action) Close() error {
+	if a.Config.Type == models.Single {
+		a.m.Lock()
+		clog.Logger.Debugf("close action %s", a.Title)
+
+		for _, command := range a.Config.Commands {
+			//cmdExecutor := GetCommand(command)
+			cmdExecutor := a.Commands[command.Name]
+			if cmdExecutor == nil {
+				clog.Logger.Errorf("can't find command with type: %s", command.Type)
+			}
+			_, err := cmdExecutor.Stop(a)
+			if err != nil {
+				clog.Logger.Errorf("error stopping command: %v", err)
+			}
+		}
+
+		a.Commands = make(map[string]CommandExecutor)
+		a.m.Unlock()
+	}
+
+	return nil
 }
 
 func IsSingleClick(message models.Message) bool {

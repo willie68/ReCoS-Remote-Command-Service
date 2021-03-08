@@ -12,6 +12,12 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
+// KeysCommandTypeInfo sending key strokes to the active program
+var KeysCommandTypeInfo = models.CommandTypeInfo{"KEYS", "Keys", "typing on a virtual keyboard", []models.CommandParameterInfo{
+	{"layout", "string", "defining the layout of the keyboard used to send the data", "", []string{"en", "de"}},
+	{"keys", "string", "keys are the string with the keys used to send, example: 'akteon{enter}'", "", make([]string, 0)},
+}}
+
 // KeysCommand is a command to send keystroke to the active application.
 // parameters: layout for the keyboard layout: en or de
 // keys: string with the keys to press. Using macros for special keys, see sendMacro methode.

@@ -14,6 +14,12 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
+// ClockCommandTypeInfo is a clock
+var ClockCommandTypeInfo = models.CommandTypeInfo{"CLOCK", "Clock", "displaying a nice clock", []models.CommandParameterInfo{
+	{"format", "string", "Format string for formatting the clock", "", make([]string, 0)},
+	{"analog", "bool", "Showing a nice analog clock", "", make([]string, 0)},
+}}
+
 // ClockCommand is a command to execute a delay. Using time for getting the ttime in seconds to delay the execution.
 type ClockCommand struct {
 	Parameters map[string]interface{}
@@ -68,17 +74,19 @@ func (c *ClockCommand) Init(a *Action) (bool, error) {
 			case <-c.done:
 				return
 			case t := <-c.ticker.C:
-				title := t.Format(c.format)
-				if c.analog {
-					c.SendPNG(title)
-				} else {
-					message := models.Message{
-						Profile: a.Profile,
-						Action:  a.Name,
-						State:   1,
-						Title:   title,
+				if api.HasConnectionWithProfile(a.Profile) {
+					title := t.Format(c.format)
+					if c.analog {
+						c.SendPNG(title)
+					} else {
+						message := models.Message{
+							Profile: a.Profile,
+							Action:  a.Name,
+							State:   1,
+							Title:   title,
+						}
+						api.SendMessage(message)
 					}
-					api.SendMessage(message)
 				}
 			}
 		}
@@ -185,12 +193,4 @@ func (c *ClockCommand) SendPNG(value string) {
 		State:    0,
 	}
 	api.SendMessage(message)
-}
-
-func deg2Rad(deg float64) float64 {
-	return deg * (math.Pi / 180.0)
-}
-
-func rad2Deg(rad float64) float64 {
-	return rad * (180.0 / math.Pi)
 }

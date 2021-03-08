@@ -3,9 +3,16 @@ port: 9280
 # port of the https server
 sslport: 0
 # this is the servicURL from outside
-serviceURL: http://127.0.0.1:9180
+serviceURL: http://127.0.0.1:9280
 #sercret file for storing usernames and passwords
-secretfile: configs/secret.yaml
+secretfile:
+
+#admin password for the admin interface
+password: recosadmin
+
+webclient: ./devdata/webclient
+adminclient: ./devdata/webadmin
+icons: ./devdata/webclient/assets
 
 healthcheck:
     period: 30

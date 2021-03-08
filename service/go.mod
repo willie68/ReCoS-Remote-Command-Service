@@ -9,6 +9,7 @@ require (
 	github.com/aphistic/golf v0.0.0-20180712155816-02c07f170c5a
 	github.com/aphistic/sweet v0.3.0 // indirect
 	github.com/armon/go-metrics v0.3.4 // indirect
+	github.com/davidscholberg/go-durationfmt v0.0.0-20170122144659-64843a2083d3
 	github.com/fogleman/gg v1.3.0
 	github.com/gen2brain/shm v0.0.0-20200228170931-49f9650110c5 // indirect
 	github.com/go-chi/chi v4.1.2+incompatible

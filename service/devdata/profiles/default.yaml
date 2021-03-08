@@ -1,46 +1,57 @@
 name: Default
-description: description for default
+description: This is the default configuration, just to have one starting point
 pages:
-  - name: page1
+  - name: Default
+    description: Some default command for every operating system
     columns: 5
-    rows: 5
+    rows: 3
     cells:
-      - page2
-      - action1
-      - action2
-      - action3
-      - pause
+      - delay1
+      - delay2
       - sendkeys
-      - window_ctrl
       - noop
       - timer
       - timer2
+      - clocks
       - clock
-      - screenshot
+      - analogclock
       - cputemp
       - cpuload
-  - name: page2
+      - stopwatch
+      - noop1
+      - 
+  - name: clocks
+    description: clocks only
     columns: 3
     rows: 3
     toolbar: hide
     cells:
       - page1
-      - action1
-      - action2
-      - pause
+      - none
+      - none
+      - none
       - clock
+      - analogclock
   - name: hardware
+    description: hardware statistics only
     columns: 3
     rows: 3
     cells:
       - cputemp
       - cpuload
+  - name: windows
+    description: only working on windows
+    columns: 3
+    rows: 3
+    cells:
+      - window_ctrl
+      - execgo
 actions:
   - type: SINGLE
-    name: action1
-    title: Action Title Sync
-    description: description for action
-    icon: trash_can.png
+    name: delay1
+    title: short delay
+    description: Just a short delay
+    icon: hourglass_begin.png
     fontsize: 10
     fontcolor: "#FF0000"
     outlined: true
@@ -50,40 +61,10 @@ actions:
         name: delay
         parameters:
           time: 2
-      - type: EXECUTE
-        name: execute
-        parameters:
-          command: echo.bat
-          args:
-            - "Hello world"
-      - type: DELAY
-        name: delay
-        parameters:
-          time: 1
   - type: SINGLE
-    name: action2
-    title: Action Title Async
-    description: description for action
-    runone: false
-    commands:
-      - type: DELAY
-        name: delay
-        parameters:
-          time: 2
-      - type: EXECUTE
-        name: execute
-        parameters:
-          command: echo.bat
-          args:
-            - "Hello world"
-      - type: DELAY
-        name: delay
-        parameters:
-          time: 1
-  - type: SINGLE
-    name: pause
+    name: delay2
     title: Pause
-    description: description for action
+    description: Stepped Delay with different titles
     runone: false
     commands:
       - type: DELAY
@@ -148,9 +129,9 @@ actions:
         parameters:
           time: 1
   - type: SINGLE
-    name: action3
-    title: Execute go version
-    description: description for action
+    name: execgo
+    title: go version
+    description: Execute go version 
     runone: true
     commands:
       - type: EXECUTE
@@ -159,26 +140,29 @@ actions:
           command: go.exe
           args:
             - "version"
+            - "help"
+            - "doit"
+  - type: SINGLE
+    name: clocks
+    title: Clocks
+    description: Goto clocks page
+    runone: true
+    commands:
+      - type: PAGE
+        name: page
+        parameters:
+          page: clocks
   - type: SINGLE
     name: page1
-    title: Execute Page
-    description: description for page
+    title: Back
+    description: Goto default page
+    icon: arrow_left.png
     runone: true
     commands:
       - type: PAGE
         name: page
         parameters:
-          page: page1
-  - type: SINGLE
-    name: page2
-    title: Execute Page
-    description: description for page
-    runone: true
-    commands:
-      - type: PAGE
-        name: page
-        parameters:
-          page: page2
+          page: Default
   - type: SINGLE
     name: sendkeys
     title: Sending some keys
@@ -240,7 +224,7 @@ actions:
     name: noop
     title: Do nothing
     description: do nothing
-    icon: alarm_bell.png
+    icon: light_bulb.png
     runone: true
     commands:
       - type: NOOP
@@ -274,7 +258,18 @@ actions:
   - type: DISPLAY
     name: clock
     title: Clock
-    description: timer counting down 20 sec
+    runone: true
+    outlined: false
+    fontcolor: white
+    commands:
+      - type: CLOCK
+        name: clock
+        parameters:
+          format: "15:04:05\r\n02 Jan 06"
+          analog: false
+  - type: DISPLAY
+    name: analogclock
+    title: Analogclock
     runone: true
     outlined: false
     fontcolor: white
@@ -329,3 +324,17 @@ actions:
           format: "%0.1f %"
           display: both
           color: "#ffff00"
+  - type: SINGLE
+    name: stopwatch
+    title: Stopwatch
+    description: simple stop watch
+    icon: timer.png
+    runone: true
+    outlined: true
+    fontcolor: black
+    commands:
+      - type: STOPWATCH
+        name: stp1
+        parameters:
+          format: "Mom: %0m:%0s"
+        

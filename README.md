@@ -10,10 +10,10 @@ Every profile has it's own configuration file. This file is written in yaml and 
 
 In the root you will find the following parameters
 
-name: The name of the profile
-description: a user readable description
-pages: This are the different pages for showing up the actions
-actions: a list of different actions. An action can appear on different pages. But as it's the same action, the status/result will be the same.
+`name`: The name of the profile
+`description`: a user readable description
+`pages`: This are the different pages for showing up the actions
+`actions`: a list of different actions. An action can appear on different pages. But as it's the same action, the status/result will be the same.
 
 This is an example
 
@@ -100,6 +100,7 @@ A page is a view component mainly showing with rows and columns. Each of this ce
 parameters:
 
 `name`: The name of the page
+`description`: a user readable description
 `columns`: Number of columns on the page
 `rows`: Number of rows on the page
 `toolbar`: `show`, this page will appear in the toolbar to directly switch to, `hide`, if this page should appear in the toolbar. With the page command you can switch to this page.
@@ -186,11 +187,12 @@ commands:
 
 This is the command, which should be executed
 
-type: the type of the command
-name: names the command
-icon: should be the icon that should be displayed when running this command
-title: should be the text that should be displayed when running this command
-parameters: parameters defers from command to command
+`type`: the type of the command
+`name`: names the command
+`description`: a user readable description
+`icon`: should be the icon that should be displayed when running this command
+`title`: should be the text that should be displayed when running this command
+`parameters`: parameters defers from command to command
 
 ##### No Operation
 
@@ -268,6 +270,37 @@ name: clock
 parameters:
   format: "15:04:05 02 Jan 06"
 ```
+
+##### Stopwatch
+
+A simple textual stopwatch.
+
+`Type`: STOPWATCH
+
+`Parameter`: 
+
+`format`: the format of the time. The `%` character signifies that the next character is a  modifier that specifies a particular duration unit. The following is the full list of modifiers supported by go-durationfmt:
+
+- `%y` - # of years
+- `%w` - # of weeks
+- `%d` - # of days
+- `%h` - # of hours
+- `%m` - # of minutes
+- `%s` - # of seconds
+- `%%` - print a percent sign
+
+You can place a `0` before the `h`, `m`, and `s` modifiers to zeropad those values to two digits. Zeropadding is undefined for the other modifiers.
+
+Example
+
+```yaml
+type: STOPWATCH
+name: stp1
+parameters:
+  format: "Mom: %0m:%0s "
+```
+
+
 
 ##### Execute
 

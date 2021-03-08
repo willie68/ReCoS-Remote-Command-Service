@@ -16,6 +16,7 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/dto"
 	"wkla.no-ip.biz/remote-desk-service/error/serror"
 	"wkla.no-ip.biz/remote-desk-service/health"
+	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 	"wkla.no-ip.biz/remote-desk-service/pkg/osdependent"
 
 	config "wkla.no-ip.biz/remote-desk-service/config"
@@ -50,7 +51,7 @@ func init() {
 	clog.Logger.Info("init service")
 	flag.IntVarP(&port, "port", "p", 0, "port of the http server.")
 	flag.IntVarP(&sslport, "sslport", "t", 0, "port of the https server.")
-	flag.StringVarP(&configFile, "config", "c", config.File, "this is the path and filename to the config file")
+	flag.StringVarP(&configFile, "config", "c", "", "this is the path and filename to the config file")
 	flag.StringVarP(&serviceURL, "serviceURL", "u", "", "service url from outside")
 }
 
@@ -67,19 +68,28 @@ func apiRoutes() *chi.Mux {
 			AllowedOrigins: []string{"*"},
 			// AllowOriginFunc:  func(r *http.Request, origin string) bool { return true },
 			AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-			AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+			AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token", "X-mcs-username", "X-mcs-password"},
 			ExposedHeaders:   []string{"Link"},
-			AllowCredentials: false,
+			AllowCredentials: true,
 			MaxAge:           300, // Maximum value not ignored by any of major browsers
 		}),
 	)
 
 	router.Route("/", func(r chi.Router) {
+		r.Mount(baseURL+"/config", routes.ConfigRoutes())
 		r.Mount(baseURL+"/profiles", routes.ProfilesRoutes())
 		r.Mount(baseURL+"/show", routes.ShowRoutes())
 		r.Mount(baseURL+"/action", routes.ActionRoutes())
 		r.Mount("/health", health.Routes())
 	})
+
+	// Create a route along /files that will serve contents from
+	// the ./data/ folder.
+	webFilesDir := http.Dir(config.Get().WebClient)
+	FileServer(router, "/webclient", webFilesDir)
+
+	adminFilesDir := http.Dir(config.Get().AdminClient)
+	FileServer(router, "/webadmin", adminFilesDir)
 	return router
 }
 
@@ -98,6 +108,27 @@ func healthRoutes() *chi.Mux {
 	return router
 }
 
+// FileServer conveniently sets up a http.FileServer handler to serve
+// static files from a http.FileSystem.
+func FileServer(r chi.Router, path string, root http.FileSystem) {
+	if strings.ContainsAny(path, "{}*") {
+		panic("FileServer does not permit any URL parameters.")
+	}
+
+	if path != "/" && path[len(path)-1] != '/' {
+		r.Get(path, http.RedirectHandler(path+"/", 301).ServeHTTP)
+		path += "/"
+	}
+	path += "*"
+
+	r.Get(path, func(w http.ResponseWriter, r *http.Request) {
+		rctx := chi.RouteContext(r.Context())
+		pathPrefix := strings.TrimSuffix(rctx.RoutePattern(), "/*")
+		fs := http.StripPrefix(pathPrefix, http.FileServer(root))
+		fs.ServeHTTP(w, r)
+	})
+}
+
 func main() {
 	clog.Logger.Info("starting server")
 	defer clog.Logger.Close()
@@ -105,7 +136,27 @@ func main() {
 	flag.Parse()
 
 	serror.Service = servicename
+	if configFile == "" {
+		configFolder, err := config.GetDefaultConfigFolder()
+		if err != nil {
+			clog.Logger.Alertf("can't load config file: %s", err.Error())
+			os.Exit(1)
+		}
+		configFolder = fmt.Sprintf("%s/service/", configFolder)
+		err = os.MkdirAll(configFolder, os.ModePerm)
+		if err != nil {
+			clog.Logger.Alertf("can't load config file: %s", err.Error())
+			os.Exit(1)
+		}
+		configFile = configFolder + "/service.yaml"
+
+		if _, err := os.Stat(configFile); os.IsNotExist(err) {
+			config.SaveConfig(configFolder, config.DefaulConfig)
+		}
+	}
+
 	config.File = configFile
+
 	if err := config.Load(); err != nil {
 		clog.Logger.Alertf("can't load config file: %s", err.Error())
 		os.Exit(1)
@@ -115,8 +166,44 @@ func main() {
 	initConfig()
 
 	if err := config.InitProfiles(serviceConfig.Profiles); err != nil {
-		clog.Logger.Alertf("can't load profile files: %s", err.Error())
-		os.Exit(1)
+		if !os.IsNotExist(err) {
+			clog.Logger.Alertf("can't load profile files: %s", err.Error())
+			os.Exit(1)
+		}
+		err = os.MkdirAll(serviceConfig.Profiles, os.ModePerm)
+		if err != nil {
+			clog.Logger.Alertf("can't load profile files: %s", err.Error())
+			os.Exit(1)
+		}
+	}
+
+	if len(config.Profiles) == 0 {
+		newProfile := models.Profile{
+			Name:        "Default",
+			Description: "This is the default profile",
+			Pages:       make([]models.Page, 0),
+			Actions:     make([]models.Action, 0),
+		}
+		newProfile.Pages = append(newProfile.Pages, models.Page{
+			Name:        "Default",
+			Description: "This is the default page",
+			Rows:        5,
+			Columns:     3,
+			Toolbar:     models.ToolbarShow,
+			Cells:       make([]string, 0),
+		})
+
+		newProfile.Actions = append(newProfile.Actions, models.Action{
+			Type:  models.Display,
+			Name:  "Clock",
+			Title: "Clock",
+		})
+
+		if err := config.SaveProfile(newProfile); err != nil {
+			clog.Logger.Alertf("can't create profiles: %s", err.Error())
+			os.Exit(1)
+		}
+		config.Profiles = append(config.Profiles, newProfile)
 	}
 
 	if err := dto.InitProfiles(config.Profiles); err != nil {
@@ -134,7 +221,6 @@ func main() {
 	}
 
 	apikey = getApikey()
-	routes.APIKey = apikey
 	clog.Logger.Infof("apikey: %s", apikey)
 	clog.Logger.Infof("ssl: %t", ssl)
 	clog.Logger.Infof("serviceURL: %s", serviceConfig.ServiceURL)
@@ -243,11 +329,38 @@ func initConfig() {
 		serviceConfig.ServiceURL = serviceURL
 	}
 
-	err := osdependent.InitOSDependend(serviceConfig)
+	if serviceConfig.AdminClient == "" {
+		serviceConfig.AdminClient = config.DefaulConfig.AdminClient
+	}
+
+	if serviceConfig.WebClient == "" {
+		serviceConfig.WebClient = config.DefaulConfig.WebClient
+	}
+
+	var err error
+	serviceConfig.Profiles, err = config.ReplaceConfigdir(serviceConfig.Profiles)
 	if err != nil {
 		clog.Logger.Alertf("error starting os dependend worker: %s", err.Error())
 		os.Exit(1)
 	}
+	serviceConfig.AdminClient, err = config.ReplaceConfigdir(serviceConfig.AdminClient)
+	if err != nil {
+		clog.Logger.Alertf("error starting os dependend worker: %s", err.Error())
+		os.Exit(1)
+	}
+	serviceConfig.WebClient, err = config.ReplaceConfigdir(serviceConfig.WebClient)
+	if err != nil {
+		clog.Logger.Alertf("error starting os dependend worker: %s", err.Error())
+		os.Exit(1)
+	}
+
+	err = osdependent.InitOSDependend(serviceConfig)
+	if err != nil {
+		clog.Logger.Alertf("error starting os dependend worker: %s", err.Error())
+		os.Exit(1)
+	}
+
+	dto.InitCommand()
 }
 
 func getApikey() string {

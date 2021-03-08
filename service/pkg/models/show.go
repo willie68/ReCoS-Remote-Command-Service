@@ -38,11 +38,12 @@ type ActionInfo struct {
 
 // PageInfo is all needed info for the action client of a defined profile page
 type PageInfo struct {
-	Name    string      `json:"name"`
-	Columns int         `json:"columns"`
-	Rows    int         `json:"rows"`
-	Toolbar ToolbarType `json:"toolbar"`
-	Cells   []string    `json:"cells"`
+	Name        string      `json:"name"`
+	Description string      `json:"description"`
+	Columns     int         `json:"columns"`
+	Rows        int         `json:"rows"`
+	Toolbar     ToolbarType `json:"toolbar"`
+	Cells       []string    `json:"cells"`
 }
 
 // Message is a message from the server to the client to update an action

@@ -1,0 +1,131 @@
+name: Willie Home
+description: profile for willies home
+pages:
+  - name: page1
+    columns: 2
+    rows: 2
+    cells:
+      - action2_1
+      - action2_2
+      - action2
+  - name: page2
+    columns: 3
+    rows: 3
+    cells:
+      - action1
+      - clock
+      - cpuload
+      - cputemp
+      - action2_1
+      - action2_2
+      - action2
+actions:
+  - type: SINGLE
+    name: action1
+    title: short delay
+    description: Just a short delay
+    icon: hourglass_begin.png
+    fontsize: 10
+    fontcolor: "#FF0000"
+    outlined: true
+    runone: true
+    commands:
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 2
+      - type: EXECUTE
+        name: execute
+        parameters:
+          command: echo.bat
+          args:
+            - "Hello world"
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 1
+  - type: MULTI
+    name: action2
+    title: Multi Action
+    description: description for action
+    icon: hand_share.png
+    actions:
+      - action2_1
+      - action2_2
+      - action2_3
+  - type: SINGLE
+    name: action2_1
+    title: Action 1 Title
+    description: description for action
+    icon: hand_thumbsup.png
+    commands:
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 2
+  - type: SINGLE
+    name: action2_2
+    title: Action 2 Title
+    description: description for action
+    icon: hand_thumbsdown.png
+    commands:
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 2
+  - type: SINGLE
+    name: action2_3
+    title: Action 3 Title
+    description: description for action
+    icon: hand_point.png
+    commands:
+      - type: DELAY
+        name: delay
+        parameters:
+          time: 2
+  - type: DISPLAY
+    name: cputemp
+    title: CPU Temp
+    description: cpu temp
+    runone: true
+    icon: company.png
+    outlined: true
+    commands:
+      - type: HARDWAREMONITOR
+        name: cpu
+        parameters:
+          sensor: "CPU/Intel Core i5-9600K/Temperature/CPU Package"
+          format: "%0.1f °C"
+          display: both
+          ymin: 30
+          ymax: 80
+          color: "#00ff00"
+  - type: DISPLAY
+    name: cpuload
+    title: CPU Load
+    description: cpu usage
+    runone: true
+    icon: company.png
+    outlined: false
+    fontcolor: white
+    commands:
+      - type: HARDWAREMONITOR
+        name: cpu
+        parameters:
+          sensor: "CPU/Intel Core i5-9600K/Load/CPU Total"
+          format: "%0.1f %"
+          display: both
+          color: "#ffff00"
+  - type: DISPLAY
+    name: clock
+    title: Clock
+    description: timer counting down 20 sec
+    runone: true
+    outlined: false
+    fontcolor: white
+    commands:
+      - type: CLOCK
+        name: clock
+        parameters:
+          format: "15:04:05\r\n02 Jan 06"
+          analog: true

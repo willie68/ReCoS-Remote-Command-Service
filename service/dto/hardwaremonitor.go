@@ -17,6 +17,16 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
+// HardwareMonitorCommandTypeInfo showing hardware sensor data
+var HardwareMonitorCommandTypeInfo = models.CommandTypeInfo{"HARDWAREMONITOR", "HardwareMonitor", "getting data from the hardware sensors", []models.CommandParameterInfo{
+	{"sensor", "string", "the sensor name like given above", "", make([]string, 0)},
+	{"format", "string", "the format string for the textual representation", "", make([]string, 0)},
+	{"display", "string", "text shows only the textual representation, graph shows both", "", []string{"text", "graph"}},
+	{"ymin", "int", "the value for the floor of the graph", "", make([]string, 0)},
+	{"ymax", "int", "the value for the top of the graph", "", make([]string, 0)},
+	{"color", "color", "color of the graph", "", make([]string, 0)},
+}}
+
 const measurepoints = 100
 const imageWidth = measurepoints
 const imageHeight = measurepoints
@@ -118,6 +128,18 @@ func (d *HardwareMonitorCommand) Init(a *Action) (bool, error) {
 					clog.Logger.Errorf("error in getting sensors: %v", err)
 				}
 				d.sensors = sensors
+				index := -1
+				for x, parameter := range HardwareMonitorCommandTypeInfo.Parameters {
+					if parameter.Name == "sensor" {
+						index = x
+					}
+				}
+				if len(d.sensors) != len(HardwareMonitorCommandTypeInfo.Parameters[index].List) {
+					HardwareMonitorCommandTypeInfo.Parameters[index].List = make([]string, 0)
+					for _, sensor := range d.sensors {
+						HardwareMonitorCommandTypeInfo.Parameters[index].List = append(HardwareMonitorCommandTypeInfo.Parameters[index].List, sensor.GetFullSensorName())
+					}
+				}
 				sensorname := d.Parameters["sensor"].(string)
 				var temp float64
 				var value string
@@ -127,21 +149,23 @@ func (d *HardwareMonitorCommand) Init(a *Action) (bool, error) {
 						value = sensor.ValueStr
 					}
 				}
-				if d.textonly {
-					message := models.Message{
-						Profile: d.action.Profile,
-						Action:  d.action.Name,
-						Text:    value,
-						State:   0,
-					}
-					api.SendMessage(message)
-					continue
-				}
 				d.temps = append(d.temps, temp)
 				if len(d.temps) > measurepoints {
 					d.temps = d.temps[1:]
 				}
-				d.SendPNG(value)
+				if api.HasConnectionWithProfile(a.Profile) {
+					if d.textonly {
+						message := models.Message{
+							Profile: d.action.Profile,
+							Action:  d.action.Name,
+							Text:    value,
+							State:   0,
+						}
+						api.SendMessage(message)
+						continue
+					}
+					d.SendPNG(value)
+				}
 			}
 		}
 	}()

@@ -27,6 +27,8 @@ const (
 // Page is the most visible part of this. Every Page is organised in Rows and Columns. And with this every cell is a place for holding an action
 type Page struct {
 	Name string `json:"name"`
+	// Description of this action for information
+	Description string `json:"description"`
 	// Columns of this page
 	Columns int `json:"columns"`
 	// Rows of this page
@@ -81,28 +83,29 @@ type Action struct {
 // CommandType the command type
 type CommandType string
 
-const (
-	// Delay dalay further execution a defined time
-	Delay CommandType = "DELAY"
-	// Execute start an application or shell script and optionally waits for it's finishing
-	Execute = "EXECUTE"
-	// PageCommand switch to another page
-	PageCommand = "PAGE"
-	// KeysCommand sending key strokes to the active program
-	KeysCommand = "KEYS"
-	// WindowCtrlCommand sending key strokes to the active program
-	WindowCtrlCommand = "WINDOWCTRL"
-	// Noop is a command with no operation, but the possibility to change text and icon
-	Noop = "NOOP"
-	// Timer is a count down timer, just showing the count down time in the title
-	Timer = "TIMER"
-	// Clock is a clock
-	Clock = "CLOCK"
-	// Screenshot saving to the file system
-	Screenshot = "SCREENSHOT"
-	// HardwareMonitorCommand showing hardware sensor data
-	HardwareMonitorCommand = "HARDWAREMONITOR"
-)
+type CommandTypeInfo struct {
+	// Type is the type of an command
+	Type CommandType `json:"type"`
+	// Name is the command
+	Name string `json:"name"`
+	// Description of this action for information
+	Description string `json:"description"`
+	// Parameters describes the needed parameters
+	Parameters []CommandParameterInfo `json:"parameter"`
+}
+
+type CommandParameterInfo struct {
+	// Name is the command
+	Name string `json:"name"`
+	// Type is the type of an command
+	Type string `json:"type"`
+	// Description of this action for information
+	Description string `json:"description"`
+	// Name is the command
+	Unit string `json:"unit"`
+	// List is a enumeration of possible values
+	List []string `json:"list"`
+}
 
 // Command type
 type Command struct {
@@ -110,6 +113,8 @@ type Command struct {
 	Type CommandType `json:"type"`
 	// Name is the command
 	Name string `json:"name"`
+	// Description of this action for information
+	Description string `json:"description"`
 	// Icon is the icon to show when this command is executing
 	Icon string `json:"icon"`
 	// Title is the title to show when this command is executing
@@ -162,10 +167,11 @@ func (a *Action) Copy() Action {
 // Copy make a deep copy of this action
 func (p *Page) Copy() Page {
 	page := Page{
-		Name:    p.Name,
-		Columns: p.Columns,
-		Rows:    p.Rows,
-		Toolbar: p.Toolbar,
+		Name:        p.Name,
+		Columns:     p.Columns,
+		Description: p.Description,
+		Rows:        p.Rows,
+		Toolbar:     p.Toolbar,
 	}
 	page.Cells = make([]string, 0)
 	for _, cell := range p.Cells {
@@ -177,10 +183,11 @@ func (p *Page) Copy() Page {
 // Copy make a deep copy of this action
 func (c *Command) Copy() Command {
 	command := Command{
-		Name:  c.Name,
-		Type:  c.Type,
-		Icon:  c.Icon,
-		Title: c.Title,
+		Name:        c.Name,
+		Description: c.Description,
+		Type:        c.Type,
+		Icon:        c.Icon,
+		Title:       c.Title,
 	}
 	var buf bytes.Buffer
 	enc := gob.NewEncoder(&buf)

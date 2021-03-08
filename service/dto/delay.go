@@ -8,6 +8,10 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
+var DelayCommandTypeInfo = models.CommandTypeInfo{"DELAY", "Delay", "Setting up a short delay", []models.CommandParameterInfo{
+	{"time", "int", "delay time in seconds", " Seconds", make([]string, 0)},
+}}
+
 // DelayCommand is a command to execute a delay. Using time for getting the ttime in seconds to delay the execution.
 type DelayCommand struct {
 	Parameters map[string]interface{}

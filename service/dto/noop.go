@@ -4,6 +4,9 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
+// NoopCommandTypeInfo is a command with no operation, but the possibility to change text and icon
+var NoopCommandTypeInfo = models.CommandTypeInfo{"NOOP", "Noop", "do nothing", []models.CommandParameterInfo{}}
+
 // NoopCommand is a command to do nothing.
 type NoopCommand struct {
 	Parameters map[string]interface{}
@@ -24,5 +27,5 @@ func (d *NoopCommand) Stop(a *Action) (bool, error) {
 func (d *NoopCommand) Execute(a *Action, requestMessage models.Message) (bool, error) {
 	if IsSingleClick(requestMessage) {
 	}
-	return false, nil
+	return true, nil
 }

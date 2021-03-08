@@ -54,7 +54,7 @@
             cellactions[x][y].type == 'SINGLE' ||
             cellactions[x][y].type == 'MULTI'
           "
-        ></Action>
+        />
         <Display
           :title="cellactions[x][y].title"
           :actionHeight="actionHeight"
@@ -67,7 +67,12 @@
           :fontcolor="cellactions[x][y].fontcolor"
           :outlined="cellactions[x][y].outlined"
           v-if="cellactions[x][y].type == 'DISPLAY'"
-        ></Display>
+        />
+        <None
+          :actionHeight="actionHeight"
+          :actionWidth="actionWidth"
+          v-if="cellactions[x][y].type == 'NONE'"
+        />
       </div>
     </div>
   </div>
@@ -76,12 +81,14 @@
 <script>
 import Action from "./components/Action.vue";
 import Display from "./components/Display.vue";
+import None from "./components/None.vue";
 
 export default {
   name: "App",
   components: {
     Action,
     Display,
+    None,
   },
   data() {
     return {
@@ -141,7 +148,7 @@ export default {
     },
   },
   mounted() {
-    console.log("service url:" + this.baseURL);
+    this.servicePort = 9280;
     this.baseURL =
       window.location.protocol +
       "//" +
@@ -165,8 +172,6 @@ export default {
         this.changeProfile();
       })
       .catch((err) => console.log(err.message));
-  },
-  created: function () {
     this.connectWS();
   },
   methods: {
@@ -187,7 +192,7 @@ export default {
         if (jsonObject.profile == that.profileName) {
           if (jsonObject.action) {
             if (that.$refs[jsonObject.action]) {
-              console.log(event.data);
+              // console.log(event.data);
               // console.log("found action");
               that.$refs[jsonObject.action].saveImg = jsonObject.imageurl;
               that.$refs[jsonObject.action].saveTitle = jsonObject.title;
@@ -196,7 +201,7 @@ export default {
             }
           }
           if (jsonObject.page) {
-            //console.log("change page ", jsonObject.page);
+            // console.log("change page ", jsonObject.page);
             that.newPageName = jsonObject.page;
             return;
           }
@@ -205,15 +210,15 @@ export default {
       };
 
       this.connection.onopen = function (event) {
-        console.log(event);
-        console.log("Successfully connected to the websocket server...");
+        // console.log(event);
+        // console.log("Successfully connected to the websocket server...");
         var message = { profile: that.profileName, command: "change" };
         that.connection.send(JSON.stringify(message));
       };
 
       this.connection.onclose = function (event) {
-        console.log(event);
-        console.log("Connection closed to the websocket server...");
+        // console.log(event);
+        // console.log("Connection closed to the websocket server...");
         if (that.connection) {
           that.connection.close(1000, "Work complete");
           that.connection = undefined;
@@ -237,31 +242,48 @@ export default {
         .catch((err) => console.log(err.message));
     },
     changePage(pageName) {
-      console.log("change page to: ", pageName);
+      // console.log("change page to: ", pageName);
       this.pageName = pageName;
       this.activeProfile.pages.forEach((page) => {
         if (pageName == page.name) {
           this.activePage = page;
         }
       });
-      console.log(this.activePage);
+      // console.log("adding actions to page: " + this.activePage.name);
+      // console.log("cell count: " + this.activePage.cells.length);
       this.cellactions = new Array(this.activePage.rows);
       for (let x = 0; x < this.activePage.rows; x++) {
         this.cellactions[x] = new Array(this.activePage.columns);
         for (let y = 0; y < this.activePage.columns; y++) {
           var action = undefined;
-          let index = x * this.activePage.rows + y;
-          let actionName = this.activePage.cells[index];
-          this.activeProfile.actions.forEach((profileAction, index) => {
-            if (profileAction.name == actionName) {
-              action = profileAction;
+          let index = x * this.activePage.columns + y;
+          if (index < this.activePage.cells.length) {
+            let actionName = this.activePage.cells[index];
+            if (actionName) {
+              this.activeProfile.actions.forEach((profileAction, z) => {
+                if (profileAction.name == actionName) {
+                  action = profileAction;
+                }
+              });
+              if (action) {
+                // console.log("adding action (" + x + "," + y + ") " + index + ":" + action.name );
+                this.cellactions[x][y] = action;
+              } else {
+                // console.log("missing action (" + x + "," + y + ") " + index);
+                this.cellactions[x][y] = {
+                  type: "DISPLAY",
+                  title: "Action not defined",
+                  name: "none",
+                  fontcolor: "#FF0000",
+                };
+              }
+              continue;
             }
-          });
-          if (action) {
-            this.cellactions[x][y] = action;
-          } else {
-            this.cellactions[x][y] = {};
           }
+          // console.log("adding none(" + x + "," + y + ") " + index);
+          this.cellactions[x][y] = {
+            type: "NONE",
+          };
         }
 
         this.cellWidth =
