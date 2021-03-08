@@ -11,6 +11,7 @@ import (
 	"sync"
 	"time"
 
+	"wkla.no-ip.biz/remote-desk-service/config"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
@@ -161,7 +162,8 @@ func (o *OpenHardwareMonitor) updateSensorList() error {
 }
 
 func writingSensorList(sensorlist []models.Sensor) {
-	f, err := os.Create("sensorlist.txt")
+	configFolder, err := config.GetDefaultConfigFolder()
+	f, err := os.Create(configFolder + "/sensorlist.txt")
 	if err != nil {
 		fmt.Println(err)
 		return

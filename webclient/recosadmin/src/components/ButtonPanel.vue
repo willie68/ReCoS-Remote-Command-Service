@@ -28,7 +28,7 @@ export default {
   props: {
     rows: {},
     columns: {},
-    actions: [],
+    actions: {},
     page: {},
   },
   data() {

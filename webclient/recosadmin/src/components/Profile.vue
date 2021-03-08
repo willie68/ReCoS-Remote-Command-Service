@@ -1,12 +1,29 @@
 <template>
-  <TabView class="tabview-custom">
-    <TabPanel header="Actions" class="tabpanel-custom">
-      <Actions :profile="profile"></Actions>
-    </TabPanel>
-    <TabPanel header="Pages">
-      <Pages :profile="profile"></Pages>
-    </TabPanel>
-  </TabView>
+  <Panel :header="'Profile: ' + activeProfile.name" class="profile-panel-custom">
+    <div class="p-fluid p-mt-2">
+      <div class="p-field p-grid">
+        <label for="description" class="p-col-2 p-mb-2 p-md-2 p-mb-0 p-ml-2"
+          >Description</label
+        >
+        <div class="p-col-2 p-md-9">
+          <InputText
+            id="description"
+            type="text"
+            v-model="activeProfile.description"
+          />
+        </div>
+      </div>
+    </div>
+    <hr/>
+    <TabView class="tabview-custom">
+      <TabPanel header="Actions">
+        <Actions :profile="activeProfile"></Actions>
+      </TabPanel>
+      <TabPanel header="Pages">
+        <Pages :profile="activeProfile"></Pages>
+      </TabPanel>
+    </TabView>
+  </Panel>
 </template>
 
 <script>
@@ -21,6 +38,20 @@ export default {
   },
   props: {
     profile: {},
+  },
+  data() {
+    return {
+      activeProfile: {},
+      profileDirty: false,
+    };
+  },
+  watch: {
+    profile(newProfile) {
+      if (newProfile) {
+        console.log("changing profile to " + newProfile.name);
+        this.activeProfile = newProfile;
+      }
+    },
   },
 };
 </script>

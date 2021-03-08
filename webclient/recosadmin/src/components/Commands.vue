@@ -35,7 +35,7 @@
         </Panel>
       </SplitterPanel>
       <SplitterPanel :size="80">
-        <Command :command="activeCommand"/>
+        <Command :command="activeCommand" v-on:change="changeCommand"/>
       </SplitterPanel>
     </Splitter>
 </template>
@@ -57,9 +57,17 @@ export default {
   },
  watch: {
     action(action) {
-      this.activeCommand = action.commands[0]
+      if (action.commands && (action.commands.length > 0)) {
+        this.activeCommand = action.commands[0]
+      }
     },
   },
+  methods: {
+    changeCommand(command) {
+      console.log("command changed:" + command.name );
+      console.log(JSON.stringify(this.action))
+    }
+  }
 };
 </script>
 
