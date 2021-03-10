@@ -14,7 +14,7 @@ import (
 )
 
 // Profiles contains all profiles defined for this server
-var Profiles []Profile
+var Profiles []*Profile
 var count int
 
 // CommandExecutor is an interface for executing a command. Every command implementation has to implement this.
@@ -47,7 +47,7 @@ type Action struct {
 
 // InitProfiles initialse the dto profiles for saving/retrieving status of and executing every action
 func InitProfiles(configProfiles []models.Profile) error {
-	Profiles = make([]Profile, 0)
+	Profiles = make([]*Profile, 0)
 	for _, configProfile := range configProfiles {
 		dtoProfile, err := InitProfile(configProfile.Name)
 		if err == nil {
@@ -58,7 +58,7 @@ func InitProfiles(configProfiles []models.Profile) error {
 }
 
 // InitProfile initialse the dto profiles for saving/retrieving status of and executing every action
-func InitProfile(profileName string) (Profile, error) {
+func InitProfile(profileName string) (*Profile, error) {
 	for _, configProfile := range config.Profiles {
 		if profileName != configProfile.Name {
 			continue
@@ -76,7 +76,7 @@ func InitProfile(profileName string) (Profile, error) {
 				Profile:  configProfile.Name,
 				RunOne:   configAction.RunOne,
 				Name:     configAction.Name,
-				Config:   configAction,
+				Config:   *configAction,
 				Title:    title,
 				counter:  0,
 				Commands: make(map[string]CommandExecutor),
@@ -87,17 +87,28 @@ func InitProfile(profileName string) (Profile, error) {
 				action.State = 0
 			}
 			for _, command := range configAction.Commands {
-				commandExecutor := GetCommand(command)
+				commandExecutor := GetCommand(*command)
 				if commandExecutor != nil {
 					commandExecutor.Init(&action)
-					action.Commands[command.Name] = commandExecutor
+					action.Commands[command.ID] = commandExecutor
 				}
 			}
 			dtoProfile.Actions = append(dtoProfile.Actions, &action)
 		}
-		return dtoProfile, nil
+		return &dtoProfile, nil
 	}
-	return Profile{}, errors.New("profile not found")
+	return nil, errors.New("profile not found")
+}
+
+// ReinitProfile reinitialse the dto profiles
+func ReinitProfile(profileName string) error {
+	dtoProfile, err := InitProfile(profileName)
+
+	if err == nil {
+		Profiles = append(Profiles, dtoProfile)
+	}
+
+	return err
 }
 
 // ReinitProfiles reinitialse the dto profiles
@@ -121,6 +132,24 @@ func CloseProfile(profileName string) error {
 		}
 	}
 	return nil
+}
+
+// RemoveProfile removing a profile from the active profiles array
+func RemoveProfile(profileName string) error {
+	pos := -1
+	for x, profile := range Profiles {
+		if strings.EqualFold(profile.Name, profileName) {
+			pos = x
+		}
+	}
+
+	if pos >= 0 {
+		Profiles[pos] = Profiles[len(Profiles)-1]
+		// We do not need to put s[i] at the end, as it will be discarded anyway
+		Profiles = Profiles[:len(Profiles)-1]
+		return nil
+	}
+	return fmt.Errorf("Profile %s not found", profileName)
 }
 
 // Execute an action from a profile
@@ -148,7 +177,7 @@ func doExecute(action *Action, message models.Message) {
 func GetProfile(profileName string) (*Profile, error) {
 	for _, profile := range Profiles {
 		if strings.EqualFold(profile.Name, profileName) {
-			return &profile, nil
+			return profile, nil
 		}
 	}
 	return nil, fmt.Errorf("Profile %s not found", profileName)
@@ -224,7 +253,7 @@ func doWorkSingle(a *Action, sendingAction *Action, requestMessage models.Messag
 		}
 		api.SendMessage(message)
 		//cmdExecutor := GetCommand(command)
-		cmdExecutor := a.Commands[command.Name]
+		cmdExecutor := a.Commands[command.ID]
 		if cmdExecutor == nil {
 			clog.Logger.Errorf("can't find command with type: %s", command.Type)
 		}
@@ -267,9 +296,9 @@ func (a *Action) Close() error {
 
 		for _, command := range a.Config.Commands {
 			//cmdExecutor := GetCommand(command)
-			cmdExecutor := a.Commands[command.Name]
+			cmdExecutor := a.Commands[command.ID]
 			if cmdExecutor == nil {
-				clog.Logger.Errorf("can't find command: %s, (%s)", command.Name, command.Type)
+				clog.Logger.Errorf("can't find command: %s, (%s)", command.ID, command.Name, command.Type)
 				continue
 			}
 			_, err := cmdExecutor.Stop(a)

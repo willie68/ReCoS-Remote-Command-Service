@@ -128,8 +128,9 @@ func PutProfile(response http.ResponseWriter, request *http.Request) {
 
 	go func() {
 		dto.CloseProfile(profile.Name)
+		dto.RemoveProfile(profile.Name)
 		config.UpdateProfile(profile)
-		if err := dto.ReinitProfiles(config.Profiles); err != nil {
+		if err := dto.ReinitProfile(profile.Name); err != nil {
 			clog.Logger.Alertf("can't create profiles: %s", err.Error())
 		}
 	}()
@@ -149,9 +150,15 @@ func DeleteProfile(response http.ResponseWriter, request *http.Request) {
 	for _, profile := range config.Profiles {
 		if strings.EqualFold(profile.Name, profileName) {
 			dto.CloseProfile(profileName)
-			profile, err := config.DeleteProfile(profileName)
+			profile, err := config.RemoveProfile(profileName)
 			if err != nil {
 				clog.Logger.Debug("Error deleting profile: \n" + err.Error())
+				api.Err(response, request, err)
+				return
+			}
+			err = config.DeleteProfileFile(profileName)
+			if err != nil {
+				clog.Logger.Debug("Error deleting profile file: \n" + err.Error())
 				api.Err(response, request, err)
 				return
 			}

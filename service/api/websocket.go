@@ -83,6 +83,7 @@ func HasConnectionWithProfile(profile string) bool {
 
 // SendMessage sending a message as a string
 func SendMessage(message models.Message) {
+	clog.Logger.Debugf("sending message: %s, %s, %s", message.Profile, message.Action, message.Command)
 	for _, conn := range Connections {
 		if conn.Connected {
 			if strings.EqualFold(message.Profile, conn.profile) {

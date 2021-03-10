@@ -1,6 +1,7 @@
 package config
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -60,9 +61,25 @@ func InitProfiles(folder string) error {
 		if err != nil {
 			return err
 		}
+		profile = setupCommandID(profile)
 		Profiles = append(Profiles, profile)
 	}
 	return nil
+}
+
+func setupCommandID(profile models.Profile) models.Profile {
+	count := 0
+	for x := range profile.Actions {
+		action := profile.Actions[x]
+		for y := range action.Commands {
+			command := action.Commands[y]
+			command.ID = fmt.Sprintf("%s_%d", command.Type, count)
+			count++
+		}
+	}
+	jsonProfile, _ := json.Marshal(profile)
+	fmt.Println(string(jsonProfile))
+	return profile
 }
 
 // SaveProfileFile saving the profile
@@ -122,16 +139,16 @@ func AddProfile(profile models.Profile) error {
 // UpdateProfile adding a profile to the profile list
 func UpdateProfile(profile models.Profile) error {
 	if HasProfile(profile.Name) {
-		Profiles = append(Profiles, profile)
-		return nil
+		_, err := RemoveProfile(profile.Name)
+		if err != nil {
+			return err
+		}
 	}
-	DeleteProfile(profile.Name)
-	AddProfile(profile)
-	return nil
+	err := AddProfile(profile)
+	return err
 }
 
-// DeleteProfile adding a profile to the profile list
-func DeleteProfile(profileName string) (models.Profile, error) {
+func RemoveProfile(profileName string) (models.Profile, error) {
 	if !HasProfile(profileName) {
 		return models.Profile{}, errors.New("Profile not exists")
 	}
@@ -143,12 +160,17 @@ func DeleteProfile(profileName string) (models.Profile, error) {
 			break
 		}
 	}
+	return myProfile, nil
+}
+
+// DeleteProfileFile adding a profile to the profile list
+func DeleteProfileFile(profileName string) error {
 	filename := fmt.Sprintf("%s/%s.yaml", profileFolder, profileName)
 	if _, err := os.Stat(filename); !os.IsNotExist(err) {
 		err := os.Remove(filename)
-		return myProfile, err
+		return err
 	}
-	return models.Profile{}, errors.New("Profile not exists")
+	return nil
 }
 
 func remove(s []models.Profile, i int) []models.Profile {
