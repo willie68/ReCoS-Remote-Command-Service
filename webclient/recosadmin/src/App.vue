@@ -173,19 +173,19 @@ export default {
   },
   methods: {
     togglePwdView() {
-      this.showPwd = !this.showPwd
+      this.showPwd = !this.showPwd;
       if (this.showPwd) {
-        this.pwdType = "text"
+        this.pwdType = "text";
       } else {
-        this.pwdType = "password"
+        this.pwdType = "password";
       }
     },
     createProfile() {
-      this.dialogProfileVisible = true
+      this.dialogProfileVisible = true;
     },
     saveProfile() {
-      console.log("Save profile:" + this.activeProfile.name)
-      this.dialogProfileVisible = false
+      console.log("Save profile:" + this.activeProfile.name);
+      this.dialogProfileVisible = false;
       fetch(this.profileURL + "/" + this.activeProfile.name, {
         method: "PUT",
         body: JSON.stringify(this.activeProfile),
@@ -197,14 +197,14 @@ export default {
         .then((response) => {
           if (!response.ok) {
             response.json().then((err) => {
-            console.log(err)
-            this.$toast.add({
-              severity: "error",
-              summary: "Delete",
-              detail: err.message,
-              life: 3000,
-            })
-            })
+              console.log(err);
+              this.$toast.add({
+                severity: "error",
+                summary: "Delete",
+                detail: err.message,
+                life: 3000,
+              });
+            });
           }
         })
         .catch((err) => {
@@ -218,13 +218,12 @@ export default {
         });
     },
     saveNewProfile(profile) {
-      this.dialogProfileVisible = false
-      console.log(JSON.stringify(profile))
-      console.log("Create profile:" + profile.name)
-/*      this.dialogProfileVisible = false
-      fetch(this.profileURL + "/" + this.activeProfile.name, {
-        method: "PUT",
-        body: JSON.stringify(this.activeProfile),
+      this.dialogProfileVisible = false;
+      console.log(JSON.stringify(profile));
+      console.log("Create profile:" + profile.name);
+      fetch(this.profileURL + "/", {
+        method: "POST",
+        body: JSON.stringify(profile),
         headers: new Headers({
           "Content-Type": "application/json",
           Authorization: `Basic ${btoa(`admin:${this.$store.state.password}`)}`,
@@ -233,44 +232,46 @@ export default {
         .then((response) => {
           if (!response.ok) {
             response.json().then((err) => {
-            console.log(err)
-            this.$toast.add({
-              severity: "error",
-              summary: "Delete",
-              detail: err.message,
-              life: 3000,
-            })
-            })
+              console.log(err);
+              this.$toast.add({
+                severity: "error",
+                summary: "Create",
+                detail: err.message,
+                life: 3000,
+              });
+            });
+          } else {
+            this.profiles.push(profile.name);
+            this.activeProfileName = profile.name;
           }
         })
         .catch((err) => {
           console.log(err.message);
           this.$toast.add({
             severity: "warn",
-            summary: "Delete",
+            summary: "Create",
             detail: err.message,
             life: 3000,
           });
         });
-        */
     },
     exportProfile() {
-      console.log("export profile: " + this.activeProfileName)
-      window.open(this.profileURL + "/" + this.activeProfileName + "/export")
+      console.log("export profile: " + this.activeProfileName);
+      window.open(this.profileURL + "/" + this.activeProfileName + "/export");
     },
   },
   watch: {
     profile(newProfile) {
       if (newProfile) {
-        console.log("changing profile to " + newProfile.name)
-        this.activeProfile = newProfile
+        console.log("changing profile to " + newProfile.name);
+        this.activeProfile = newProfile;
       }
     },
     activeProfile: {
       deep: true,
       handler(newProfile) {
-        console.log("app: changing profile " + newProfile.name)
-        this.profileDirty = true
+        console.log("app: changing profile " + newProfile.name);
+        this.profileDirty = true;
       },
     },
   },

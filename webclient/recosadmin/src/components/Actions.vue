@@ -50,7 +50,11 @@ export default {
   },
   watch: {
     profile(profile) {
-      this.activeAction = profile.actions[0];
+      if (profile.actions) {
+        this.activeAction = profile.actions[0];
+      } else {
+        this.activeAction = {};
+      }
     },
   },
 };

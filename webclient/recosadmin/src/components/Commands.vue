@@ -6,22 +6,18 @@
           <template #icons>
             <Button
               class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
-              @click="toggle"
               icon="pi pi-plus"
             />
             <Button
               class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
-              @click="toggle"
               icon="pi pi-arrow-up"
             />
             <Button
               class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
-              @click="toggle"
               icon="pi pi-arrow-down"
             />
             <Button
               class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
-              @click="toggle"
               icon="pi pi-trash"
             />
           </template>

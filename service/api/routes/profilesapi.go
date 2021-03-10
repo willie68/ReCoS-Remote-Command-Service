@@ -84,8 +84,9 @@ func PostProfile(response http.ResponseWriter, request *http.Request) {
 	}
 
 	go func() {
+		config.SaveProfileFile(profile)
 		config.AddProfile(profile)
-		if err := dto.ReinitProfiles(config.Profiles); err != nil {
+		if _, err := dto.InitProfile(profile.Name); err != nil {
 			clog.Logger.Alertf("can't create profiles: %s", err.Error())
 		}
 	}()
