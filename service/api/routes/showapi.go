@@ -2,6 +2,7 @@ package routes
 
 import (
 	"net/http"
+	"sort"
 	"strings"
 
 	"github.com/go-chi/chi"
@@ -37,6 +38,9 @@ func GetUIProfilesEndpoint(response http.ResponseWriter, request *http.Request) 
 		}
 		profileInfos = append(profileInfos, info)
 	}
+
+	sort.Slice(profileInfos, func(i, j int) bool { return profileInfos[i].Name < profileInfos[j].Name })
+
 	result := models.ProfileInfos{
 		Profiles: profileInfos,
 	}
