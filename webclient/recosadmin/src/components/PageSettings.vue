@@ -1,7 +1,7 @@
 <template>
   <Panel class="page-panel-custom">
     <template #header>
-        <b>{{ profile.name }} # {{ page.name }}</b>
+      <b>{{ profile.name }} # {{ activePage.name }}</b>
     </template>
     <template #icons>
       <Button class="p-panel-header-icon p-link p-mr-2" @click="toggle">
@@ -13,25 +13,46 @@
     <div class="p-fluid p-formgrid p-grid">
       <div class="p-field p-col">
         <label for="name">name</label>
-        <InputText id="name" type="text" v-model="name" />
+        <InputText id="name" type="text" v-model="activePage.name" />
       </div>
       <div class="p-field p-col">
         <label for="rows">rows</label>
-        <InputNumber id="rows" showButtons v-model="rows" :min="1" :max="10" />
+        <InputNumber
+          id="rows"
+          showButtons
+          v-model="activePage.rows"
+          :min="1"
+          :max="10"
+        />
       </div>
       <div class="p-field p-col">
         <label for="columns">columns</label>
         <InputNumber
           id="columns"
           showButtons
-          v-model="columns"
+          v-model="activePage.columns"
           :min="1"
           :max="10"
         />
       </div>
+      <div class="p-field p-col">
+        <label for="rows">Type</label>
+        <Dropdown
+          v-model="activePage.toolbar"
+          :options="enumPageTypes"
+          placeholder="select a toolbar type"
+          optionLabel="name"
+          optionValue="type"
+        />
+      </div>
     </div>
   </Panel>
-  <ButtonPanel :rows="rows" :columns="columns" :actions="profile.actions" :page="page"></ButtonPanel>
+  <ButtonPanel
+    :rows="activePage.rows"
+    :columns="activePage.columns"
+    :actions="profile.actions"
+    :page="activePage"
+  ></ButtonPanel>
 </template>
 
 <script>
@@ -43,13 +64,10 @@ export default {
   },
   props: {
     page: {},
-    profile: {name: ""},
+    profile: { name: "" },
   },
   data() {
     return {
-      rows: 3,
-      columns: 5,
-      name: "",
       profileitems: [
         {
           label: "Options",
@@ -96,6 +114,11 @@ export default {
           ],
         },
       ],
+      activePage: {},
+      enumPageTypes: [
+        { name: "Show", type: "show" },
+        { name: "Hide", type: "hide" },
+      ],
     };
   },
   methods: {
@@ -108,9 +131,14 @@ export default {
   created() {},
   watch: {
     page(page) {
-      this.name = page.name;
-      this.rows = page.rows;
-      this.columns = page.columns;
+      this.activePage = page;
+    },
+    profile(profile) {
+      if (profile.pages) {
+        this.activePage = profile.pages[0];
+      } else {
+        this.activePage = {};
+      }
     },
   },
 };
@@ -119,8 +147,7 @@ export default {
 
 <style>
 .page-panel-custom .p-panel-header {
-    margin: 0px;
-    padding: 2px !important;
+  margin: 0px;
+  padding: 2px !important;
 }
-
 </style>
