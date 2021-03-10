@@ -39,24 +39,25 @@
 
   <Profile :profile="activeProfile"></Profile>
   <AppFooter></AppFooter>
-  <EditProfile
+  <AddProfile
     :visible="dialogProfileVisible"
-    v-on:save="saveProfile"
+    v-on:save="saveNewProfile($event)"
     v-on:cancel="this.dialogProfileVisible = false"
-  ></EditProfile>
+    :profiles="profiles"
+  ></AddProfile>
   <Toast position="top-right" />
 </template>
 
 <script>
 import Profile from "./components/Profile.vue";
 import AppFooter from "./components/AppFooter.vue";
-import EditProfile from "./components/EditProfile.vue";
+import AddProfile from "./components/AddProfile.vue";
 
 export default {
   components: {
     Profile,
     AppFooter,
-    EditProfile,
+    AddProfile,
   },
   data() {
     return {
@@ -73,6 +74,9 @@ export default {
         {
           label: "Add",
           icon: "pi pi-plus",
+          command: () => {
+            this.createProfile();
+          },
         },
         {
           label: "Delete",
@@ -89,7 +93,6 @@ export default {
         },
       ],
       dialogProfileVisible: false,
-      editProfile: { name: "", description: "" },
     };
   },
   computed: {
@@ -170,16 +173,19 @@ export default {
   },
   methods: {
     togglePwdView() {
-      this.showPwd = !this.showPwd;
+      this.showPwd = !this.showPwd
       if (this.showPwd) {
-        this.pwdType = "text";
+        this.pwdType = "text"
       } else {
-        this.pwdType = "password";
+        this.pwdType = "password"
       }
     },
+    createProfile() {
+      this.dialogProfileVisible = true
+    },
     saveProfile() {
-      console.log("Save profile:" + this.activeProfile.name);
-      this.dialogProfileVisible = false;
+      console.log("Save profile:" + this.activeProfile.name)
+      this.dialogProfileVisible = false
       fetch(this.profileURL + "/" + this.activeProfile.name, {
         method: "PUT",
         body: JSON.stringify(this.activeProfile),
@@ -211,23 +217,60 @@ export default {
           });
         });
     },
+    saveNewProfile(profile) {
+      this.dialogProfileVisible = false
+      console.log(JSON.stringify(profile))
+      console.log("Create profile:" + profile.name)
+/*      this.dialogProfileVisible = false
+      fetch(this.profileURL + "/" + this.activeProfile.name, {
+        method: "PUT",
+        body: JSON.stringify(this.activeProfile),
+        headers: new Headers({
+          "Content-Type": "application/json",
+          Authorization: `Basic ${btoa(`admin:${this.$store.state.password}`)}`,
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            response.json().then((err) => {
+            console.log(err)
+            this.$toast.add({
+              severity: "error",
+              summary: "Delete",
+              detail: err.message,
+              life: 3000,
+            })
+            })
+          }
+        })
+        .catch((err) => {
+          console.log(err.message);
+          this.$toast.add({
+            severity: "warn",
+            summary: "Delete",
+            detail: err.message,
+            life: 3000,
+          });
+        });
+        */
+    },
     exportProfile() {
-      console.log("export profile: " + this.activeProfileName);
-      window.open(this.profileURL + "/" + this.activeProfileName + "/export");
+      console.log("export profile: " + this.activeProfileName)
+      window.open(this.profileURL + "/" + this.activeProfileName + "/export")
     },
   },
   watch: {
     profile(newProfile) {
       if (newProfile) {
-        console.log("changing profile to " + newProfile.name);
-        this.activeProfile = newProfile;
+        console.log("changing profile to " + newProfile.name)
+        this.activeProfile = newProfile
       }
     },
     activeProfile: {
       deep: true,
       handler(newProfile) {
-        console.log("app: changing profile " + newProfile.name);
-        this.profileDirty = true;
+        console.log("app: changing profile " + newProfile.name)
+        this.profileDirty = true
       },
     },
   },

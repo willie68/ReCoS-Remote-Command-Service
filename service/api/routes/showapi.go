@@ -23,12 +23,6 @@ func ShowRoutes() *chi.Mux {
 
 // GetUIProfilesEndpoint getting all profile names
 func GetUIProfilesEndpoint(response http.ResponseWriter, request *http.Request) {
-	// user := getUsername(request)
-	// if user == "" {
-	// 	msg := fmt.Sprintf("user header %s missing", api.UserHeader)
-	// 	api.Err(response, request, serror.BadRequest(nil, "missing-user", msg))
-	// 	return
-	// }
 	var profileInfos []models.ProfileShortInfo
 	profileInfos = make([]models.ProfileShortInfo, 0)
 	for _, profile := range config.Profiles {
@@ -49,13 +43,6 @@ func GetUIProfilesEndpoint(response http.ResponseWriter, request *http.Request) 
 
 // GetUIProfileEndpoint getting all profile names
 func GetUIProfileEndpoint(response http.ResponseWriter, request *http.Request) {
-	// user := getUsername(request)
-	// if user == "" {
-	// 	msg := fmt.Sprintf("user header %s missing", api.UserHeader)
-	// 	api.Err(response, request, serror.BadRequest(nil, "missing-user", msg))
-	// 	return
-	// }
-
 	profileName, err := api.Param(request, "profileName")
 	if err != nil {
 		clog.Logger.Debug("Error reading profile name: \n" + err.Error())

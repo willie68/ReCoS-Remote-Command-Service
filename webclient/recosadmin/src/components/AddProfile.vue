@@ -1,7 +1,7 @@
 <template>
   <Dialog v-model:visible="dialogProfileVisible">
     <template #header>
-      <h3>Edit profile</h3>
+      <h3>Add profile</h3>
     </template>
     <div class="p-fluid">
       <div class="p-field p-grid">
@@ -10,9 +10,10 @@
           <InputText
             id="name"
             type="text"
-            v-model="editProfile.name"
+            v-model="addProfile.name"
             class="p-ml-2"
-            :disabled="edit" 
+            :disabled="edit"
+            :class="{ nameMissing: !isNameOK }"
           />
         </div>
       </div>
@@ -24,7 +25,7 @@
           <InputText
             id="description"
             type="text"
-            v-model="editProfile.description"
+            v-model="addProfile.description"
             class="p-ml-2"
           />
         </div>
@@ -37,24 +38,26 @@
         class="p-button-text"
         @click="cancel"
       />
-      <Button label="Save" icon="pi pi-check" autofocus @click="save" />
+      <Button label="Save" icon="pi pi-check" autofocus @click="save" :disabled="!isNameOK" />
     </template>
   </Dialog>
 </template>
 
 <script>
 export default {
-  name: "EditProfile",
+  name: "AddProfile",
   components: {},
   props: {
     profile: {},
     visible: Boolean,
     edit: Boolean,
+    profiles: {},
   },
   data() {
     return {
       dialogProfileVisible: false,
-      editProfile: { name: "", description: "" },
+      addProfile: { name: "", description: "" },
+      isNameOK: true,
     };
   },
   methods: {
@@ -62,16 +65,36 @@ export default {
       this.$emit("cancel");
     },
     save() {
-      this.$emit("save", this.editProfile);
+      this.$emit("save", this.addProfile);
     },
+    checkName(name) {
+        if (name == "") {
+          this.isNameOK = false
+          return
+        }
+        this.isNameOK = this.profiles.indexOf(name) < 0;
+    }
   },
   watch: {
     visible(visible) {
       this.dialogProfileVisible = visible;
+      this.checkName(this.addProfile.name)
     },
     profile(profile) {
-      this.editProfile = profile;
+        this.addProfile = profile;
+    },
+    addProfile: {
+      deep: true,
+      handler(profile) {
+        this.checkName(profile.name)
+      },
     },
   },
 };
 </script>
+
+<style>
+.nameMissing {
+  background: lightcoral !important;
+}
+</style>
