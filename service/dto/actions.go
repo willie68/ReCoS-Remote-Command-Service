@@ -28,7 +28,7 @@ type CommandExecutor interface {
 type Profile struct {
 	Name    string
 	Config  models.Profile
-	Actions []Action
+	Actions []*Action
 }
 
 // Action holding status of one action and can execute this action
@@ -66,7 +66,7 @@ func InitProfile(profileName string) (Profile, error) {
 		dtoProfile := Profile{
 			Name:    configProfile.Name,
 			Config:  configProfile,
-			Actions: make([]Action, 0),
+			Actions: make([]*Action, 0),
 		}
 
 		for _, configAction := range configProfile.Actions {
@@ -93,7 +93,7 @@ func InitProfile(profileName string) (Profile, error) {
 					action.Commands[command.Name] = commandExecutor
 				}
 			}
-			dtoProfile.Actions = append(dtoProfile.Actions, action)
+			dtoProfile.Actions = append(dtoProfile.Actions, &action)
 		}
 		return dtoProfile, nil
 	}
@@ -145,24 +145,24 @@ func doExecute(action *Action, message models.Message) {
 }
 
 // GetProfile return the action with the name actionName if present otherwise an error
-func GetProfile(profileName string) (Profile, error) {
+func GetProfile(profileName string) (*Profile, error) {
 	for _, profile := range Profiles {
 		if strings.EqualFold(profile.Name, profileName) {
-			return profile, nil
+			return &profile, nil
 		}
 	}
-	return Profile{}, fmt.Errorf("Profile %s not found", profileName)
+	return nil, fmt.Errorf("Profile %s not found", profileName)
 }
 
 // GetAction return the action with the name actionName if present otherwise an error
 func (p *Profile) GetAction(actionName string) (*Action, error) {
 	for index := range p.Actions {
-		action := &p.Actions[index]
+		action := p.Actions[index]
 		if strings.EqualFold(action.Name, actionName) {
 			return action, nil
 		}
 	}
-	return &Action{}, fmt.Errorf("Action %s not found", actionName)
+	return nil, fmt.Errorf("Action %s not found", actionName)
 }
 
 // Execute an action
