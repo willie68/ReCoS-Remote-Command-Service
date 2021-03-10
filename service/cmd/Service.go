@@ -311,6 +311,9 @@ func main() {
 		}()
 	}
 
+	clog.Logger.Infof("start web client: http://localhost:%d/webclient", serviceConfig.Port)
+	clog.Logger.Infof("start admin client: http://localhost:%d/webadmin", serviceConfig.Port)
+
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
 	<-c
