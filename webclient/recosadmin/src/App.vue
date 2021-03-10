@@ -82,6 +82,9 @@ export default {
           label: "Delete",
           icon: "pi pi-trash",
           class: "p-button-warning",
+          command: () => {
+            this.deleteProfile();
+          },
         },
         {
           label: "Export",
@@ -200,7 +203,7 @@ export default {
               console.log(err);
               this.$toast.add({
                 severity: "error",
-                summary: "Delete",
+                summary: "Error on save",
                 detail: err.message,
                 life: 3000,
               });
@@ -211,7 +214,7 @@ export default {
           console.log(err.message);
           this.$toast.add({
             severity: "warn",
-            summary: "Delete",
+            summary: "Error on save",
             detail: err.message,
             life: 3000,
           });
@@ -250,6 +253,43 @@ export default {
           this.$toast.add({
             severity: "warn",
             summary: "Create",
+            detail: err.message,
+            life: 3000,
+          });
+        });
+    },
+    deleteProfile() {
+      console.log("Delete profile:" + this.activeProfile.name);
+      fetch(this.profileURL + "/" + this.activeProfile.name, {
+        method: "DELETE",
+        headers: new Headers({
+          Authorization: `Basic ${btoa(`admin:${this.$store.state.password}`)}`,
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            response.json().then((err) => {
+              console.log(err);
+              this.$toast.add({
+                severity: "error",
+                summary: "Delete",
+                detail: err.message,
+                life: 3000,
+              });
+            });
+          } else {
+            this.profiles.splice(this.profiles.indexOf(this.activeProfile), 1);
+            if (this.profiles.length > 0) {
+              this.activeProfileName = this.profiles[0];
+            }
+            this.activeProfileName = ""
+          }
+        })
+        .catch((err) => {
+          console.log(err.message);
+          this.$toast.add({
+            severity: "warn",
+            summary: "Delete",
             detail: err.message,
             life: 3000,
           });

@@ -72,7 +72,7 @@ export default {
           this.isNameOK = false
           return
         }
-        this.isNameOK = this.profiles.indexOf(name) < 0;
+        this.isNameOK = !this.profiles.map(elem => elem.toLowerCase()).includes(name.toLowerCase());
     }
   },
   watch: {
