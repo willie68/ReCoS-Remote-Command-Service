@@ -140,10 +140,10 @@ export default {
       this.activeAction = action;
     },
     activeAction(activeAction) {
-      console.log("Action: activeAction changed: " + JSON.stringify(activeAction));
+//      console.log("Action: activeAction changed: " + JSON.stringify(activeAction));
     },
     profile(profile) {
-      console.log("Action change profile to " + profile.name);
+//      console.log("Action change profile to " + profile.name);
       this.activeProfile = profile;
     },
   },

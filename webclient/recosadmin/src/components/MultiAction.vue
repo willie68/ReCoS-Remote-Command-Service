@@ -35,7 +35,7 @@ export default {
   },
   watch: {
     profile(profile) {
-      console.log("multi profile changed: " + profile.name);
+//      console.log("multi profile changed: " + profile.name);
       this.actionNames = [];
       profile.actions.forEach((element) => {
         this.actionNames.push(element.name);
@@ -43,14 +43,14 @@ export default {
       this.actionlist = [this.actionNames, []];
     },
     action(action) {
-      console.log("multi action changed:" + action.name);
+//      console.log("multi action changed:" + action.name);
       this.activeAction = action;
     },
   },
   methods: {
     changeCommand(command) {
-      console.log("multi command changed:" + command.name);
-      console.log(JSON.stringify(this.action));
+//      console.log("multi command changed:" + command.name);
+//      console.log(JSON.stringify(this.action));
     },
   },
 };
