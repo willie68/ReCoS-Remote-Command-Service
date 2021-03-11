@@ -27,7 +27,7 @@
           v-model="password"
           :type="pwdType"
           name="password"
-          :class="{ passwordOK: isPwdOK, passwordMissing: !isPwdOK }"
+          :class="{ passwordOK: isPwdOK, 'p-invalid': !isPwdOK }"
         />
         <i class="pi pi-eye-slash" @click="togglePwdView()" />
         <i v-if="!showPwd" class="pi pi-eye-slash" @click="togglePwdView()" />
@@ -39,24 +39,25 @@
 
   <Profile :profile="activeProfile"></Profile>
   <AppFooter></AppFooter>
-  <EditProfile
+  <AddProfile
     :visible="dialogProfileVisible"
-    v-on:save="saveProfile"
+    v-on:save="saveNewProfile($event)"
     v-on:cancel="this.dialogProfileVisible = false"
-  ></EditProfile>
+    :profiles="profiles"
+  ></AddProfile>
   <Toast position="top-right" />
 </template>
 
 <script>
 import Profile from "./components/Profile.vue";
 import AppFooter from "./components/AppFooter.vue";
-import EditProfile from "./components/EditProfile.vue";
+import AddProfile from "./components/AddProfile.vue";
 
 export default {
   components: {
     Profile,
     AppFooter,
-    EditProfile,
+    AddProfile,
   },
   data() {
     return {
@@ -73,11 +74,17 @@ export default {
         {
           label: "Add",
           icon: "pi pi-plus",
+          command: () => {
+            this.createProfile();
+          },
         },
         {
           label: "Delete",
           icon: "pi pi-trash",
           class: "p-button-warning",
+          command: () => {
+            this.deleteProfile();
+          },
         },
         {
           label: "Export",
@@ -89,7 +96,6 @@ export default {
         },
       ],
       dialogProfileVisible: false,
-      editProfile: { name: "", description: "" },
     };
   },
   computed: {
@@ -177,6 +183,9 @@ export default {
         this.pwdType = "password";
       }
     },
+    createProfile() {
+      this.dialogProfileVisible = true;
+    },
     saveProfile() {
       console.log("Save profile:" + this.activeProfile.name);
       this.dialogProfileVisible = false;
@@ -191,14 +200,89 @@ export default {
         .then((response) => {
           if (!response.ok) {
             response.json().then((err) => {
-            console.log(err)
-            this.$toast.add({
-              severity: "error",
-              summary: "Delete",
-              detail: err.message,
-              life: 3000,
-            })
-            })
+              console.log(err);
+              this.$toast.add({
+                severity: "error",
+                summary: "Error on save",
+                detail: err.message,
+                life: 3000,
+              });
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err.message);
+          this.$toast.add({
+            severity: "warn",
+            summary: "Error on save",
+            detail: err.message,
+            life: 3000,
+          });
+        });
+    },
+    saveNewProfile(profile) {
+      this.dialogProfileVisible = false;
+      console.log(JSON.stringify(profile));
+      console.log("Create profile:" + profile.name);
+      fetch(this.profileURL + "/", {
+        method: "POST",
+        body: JSON.stringify(profile),
+        headers: new Headers({
+          "Content-Type": "application/json",
+          Authorization: `Basic ${btoa(`admin:${this.$store.state.password}`)}`,
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            response.json().then((err) => {
+              console.log(err);
+              this.$toast.add({
+                severity: "error",
+                summary: "Create",
+                detail: err.message,
+                life: 3000,
+              });
+            });
+          } else {
+            this.profiles.push(profile.name);
+            this.activeProfileName = profile.name;
+          }
+        })
+        .catch((err) => {
+          console.log(err.message);
+          this.$toast.add({
+            severity: "warn",
+            summary: "Create",
+            detail: err.message,
+            life: 3000,
+          });
+        });
+    },
+    deleteProfile() {
+      console.log("Delete profile:" + this.activeProfile.name);
+      fetch(this.profileURL + "/" + this.activeProfile.name, {
+        method: "DELETE",
+        headers: new Headers({
+          Authorization: `Basic ${btoa(`admin:${this.$store.state.password}`)}`,
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            response.json().then((err) => {
+              console.log(err);
+              this.$toast.add({
+                severity: "error",
+                summary: "Delete",
+                detail: err.message,
+                life: 3000,
+              });
+            });
+          } else {
+            this.profiles.splice(this.profiles.indexOf(this.activeProfile), 1);
+            if (this.profiles.length > 0) {
+              this.activeProfileName = this.profiles[0];
+            }
+            this.activeProfileName = ""
           }
         })
         .catch((err) => {
@@ -227,6 +311,7 @@ export default {
       deep: true,
       handler(newProfile) {
         console.log("app: changing profile " + newProfile.name);
+        //console.log(JSON.stringify(newProfile));
         this.profileDirty = true;
       },
     },

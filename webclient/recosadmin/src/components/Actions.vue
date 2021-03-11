@@ -26,7 +26,7 @@
       </Panel>
     </SplitterPanel>
     <SplitterPanel :size="80">
-      <Action :action="activeAction"></Action>
+      <Action :action="activeAction" :profile="profile"></Action>
     </SplitterPanel>
   </Splitter>
 </template>
@@ -50,7 +50,11 @@ export default {
   },
   watch: {
     profile(profile) {
-      this.activeAction = profile.actions[0];
+      if (profile.actions) {
+        this.activeAction = profile.actions[0];
+      } else {
+        this.activeAction = {};
+      }
     },
   },
 };

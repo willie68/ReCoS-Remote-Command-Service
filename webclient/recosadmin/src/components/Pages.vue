@@ -76,6 +76,7 @@ export default {
         description: "Your description here",
         rows: 3,
         columns: 5,
+        toolbar: "show",
       };
       this.activeProfile.pages.push(this.activePage);
       this.selectedPage = this.activePage;

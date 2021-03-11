@@ -81,24 +81,33 @@
         </div>
       </div>
     </div>
-    <Commands :action="activeAction" v-if="activeAction.type !=`MULTI`"/>
+    <Commands :action="activeAction" v-if="activeAction.type != `MULTI`" />
+    <MultiAction
+      :action="activeAction"
+      :profile="activeProfile"
+      v-show="activeAction.type == `MULTI`"
+    />
   </Panel>
 </template>
 
 <script>
-import Commands from "./Commands.vue"
+import Commands from "./Commands.vue";
+import MultiAction from "./MultiAction.vue";
 
 export default {
   name: "Action",
   components: {
     Commands,
+    MultiAction,
   },
   props: {
     action: {},
+    profile: {},
   },
   data() {
     return {
-      activeAction: {},
+      activeProfile: {},
+      activeAction: { name: "" },
       enumActionTypes: [
         { name: "Single", type: "SINGLE" },
         { name: "Display", type: "DISPLAY" },
@@ -129,6 +138,13 @@ export default {
   watch: {
     action(action) {
       this.activeAction = action;
+    },
+    activeAction(activeAction) {
+      console.log("Action: activeAction changed: " + JSON.stringify(activeAction));
+    },
+    profile(profile) {
+      console.log("Action change profile to " + profile.name);
+      this.activeProfile = profile;
     },
   },
   mounted() {},

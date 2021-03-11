@@ -193,7 +193,7 @@ func main() {
 			Name:        "Default",
 			Description: "This is the default profile",
 			Pages:       make([]models.Page, 0),
-			Actions:     make([]models.Action, 0),
+			Actions:     make([]*models.Action, 0),
 		}
 		newProfile.Pages = append(newProfile.Pages, models.Page{
 			Name:        "Default",
@@ -204,7 +204,7 @@ func main() {
 			Cells:       make([]string, 0),
 		})
 
-		newProfile.Actions = append(newProfile.Actions, models.Action{
+		newProfile.Actions = append(newProfile.Actions, &models.Action{
 			Type:  models.Display,
 			Name:  "Clock",
 			Title: "Clock",
@@ -310,6 +310,9 @@ func main() {
 			}
 		}()
 	}
+
+	clog.Logger.Infof("start web client: http://localhost:%d/webclient", serviceConfig.Port)
+	clog.Logger.Infof("start admin client: http://localhost:%d/webadmin", serviceConfig.Port)
 
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)

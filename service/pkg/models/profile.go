@@ -14,7 +14,7 @@ type Profile struct {
 	// Pages are the UI structure for the different pages
 	Pages []Page `json:"pages"`
 	// Actions contains the action definitions
-	Actions []Action `json:"actions"`
+	Actions []*Action `json:"actions"`
 }
 
 type ToolbarType string
@@ -75,7 +75,7 @@ type Action struct {
 	// Scheduling more than one execution will lead into a sequentiell execution
 	RunOne bool `json:"runone"`
 	// Commands are the magic behind this
-	Commands []Command `json:"commands"`
+	Commands []*Command `json:"commands"`
 	// Actions are the actions to execute behind a multi action button
 	Actions []string `json:"actions"`
 }
@@ -109,6 +109,8 @@ type CommandParameterInfo struct {
 
 // Command type
 type Command struct {
+	// ID is for internal use only
+	ID string
 	// Type is the type of an command
 	Type CommandType `json:"type"`
 	// Name is the command
@@ -129,7 +131,7 @@ func (p *Profile) Copy() Profile {
 		Name:        p.Name,
 		Description: p.Description,
 	}
-	profile.Actions = make([]Action, 0)
+	profile.Actions = make([]*Action, 0)
 	for _, action := range p.Actions {
 		profile.Actions = append(profile.Actions, action.Copy())
 	}
@@ -141,7 +143,7 @@ func (p *Profile) Copy() Profile {
 }
 
 // Copy make a deep copy of this action
-func (a *Action) Copy() Action {
+func (a *Action) Copy() *Action {
 	action := Action{
 		Name:        a.Name,
 		Description: a.Description,
@@ -153,7 +155,7 @@ func (a *Action) Copy() Action {
 		Fontcolor:   a.Fontcolor,
 		Outlined:    a.Outlined,
 	}
-	action.Commands = make([]Command, 0)
+	action.Commands = make([]*Command, 0)
 	for _, command := range a.Commands {
 		action.Commands = append(action.Commands, command.Copy())
 	}
@@ -161,7 +163,7 @@ func (a *Action) Copy() Action {
 	for _, actionName := range a.Actions {
 		action.Actions = append(action.Actions, actionName)
 	}
-	return action
+	return &action
 }
 
 // Copy make a deep copy of this action
@@ -181,7 +183,7 @@ func (p *Page) Copy() Page {
 }
 
 // Copy make a deep copy of this action
-func (c *Command) Copy() Command {
+func (c *Command) Copy() *Command {
 	command := Command{
 		Name:        c.Name,
 		Description: c.Description,
@@ -195,5 +197,5 @@ func (c *Command) Copy() Command {
 	enc.Encode(c.Parameters)
 	command.Parameters = make(map[string]interface{})
 	dec.Decode(&command.Parameters)
-	return command
+	return &command
 }

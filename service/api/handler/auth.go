@@ -23,7 +23,7 @@ func AuthCheck() func(next http.Handler) http.Handler {
 			auth := strings.SplitN(r.Header.Get("Authorization"), " ", 2)
 
 			if len(auth) != 2 || auth[0] != "Basic" {
-				http.Error(w, "authorization failed", http.StatusUnauthorized)
+				http.Error(w, "{\"message\": \"authorization failed\"}", http.StatusUnauthorized)
 				return
 			}
 
@@ -31,7 +31,7 @@ func AuthCheck() func(next http.Handler) http.Handler {
 			pair := strings.SplitN(string(payload), ":", 2)
 
 			if len(pair) != 2 || !validate(pair[0], pair[1]) {
-				http.Error(w, "authorization failed", http.StatusUnauthorized)
+				http.Error(w, "{\"message\": \"authorization failed\"}", http.StatusUnauthorized)
 				return
 			}
 
