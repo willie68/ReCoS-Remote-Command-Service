@@ -92,9 +92,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.nameMissing {
-  background: lightcoral !important;
-}
-</style>

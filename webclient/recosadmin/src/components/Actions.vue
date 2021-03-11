@@ -5,7 +5,7 @@
         <template #icons>
           <button
             class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
-            @click="toggle"
+            @click="addAction"
           >
             <span class="pi pi-plus"></span>
           </button>
@@ -29,15 +29,24 @@
       <Action :action="activeAction" :profile="profile"></Action>
     </SplitterPanel>
   </Splitter>
+  <AddName
+    :visible="addActionDialog"
+    v-model="newActionName"
+    :excludeList="actionNames"
+    v-on:save="saveNewAction($event)"
+    v-on:cancel="this.dialogNameVisible = false"
+  />
 </template>
 
 <script>
 import Action from "./Action.vue";
+import AddName from "./AddName.vue";
 
 export default {
   name: "Actions",
   components: {
     Action,
+    AddName,
   },
   props: {
     profile: {},
@@ -46,12 +55,34 @@ export default {
     return {
       activeAction: {},
       splitterHeight: "600px",
+      addActionDialog: false,
+      actionNames: null,
+      newActionName: null,
     };
+  },
+  methods: {
+    addAction() {
+      this.addActionDialog = true;
+    },
+    saveNewAction(value) {
+      console.log("Actions: add new action: " + value)
+      this.addActionDialog = false
+      newAction = {
+        name: value,
+        type: "SINGLE",
+        description: "",
+      }
+      this.profile.actions.push(newAction)
+    }
   },
   watch: {
     profile(profile) {
+      this.actionNames = [];
       if (profile.actions) {
         this.activeAction = profile.actions[0];
+        profile.actions.forEach((element) => {
+          this.actionNames.push(element.name);
+        });
       } else {
         this.activeAction = {};
       }

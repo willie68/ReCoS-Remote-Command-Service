@@ -27,7 +27,7 @@
           v-model="password"
           :type="pwdType"
           name="password"
-          :class="{ passwordOK: isPwdOK, 'p-invalid': !isPwdOK }"
+          :class="{ 'p-valid': isPwdOK, 'p-invalid': !isPwdOK }"
         />
         <i class="pi pi-eye-slash" @click="togglePwdView()" />
         <i v-if="!showPwd" class="pi pi-eye-slash" @click="togglePwdView()" />
@@ -336,15 +336,11 @@ body {
   color: #2c3e50;
 }
 
-.passwordOK {
-  background: lightgreen !important;
-}
-
-.passwordMissing {
-  background: lightcoral !important;
-}
-
 .profiledirty {
   background: lightsalmon;
+}
+
+.p-inputtext.p-valid.p-component {
+    border-color: #36f43f;
 }
 </style>
