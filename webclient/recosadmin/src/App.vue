@@ -27,7 +27,7 @@
           v-model="password"
           :type="pwdType"
           name="password"
-          :class="{ passwordOK: isPwdOK, passwordMissing: !isPwdOK }"
+          :class="{ passwordOK: isPwdOK, 'p-invalid': !isPwdOK }"
         />
         <i class="pi pi-eye-slash" @click="togglePwdView()" />
         <i v-if="!showPwd" class="pi pi-eye-slash" @click="togglePwdView()" />
@@ -311,6 +311,7 @@ export default {
       deep: true,
       handler(newProfile) {
         console.log("app: changing profile " + newProfile.name);
+        //console.log(JSON.stringify(newProfile));
         this.profileDirty = true;
       },
     },

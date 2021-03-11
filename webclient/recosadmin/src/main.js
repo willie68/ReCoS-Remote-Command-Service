@@ -35,6 +35,8 @@ import ColorPicker from 'primevue/colorpicker'
 import Checkbox from 'primevue/checkbox'
 import ToastService from 'primevue/toastservice'
 import Toast from 'primevue/toast'
+import PickList from 'primevue/picklist';
+import OrderList from 'primevue/orderlist';
 
 const store = createStore({
     state () {
@@ -92,5 +94,7 @@ app.component('TabPanel', TabPanel)
 app.component('ColorPicker', ColorPicker)
 app.component('Checkbox', Checkbox)
 app.component('Toast', Toast)
+app.component('PickList', PickList)
+app.component('OrderList', OrderList)
 
 app.mount('#app')

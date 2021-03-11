@@ -13,7 +13,7 @@
             v-model="addProfile.name"
             class="p-ml-2"
             :disabled="edit"
-            :class="{ nameMissing: !isNameOK }"
+            :class="{ 'p-invalid': !isNameOK }"
           />
         </div>
       </div>

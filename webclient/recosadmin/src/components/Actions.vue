@@ -26,7 +26,7 @@
       </Panel>
     </SplitterPanel>
     <SplitterPanel :size="80">
-      <Action :action="activeAction"></Action>
+      <Action :action="activeAction" :profile="profile"></Action>
     </SplitterPanel>
   </Splitter>
 </template>
