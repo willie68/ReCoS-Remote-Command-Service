@@ -49,7 +49,7 @@ export default {
   },
   methods: {
     changeCommand(command) {
-//      console.log("multi command changed:" + command.name);
+      console.log("multi command changed:" + command.name);
 //      console.log(JSON.stringify(this.action));
     },
   },
