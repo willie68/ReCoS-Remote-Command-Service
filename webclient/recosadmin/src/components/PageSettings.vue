@@ -132,13 +132,8 @@ export default {
   created() {},
   watch: {
     page(page) {
-      this.activePage = page;
-    },
-    profile(profile) {
-      if (profile.pages) {
-        this.activePage = profile.pages[0];
-      } else {
-        this.activePage = {};
+      if (page) {
+        this.activePage = page;
       }
     },
   },
