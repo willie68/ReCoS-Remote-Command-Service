@@ -1,7 +1,9 @@
 <template>
-  <Dialog v-model:visible="dialogProfileVisible">
+  <Dialog v-model:visible="dialogVisible">
     <template #header>
-      <h3>Add profile</h3>
+      <h3><div class="p-orderlist-header" v-if="$slots.sourceHeader">
+        <slot name="sourceHeader"></slot>
+      </div></h3>
     </template>
     <div class="p-fluid">
       <div class="p-field p-grid">
@@ -52,7 +54,7 @@ export default {
   },
   data() {
     return {
-      dialogNameVisible: false,
+      dialogVisible: false,
       name: "", 
       isNameOK: true,
     };
@@ -77,7 +79,7 @@ export default {
   },
   watch: {
     visible(visible) {
-      this.dialogProfileVisible = visible;
+      this.dialogVisible = visible;
       this.checkName(this.name);
     },
     modelValue(value) {

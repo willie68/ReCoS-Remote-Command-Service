@@ -37,6 +37,8 @@ import ToastService from 'primevue/toastservice'
 import Toast from 'primevue/toast'
 import PickList from 'primevue/picklist';
 import OrderList from 'primevue/orderlist';
+import ConfirmationService from 'primevue/confirmationservice';
+import ConfirmDialog from 'primevue/confirmdialog';
 
 const store = createStore({
     state () {
@@ -69,6 +71,7 @@ app.directive('tooltip', Tooltip)
 app.use(store)
 app.use(PrimeVue, {ripple: true})
 app.use(ToastService);
+app.use(ConfirmationService);
 app.component('Toolbar', Toolbar)
 app.component('Button', Button)
 app.component('SplitButton', SplitButton)
@@ -96,5 +99,6 @@ app.component('Checkbox', Checkbox)
 app.component('Toast', Toast)
 app.component('PickList', PickList)
 app.component('OrderList', OrderList)
+app.component('ConfirmDialog', ConfirmDialog)
 
 app.mount('#app')
