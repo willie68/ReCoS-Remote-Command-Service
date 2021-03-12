@@ -15,6 +15,7 @@
             v-model="name"
             class="p-ml-2"
             :class="{ 'p-invalid': !isNameOK }"
+            @keyup.enter="save"
           />
         </div>
       </div>

@@ -38,7 +38,13 @@
         class="p-button-text"
         @click="cancel"
       />
-      <Button label="Save" icon="pi pi-check" autofocus @click="save" :disabled="!isNameOK" />
+      <Button
+        label="Save"
+        icon="pi pi-check"
+        autofocus
+        @click="save"
+        :disabled="!isNameOK"
+      />
     </template>
   </Dialog>
 </template>
@@ -68,25 +74,27 @@ export default {
       this.$emit("save", this.addProfile);
     },
     checkName(name) {
-        if (name == "") {
-          this.isNameOK = false
-          return
-        }
-        this.isNameOK = !this.profiles.map(elem => elem.toLowerCase()).includes(name.toLowerCase());
-    }
+      if (name == "") {
+        this.isNameOK = false;
+        return;
+      }
+      this.isNameOK = !this.profiles
+        .map((elem) => elem.toLowerCase())
+        .includes(name.toLowerCase());
+    },
   },
   watch: {
     visible(visible) {
       this.dialogProfileVisible = visible;
-      this.checkName(this.addProfile.name)
+      this.checkName(this.addProfile.name);
     },
     profile(profile) {
-        this.addProfile = profile;
+      this.addProfile = profile;
     },
     addProfile: {
       deep: true,
       handler(profile) {
-        this.checkName(profile.name)
+        this.checkName(profile.name);
       },
     },
   },

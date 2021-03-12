@@ -187,7 +187,7 @@ export default {
       this.dialogProfileVisible = true;
     },
     saveProfile() {
-      console.log("Save profile:" + this.activeProfile.name);
+      console.log("App: Save profile:" + this.activeProfile.name);
       this.dialogProfileVisible = false;
       fetch(this.profileURL + "/" + this.activeProfile.name, {
         method: "PUT",

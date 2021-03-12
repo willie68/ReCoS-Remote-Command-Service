@@ -80,7 +80,7 @@ actions:
       commands:
         - id: DELAY_1
           type: DELAY
-          name: delay
+          name: delay1
           description: ""
           icon: address_book.png
           title: step 1
@@ -88,7 +88,7 @@ actions:
             time: 1
         - id: DELAY_2
           type: DELAY
-          name: delay
+          name: delay2
           description: ""
           icon: ""
           title: step 2
@@ -96,7 +96,7 @@ actions:
             time: 1
         - id: DELAY_3
           type: DELAY
-          name: delay
+          name: delay3
           description: ""
           icon: ""
           title: step 3
@@ -104,7 +104,7 @@ actions:
             time: 1
         - id: DELAY_4
           type: DELAY
-          name: delay
+          name: delay4
           description: ""
           icon: ""
           title: step 4
@@ -112,7 +112,7 @@ actions:
             time: 1
         - id: DELAY_5
           type: DELAY
-          name: delay
+          name: delay5
           description: ""
           icon: ""
           title: step 5
@@ -120,7 +120,7 @@ actions:
             time: 1
         - id: DELAY_6
           type: DELAY
-          name: delay
+          name: delay6
           description: ""
           icon: ""
           title: step 6
@@ -128,7 +128,7 @@ actions:
             time: 1
         - id: DELAY_7
           type: DELAY
-          name: delay
+          name: delay7
           description: ""
           icon: ""
           title: step 7
@@ -136,7 +136,7 @@ actions:
             time: 1
         - id: DELAY_8
           type: DELAY
-          name: delay
+          name: delay8
           description: ""
           icon: ""
           title: step 8
@@ -144,7 +144,7 @@ actions:
             time: 1
         - id: DELAY_9
           type: DELAY
-          name: delay
+          name: delay9
           description: ""
           icon: ""
           title: step 9
@@ -152,7 +152,7 @@ actions:
             time: 1
         - id: DELAY_10
           type: DELAY
-          name: delay
+          name: delay10
           description: ""
           icon: ""
           title: step 10
@@ -160,7 +160,7 @@ actions:
             time: 1
         - id: DELAY_11
           type: DELAY
-          name: delay
+          name: delay11
           description: ""
           icon: ""
           title: step 11
@@ -168,7 +168,7 @@ actions:
             time: 1
         - id: DELAY_12
           type: DELAY
-          name: delay
+          name: delay12
           description: ""
           icon: ""
           title: step 12

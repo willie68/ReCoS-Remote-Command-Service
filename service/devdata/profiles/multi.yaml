@@ -1,39 +1,65 @@
 name: Multi
 description: profile for Multi
 pages:
-  - name: page1
-    columns: 2
-    rows: 2
-    cells:
-      - action2_1
-      - action2_2
-      - action2
+    - name: page1
+      description: ""
+      columns: 2
+      rows: 2
+      toolbar: ""
+      cells:
+        - action2_1
+        - action2_2
+        - action2
 actions:
-  - type: MULTI
-    name: action2
-    title: Multi Action
-    description: description for action
-    icon: hand_share.png
-    actions:
-      - action2_1
-      - action2_2
-  - type: SINGLE
-    name: action2_1
-    title: Action Title
-    description: description for action
-    icon: hand_thumbsup.png
-    commands:
-      - type: DELAY
-        name: delay
-        parameters:
-          time: 10
-  - type: SINGLE
-    name: action2_2
-    title: Action Title
-    description: description for action
-    icon: hand_thumbsdown.png
-    commands:
-      - type: DELAY
-        name: delay
-        parameters:
-          time: 10
+    - type: MULTI
+      name: action2
+      title: Multi Action
+      icon: hand_share.png
+      description: description for action
+      fontsize: 0
+      fontcolor: ""
+      outlined: false
+      runone: false
+      commands: []
+      actions:
+        - action2_1
+        - action2_2
+        - action2
+    - type: SINGLE
+      name: action2_1
+      title: Action Title
+      icon: hand_thumbsup.png
+      description: description for action
+      fontsize: 0
+      fontcolor: ""
+      outlined: false
+      runone: false
+      commands:
+        - id: DELAY_0
+          type: DELAY
+          name: delay
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            time: 10
+      actions: []
+    - type: SINGLE
+      name: action2_2
+      title: Action Title
+      icon: hand_thumbsdown.png
+      description: description for action
+      fontsize: 0
+      fontcolor: ""
+      outlined: false
+      runone: false
+      commands:
+        - id: DELAY_1
+          type: DELAY
+          name: delay
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            time: 10
+      actions: []

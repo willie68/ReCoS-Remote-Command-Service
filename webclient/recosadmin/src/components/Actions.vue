@@ -37,7 +37,7 @@
     v-on:cancel="this.addActionDialog = false"
     ><template #sourceHeader>New Action</template></AddName
   >
-  <ConfirmDialog></ConfirmDialog>
+  <ConfirmDialog group="actions"></ConfirmDialog>
 </template>
 
 <script>
@@ -91,6 +91,7 @@ export default {
             this.activeAction.name +
             ". Are you sure you want to proceed?",
           header: "Confirmation",
+          group: "actions",
           icon: "pi pi-exclamation-triangle",
           accept: () => {
             this.deleteAction();
