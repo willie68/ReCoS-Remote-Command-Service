@@ -46,6 +46,7 @@
     :profiles="profiles"
   ></AddProfile>
   <Toast position="top-right" />
+  <ConfirmDialog></ConfirmDialog>
 </template>
 
 <script>
@@ -282,7 +283,7 @@ export default {
             if (this.profiles.length > 0) {
               this.activeProfileName = this.profiles[0];
             }
-            this.activeProfileName = ""
+            this.activeProfileName = "";
           }
         })
         .catch((err) => {
@@ -341,6 +342,6 @@ body {
 }
 
 .p-inputtext.p-valid.p-component {
-    border-color: #36f43f;
+  border-color: #36f43f;
 }
 </style>
