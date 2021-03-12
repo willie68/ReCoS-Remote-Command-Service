@@ -1,5 +1,5 @@
 <template>
-  <Panel class="page-panel-custom">
+  <Panel class="page-panel-custom" v-if="activePage && (activePage.name != '')">
     <template #header>
       <b>{{ profile.name }} # {{ activePage.name }}</b>
     </template>
@@ -48,6 +48,7 @@
     </div>
   </Panel>
   <ButtonPanel
+    v-if="activePage"
     :rows="activePage.rows"
     :columns="activePage.columns"
     :actions="profile.actions"

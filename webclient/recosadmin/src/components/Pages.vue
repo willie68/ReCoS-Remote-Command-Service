@@ -5,20 +5,20 @@
         <template #icons>
           <button
             class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
-            @click="toggle"
+            @click="addPage"
           >
             <span class="pi pi-plus"></span>
           </button>
           <button
             class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
-            @click="toggle"
+            @click="deleteConfirm"
           >
             <span class="pi pi-trash"></span>
           </button>
         </template>
         <Listbox
           v-model="activePage"
-          :options="profile.pages"
+          :options="activeProfile.pages"
           optionLabel="name"
           listStyle="max-height:440px"
         >
@@ -26,24 +26,36 @@
       </Panel>
     </SplitterPanel>
     <SplitterPanel :size="80">
-      <PageSettings :page="activePage" :profile="profile"></PageSettings>
+      <PageSettings :page="activePage" :profile="activeProfile"></PageSettings>
     </SplitterPanel>
   </Splitter>
+  <AddName
+    :visible="addPageDialog"
+    v-model="newPageName"
+    :excludeList="pageNames"
+    v-on:save="saveNewPage($event)"
+    v-on:cancel="this.addPageDialog = false"
+    ><template #sourceHeader>New Command</template></AddName
+  >
 </template>
 
 <script>
-import PageSettings from "./PageSettings.vue"
+import PageSettings from "./PageSettings.vue";
+import AddName from "./AddName.vue";
+import { ObjectUtils } from "primevue/utils";
 
 export default {
   name: "Pages",
   components: {
     PageSettings,
+    AddName,
   },
   props: {
     profile: {},
   },
   data() {
     return {
+      activeProfile: { name: "" },
       activePage: {},
       actionMenuItems: [
         {
@@ -55,6 +67,9 @@ export default {
           icon: "pi pi-trash",
         },
       ],
+      addPageDialog: false,
+      pageNames: [],
+      newPageName: "",
     };
   },
   computed: {
@@ -87,6 +102,59 @@ export default {
     changePage(page) {
       this.selectedPage = page;
     },
+    addPage() {
+      this.activeProfile.pages.forEach((element) => {
+        this.pageNames.push(element.name);
+      });
+      this.addPageDialog = true;
+    },
+    saveNewPage(value) {
+      console.log("Pages: add new page: " + value);
+      this.addPageDialog = false;
+      let newPage = {
+        name: value,
+        description: "Your description here",
+        rows: 3,
+        columns: 5,
+        toolbar: "show",
+      };
+      this.activeProfile.pages.push(newPage);
+      this.activePage = newPage;
+    },
+    deleteConfirm() {
+      if (this.activePage) {
+        console.log("Pages: delete confirm pressed");
+        this.$confirm.require({
+          message:
+            "Deleting page: " +
+            this.activePage.name +
+            ". Are you sure you want to proceed?",
+          header: "Confirmation",
+          icon: "pi pi-exclamation-triangle",
+          accept: () => {
+            this.deletePage();
+          },
+          reject: () => {
+            //callback to execute when user rejects the action
+          },
+        });
+      }
+    },
+    deletePage() {
+      if (this.activePage) {
+        console.log("Commands: delete command " + this.activePage.name);
+        let index = ObjectUtils.findIndexInList(
+          this.activePage,
+          this.activeProfile.pages
+        );
+        this.activeProfile.pages.splice(index, 1);
+        if (this.activeProfile.pages.length > 0) {
+          this.activePage = this.activeProfile.pages[0];
+        } else {
+          this.activePage = null;
+        }
+      }
+    },
   },
   mounted() {},
   created() {
@@ -97,6 +165,23 @@ export default {
   },
   beforeUnmount() {
     // this.unsubscribe();
+  },
+  watch: {
+    profile(profile) {
+      if (profile && profile.name != "") {
+        console.log("Pages: profile changed: ", profile.name);
+        this.activeProfile = profile;
+        if (this.activeProfile.pages) {
+          if (this.activeProfile.pages.length > 0) {
+            console.log("Pages: active page");
+            this.activePage = this.activeProfile.pages[0];
+            return;
+          }
+        }
+      }
+      this.activePage = { name: "" };
+      this.activeProfile = { name: "" };
+    },
   },
 };
 </script>
@@ -112,8 +197,7 @@ export default {
 }
 
 .pages-panel-custom .p-panel-header {
-    margin: 0px;
-    padding: 2px !important;
+  margin: 0px;
+  padding: 2px !important;
 }
-
 </style>
