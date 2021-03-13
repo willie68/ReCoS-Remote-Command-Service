@@ -3,13 +3,13 @@
     <template #header>
       <h3>Select Action</h3>
     </template>
-      <Listbox 
-        v-model="selectedSourceValue"
-        :options="sourceValue"
-        optionLabel="name"
-        :filter="true"
-        listStyle="max-height:150px"
-      />
+    <Listbox
+      v-model="selectedAction"
+      :options="sourceValue"
+      optionLabel="name"
+      :filter="true"
+      listStyle="max-height:150px"
+    />
     <template #footer>
       <Button
         label="Cancel"
@@ -38,6 +38,7 @@ export default {
       default: null,
     },
     visible: Boolean,
+    selectByName: String,
   },
   data() {
     return {
@@ -63,9 +64,31 @@ export default {
         .includes(name.toLowerCase());
     },
   },
+  beforeUpdate() {
+    console.log("SelectAction: BeforeUpdate");
+    if (this.selectByName) {
+      if (this.sourceValue) {
+        this.sourceValue.forEach((element) => {
+          if (element.name == this.selectByName) {
+            console.log("SelectAction: Element found");
+            this.selectedAction = element;
+          }
+        });
+      }
+    }
+  },
   watch: {
     visible(visible) {
       this.dialogVisible = visible;
+      if (visible && this.selectByName) {
+        if (this.sourceValue) {
+          this.sourceValue.forEach((element) => {
+            if (element.name == this.selectByName) {
+              this.selectedAction = element;
+            }
+          });
+        }
+      }
     },
   },
 };

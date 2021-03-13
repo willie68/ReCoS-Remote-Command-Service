@@ -32,6 +32,7 @@
     v-on:save="saveNewProfile($event)"
     v-on:cancel="this.dialogActionVisible = false"
     :sourceValue="profile.actions"
+    :selectByName="buttonActionSelected"
   ></SelectAction>
 
 </template>
@@ -56,11 +57,13 @@ export default {
       activePage: {},
       cellActions: [{ name: "name" }],
       dialogActionVisible: false,
+      buttonActionSelected: "",
     };
   },
   methods: {
-    clickButton(name) {
-      console.log("button clicked: ", name, this.$refs["btn"+name]);
+    clickButton(index) {
+      console.log("button clicked: ", index, this.$refs["btn"+index]);
+      this.buttonActionSelected = this.page.cells[index]
       this.dialogActionVisible = true
     },
     displayAllRefs() {
