@@ -188,9 +188,11 @@ export default {
   watch: {
     modelValue(modelvalue) {
       this.destinationList = [];
-      modelvalue.forEach((element) => {
-        this.destinationList.push(this.newEntry(element));
-      });
+      if (modelvalue) {
+        modelvalue.forEach((element) => {
+          this.destinationList.push(this.newEntry(element));
+        });
+      }
     },
   },
 };

@@ -1,5 +1,5 @@
 <template>
-  <Panel class="page-panel-custom">
+  <Panel class="page-panel-custom" v-if="activePage && (activePage.name != '')">
     <template #header>
       <b>{{ profile.name }} # {{ activePage.name }}</b>
     </template>
@@ -48,10 +48,10 @@
     </div>
   </Panel>
   <ButtonPanel
-    :rows="activePage.rows"
-    :columns="activePage.columns"
+    v-if="activePage"
     :actions="profile.actions"
     :page="activePage"
+    :profile="profile"
   ></ButtonPanel>
 </template>
 
@@ -131,13 +131,8 @@ export default {
   created() {},
   watch: {
     page(page) {
-      this.activePage = page;
-    },
-    profile(profile) {
-      if (profile.pages) {
-        this.activePage = profile.pages[0];
-      } else {
-        this.activePage = {};
+      if (page) {
+        this.activePage = page;
       }
     },
   },

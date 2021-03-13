@@ -1,5 +1,5 @@
 <template>
-  <Panel :header="activeAction.name" class="action-panel-custom">
+  <Panel :header="activeAction.name" class="action-panel-custom" v-if="activeAction.name != ''">
     <div class="p-fluid p-formgrid p-grid">
       <div class="p-field p-col">
         <label for="name">Name</label>
@@ -137,13 +137,18 @@ export default {
   },
   watch: {
     action(action) {
-      this.activeAction = action;
+      if (action) {
+        this.activeAction = action;
+      } else {
+        this.activeAction = {name: ""};
+        this.$refs.actionpanel
+      }
     },
     activeAction(activeAction) {
-      console.log("Action: activeAction changed: " + JSON.stringify(activeAction));
+      console.log("Action: activeAction changed: " + activeAction.name);
     },
     profile(profile) {
-      console.log("Action change profile to " + profile.name);
+//      console.log("Action change profile to " + profile.name);
       this.activeProfile = profile;
     },
   },

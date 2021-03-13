@@ -1,7 +1,9 @@
 <template>
-  <Dialog v-model:visible="dialogProfileVisible">
+  <Dialog v-model:visible="dialogVisible">
     <template #header>
-      <h3>Add profile</h3>
+      <h3><div class="p-orderlist-header" v-if="$slots.sourceHeader">
+        <slot name="sourceHeader"></slot>
+      </div></h3>
     </template>
     <div class="p-fluid">
       <div class="p-field p-grid">
@@ -10,24 +12,11 @@
           <InputText
             id="name"
             type="text"
-            v-model="addProfile.name"
+            v-model="name"
             class="p-ml-2"
-            :disabled="edit"
             :class="{ 'p-invalid': !isNameOK }"
+            @keyup.enter="save"
             autofocus
-          />
-        </div>
-      </div>
-      <div class="p-field p-grid">
-        <label for="description" class="p-col-24 p-mb-2 p-md-2 p-mb-md-0"
-          >description</label
-        >
-        <div class="p-col-24 p-md-10">
-          <InputText
-            id="description"
-            type="text"
-            v-model="addProfile.description"
-            class="p-ml-2"
           />
         </div>
       </div>
@@ -52,18 +41,23 @@
 
 <script>
 export default {
-  name: "AddProfile",
+  name: "AddName",
   components: {},
   props: {
-    profile: {},
+    modelValue: {
+      type: String,
+      default: "",
+    },
+    excludeList: {
+      type: Array,
+      default: null,
+    },
     visible: Boolean,
-    edit: Boolean,
-    profiles: {},
   },
   data() {
     return {
-      dialogProfileVisible: false,
-      addProfile: { name: "", description: "" },
+      dialogVisible: false,
+      name: "", 
       isNameOK: true,
     };
   },
@@ -72,32 +66,30 @@ export default {
       this.$emit("cancel");
     },
     save() {
-      this.$emit("save", this.addProfile);
+      this.$emit("updatemodelValue", this.name);
+      this.$emit("save", this.name);
     },
     checkName(name) {
       if (name == "") {
         this.isNameOK = false;
         return;
       }
-      this.isNameOK = !this.profiles
+      this.isNameOK = !this.excludeList
         .map((elem) => elem.toLowerCase())
         .includes(name.toLowerCase());
     },
   },
   watch: {
     visible(visible) {
-      this.dialogProfileVisible = visible;
-      this.checkName(this.addProfile.name);
+      this.dialogVisible = visible;
+      this.checkName(this.name);
     },
-    profile(profile) {
-      this.addProfile = profile;
+    modelValue(value) {
+      this.name = value;
     },
-    addProfile: {
-      deep: true,
-      handler(profile) {
-        this.checkName(profile.name);
-      },
-    },
+    name(name) {
+      this.checkName(name)
+    }
   },
 };
 </script>

@@ -27,7 +27,7 @@
           v-model="password"
           :type="pwdType"
           name="password"
-          :class="{ passwordOK: isPwdOK, 'p-invalid': !isPwdOK }"
+          :class="{ 'p-valid': isPwdOK, 'p-invalid': !isPwdOK }"
         />
         <i class="pi pi-eye-slash" @click="togglePwdView()" />
         <i v-if="!showPwd" class="pi pi-eye-slash" @click="togglePwdView()" />
@@ -46,6 +46,7 @@
     :profiles="profiles"
   ></AddProfile>
   <Toast position="top-right" />
+  <ConfirmDialog></ConfirmDialog>
 </template>
 
 <script>
@@ -167,12 +168,18 @@ export default {
     fetch(that.profileURL)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         that.profiles = data;
         that.activeProfileName = that.profiles[0];
-        console.log(that.profiles);
       })
-      .catch((err) => console.log(err.message));
+      .catch((err) => {
+        console.log(err.message);
+        this.$toast.add({
+          severity: "error",
+          summary: "Error loading profile",
+          detail: err.message,
+          life: 3000,
+        });
+      });
   },
   methods: {
     togglePwdView() {
@@ -187,7 +194,8 @@ export default {
       this.dialogProfileVisible = true;
     },
     saveProfile() {
-      console.log("Save profile:" + this.activeProfile.name);
+      console.log("App: Save profile:" + this.activeProfile.name);
+      //      console.log(JSON.stringify(this.activeProfile));
       this.dialogProfileVisible = false;
       fetch(this.profileURL + "/" + this.activeProfile.name, {
         method: "PUT",
@@ -213,7 +221,7 @@ export default {
         .catch((err) => {
           console.log(err.message);
           this.$toast.add({
-            severity: "warn",
+            severity: "error",
             summary: "Error on save",
             detail: err.message,
             life: 3000,
@@ -251,7 +259,7 @@ export default {
         .catch((err) => {
           console.log(err.message);
           this.$toast.add({
-            severity: "warn",
+            severity: "error",
             summary: "Create",
             detail: err.message,
             life: 3000,
@@ -282,13 +290,13 @@ export default {
             if (this.profiles.length > 0) {
               this.activeProfileName = this.profiles[0];
             }
-            this.activeProfileName = ""
+            this.activeProfileName = "";
           }
         })
         .catch((err) => {
           console.log(err.message);
           this.$toast.add({
-            severity: "warn",
+            severity: "error",
             summary: "Delete",
             detail: err.message,
             life: 3000,
@@ -336,15 +344,11 @@ body {
   color: #2c3e50;
 }
 
-.passwordOK {
-  background: lightgreen !important;
-}
-
-.passwordMissing {
-  background: lightcoral !important;
-}
-
 .profiledirty {
   background: lightsalmon;
+}
+
+.p-inputtext.p-valid.p-component {
+  border-color: #36f43f;
 }
 </style>
