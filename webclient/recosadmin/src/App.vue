@@ -168,12 +168,18 @@ export default {
     fetch(that.profileURL)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         that.profiles = data;
         that.activeProfileName = that.profiles[0];
-        console.log(that.profiles);
       })
-      .catch((err) => console.log(err.message));
+      .catch((err) => {
+        console.log(err.message);
+        this.$toast.add({
+          severity: "error",
+          summary: "Error loading profile",
+          detail: err.message,
+          life: 3000,
+        });
+      });
   },
   methods: {
     togglePwdView() {
@@ -189,6 +195,7 @@ export default {
     },
     saveProfile() {
       console.log("App: Save profile:" + this.activeProfile.name);
+      //      console.log(JSON.stringify(this.activeProfile));
       this.dialogProfileVisible = false;
       fetch(this.profileURL + "/" + this.activeProfile.name, {
         method: "PUT",
@@ -214,7 +221,7 @@ export default {
         .catch((err) => {
           console.log(err.message);
           this.$toast.add({
-            severity: "warn",
+            severity: "error",
             summary: "Error on save",
             detail: err.message,
             life: 3000,
@@ -252,7 +259,7 @@ export default {
         .catch((err) => {
           console.log(err.message);
           this.$toast.add({
-            severity: "warn",
+            severity: "error",
             summary: "Create",
             detail: err.message,
             life: 3000,
@@ -289,7 +296,7 @@ export default {
         .catch((err) => {
           console.log(err.message);
           this.$toast.add({
-            severity: "warn",
+            severity: "error",
             summary: "Delete",
             detail: err.message,
             life: 3000,

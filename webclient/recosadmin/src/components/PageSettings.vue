@@ -49,8 +49,6 @@
   </Panel>
   <ButtonPanel
     v-if="activePage"
-    :rows="activePage.rows"
-    :columns="activePage.columns"
     :actions="profile.actions"
     :page="activePage"
     :profile="profile"

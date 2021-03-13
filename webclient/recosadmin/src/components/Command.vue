@@ -152,16 +152,10 @@ export default {
       deep: true,
       handler(newCommand) {
         if (newCommand && (newCommand.name != "")) {
-          console.log(
-            "Command: changing active command " + JSON.stringify(newCommand)
-          );
           if (newCommand.type) {
             this.commandtypes.forEach((commandType) => {
               if (commandType.type === newCommand.type) {
                 this.activeCommandType = commandType;
-                console.log(
-                  "Command: changing active command type to " + newCommand.type
-                );
               }
             });
           }

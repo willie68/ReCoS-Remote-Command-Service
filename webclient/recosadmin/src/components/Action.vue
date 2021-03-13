@@ -145,7 +145,7 @@ export default {
       }
     },
     activeAction(activeAction) {
-      console.log("Action: activeAction changed: " + JSON.stringify(activeAction));
+      console.log("Action: activeAction changed: " + activeAction.name);
     },
     profile(profile) {
 //      console.log("Action change profile to " + profile.name);

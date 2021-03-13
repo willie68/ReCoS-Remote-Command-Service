@@ -87,7 +87,7 @@ export default {
   methods: {
     changeCommand(command) {
       console.log("Commands: command changed:" + command.name);
-      console.log(JSON.stringify(this.action));
+      //      console.log(JSON.stringify(this.action));
     },
     addCommand() {
       this.cmdNames = [];
@@ -107,7 +107,7 @@ export default {
         parameters: new Map(),
       };
       if (!this.activeAction.commands) {
-        this.activeAction.commands = []
+        this.activeAction.commands = [];
       }
       this.activeAction.commands.push(newCommand);
       this.activeCommand = newCommand;
@@ -171,7 +171,6 @@ export default {
   },
   mounted() {
     if (this.action) {
-      console.log("Commands: action: " + JSON.stringify(this.action));
       this.activeAction = this.action;
       if (this.action.commands && this.action.commands.length > 0) {
         this.activeCommand = this.action.commands[0];

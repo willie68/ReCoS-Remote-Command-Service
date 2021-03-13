@@ -66,6 +66,7 @@ export default {
   },
   beforeUpdate() {
     console.log("SelectAction: BeforeUpdate");
+    this.selectedAction = null;
     if (this.selectByName) {
       if (this.sourceValue) {
         this.sourceValue.forEach((element) => {
