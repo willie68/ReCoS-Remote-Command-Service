@@ -90,9 +90,12 @@ export default {
       console.log(JSON.stringify(this.action));
     },
     addCommand() {
-      this.action.commands.forEach((element) => {
-        this.cmdNames.push(element.name);
-      });
+      this.cmdNames = [];
+      if (this.action.commands) {
+        this.action.commands.forEach((element) => {
+          this.cmdNames.push(element.name);
+        });
+      }
       this.addCmdDialog = true;
     },
     saveNewCommand(value) {
@@ -101,8 +104,11 @@ export default {
       let newCommand = {
         name: value,
         title: value,
-        parameters: [],
+        parameters: new Map(),
       };
+      if (!this.activeAction.commands) {
+        this.activeAction.commands = []
+      }
       this.activeAction.commands.push(newCommand);
       this.activeCommand = newCommand;
     },

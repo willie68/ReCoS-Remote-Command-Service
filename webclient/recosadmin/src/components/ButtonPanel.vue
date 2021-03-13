@@ -27,13 +27,25 @@
       </div>
     </transition-group>
   </ScrollPanel>
+    <SelectAction
+    :visible="dialogActionVisible"
+    v-on:save="saveNewProfile($event)"
+    v-on:cancel="this.dialogActionVisible = false"
+    :sourceValue="profile.actions"
+  ></SelectAction>
+
 </template>
 
 <script>
+import SelectAction from "./SelectAction.vue";
+
 export default {
   name: "ButtonPanel",
-  components: {},
+  components: {
+    SelectAction,
+  },
   props: {
+    profile: {},
     rows: {},
     columns: {},
     actions: {},
@@ -43,12 +55,13 @@ export default {
     return {
       activePage: {},
       cellActions: [{ name: "name" }],
+      dialogActionVisible: false,
     };
   },
   methods: {
     clickButton(name) {
       console.log("button clicked: ", name, this.$refs["btn"+name]);
-      this.$refs["btn"+name].icon = "pi-check";
+      this.dialogActionVisible = true
     },
     displayAllRefs() {
       console.log("refs");

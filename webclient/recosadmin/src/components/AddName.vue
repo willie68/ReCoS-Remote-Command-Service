@@ -16,6 +16,7 @@
             class="p-ml-2"
             :class="{ 'p-invalid': !isNameOK }"
             @keyup.enter="save"
+            autofocus
           />
         </div>
       </div>

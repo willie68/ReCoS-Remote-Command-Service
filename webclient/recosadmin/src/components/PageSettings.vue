@@ -53,6 +53,7 @@
     :columns="activePage.columns"
     :actions="profile.actions"
     :page="activePage"
+    :profile="profile"
   ></ButtonPanel>
 </template>
 

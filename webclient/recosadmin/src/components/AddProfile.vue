@@ -14,6 +14,7 @@
             class="p-ml-2"
             :disabled="edit"
             :class="{ 'p-invalid': !isNameOK }"
+            autofocus
           />
         </div>
       </div>
