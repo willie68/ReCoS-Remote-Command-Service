@@ -10,10 +10,10 @@ import (
 )
 
 // TimerCommandTypeInfo is a count down timer, just showing the count down time in the title
-var TimerCommandTypeInfo = models.CommandTypeInfo{"TIMER", "Timer", "starting a count down timer", []models.CommandParameterInfo{
-	{"time", "int", "time to delay in Seconds", " Seconds", make([]string, 0)},
-	{"format", "string", "the message for the response, defaults %d seconds", "", make([]string, 0)},
-	{"finished", "string", "the message at the end of the timer, defaults: finished", "", make([]string, 0)},
+var TimerCommandTypeInfo = models.CommandTypeInfo{"TIMER", "Timer", "Starting a count down timer", true, []models.CommandParameterInfo{
+	{"time", "int", "time to delay in Seconds", " Seconds", true, make([]string, 0)},
+	{"format", "string", "the message for the response, defaults %d seconds", "", false, make([]string, 0)},
+	{"finished", "string", "the message at the end of the timer, defaults: finished", "", true, make([]string, 0)},
 }}
 
 // TimerCommand is a command to start a timer. Using time for getting the time in seconds.

@@ -90,6 +90,8 @@ type CommandTypeInfo struct {
 	Name string `json:"name"`
 	// Description of this action for information
 	Description string `json:"description"`
+	// WizardPossible this command can be used in the wizard
+	WizardPossible bool `json:"wizard"`
 	// Parameters describes the needed parameters
 	Parameters []CommandParameterInfo `json:"parameter"`
 }
@@ -103,6 +105,8 @@ type CommandParameterInfo struct {
 	Description string `json:"description"`
 	// Name is the command
 	Unit string `json:"unit"`
+	// WizardPossible this command can be used in the wizard
+	WizardPossible bool `json:"wizard"`
 	// List is a enumeration of possible values
 	List []string `json:"list"`
 }

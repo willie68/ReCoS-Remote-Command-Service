@@ -18,13 +18,13 @@ import (
 )
 
 // HardwareMonitorCommandTypeInfo showing hardware sensor data
-var HardwareMonitorCommandTypeInfo = models.CommandTypeInfo{"HARDWAREMONITOR", "HardwareMonitor", "getting data from the hardware sensors", []models.CommandParameterInfo{
-	{"sensor", "string", "the sensor name like given above", "", make([]string, 0)},
-	{"format", "string", "the format string for the textual representation", "", make([]string, 0)},
-	{"display", "string", "text shows only the textual representation, graph shows both", "", []string{"text", "graph"}},
-	{"ymin", "int", "the value for the floor of the graph", "", make([]string, 0)},
-	{"ymax", "int", "the value for the top of the graph", "", make([]string, 0)},
-	{"color", "color", "color of the graph", "", make([]string, 0)},
+var HardwareMonitorCommandTypeInfo = models.CommandTypeInfo{"HARDWAREMONITOR", "HardwareMonitor", "Displaying data from a sensors", true, []models.CommandParameterInfo{
+	{"sensor", "string", "the sensor name like given above", "", true, make([]string, 0)},
+	{"format", "string", "the format string for the textual representation", "", false, make([]string, 0)},
+	{"display", "string", "text shows only the textual representation, graph shows both", "", true, []string{"text", "graph"}},
+	{"ymin", "int", "the value for the floor of the graph", "", true, make([]string, 0)},
+	{"ymax", "int", "the value for the top of the graph", "", true, make([]string, 0)},
+	{"color", "color", "color of the graph", "", true, make([]string, 0)},
 }}
 
 const measurepoints = 100
