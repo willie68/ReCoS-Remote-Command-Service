@@ -17,6 +17,7 @@ export default {
   name: "Step1",
   components: {},
   props: {
+    modelValue: {},
     profile: {},
   },
   data() {
@@ -24,10 +25,19 @@ export default {
       commandtypes: [],
       commandType: null,
       type: null,
+      value: {},
     };
   },
   methods: {
     check(commandType) {
+      console.log("Step1: select command:", JSON.stringify(commandType));
+      if (commandType) {
+        this.value.type = commandType;
+      } else {
+        this.value = { type: "" };
+      }
+      console.log("Step1: emit:", JSON.stringify(this.value));
+      this.$emit("update:value", this.value);
       if (commandType) {
         this.$emit("next", true);
         return;
@@ -53,6 +63,9 @@ export default {
   watch: {
     commandType(commandType) {
       this.check(commandType);
+    },
+    modelValue(modelValue) {
+      this.value = modelValue;
     },
   },
 };

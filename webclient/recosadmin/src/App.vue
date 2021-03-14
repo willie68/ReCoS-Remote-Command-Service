@@ -197,7 +197,7 @@ export default {
   },
   methods: {
     actionWizard() {
-      if (!this.isPwdOK) {
+/*      if (!this.isPwdOK) {
         this.$toast.add({
           severity: "warn",
           summary: "Please enter the password",
@@ -205,10 +205,11 @@ export default {
           life: 5000,
         });
       } else {
+*/
         if (this.activeProfile) {
           this.actionWizardVisible = true;
         }
-      }
+//      }
     },
     togglePwdView() {
       this.showPwd = !this.showPwd;

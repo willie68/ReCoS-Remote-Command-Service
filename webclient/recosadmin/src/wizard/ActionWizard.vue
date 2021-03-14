@@ -1,19 +1,24 @@
 <template>
   <Dialog
-    v-model:visible="dialogProfileVisible"
+    v-model:visible="dialogVisible"
     :modal="true"
     :closable="false"
   >
     <template #header>
       <h3>Action Wizard for profile: {{ this.profile.name }}</h3>
     </template>
-    <Step0 v-show="this.step == 0" :profile="profile"></Step0>
+    <Step0 v-if="this.step == 0" :profile="profile"></Step0>
     <Step1
-      v-show="this.step == 1"
+      v-if="this.step == 1"
       :profile="profile"
+      :value="newAction"
       v-on:next="checkNextState(1, $event)"
     ></Step1>
-    <Step2 v-show="this.step == 2" :profile="profile"></Step2>
+    <Step2
+      v-if="this.step == 2"
+      :profile="profile"
+      :value="newAction"
+    ></Step2>
     <template #footer>
       <Button label="Cancel" icon="pi pi-times" @click="cancel" />
       <Button
@@ -66,6 +71,7 @@ export default {
       activeProfile: { name: "" },
       step: 0,
       maxStep: 2,
+      newAction: {},
     };
   },
   methods: {
@@ -117,11 +123,14 @@ export default {
   },
   watch: {
     visible(visible) {
-      this.dialogProfileVisible = visible;
+      this.dialogVisible = visible;
     },
     profile(profile) {
       this.activeProfile = profile;
     },
+    newAction(newAction) {
+      console.log("ActionWizard: newAction: ", JSON.stringify(newAction))
+    }
   },
 };
 </script>

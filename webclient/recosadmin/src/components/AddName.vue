@@ -66,7 +66,7 @@ export default {
       this.$emit("cancel");
     },
     save() {
-      this.$emit("updatemodelValue", this.name);
+      this.$emit("update:modelValue", this.name);
       this.$emit("save", this.name);
     },
     checkName(name) {
