@@ -1,5 +1,5 @@
 <template>
-  <Panel :header="'Profile: ' + activeProfile.name" class="profile-panel-custom">
+  <div>
     <div class="p-fluid p-mt-2">
       <div class="p-field p-grid">
         <label for="description" class="p-col-2 p-mb-2 p-md-2 p-mb-0 p-ml-2"
@@ -14,7 +14,7 @@
         </div>
       </div>
     </div>
-    <hr/>
+    <hr />
     <TabView class="tabview-custom">
       <TabPanel header="Actions">
         <Actions :profile="activeProfile"></Actions>
@@ -23,7 +23,7 @@
         <Pages :profile="activeProfile"></Pages>
       </TabPanel>
     </TabView>
-  </Panel>
+  </div>
 </template>
 
 <script>

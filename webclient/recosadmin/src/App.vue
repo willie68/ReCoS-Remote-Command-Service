@@ -17,6 +17,11 @@
         @click="saveProfile()"
       ></SplitButton>
       <div v-if="profileDirty">*</div>
+      <Button
+        icon="pi pi-flag"
+        class="p-mr-1 p-button-warning"
+        @click="actionWizard()"
+      />
     </template>
 
     <template #right>
@@ -33,7 +38,7 @@
         <i v-if="!showPwd" class="pi pi-eye-slash" @click="togglePwdView()" />
         <i v-if="showPwd" class="pi pi-eye" @click="togglePwdView()" />
       </span>
-      <Button icon="pi pi-cog" class="p-mr-1" />
+      <Button icon="pi pi-bars" class="p-mr-1" />
     </template>
   </Toolbar>
 
@@ -47,18 +52,26 @@
   ></AddProfile>
   <Toast position="top-right" />
   <ConfirmDialog></ConfirmDialog>
+  <ActionWizard
+    :visible="actionWizardVisible"
+    v-on:save="saveProfile($event)"
+    v-on:cancel="this.actionWizardVisible = false"
+    :profile="activeProfile"
+  ></ActionWizard>
 </template>
 
 <script>
 import Profile from "./components/Profile.vue";
 import AppFooter from "./components/AppFooter.vue";
 import AddProfile from "./components/AddProfile.vue";
+import ActionWizard from "./wizard/ActionWizard.vue";
 
 export default {
   components: {
     Profile,
     AppFooter,
     AddProfile,
+    ActionWizard,
   },
   data() {
     return {
@@ -97,6 +110,7 @@ export default {
         },
       ],
       dialogProfileVisible: false,
+      actionWizardVisible: false,
     };
   },
   computed: {
@@ -182,6 +196,20 @@ export default {
       });
   },
   methods: {
+    actionWizard() {
+      if (!this.isPwdOK) {
+        this.$toast.add({
+          severity: "warn",
+          summary: "Please enter the password",
+          detail: "To use the wizard please enter the right password.",
+          life: 5000,
+        });
+      } else {
+        if (this.activeProfile) {
+          this.actionWizardVisible = true;
+        }
+      }
+    },
     togglePwdView() {
       this.showPwd = !this.showPwd;
       if (this.showPwd) {
@@ -330,6 +358,8 @@ export default {
 <style>
 html {
   font-size: 14px;
+  background-color: #1f2d40;
+  color: #ffffff;
 }
 
 body {
@@ -341,7 +371,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #ffffff;
 }
 
 .profiledirty {
