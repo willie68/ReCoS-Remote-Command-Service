@@ -153,6 +153,7 @@ export default {
   props: {
     command: {},
   },
+  emits: ["change"],
   data() {
     return {
       activeCommand: {},
