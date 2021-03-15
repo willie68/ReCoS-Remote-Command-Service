@@ -1,9 +1,11 @@
 <template>
   <Dialog v-model:visible="dialogVisible">
     <template #header>
-      <h3><div class="p-orderlist-header" v-if="$slots.sourceHeader">
-        <slot name="sourceHeader"></slot>
-      </div></h3>
+      <h3>
+        <div class="p-orderlist-header" v-if="$slots.sourceHeader">
+          <slot name="sourceHeader"></slot>
+        </div>
+      </h3>
     </template>
     <div class="p-fluid">
       <div class="p-field p-grid">
@@ -54,10 +56,11 @@ export default {
     },
     visible: Boolean,
   },
+  emits: ["save", "cancel", "update:modelValue"],
   data() {
     return {
       dialogVisible: false,
-      name: "", 
+      name: "",
       isNameOK: true,
     };
   },
@@ -74,9 +77,13 @@ export default {
         this.isNameOK = false;
         return;
       }
-      this.isNameOK = !this.excludeList
-        .map((elem) => elem.toLowerCase())
-        .includes(name.toLowerCase());
+      if (this.excludeList) {
+        this.isNameOK = !this.excludeList
+          .map((elem) => elem.toLowerCase())
+          .includes(name.toLowerCase());
+      } else {
+        this.isNameOK = true;
+      }
     },
   },
   watch: {
@@ -88,8 +95,8 @@ export default {
       this.name = value;
     },
     name(name) {
-      this.checkName(name)
-    }
+      this.checkName(name);
+    },
   },
 };
 </script>
