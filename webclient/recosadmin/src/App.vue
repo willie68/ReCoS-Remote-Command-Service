@@ -54,7 +54,7 @@
   <ConfirmDialog></ConfirmDialog>
   <ActionWizard
     :visible="actionWizardVisible"
-    v-on:save="saveProfile($event)"
+    v-on:save="saveWizardProfile($event)"
     v-on:cancel="this.actionWizardVisible = false"
     :profile="activeProfile"
   ></ActionWizard>
@@ -197,7 +197,7 @@ export default {
   },
   methods: {
     actionWizard() {
-/*      if (!this.isPwdOK) {
+      if (!this.isPwdOK) {
         this.$toast.add({
           severity: "warn",
           summary: "Please enter the password",
@@ -205,11 +205,16 @@ export default {
           life: 5000,
         });
       } else {
-*/
         if (this.activeProfile) {
           this.actionWizardVisible = true;
         }
-//      }
+      }
+    },
+    saveWizardProfile(profile) {
+      console.log("App: ", JSON.stringify(profile));
+      this.actionWizardVisible = false;
+      this.activeProfile = profile;
+      this.saveProfile();
     },
     togglePwdView() {
       this.showPwd = !this.showPwd;
