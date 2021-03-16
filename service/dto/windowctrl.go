@@ -26,6 +26,11 @@ type WindowCtrlCommand struct {
 	Parameters map[string]interface{}
 }
 
+// EnrichType enrich the type info with the informations from the profile
+func (e *WindowCtrlCommand) EnrichType(profile models.Profile) (models.CommandTypeInfo, error) {
+	return WindowCtrlCommandTypeInfo, nil
+}
+
 // Init the command
 func (e *WindowCtrlCommand) Init(a *Action) (bool, error) {
 	return true, nil

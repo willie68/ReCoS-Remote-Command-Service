@@ -19,6 +19,7 @@ var count int
 
 // CommandExecutor is an interface for executing a command. Every command implementation has to implement this.
 type CommandExecutor interface {
+	EnrichType(profile models.Profile) (models.CommandTypeInfo, error)
 	Init(a *Action) (bool, error)
 	Execute(a *Action, requestMessage models.Message) (bool, error)
 	Stop(a *Action) (bool, error)

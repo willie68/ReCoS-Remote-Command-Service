@@ -42,6 +42,11 @@ var (
 	tickLength    float64     = 15
 )
 
+// EnrichType enrich the type info with the informations from the profile
+func (c *ClockCommand) EnrichType(profile models.Profile) (models.CommandTypeInfo, error) {
+	return ClockCommandTypeInfo, nil
+}
+
 // Init a delay in the actual context
 func (c *ClockCommand) Init(a *Action) (bool, error) {
 	c.action = a

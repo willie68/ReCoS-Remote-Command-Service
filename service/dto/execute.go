@@ -21,6 +21,11 @@ type ExecuteCommand struct {
 	Parameters map[string]interface{}
 }
 
+// EnrichType enrich the type info with the informations from the profile
+func (e *ExecuteCommand) EnrichType(profile models.Profile) (models.CommandTypeInfo, error) {
+	return ExecuteCommandTypeInfo, nil
+}
+
 // Init the command
 func (e *ExecuteCommand) Init(a *Action) (bool, error) {
 	return true, nil

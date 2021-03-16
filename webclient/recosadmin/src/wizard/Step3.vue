@@ -2,7 +2,8 @@
   <div class="w-page">
     <span class="p-mb-2"
       >Where should i display your action?<br />
-      (To create a new 5x3 page simply add a new name.)</span
+      (To create a new 5x3 page simply add a new name and press the +
+      Button.)</span
     >
     <div class="p-field p-grid p-mb-2 p-mt-2">
       <label :for="page" class="p-col-12 p-mb-2 p-ml-2 p-md-2 p-mb-md-0"
@@ -16,6 +17,7 @@
           optionLabel="name"
           class="p-ml-1 dropdownwidth"
           :editable="true"
+          scrollHeight="120px"
         />
         <Button icon="pi pi-plus" @click="addPage" v-tooltip="'add new page'" />
       </div>
@@ -34,12 +36,13 @@
             v-if="isSet((row - 1) * page.columns + (col - 1))"
             style="width=100%;"
             :label="page.cells[(row - 1) * page.columns + (col - 1)]"
+            class="p-button-sm"
           ></Button>
           <Button
             :ref="'btn' + ((row - 1) * page.columns + (col - 1))"
             @click="clickButton((row - 1) * page.columns + (col - 1))"
             v-if="isActual((row - 1) * page.columns + (col - 1))"
-            class="p-button-danger"
+            class="p-button-danger p-button-sm"
             style="width=100%;"
             label="actual"
           ></Button>
@@ -50,7 +53,7 @@
               !isSet((row - 1) * page.columns + (col - 1)) &&
               !isActual((row - 1) * page.columns + (col - 1))
             "
-            class="p-button-success"
+            class="p-button-success p-button-sm"
             style="width=100%;"
             label="empty"
           ></Button>

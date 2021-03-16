@@ -16,12 +16,12 @@
         class="p-button-warning"
         @click="saveProfile()"
       ></SplitButton>
-      <div v-if="profileDirty">*</div>
       <Button
         icon="pi pi-flag"
         class="p-mr-1 p-button-warning"
         @click="actionWizard()"
       />
+      <div v-if="profileDirty">*</div>
     </template>
 
     <template #right>

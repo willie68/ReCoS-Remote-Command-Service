@@ -18,6 +18,27 @@ type PageCommand struct {
 	Parameters map[string]interface{}
 }
 
+// EnrichType enrich the type info with the informations from the profile
+func (p *PageCommand) EnrichType(profile models.Profile) (models.CommandTypeInfo, error) {
+	if profile.Name == "" {
+		return PageCommandTypeInfo, nil
+	}
+	commandInfo := PageCommandTypeInfo
+	index := -1
+	for x, param := range commandInfo.Parameters {
+		if param.Name == "page" {
+			index = x
+		}
+	}
+	if index >= 0 {
+		commandInfo.Parameters[index].List = make([]string, 0)
+		for _, page := range profile.Pages {
+			commandInfo.Parameters[index].List = append(commandInfo.Parameters[index].List, page.Name)
+		}
+	}
+	return commandInfo, nil
+}
+
 // Init the command
 func (p *PageCommand) Init(a *Action) (bool, error) {
 	return true, nil

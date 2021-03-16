@@ -17,6 +17,7 @@
       :profile="profile"
       :value="newAction"
       :commandTypes="commandTypes"
+      :iconlist="iconlist"
       v-on:value="updateAction($event)"
       v-on:next="checkNextState(2, $event)"
     ></Step2>
@@ -85,6 +86,7 @@ export default {
       maxStep: 3,
       newAction: {},
       commandTypes: [],
+      iconlist: null,
     };
   },
   methods: {
@@ -138,20 +140,46 @@ export default {
         }
       }
     },
+    updateIcons() {
+      let iconurl = this.$store.state.baseURL + "config/icons";
+      fetch(iconurl)
+        .then((res) => res.json())
+        .then((data) => {
+          //console.log(data);
+          this.iconlist = data;
+        })
+        .catch((err) => console.log(err.message));
+    },
+    updateCommands() {
+      let url = this.$store.state.baseURL + "/config/commands";
+      const myHeaders = new Headers();
+
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append(
+        "Authorization",
+        `Basic ${btoa(`admin:${this.$store.state.password}`)}`
+      );
+      myHeaders.append("X-mcs-profile", this.activeProfile.name );
+
+      fetch(url, {
+        method: "GET",
+        mode: "cors",
+        headers: myHeaders,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          this.commandTypes = [];
+          data.forEach((element) => {
+            if (element.wizard && element.wizard == true) {
+              this.commandTypes.push(element);
+            }
+          });
+        })
+        .catch((err) => console.log(err.message));
+    },
   },
   mounted() {
-    let url = this.$store.state.baseURL + "config/commands";
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => {
-        this.commandTypes = [];
-        data.forEach((element) => {
-          if (element.wizard && element.wizard == true) {
-            this.commandTypes.push(element);
-          }
-        });
-      })
-      .catch((err) => console.log(err.message));
+    this.updateIcons();
   },
   watch: {
     visible(visible) {
@@ -163,6 +191,7 @@ export default {
     },
     profile(profile) {
       this.activeProfile = profile;
+      this.updateCommands();
     },
     newAction(newAction) {
       console.log("ActionWizard: newAction: ", JSON.stringify(newAction));
@@ -173,8 +202,8 @@ export default {
 
 <style>
 .w-page {
-  width: 500px;
-  height: 200px;
+  width: 600px;
+  height: 300px;
   text-align: left;
 }
 </style>

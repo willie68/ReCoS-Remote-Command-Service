@@ -23,6 +23,11 @@ type TimerCommand struct {
 	Parameters map[string]interface{}
 }
 
+// EnrichType enrich the type info with the informations from the profile
+func (d *TimerCommand) EnrichType(profile models.Profile) (models.CommandTypeInfo, error) {
+	return TimerCommandTypeInfo, nil
+}
+
 // Init a timer in the actual context
 func (d *TimerCommand) Init(a *Action) (bool, error) {
 	return true, nil

@@ -56,6 +56,11 @@ type HardwareMonitorCommand struct {
 	textonly   bool
 }
 
+// EnrichType enrich the type info with the informations from the profile
+func (d *HardwareMonitorCommand) EnrichType(profile models.Profile) (models.CommandTypeInfo, error) {
+	return HardwareMonitorCommandTypeInfo, nil
+}
+
 // Init nothing
 func (d *HardwareMonitorCommand) Init(a *Action) (bool, error) {
 	d.temps = make([]float64, measurepoints)

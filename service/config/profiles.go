@@ -127,6 +127,16 @@ func HasProfile(profileName string) bool {
 	return false
 }
 
+// GetProfile chacking if a profile is already defined
+func GetProfile(profileName string) (models.Profile, bool) {
+	for _, profile := range Profiles {
+		if strings.EqualFold(profileName, profile.Name) {
+			return profile, true
+		}
+	}
+	return models.Profile{}, false
+}
+
 // AddProfile adding a profile to the profile list
 func AddProfile(profile models.Profile) error {
 	if HasProfile(profile.Name) {

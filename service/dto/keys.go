@@ -25,6 +25,11 @@ type KeysCommand struct {
 	Parameters map[string]interface{}
 }
 
+// EnrichType enrich the type info with the informations from the profile
+func (p *KeysCommand) EnrichType(profile models.Profile) (models.CommandTypeInfo, error) {
+	return KeysCommandTypeInfo, nil
+}
+
 // Init the command
 func (p *KeysCommand) Init(a *Action) (bool, error) {
 	return true, nil

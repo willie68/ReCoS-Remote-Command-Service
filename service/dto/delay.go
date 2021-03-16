@@ -17,6 +17,11 @@ type DelayCommand struct {
 	Parameters map[string]interface{}
 }
 
+// EnrichType enrich the type info with the informations from the profile
+func (d *DelayCommand) EnrichType(profile models.Profile) (models.CommandTypeInfo, error) {
+	return DelayCommandTypeInfo, nil
+}
+
 // Init a delay in the actual context
 func (d *DelayCommand) Init(a *Action) (bool, error) {
 	return true, nil
