@@ -1,7 +1,7 @@
 <template>
   <Splitter class="actions-splitter no-border">
     <SplitterPanel :size="20" style="height: 100%">
-      <Panel header="Actions" class="actions-panel-custom">
+      <Panel header="Actions" class="actions-panel-custom no-border">
         <template #icons>
           <button
             class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
@@ -20,14 +20,21 @@
           v-model="activeAction"
           :options="profile.actions"
           optionLabel="name"
-          listStyle="height: 100%"
+          listStyle="max-height:500px"
           class="no-border"
+          v-on:change="checkChange($event)"
         >
         </Listbox>
       </Panel>
     </SplitterPanel>
     <SplitterPanel class="no-border" :size="80">
-      <Action :action="activeAction" :profile="activeProfile"></Action>
+      <Panel
+        v-if="activeAction != null"
+        :header="'Action: ' + activeAction.name"
+        class="actions-panel-custom no-border"
+      >
+        <Action :action="activeAction" :profile="activeProfile"></Action>
+      </Panel>
     </SplitterPanel>
   </Splitter>
   <AddName
@@ -64,6 +71,9 @@ export default {
     };
   },
   methods: {
+    checkChange(action) {
+      console.log("Actions: changed", JSON.stringify(action))
+    },
     addAction() {
       this.activeProfile.actions.forEach((element) => {
         this.actionNames.push(element.name);
@@ -133,7 +143,7 @@ export default {
 <style>
 .actions-splitter {
   border-width: 0px;
-  height: 400px;
+  height: 500px;
 }
 
 .actions-panel-custom {
@@ -143,6 +153,7 @@ export default {
 .actions-panel-custom .p-panel-header {
   margin: 0px;
   padding: 2px !important;
+  height: 34px;
 }
 
 .actions-panel-custom .p-panel-content {

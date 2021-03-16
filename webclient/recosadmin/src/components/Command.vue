@@ -1,135 +1,129 @@
 <template>
-  <Panel
-    :header="'Command: ' + activeCommand.name"
-    class="command-panel-custom"
-    v-if="activeCommand.name != ''"
-  >
-    <div class="p-fluid p-formgrid p-grid">
-      <div class="p-field p-col">
-        <label for="name">Name</label>
-        <InputText id="name" type="text" v-model="activeCommand.name" />
-      </div>
-      <div class="p-field p-col">
-        <label for="title">Title</label>
-        <InputText id="title" type="text" v-model="activeCommand.title" />
-      </div>
-      <div class="p-field p-col">
-        <label for="rows">Type</label>
-        <Dropdown
-          v-model="activeCommand.type"
-          :options="commandtypes"
-          placeholder="select a type"
-          optionLabel="name"
-          optionValue="type"
-          editable
+  <div class="p-fluid p-formgrid p-grid">
+    <div class="p-field p-col">
+      <label for="name">Name</label>
+      <InputText id="name" type="text" v-model="activeCommand.name" />
+    </div>
+    <div class="p-field p-col">
+      <label for="title">Title</label>
+      <InputText id="title" type="text" v-model="activeCommand.title" />
+    </div>
+    <div class="p-field p-col">
+      <label for="rows">Type</label>
+      <Dropdown
+        v-model="activeCommand.type"
+        :options="commandtypes"
+        placeholder="select a type"
+        optionLabel="name"
+        optionValue="type"
+        editable
+      />
+    </div>
+    <div class="p-field p-col">
+      <label for="icon">Icon</label>
+      <Dropdown
+        id="icon"
+        v-model="activeCommand.icon"
+        :options="iconlist"
+        placeholder="select a icon"
+      >
+        <template #option="slotProps">
+          <div class="icon-item">
+            <img :src="'assets/' + slotProps.option" />
+            <div>{{ slotProps.option }}</div>
+          </div>
+        </template>
+      </Dropdown>
+    </div>
+  </div>
+  <div class="p-fluid">
+    <div class="p-field p-grid">
+      <label for="description" class="p-col-6 p-mb-2 p-ml-2 p-md-2 p-mb-md-0"
+        >Description</label
+      >
+      <div class="p-col-12 p-md-9">
+        <InputText
+          id="description"
+          type="text"
+          v-model="activeCommand.description"
         />
       </div>
-      <div class="p-field p-col">
-        <label for="icon">Icon</label>
-        <Dropdown
-          id="icon"
-          v-model="activeCommand.icon"
-          :options="iconlist"
-          placeholder="select a icon"
-        >
-          <template #option="slotProps">
-            <div class="icon-item">
-              <img :src="'assets/' + slotProps.option" />
-              <div>{{ slotProps.option }}</div>
-            </div>
-          </template>
-        </Dropdown>
-      </div>
+    </div>
+  </div>
+  <div v-show="activeCommandType.parameter">
+    <div class="p-pb-3">
+      Command parameter for type {{ activeCommandType.name }}
     </div>
     <div class="p-fluid">
-      <div class="p-field p-grid">
-        <label for="description" class="p-col-6 p-mb-2 p-ml-2 p-md-2 p-mb-md-0"
-          >Description</label
+      <div
+        class="p-field p-grid"
+        v-for="(param, x) in activeCommandType.parameter"
+        :key="x"
+      >
+        <label
+          :for="param.name"
+          class="p-col-12 p-mb-2 p-ml-2 p-md-2 p-mb-md-0"
+          >{{ param.name }}</label
         >
-        <div class="p-col-12 p-md-9">
+        <div class="p-col-12 p-md-8">
           <InputText
-            id="description"
+            v-if="param.type == 'string' && param.list.length == 0"
+            :id="param.name"
             type="text"
-            v-model="activeCommand.description"
+            v-tooltip="param.description"
+            v-model="activeCommand.parameters[param.name]"
+          />
+          <Dropdown
+            v-if="param.type == 'string' && param.list.length > 0"
+            :id="param.name"
+            :options="param.list"
+            v-tooltip="param.description"
+            v-model="activeCommand.parameters[param.name]"
+            :placeholder="param.unit"
+          />
+          <InputNumber
+            v-if="param.type == 'int'"
+            :id="param.name"
+            type="text"
+            mode="decimal"
+            showButtons
+            :suffix="param.unit"
+            v-tooltip="param.description"
+            v-model="activeCommand.parameters[param.name]"
+          />
+          <Checkbox
+            v-if="param.type == 'bool'"
+            :id="param.name"
+            v-tooltip="param.description"
+            v-model="activeCommand.parameters[param.name]"
+            :binary="true"
+          />
+          <ArgumentList
+            v-if="param.type == '[]string'"
+            :id="param.name"
+            v-tooltip="param.description"
+            v-model="activeCommand.parameters[param.name]"
+            v-on:add="addArgument(param.name)"
+            v-on:remove="removeArgument(param.name, $event)"
+          >
+            <template #item="slotProps">
+              <div>
+                {{ slotProps.item }}
+              </div>
+            </template></ArgumentList
+          >
+          <ColorPicker
+            v-if="param.type == 'color'"
+            :id="param.name"
+            :inline="false"
+            defaultColor="#00FF00"
+            v-tooltip="param.description"
+            v-model="activeCommand.parameters[param.name]"
           />
         </div>
       </div>
     </div>
-    <div v-show="activeCommandType.parameter">
-      <div class="p-pb-3">
-        Command parameter for type {{ activeCommandType.name }}
-      </div>
-      <div class="p-fluid">
-        <div
-          class="p-field p-grid"
-          v-for="(param, x) in activeCommandType.parameter"
-          :key="x"
-        >
-          <label
-            :for="param.name"
-            class="p-col-12 p-mb-2 p-ml-2 p-md-2 p-mb-md-0"
-            >{{ param.name }}</label
-          >
-          <div class="p-col-12 p-md-8">
-            <InputText
-              v-if="param.type == 'string' && param.list.length == 0"
-              :id="param.name"
-              type="text"
-              v-tooltip="param.description"
-              v-model="activeCommand.parameters[param.name]"
-            />
-            <Dropdown
-              v-if="param.type == 'string' && param.list.length > 0"
-              :id="param.name"
-              :options="param.list"
-              v-tooltip="param.description"
-              v-model="activeCommand.parameters[param.name]"
-              :placeholder="param.unit"
-            />
-            <InputNumber
-              v-if="param.type == 'int'"
-              :id="param.name"
-              type="text"
-              mode="decimal"
-              showButtons
-              :suffix="param.unit"
-              v-tooltip="param.description"
-              v-model="activeCommand.parameters[param.name]"
-            />
-            <Checkbox
-              v-if="param.type == 'bool'"
-              :id="param.name"
-              v-tooltip="param.description"
-              v-model="activeCommand.parameters[param.name]"
-              :binary="true"
-            />
-            <ArgumentList
-              v-if="param.type == '[]string'"
-              :id="param.name"
-              v-tooltip="param.description"
-              v-model="activeCommand.parameters[param.name]"
-              v-on:add="addArgument(param.name)"
-              v-on:remove="removeArgument(param.name, $event)"
-            >
-              <template #item="slotProps">
-                <div>
-                  {{ slotProps.item }}
-                </div>
-              </template></ArgumentList
-            >
-            <ColorPicker
-              v-if="param.type == 'color'"
-              :id="param.name"
-              :inline="false"
-              defaultColor="#00FF00"
-              v-tooltip="param.description"
-              v-model="activeCommand.parameters[param.name]"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  </Panel>
+  </div>
   <AddName
     :visible="addArgDialog"
     v-model="newArgName"
@@ -222,7 +216,9 @@ export default {
       this.$confirm.require({
         message:
           "Deleting argument: " +
-          param + ":" + data +
+          param +
+          ":" +
+          data +
           ". Are you sure you want to proceed?",
         header: "Confirmation",
         icon: "pi pi-exclamation-triangle",
@@ -235,12 +231,12 @@ export default {
       });
     },
     deleteCommand(param, data) {
-        console.log("Command: delete argument ", param, data);
-        let index = ObjectUtils.findIndexInList(
-          this.data,
-          this.activeCommand.parameters[param]
-        );
-        this.activeCommand.parameters[param].splice(index, 1);
+      console.log("Command: delete argument ", param, data);
+      let index = ObjectUtils.findIndexInList(
+        this.data,
+        this.activeCommand.parameters[param]
+      );
+      this.activeCommand.parameters[param].splice(index, 1);
     },
     updateIcons() {
       let iconurl = this.$store.state.baseURL + "/config/icons";

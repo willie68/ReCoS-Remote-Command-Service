@@ -2,7 +2,7 @@
   <Panel header="Commands" class="commands-panel-custom">
     <Splitter style="height: 300px">
       <SplitterPanel :size="20">
-        <Panel header=" " class="commands-panel-custom">
+        <Panel header=" " class="commands-panel-custom no-border">
           <template #icons>
             <Button
               class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
@@ -36,7 +36,13 @@
         </Panel>
       </SplitterPanel>
       <SplitterPanel :size="80">
-        <Command :command="activeCommand" v-on:change="changeCommand" />
+        <Panel
+          v-if="activeCommand != null"
+          :header="'Command: ' + activeCommand.name"
+          class="commands-panel-custom no-border"
+        >
+          <Command :command="activeCommand" v-on:change="changeCommand" />
+        </Panel>
       </SplitterPanel>
     </Splitter>
   </Panel>
@@ -185,8 +191,15 @@ export default {
 </script>
 
 <style>
+.commands-list {
+  max-height: 250px;
+}
 .commands-panel-custom {
   height: 100%;
+}
+
+.commands-panel-custom .p-panel-content {
+  border-width: 0px;
 }
 
 .commands-panel-custom .p-panel-header {

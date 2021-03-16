@@ -1,5 +1,4 @@
 <template>
-  <Panel :header="'Action: '+ activeAction.name" class="action-panel-custom" v-if="activeAction.name != ''">
     <div class="p-fluid p-formgrid p-grid">
       <div class="p-field p-col">
         <label for="name">Name</label>
@@ -87,7 +86,6 @@
       :profile="activeProfile"
       v-show="activeAction.type == `MULTI`"
     />
-  </Panel>
 </template>
 
 <script>
@@ -141,7 +139,7 @@ export default {
         this.activeAction = action;
       } else {
         this.activeAction = {name: ""};
-        this.$refs.actionpanel
+        //this.$refs.actionpanel
       }
     },
     activeAction(activeAction) {
@@ -187,4 +185,11 @@ export default {
   text-align: center;
   height: 34px;
 }
+
+.action-panel-custom .p-panel-content {
+  margin: 0px;
+  height: 100%;
+  border-width: 0px;
+}
+
 </style>
