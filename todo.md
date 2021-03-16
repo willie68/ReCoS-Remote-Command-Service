@@ -14,7 +14,7 @@
 
 ## WebAdmin
 
-- Save the profile
+- some smaller cosmetics UI fixes
 
 ## Installer
 
@@ -23,3 +23,6 @@
 # Documentation
 
 - adding section for installing OpenHardwareMonitor
+- adding a documentation about the new Action Wizard
+- adding a documentation about the ReCoS Admin interface
+- adding a documentation about the ReCoS Web interface
