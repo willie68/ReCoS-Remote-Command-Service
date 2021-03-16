@@ -8,6 +8,7 @@ import "primevue/resources/themes/vela-blue/theme.css"
 import "primevue/resources/primevue.min.css"
 import "primeicons/primeicons.css"
 import 'primeflex/primeflex.css'
+import './assets/style.css'
 import Dialog from 'primevue/dialog'
 import InputText from 'primevue/inputtext'
 import Toolbar from "primevue/toolbar"

@@ -1,5 +1,5 @@
 <template>
-  <Panel :header="activeAction.name" class="action-panel-custom" v-if="activeAction.name != ''">
+  <Panel :header="'Action: '+ activeAction.name" class="action-panel-custom" v-if="activeAction.name != ''">
     <div class="p-fluid p-formgrid p-grid">
       <div class="p-field p-col">
         <label for="name">Name</label>
@@ -175,6 +175,12 @@ export default {
 </script>
 
 <style>
+.action-panel-custom {
+  margin: 0px;
+  text-align: center;
+  height: 100%;
+}
+
 .action-panel-custom .p-panel-header {
   margin: 0px;
   padding: 2px !important;

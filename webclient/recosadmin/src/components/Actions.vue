@@ -1,5 +1,5 @@
 <template>
-  <Splitter :style="{ height: splitterHeight }">
+  <Splitter class="actions-splitter no-border">
     <SplitterPanel :size="20" style="height: 100%">
       <Panel header="Actions" class="actions-panel-custom">
         <template #icons>
@@ -21,11 +21,12 @@
           :options="profile.actions"
           optionLabel="name"
           listStyle="height: 100%"
+          class="no-border"
         >
         </Listbox>
       </Panel>
     </SplitterPanel>
-    <SplitterPanel :size="80">
+    <SplitterPanel class="no-border" :size="80">
       <Action :action="activeAction" :profile="activeProfile"></Action>
     </SplitterPanel>
   </Splitter>
@@ -57,7 +58,6 @@ export default {
     return {
       activeProfile: null,
       activeAction: {},
-      splitterHeight: "600px",
       addActionDialog: false,
       actionNames: null,
       newActionName: null,
@@ -131,6 +131,11 @@ export default {
 </script>
 
 <style>
+.actions-splitter {
+  border-width: 0px;
+  height: 400px;
+}
+
 .actions-panel-custom {
   height: 100%;
 }
@@ -143,9 +148,6 @@ export default {
 .actions-panel-custom .p-panel-content {
   margin: 0px;
   padding: 2px !important;
-  height: 100%;
-}
-.p-toggleable-content {
   height: 100%;
 }
 </style>

@@ -1,43 +1,45 @@
 <template>
-  <Panel header="Commands" class="commands-panel-custom"></Panel>
-  <Splitter style="height: 300px">
-    <SplitterPanel :size="20">
-      <Panel header=" " class="commands-panel-custom">
-        <template #icons>
-          <Button
-            class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
-            icon="pi pi-plus"
-            @click="addCommand"
-          />
-          <Button
-            class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
-            icon="pi pi-arrow-up"
-            @click="moveUp"
-          />
-          <Button
-            class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
-            icon="pi pi-arrow-down"
-            @click="moveDown"
-          />
-          <Button
-            class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
-            icon="pi pi-trash"
-            @click="deleteConfirm"
-          />
-        </template>
-        <Listbox
-          v-model="activeCommand"
-          :options="activeAction.commands"
-          optionLabel="name"
-          listStyle="max-height:240px"
-        >
-        </Listbox>
-      </Panel>
-    </SplitterPanel>
-    <SplitterPanel :size="80">
-      <Command :command="activeCommand" v-on:change="changeCommand" />
-    </SplitterPanel>
-  </Splitter>
+  <Panel header="Commands" class="commands-panel-custom">
+    <Splitter style="height: 300px">
+      <SplitterPanel :size="20">
+        <Panel header=" " class="commands-panel-custom">
+          <template #icons>
+            <Button
+              class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
+              icon="pi pi-plus"
+              @click="addCommand"
+            />
+            <Button
+              class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
+              icon="pi pi-arrow-up"
+              @click="moveUp"
+            />
+            <Button
+              class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
+              icon="pi pi-arrow-down"
+              @click="moveDown"
+            />
+            <Button
+              class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
+              icon="pi pi-trash"
+              @click="deleteConfirm"
+            />
+          </template>
+          <Listbox
+            v-model="activeCommand"
+            :options="activeAction.commands"
+            optionLabel="name"
+            listStyle="max-height:240px"
+            class="no-border"
+          >
+          </Listbox>
+        </Panel>
+      </SplitterPanel>
+      <SplitterPanel :size="80">
+        <Command :command="activeCommand" v-on:change="changeCommand" />
+      </SplitterPanel>
+    </Splitter>
+  </Panel>
   <AddName
     :visible="addCmdDialog"
     v-model="newCmdName"
@@ -183,8 +185,18 @@ export default {
 </script>
 
 <style>
+.commands-panel-custom {
+  height: 100%;
+}
+
 .commands-panel-custom .p-panel-header {
   margin: 0px;
   padding: 2px !important;
+}
+
+.commands-panel-custom .p-panel-content {
+  margin: 0px;
+  padding: 2px !important;
+  height: 100%;
 }
 </style>

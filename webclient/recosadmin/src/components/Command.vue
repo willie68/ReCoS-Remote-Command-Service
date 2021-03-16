@@ -1,6 +1,6 @@
 <template>
   <Panel
-    :header="activeCommand.name"
+    :header="'Command: ' + activeCommand.name"
     class="command-panel-custom"
     v-if="activeCommand.name != ''"
   >

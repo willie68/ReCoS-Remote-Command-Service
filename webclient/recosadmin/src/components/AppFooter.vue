@@ -10,7 +10,7 @@
   left: 0;
   bottom: 0;
   width: 100%;
-  color: black;
+  color: rgba(255, 255, 255, 255);
   text-align: center;
 }
 </style>
