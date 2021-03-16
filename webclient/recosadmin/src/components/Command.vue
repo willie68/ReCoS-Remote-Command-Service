@@ -103,12 +103,20 @@
               v-model="activeCommand.parameters[param.name]"
               :binary="true"
             />
-            <Textarea
+            <ArgumentList
               v-if="param.type == '[]string'"
               :id="param.name"
               v-tooltip="param.description"
               v-model="activeCommand.parameters[param.name]"
-            />
+              v-on:add="addArgument(param.name)"
+              v-on:remove="removeArgument(param.name, $event)"
+            >
+              <template #item="slotProps">
+                <div>
+                  {{ slotProps.item }}
+                </div>
+              </template></ArgumentList
+            >
             <ColorPicker
               v-if="param.type == 'color'"
               :id="param.name"
@@ -122,21 +130,39 @@
       </div>
     </div>
   </Panel>
+  <AddName
+    :visible="addArgDialog"
+    v-model="newArgName"
+    v-on:save="saveNewArgument($event)"
+    v-on:cancel="this.addArgDialog = false"
+    ><template #sourceHeader>New Argument</template></AddName
+  >
 </template>
 
 <script>
+import ArgumentList from "./ArgumentList.vue";
+import AddName from "./AddName.vue";
+import { ObjectUtils } from "primevue/utils";
+
 export default {
   name: "Command",
-  components: {},
+  components: {
+    ArgumentList,
+    AddName,
+  },
   props: {
     command: {},
   },
+  emits: ["change"],
   data() {
     return {
       activeCommand: {},
       iconlist: [],
       commandtypes: [],
       activeCommandType: {},
+      addArgDialog: false,
+      newArgName: "",
+      activeParam: null,
     };
   },
   watch: {
@@ -151,7 +177,7 @@ export default {
     activeCommand: {
       deep: true,
       handler(newCommand) {
-        if (newCommand && (newCommand.name != "")) {
+        if (newCommand && newCommand.name != "") {
           if (newCommand.type) {
             this.commandtypes.forEach((commandType) => {
               if (commandType.type === newCommand.type) {
@@ -176,6 +202,46 @@ export default {
     });
   },
   methods: {
+    addArgument(param) {
+      this.activeParam = param;
+      console.log("Command: add argument.");
+      this.addArgDialog = true;
+    },
+    saveNewArgument(data) {
+      if (this.activeParam) {
+        let paramArray = this.activeCommand.parameters[this.activeParam];
+        if (!paramArray) {
+          paramArray = [];
+        }
+        paramArray.push(data);
+      }
+      this.addArgDialog = false;
+    },
+    removeArgument(param, data) {
+      console.log("Command: remove argument.", param, JSON.stringify(data));
+      this.$confirm.require({
+        message:
+          "Deleting argument: " +
+          param + ":" + data +
+          ". Are you sure you want to proceed?",
+        header: "Confirmation",
+        icon: "pi pi-exclamation-triangle",
+        accept: () => {
+          this.deleteCommand(param, data);
+        },
+        reject: () => {
+          //callback to execute when user rejects the action
+        },
+      });
+    },
+    deleteCommand(param, data) {
+        console.log("Command: delete argument ", param, data);
+        let index = ObjectUtils.findIndexInList(
+          this.data,
+          this.activeCommand.parameters[param]
+        );
+        this.activeCommand.parameters[param].splice(index, 1);
+    },
     updateIcons() {
       let iconurl = this.$store.state.baseURL + "/config/icons";
       fetch(iconurl)

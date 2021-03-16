@@ -23,6 +23,11 @@ type ScreenshotCommand struct {
 	Parameters map[string]interface{}
 }
 
+// EnrichType enrich the type info with the informations from the profile
+func (s *ScreenshotCommand) EnrichType(profile models.Profile) (models.CommandTypeInfo, error) {
+	return ScreenshotCommandTypeInfo, nil
+}
+
 // Init a delay in the actual context
 func (s *ScreenshotCommand) Init(a *Action) (bool, error) {
 	return true, nil

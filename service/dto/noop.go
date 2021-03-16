@@ -13,6 +13,11 @@ type NoopCommand struct {
 	action     *Action
 }
 
+// EnrichType enrich the type info with the informations from the profile
+func (d *NoopCommand) EnrichType(profile models.Profile) (models.CommandTypeInfo, error) {
+	return NoopCommandTypeInfo, nil
+}
+
 // Init nothing
 func (d *NoopCommand) Init(a *Action) (bool, error) {
 	return true, nil

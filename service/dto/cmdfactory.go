@@ -20,6 +20,22 @@ func InitCommand() {
 	InitOSCommand()
 }
 
+func EnrichTypes(types []models.CommandTypeInfo, profile models.Profile) ([]models.CommandTypeInfo, error) {
+	localTypes := make([]models.CommandTypeInfo, 0)
+	for _, commandType := range types {
+		command := models.Command{
+			Type: commandType.Type,
+		}
+		commandExecutor := GetCommand(command)
+		newType, err := commandExecutor.EnrichType(profile)
+		if err != nil {
+			return nil, err
+		}
+		localTypes = append(localTypes, newType)
+	}
+	return localTypes, nil
+}
+
 // GetCommand return the command worker class responsible for executing the command definition
 func GetCommand(command models.Command) CommandExecutor {
 	var cmdExecutor CommandExecutor

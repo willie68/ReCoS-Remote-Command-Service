@@ -34,6 +34,11 @@ type StopwatchCommand struct {
 	running   bool
 }
 
+// EnrichType enrich the type info with the informations from the profile
+func (s *StopwatchCommand) EnrichType(profile models.Profile) (models.CommandTypeInfo, error) {
+	return StopwatchCommandTypeInfo, nil
+}
+
 // Init initialise the stopwatch parmeters
 func (s *StopwatchCommand) Init(a *Action) (bool, error) {
 	s.action = a

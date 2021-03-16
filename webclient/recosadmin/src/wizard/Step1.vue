@@ -3,11 +3,13 @@
     What kind of action do you like to add?<br />
     <Listbox
       v-model="commandType"
-      :options="commandtypes"
+      :options="commandTypes"
       placeholder="select a type"
       optionLabel="description"
       optionValue="type"
-      editable
+      :filter="true"
+      dataKey="type"
+      class="p-mt-2"
     />
   </div>
 </template>
@@ -17,55 +19,65 @@ export default {
   name: "Step1",
   components: {},
   props: {
-    modelValue: {},
+    value: {},
     profile: {},
+    commandTypes: Array,
   },
+  emits: ["next", "value"],
   data() {
     return {
-      commandtypes: [],
-      commandType: null,
       type: null,
-      value: {},
+      localValue: {},
     };
   },
+  computed: {
+    commandType: {
+      get: function () {
+        return this.localValue.type;
+      },
+      set: function (newType) {
+        if (newType) {
+          this.localValue.type = newType;
+        } else {
+          this.localValue = { type: "" };
+        }
+        this.check();
+      },
+    },
+  },
   methods: {
-    check(commandType) {
-      console.log("Step1: select command:", JSON.stringify(commandType));
-      if (commandType) {
-        this.value.type = commandType;
-      } else {
-        this.value = { type: "" };
-      }
-      console.log("Step1: emit:", JSON.stringify(this.value));
-      this.$emit("update:value", this.value);
-      if (commandType) {
+    check() {
+      console.log("Step1: select command:", JSON.stringify(this.localValue));
+      this.$emit("value", this.localValue);
+      if (this.localValue.type) {
         this.$emit("next", true);
         return;
       }
       this.$emit("next", false);
     },
   },
-  updated() {},
   mounted() {
-    let url = this.$store.state.baseURL + "/config/commands";
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => {
-        this.commandtypes = [];
-        data.forEach((element) => {
-          if (element.wizard && element.wizard == true) {
-            this.commandtypes.push(element);
-          }
-        });
-      })
-      .catch((err) => console.log(err.message));
+    this.localValue = this.value;
+    console.log(
+      "Step1: mounted update value:",
+      JSON.stringify(this.localValue)
+    );
+    this.check();
+  },
+  beforeUpdate() {
+    this.localValue = this.value;
+    console.log("Step1: before update value:", JSON.stringify(this.localValue));
+  },
+  updated() {
+    console.log("Step1: updated value:", JSON.stringify(this.localValue));
   },
   watch: {
-    commandType(commandType) {
-      this.check(commandType);
-    },
-    modelValue(modelValue) {
-      this.value = modelValue;
+    value: {
+      deep: true,
+      handler(value) {
+        this.localValue = value;
+        console.log("Step1: value:", JSON.stringify(this.localValue));
+      },
     },
   },
 };
