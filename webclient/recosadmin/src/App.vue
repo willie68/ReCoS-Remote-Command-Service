@@ -25,7 +25,7 @@
     </template>
 
     <template #right>
-      <span class="p-input-icon-right">
+      <span v-if="isPWDNeeded" class="p-input-icon-right">
         Password
         <InputText
           ref="pwd"
@@ -76,6 +76,7 @@ export default {
   data() {
     return {
       name: "RecosAdmin",
+      isPWDNeeded: true,
       pwd: "",
       showPwd: false,
       pwdType: "password",
@@ -184,6 +185,7 @@ export default {
       .then((data) => {
         that.profiles = data;
         that.activeProfileName = that.profiles[0];
+        this.needPWd();
       })
       .catch((err) => {
         console.log(err.message);
@@ -196,6 +198,24 @@ export default {
       });
   },
   methods: {
+    needPWd() {
+      let that = this;
+      fetch(this.$store.state.baseURL + "/config/check")
+        .then((response) => {
+          if (response.ok) {
+            console.log("APP: no authentication needed");
+            that.isPWDNeeded = false;
+            that.isPwdOK = true;
+            that.$store.commit("password", "");
+          } else {
+            console.log("APP: authentication needed");
+          }
+        })
+        .catch((err) => {
+          console.log("APP: authentication needed");
+          console.log(err.message);
+        });
+    },
     actionWizard() {
       if (!this.isPwdOK) {
         this.$toast.add({

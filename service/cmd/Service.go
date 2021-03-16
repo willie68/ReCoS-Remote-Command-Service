@@ -351,9 +351,7 @@ func initConfig() {
 		serviceConfig.WebClient = config.DefaulConfig.WebClient
 	}
 
-	if serviceConfig.Password != "" {
-		handler.AuthenticationConfig.Password = serviceConfig.Password
-	}
+	handler.AuthenticationConfig.Password = serviceConfig.Password
 
 	var err error
 	serviceConfig.Profiles, err = config.ReplaceConfigdir(serviceConfig.Profiles)

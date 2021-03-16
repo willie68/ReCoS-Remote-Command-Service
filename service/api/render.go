@@ -19,9 +19,6 @@ const TokenHeader = "Authorization"
 // UserHeader in this header the username is expected
 const UserHeader = "X-mcs-username"
 
-// PwdHeader in this header the password is expected
-const PwdHeader = "X-mcs-password"
-
 // Username gets the username of the given request
 func Username(r *http.Request) (string, error) {
 	uid := r.Header.Get(UserHeader)
