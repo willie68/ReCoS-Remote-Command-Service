@@ -212,31 +212,35 @@ export default {
       this.addArgDialog = false;
     },
     removeArgument(param, data) {
-      console.log("Command: remove argument.", param, JSON.stringify(data));
+      let value = data;
+      if (Array.isArray(data)) {
+        value = data[0];
+      }
       this.$confirm.require({
         message:
           "Deleting argument: " +
           param +
           ":" +
-          data +
+          value +
           ". Are you sure you want to proceed?",
         header: "Confirmation",
         icon: "pi pi-exclamation-triangle",
         accept: () => {
-          this.deleteCommand(param, data);
+          this.deleteArgument(param, value);
         },
         reject: () => {
           //callback to execute when user rejects the action
         },
       });
     },
-    deleteCommand(param, data) {
-      console.log("Command: delete argument ", param, data);
+    deleteArgument(param, value) {
       let index = ObjectUtils.findIndexInList(
-        this.data,
+        value,
         this.activeCommand.parameters[param]
       );
-      this.activeCommand.parameters[param].splice(index, 1);
+      if (index >= 0) {
+        this.activeCommand.parameters[param].splice(index, 1);
+      }
     },
     updateIcons() {
       let iconurl = this.$store.state.baseURL + "/config/icons";
