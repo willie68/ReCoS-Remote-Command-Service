@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"sort"
 	"strings"
 
 	"github.com/go-chi/chi"
@@ -40,6 +41,9 @@ func GetProfiles(response http.ResponseWriter, request *http.Request) {
 	for _, profile := range config.Profiles {
 		profileNames = append(profileNames, profile.Name)
 	}
+
+	sort.Slice(profileNames, func(i, j int) bool { return strings.ToLower(profileNames[i]) < strings.ToLower(profileNames[j]) })
+
 	render.JSON(response, request, profileNames)
 }
 

@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 
 	"github.com/go-chi/chi"
@@ -33,23 +34,27 @@ func ConfigRoutes() *chi.Mux {
 GetIcons list of all possible icon names
 */
 func GetIcons(response http.ResponseWriter, request *http.Request) {
-	icons = make([]string, 0)
+	if icons == nil || len(icons) == 0 {
 
-	err := filepath.Walk(config.Get().Icons, func(path string, info os.FileInfo, err error) error {
-		pathNames := strings.Split(path, "/")
-		if len(pathNames) == 1 {
-			pathNames = strings.Split(path, "\\")
+		icons = make([]string, 0)
+
+		err := filepath.Walk(config.Get().Icons, func(path string, info os.FileInfo, err error) error {
+			pathNames := strings.Split(path, "/")
+			if len(pathNames) == 1 {
+				pathNames = strings.Split(path, "\\")
+			}
+			icon := pathNames[len(pathNames)-1]
+			if strings.HasSuffix(icon, ".png") {
+				icons = append(icons, icon)
+			}
+			return nil
+		})
+		if err != nil {
+			clog.Logger.Debug("Error reading icon files:" + err.Error())
+			api.Err(response, request, err)
+			return
 		}
-		icon := pathNames[len(pathNames)-1]
-		if strings.HasSuffix(icon, ".png") {
-			icons = append(icons, icon)
-		}
-		return nil
-	})
-	if err != nil {
-		clog.Logger.Debug("Error reading icon files:" + err.Error())
-		api.Err(response, request, err)
-		return
+		sort.Slice(icons, func(i, j int) bool { return strings.ToLower(icons[i]) < strings.ToLower(icons[j]) })
 	}
 
 	render.JSON(response, request, icons)

@@ -1,0 +1,550 @@
+name: aaa
+description: This is the default configuration, just to have one starting point
+pages:
+    - name: Default
+      description: Some default command for every operating system
+      columns: 5
+      rows: 3
+      toolbar: ""
+      cells:
+        - delay1
+        - delay2
+        - sendkeys
+        - noop
+        - timer
+        - timer2
+        - clocks
+        - clock
+        - analogclock
+        - cputemp
+        - cpuload
+        - stopwatch
+        - noop1
+        - ""
+        - page_0
+    - name: clocks
+      description: clocks only
+      columns: 3
+      rows: 3
+      toolbar: hide
+      cells:
+        - page1
+        - none
+        - none
+        - none
+        - clock
+        - analogclock
+    - name: hardware
+      description: hardware statistics only
+      columns: 3
+      rows: 3
+      toolbar: ""
+      cells:
+        - cputemp
+        - cpuload
+    - name: windows
+      description: only working on windows
+      columns: 3
+      rows: 3
+      toolbar: ""
+      cells:
+        - window_ctrl
+        - execgo
+actions:
+    - type: SINGLE
+      name: delay1
+      title: short delay
+      icon: hourglass_begin.png
+      description: Just a short delay
+      fontsize: 10
+      fontcolor: '#FF0000'
+      outlined: false
+      runone: true
+      commands:
+        - id: DELAY_0
+          type: DELAY
+          name: delay
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            time: 2
+      actions: []
+    - type: SINGLE
+      name: delay2
+      title: Pause
+      icon: ""
+      description: Stepped Delay with different titles
+      fontsize: 0
+      fontcolor: ""
+      outlined: false
+      runone: false
+      commands:
+        - id: DELAY_1
+          type: DELAY
+          name: delay1
+          description: ""
+          icon: address_book.png
+          title: step 1
+          parameters:
+            time: 1
+        - id: DELAY_2
+          type: DELAY
+          name: delay2
+          description: ""
+          icon: ""
+          title: step 2
+          parameters:
+            time: 1
+        - id: DELAY_3
+          type: DELAY
+          name: delay3
+          description: ""
+          icon: ""
+          title: step 3
+          parameters:
+            time: 1
+        - id: DELAY_4
+          type: DELAY
+          name: delay4
+          description: ""
+          icon: ""
+          title: step 4
+          parameters:
+            time: 1
+        - id: DELAY_5
+          type: DELAY
+          name: delay5
+          description: ""
+          icon: ""
+          title: step 5
+          parameters:
+            time: 1
+        - id: DELAY_6
+          type: DELAY
+          name: delay6
+          description: ""
+          icon: ""
+          title: step 6
+          parameters:
+            time: 1
+        - id: DELAY_7
+          type: DELAY
+          name: delay7
+          description: ""
+          icon: ""
+          title: step 7
+          parameters:
+            time: 1
+        - id: DELAY_8
+          type: DELAY
+          name: delay8
+          description: ""
+          icon: ""
+          title: step 8
+          parameters:
+            time: 1
+        - id: DELAY_9
+          type: DELAY
+          name: delay9
+          description: ""
+          icon: ""
+          title: step 9
+          parameters:
+            time: 1
+        - id: DELAY_10
+          type: DELAY
+          name: delay10
+          description: ""
+          icon: ""
+          title: step 10
+          parameters:
+            time: 1
+        - id: DELAY_11
+          type: DELAY
+          name: delay11
+          description: ""
+          icon: ""
+          title: step 11
+          parameters:
+            time: 1
+        - id: DELAY_12
+          type: DELAY
+          name: delay12
+          description: ""
+          icon: ""
+          title: step 12
+          parameters:
+            time: 1
+      actions: []
+    - type: SINGLE
+      name: execgo
+      title: go version
+      icon: ""
+      description: Execute go version
+      fontsize: 0
+      fontcolor: ""
+      outlined: false
+      runone: true
+      commands:
+        - id: EXECUTE_13
+          type: EXECUTE
+          name: execute
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            args:
+                - version
+                - help
+                - doit
+            command: go.exe
+      actions: []
+    - type: SINGLE
+      name: clocks
+      title: Clocks
+      icon: ""
+      description: Goto clocks page
+      fontsize: 0
+      fontcolor: ""
+      outlined: false
+      runone: true
+      commands:
+        - id: PAGE_14
+          type: PAGE
+          name: page
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            page: clocks
+      actions: []
+    - type: SINGLE
+      name: page1
+      title: Back
+      icon: arrow_left.png
+      description: Goto default page
+      fontsize: 0
+      fontcolor: ""
+      outlined: false
+      runone: true
+      commands:
+        - id: PAGE_15
+          type: PAGE
+          name: page
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            page: Default
+      actions: []
+    - type: SINGLE
+      name: sendkeys
+      title: Sending some keys
+      icon: ""
+      description: description for page
+      fontsize: 0
+      fontcolor: ""
+      outlined: false
+      runone: true
+      commands:
+        - id: DELAY_16
+          type: DELAY
+          name: delay
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            time: 5
+        - id: KEYS_17
+          type: KEYS
+          name: sendkeys
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            keys: '{esc}1+1{enter}'
+            layout: de
+      actions: []
+    - type: SINGLE
+      name: window_ctrl
+      title: window_ctrl
+      icon: ""
+      description: window_ctrl
+      fontsize: 0
+      fontcolor: ""
+      outlined: false
+      runone: true
+      commands:
+        - id: DELAY_18
+          type: DELAY
+          name: delay1
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            time: 2
+        - id: WINDOWCTRL_19
+          type: WINDOWCTRL
+          name: control window
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            caption: Rechner
+            command: activate
+        - id: DELAY_20
+          type: DELAY
+          name: delay2
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            time: 1
+        - id: KEYS_21
+          type: KEYS
+          name: sendkeys
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            keys: '{esc}1+1{enter}'
+            layout: de
+        - id: DELAY_22
+          type: DELAY
+          name: delay3
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            time: 2
+        - id: WINDOWCTRL_23
+          type: WINDOWCTRL
+          name: control window
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            caption: Rechner
+            command: move 700 300
+        - id: DELAY_24
+          type: DELAY
+          name: delay4
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            time: 2
+        - id: WINDOWCTRL_25
+          type: WINDOWCTRL
+          name: control window
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            caption: Rechner
+            command: minimize
+      actions: []
+    - type: SINGLE
+      name: noop
+      title: Do nothing
+      icon: light_bulb.png
+      description: do nothing
+      fontsize: 0
+      fontcolor: ""
+      outlined: false
+      runone: true
+      commands:
+        - id: NOOP_26
+          type: NOOP
+          name: noop
+          description: ""
+          icon: ""
+          title: Waiting
+          parameters: {}
+      actions: []
+    - type: SINGLE
+      name: timer
+      title: Timer 10 sec
+      icon: alarm_bell.png
+      description: timer counting down 10 sec
+      fontsize: 0
+      fontcolor: ""
+      outlined: false
+      runone: true
+      commands:
+        - id: TIMER_27
+          type: TIMER
+          name: timer
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            finished: Fertig
+            format: noch %ds
+            time: 10
+      actions: []
+    - type: SINGLE
+      name: timer2
+      title: Timer 20 sec
+      icon: time_frame.png
+      description: timer counting down 20 sec
+      fontsize: 0
+      fontcolor: ""
+      outlined: false
+      runone: true
+      commands:
+        - id: TIMER_28
+          type: TIMER
+          name: timer
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            format: '%d Sekunden'
+            time: 20
+      actions: []
+    - type: DISPLAY
+      name: clock
+      title: Clock
+      icon: ""
+      description: ""
+      fontsize: 0
+      fontcolor: white
+      outlined: false
+      runone: true
+      commands:
+        - id: CLOCK_29
+          type: CLOCK
+          name: clock
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            analog: false
+            format: "15:04:05\r\n02 Jan 06"
+      actions: []
+    - type: DISPLAY
+      name: analogclock
+      title: Analogclock
+      icon: ""
+      description: ""
+      fontsize: 0
+      fontcolor: white
+      outlined: false
+      runone: true
+      commands:
+        - id: CLOCK_30
+          type: CLOCK
+          name: clock
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            analog: true
+            format: "15:04:05\r\n02 Jan 06"
+      actions: []
+    - type: SINGLE
+      name: screenshot
+      title: Screenshot
+      icon: monitor.png
+      description: doing a screenshot
+      fontsize: 0
+      fontcolor: ""
+      outlined: false
+      runone: true
+      commands:
+        - id: SCREENSHOT_31
+          type: SCREENSHOT
+          name: screenshot
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            display: 1
+            saveto: e:/temp/screenshot
+      actions: []
+    - type: DISPLAY
+      name: cputemp
+      title: CPU Temp
+      icon: company.png
+      description: cpu temp
+      fontsize: 0
+      fontcolor: ""
+      outlined: true
+      runone: true
+      commands:
+        - id: HARDWAREMONITOR_32
+          type: HARDWAREMONITOR
+          name: cpu
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            color: '#00ff00'
+            display: both
+            format: '%0.1f °C'
+            sensor: CPU/Intel Core i7-6820HQ/Temperature/CPU Package
+            ymax: 80
+            ymin: 30
+      actions: []
+    - type: DISPLAY
+      name: cpuload
+      title: CPU Load
+      icon: company.png
+      description: cpu usage
+      fontsize: 0
+      fontcolor: white
+      outlined: false
+      runone: true
+      commands:
+        - id: HARDWAREMONITOR_33
+          type: HARDWAREMONITOR
+          name: cpu
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            color: '#ffff00'
+            display: both
+            format: '%0.1f %'
+            sensor: CPU/Intel Core i7-6820HQ/Load/CPU Total
+      actions: []
+    - type: SINGLE
+      name: stopwatch
+      title: Stopwatch
+      icon: timer.png
+      description: simple stop watch
+      fontsize: 0
+      fontcolor: black
+      outlined: true
+      runone: true
+      commands:
+        - id: STOPWATCH_34
+          type: STOPWATCH
+          name: stp1
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            format: 'Mom: %0m:%0s'
+      actions: []
+    - type: SINGLE
+      name: page_0
+      title: Goto Default
+      icon: abacus.png
+      description: new PAGE action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: ""
+          type: PAGE
+          name: page_0
+          description: new PAGE command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            page: Default
+      actions: []
