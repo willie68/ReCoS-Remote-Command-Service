@@ -185,12 +185,10 @@ export default {
     },
   },
   created() {
-    this.updateIcons();
     this.upadteCommandTypes();
     let that = this;
     this.unsubscribe = this.$store.subscribe((mutation) => {
       if (mutation.type === "baseURL") {
-        that.updateIcons();
         that.upadteCommandTypes();
       }
     });
@@ -242,18 +240,8 @@ export default {
         this.activeCommand.parameters[param].splice(index, 1);
       }
     },
-    updateIcons() {
-      let iconurl = this.$store.state.baseURL + "/config/icons";
-      fetch(iconurl)
-        .then((res) => res.json())
-        .then((data) => {
-          //console.log(data);
-          this.iconlist = data;
-        })
-        .catch((err) => console.log(err.message));
-    },
     upadteCommandTypes() {
-      let url = this.$store.state.baseURL + "/config/commands";
+      let url = this.$store.state.baseURL + "config/commands";
       fetch(url)
         .then((res) => res.json())
         .then((data) => {
@@ -267,6 +255,13 @@ export default {
     this.unsubscribe();
   },
   mounted() {
+    this.iconlist = this.$store.state.iconlist;
+    let that = this;
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type === "iconlist") {
+        that.iconlist = state.iconlist;
+      }
+    });
     if (this.command) {
       console.log("Commands: action: " + JSON.stringify(this.command));
       this.activeCommand = this.command;

@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
+	"sync"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
@@ -18,6 +19,7 @@ import (
 )
 
 var icons []string
+var mu sync.Mutex
 
 /*
 ConfigRoutes getting all routes for the config endpoint
@@ -34,6 +36,7 @@ func ConfigRoutes() *chi.Mux {
 GetIcons list of all possible icon names
 */
 func GetIcons(response http.ResponseWriter, request *http.Request) {
+	mu.Lock()
 	if icons == nil || len(icons) == 0 {
 
 		icons = make([]string, 0)
@@ -56,7 +59,7 @@ func GetIcons(response http.ResponseWriter, request *http.Request) {
 		}
 		sort.Slice(icons, func(i, j int) bool { return strings.ToLower(icons[i]) < strings.ToLower(icons[j]) })
 	}
-
+	mu.Unlock()
 	render.JSON(response, request, icons)
 }
 
