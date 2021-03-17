@@ -1,4 +1,4 @@
-name: Default
+name: default
 description: This is the default configuration, just to have one starting point
 pages:
     - name: Default
