@@ -43,7 +43,7 @@ Source: "..\service\recos-service.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\service\devdata\webclient\*"; DestDir: "{userappdata}\ReCoS\webclient"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "..\service\devdata\webadmin\*"; DestDir: "{userappdata}\ReCoS\webadmin"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
-Source: "..\service\devdata\profiles\default.yaml"; DestDir: "{userappdata}\ReCoS\profiles\"; Flags: confirmoverwrite onlyifdoesntexist
+Source: "..\general\default.yaml"; DestDir: "{userappdata}\ReCoS\profiles\"; Flags: confirmoverwrite onlyifdoesntexist
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
