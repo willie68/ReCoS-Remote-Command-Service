@@ -81,30 +81,6 @@ export default {
       cmdNames: [],
     };
   },
-  watch: {
-    activeProfile: {
-      deep: true,
-      handler(newProfile) {
-        console.log("app: changing profile " + newProfile.name);
-        //console.log(JSON.stringify(newProfile));
-        this.profileDirty = true;
-      },
-    },
-    action: {
-      deep: true,
-      handler(action) {
-        if (action) {
-          console.log("Commands: action: " + JSON.stringify(action));
-          this.activeAction = action;
-          if (action.commands && action.commands.length > 0) {
-            this.activeCommand = action.commands[0];
-          }
-        } else {
-          this.activeAction = { name: "", commands: [] };
-        }
-      },
-    },
-  },
   methods: {
     changeCommand(event) {
       let command = event.value;
@@ -140,10 +116,10 @@ export default {
       this.$nextTick(function () {
         console.log(
           "Commands: set active commnad to: ",
-          this.activeAction.commands[this.activeAction.commands.length-1]
+          this.activeAction.commands[this.activeAction.commands.length - 1]
         );
         this.activeCommand = this.activeAction.commands[
-          this.activeAction.commands.length-1
+          this.activeAction.commands.length - 1
         ];
       });
     },
@@ -214,6 +190,32 @@ export default {
     } else {
       this.activeAction = { name: "", commands: [] };
     }
+  },
+  watch: {
+    activeProfile: {
+      deep: true,
+      handler(newProfile) {
+        console.log("app: changing profile " + newProfile.name);
+        //console.log(JSON.stringify(newProfile));
+        this.profileDirty = true;
+      },
+    },
+    action: {
+      deep: false,
+      handler(action) {
+        if (action) {
+          if (this.activeAction != action) {
+            console.log("Commands: action: changed: ", action);
+            this.activeAction = action;
+            if (action.commands && action.commands.length > 0) {
+              this.activeCommand = action.commands[0];
+            }
+          } else {
+            this.activeAction = { name: "", commands: [] };
+          }
+        }
+      },
+    },
   },
 };
 </script>
