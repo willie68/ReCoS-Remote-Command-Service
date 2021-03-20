@@ -42,7 +42,7 @@
           :header="'Command: ' + activeCommandName"
           class="commands-panel-custom no-border"
         >
-          <Command :command="activeCommand"  />
+          <Command :command="activeCommand" />
         </Panel>
       </SplitterPanel>
     </Splitter>
@@ -107,12 +107,12 @@ export default {
   },
   methods: {
     changeCommand(event) {
-      let command = event.value
+      let command = event.value;
       console.log("Commands: command changed:" + command.name);
       if (command) {
-        this.activeCommandName = command.name
+        this.activeCommandName = command.name;
       } else {
-        this.activeCommandName = ""
+        this.activeCommandName = "";
       }
       //      console.log(JSON.stringify(this.action));
     },
@@ -137,7 +137,15 @@ export default {
         this.activeAction.commands = [];
       }
       this.activeAction.commands.push(newCommand);
-      this.activeCommand = newCommand;
+      this.$nextTick(function () {
+        console.log(
+          "Commands: set active commnad to: ",
+          this.activeAction.commands[this.activeAction.commands.length-1]
+        );
+        this.activeCommand = this.activeAction.commands[
+          this.activeAction.commands.length-1
+        ];
+      });
     },
     deleteConfirm() {
       if (this.activeCommand) {
@@ -201,7 +209,7 @@ export default {
       this.activeAction = this.action;
       if (this.action.commands && this.action.commands.length > 0) {
         this.activeCommand = this.action.commands[0];
-        this.activeCommandName = this.activeCommand.name
+        this.activeCommandName = this.activeCommand.name;
       }
     } else {
       this.activeAction = { name: "", commands: [] };

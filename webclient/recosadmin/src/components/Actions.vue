@@ -98,6 +98,7 @@ export default {
       this.activeProfile.actions.push(newAction);
       this.activeAction = newAction;
       this.actionNames.push(newAction.name);
+      this.activeActionName = this.activeAction.name;
     },
     deleteConfirm() {
       if (this.activeAction) {
