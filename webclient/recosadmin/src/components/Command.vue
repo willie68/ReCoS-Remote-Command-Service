@@ -263,7 +263,7 @@ export default {
       }
     });
     if (this.command) {
-      console.log("Commands: action: " + JSON.stringify(this.command));
+      console.log("Command: monuted: " + JSON.stringify(this.command));
       this.activeCommand = this.command;
       this.commandtypes.forEach((commandType) => {
         if (commandType.type === this.activeCommand.type) {

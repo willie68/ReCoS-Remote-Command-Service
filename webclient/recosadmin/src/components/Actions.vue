@@ -29,8 +29,8 @@
     </SplitterPanel>
     <SplitterPanel class="no-border" :size="80">
       <Panel
-        v-if="activeAction != null"
-        :header="'Action: ' + activeAction.name"
+        v-show="activeAction"
+        :header="'Action: ' + activeActionName"
         class="actions-panel-custom no-border"
       >
         <Action :action="activeAction" :profile="activeProfile"></Action>
@@ -65,14 +65,21 @@ export default {
     return {
       activeProfile: null,
       activeAction: {},
+      activeActionName: "",
       addActionDialog: false,
       actionNames: null,
       newActionName: null,
     };
   },
   methods: {
-    checkChange(action) {
-      console.log("Actions: changed", JSON.stringify(action))
+    checkChange(event) {
+      let action = event.value;
+      console.log("Actions: changed", JSON.stringify(action));
+      if (action) {
+        this.activeActionName = action.name;
+      } else {
+        this.activeActionName = "";
+      }
     },
     addAction() {
       this.activeProfile.actions.forEach((element) => {
@@ -132,6 +139,7 @@ export default {
       this.actionNames = [];
       if (profile.actions) {
         this.activeAction = profile.actions[0];
+        this.activeActionName = this.activeAction.name;
       } else {
         this.activeAction = {};
       }

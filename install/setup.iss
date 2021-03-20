@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "ReCoS"
-#define MyAppVersion "0.53"
+#define MyAppVersion "0.53a"
 #define MyAppPublisher "MCS Media Computer Software"
 #define MyAppURL "https://www.wk-music.de"
 #define MyAppExeName "recos-service.exe"
@@ -14,7 +14,7 @@
 AppId={{8D6B4B17-6004-44DD-9AED-FD3FBBDB5B00}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
-;AppVerName={#MyAppName} {#MyAppVersion}
+AppVerName={#MyAppName} {#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
@@ -24,10 +24,11 @@ DefaultGroupName={#MyAppName}
 LicenseFile=..\LICENSE
 InfoAfterFile=..\README.md
 OutputDir=.\dist
-OutputBaseFilename=recos-setup
+OutputBaseFilename=recos-setup-{#MyAppVersion}
 SetupIconFile=..\webclient\RecosUI\public\favicon.ico
 Compression=lzma
 SolidCompression=yes
+PrivilegesRequired=none
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -42,6 +43,7 @@ Source: "..\service\recos-service.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\service\devdata\webclient\*"; DestDir: "{userappdata}\ReCoS\webclient"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "..\service\devdata\webadmin\*"; DestDir: "{userappdata}\ReCoS\webadmin"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
+Source: "..\service\devdata\profiles\default.yaml"; DestDir: "{userappdata}\ReCoS\profiles\"; Flags: confirmoverwrite onlyifdoesntexist
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
