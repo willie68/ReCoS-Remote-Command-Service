@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/json"
+	"fmt"
 	"image/color"
 	"strings"
 	"time"
@@ -64,6 +65,14 @@ func (d *HardwareMonitorCommand) EnrichType(profile models.Profile) (models.Comm
 // Init nothing
 func (d *HardwareMonitorCommand) Init(a *Action) (bool, error) {
 	d.temps = make([]float64, measurepoints)
+	object, ok := d.Parameters["sensor"]
+	if !ok {
+		return false, fmt.Errorf("The sensor parameter is empty.")
+	}
+	sensorname, ok := object.(string)
+	if !ok {
+		return false, fmt.Errorf("The sensor parameter is in wrong format. Please use string as format")
+	}
 	value, ok := d.Parameters["ymin"]
 	if !ok {
 		d.yMinValue = 0
@@ -131,6 +140,7 @@ func (d *HardwareMonitorCommand) Init(a *Action) (bool, error) {
 				sensors, err := hardware.OpenHardwareMonitorInstance.GetSensorList()
 				if err != nil {
 					clog.Logger.Errorf("error in getting sensors: %v", err)
+					continue
 				}
 				d.sensors = sensors
 				index := -1
@@ -145,7 +155,6 @@ func (d *HardwareMonitorCommand) Init(a *Action) (bool, error) {
 						HardwareMonitorCommandTypeInfo.Parameters[index].List = append(HardwareMonitorCommandTypeInfo.Parameters[index].List, sensor.GetFullSensorName())
 					}
 				}
-				sensorname := d.Parameters["sensor"].(string)
 				var temp float64
 				var value string
 				for _, sensor := range sensors {

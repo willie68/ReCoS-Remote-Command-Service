@@ -90,8 +90,13 @@ func InitProfile(profileName string) (*Profile, error) {
 			for _, command := range configAction.Commands {
 				commandExecutor := GetCommand(*command)
 				if commandExecutor != nil {
-					commandExecutor.Init(&action)
-					action.Commands[command.ID] = commandExecutor
+					ok, err := commandExecutor.Init(&action)
+					if ok {
+						action.Commands[command.ID] = commandExecutor
+					}
+					if err != nil {
+						clog.Logger.Errorf("error initialising command %s#%s: %v", action.Name, command.Name, err)
+					}
 				}
 			}
 			dtoProfile.Actions = append(dtoProfile.Actions, &action)
