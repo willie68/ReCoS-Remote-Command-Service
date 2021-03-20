@@ -1,43 +1,52 @@
 <template>
-  <Panel header="Commands" class="commands-panel-custom"></Panel>
-  <Splitter style="height: 300px">
-    <SplitterPanel :size="20">
-      <Panel header=" " class="commands-panel-custom">
-        <template #icons>
-          <Button
-            class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
-            icon="pi pi-plus"
-            @click="addCommand"
-          />
-          <Button
-            class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
-            icon="pi pi-arrow-up"
-            @click="moveUp"
-          />
-          <Button
-            class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
-            icon="pi pi-arrow-down"
-            @click="moveDown"
-          />
-          <Button
-            class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
-            icon="pi pi-trash"
-            @click="deleteConfirm"
-          />
-        </template>
-        <Listbox
-          v-model="activeCommand"
-          :options="activeAction.commands"
-          optionLabel="name"
-          listStyle="max-height:240px"
+  <Panel header="Commands" class="commands-panel-custom">
+    <Splitter style="height: 300px">
+      <SplitterPanel :size="20">
+        <Panel header=" " class="commands-panel-custom no-border">
+          <template #icons>
+            <Button
+              class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
+              icon="pi pi-plus"
+              @click="addCommand"
+            />
+            <Button
+              class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
+              icon="pi pi-arrow-up"
+              @click="moveUp"
+            />
+            <Button
+              class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
+              icon="pi pi-arrow-down"
+              @click="moveDown"
+            />
+            <Button
+              class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
+              icon="pi pi-trash"
+              @click="deleteConfirm"
+            />
+          </template>
+          <Listbox
+            v-model="activeCommand"
+            :options="activeAction.commands"
+            optionLabel="name"
+            listStyle="max-height:240px"
+            class="no-border"
+            v-on:change="changeCommand($event)"
+          >
+          </Listbox>
+        </Panel>
+      </SplitterPanel>
+      <SplitterPanel :size="80">
+        <Panel
+          v-show="activeCommand != null"
+          :header="'Command: ' + activeCommandName"
+          class="commands-panel-custom no-border"
         >
-        </Listbox>
-      </Panel>
-    </SplitterPanel>
-    <SplitterPanel :size="80">
-      <Command :command="activeCommand" v-on:change="changeCommand" />
-    </SplitterPanel>
-  </Splitter>
+          <Command :command="activeCommand" />
+        </Panel>
+      </SplitterPanel>
+    </Splitter>
+  </Panel>
   <AddName
     :visible="addCmdDialog"
     v-model="newCmdName"
@@ -66,27 +75,21 @@ export default {
     return {
       activeAction: { name: "" },
       activeCommand: {},
+      activeCommandName: "",
       addCmdDialog: false,
       newCmdName: null,
       cmdNames: [],
     };
   },
-  watch: {
-    action(action) {
-      if (action) {
-        console.log("Commands: action: " + JSON.stringify(action));
-        this.activeAction = action;
-        if (action.commands && action.commands.length > 0) {
-          this.activeCommand = action.commands[0];
-        }
-      } else {
-        this.activeAction = { name: "", commands: [] };
-      }
-    },
-  },
   methods: {
-    changeCommand(command) {
+    changeCommand(event) {
+      let command = event.value;
       console.log("Commands: command changed:" + command.name);
+      if (command) {
+        this.activeCommandName = command.name;
+      } else {
+        this.activeCommandName = "";
+      }
       //      console.log(JSON.stringify(this.action));
     },
     addCommand() {
@@ -110,7 +113,15 @@ export default {
         this.activeAction.commands = [];
       }
       this.activeAction.commands.push(newCommand);
-      this.activeCommand = newCommand;
+      this.$nextTick(function () {
+        console.log(
+          "Commands: set active commnad to: ",
+          this.activeAction.commands[this.activeAction.commands.length - 1]
+        );
+        this.activeCommand = this.activeAction.commands[
+          this.activeAction.commands.length - 1
+        ];
+      });
     },
     deleteConfirm() {
       if (this.activeCommand) {
@@ -174,17 +185,61 @@ export default {
       this.activeAction = this.action;
       if (this.action.commands && this.action.commands.length > 0) {
         this.activeCommand = this.action.commands[0];
+        this.activeCommandName = this.activeCommand.name;
       }
     } else {
       this.activeAction = { name: "", commands: [] };
     }
   },
+  watch: {
+    activeProfile: {
+      deep: true,
+      handler(newProfile) {
+        console.log("app: changing profile " + newProfile.name);
+        //console.log(JSON.stringify(newProfile));
+        this.profileDirty = true;
+      },
+    },
+    action: {
+      deep: false,
+      handler(action) {
+        if (action) {
+          if (this.activeAction != action) {
+            console.log("Commands: action: changed: ", action);
+            this.activeAction = action;
+            if (action.commands && action.commands.length > 0) {
+              this.activeCommand = action.commands[0];
+            }
+          } else {
+            this.activeAction = { name: "", commands: [] };
+          }
+        }
+      },
+    },
+  },
 };
 </script>
 
 <style>
+.commands-list {
+  max-height: 250px;
+}
+.commands-panel-custom {
+  height: 100%;
+}
+
+.commands-panel-custom .p-panel-content {
+  border-width: 0px;
+}
+
 .commands-panel-custom .p-panel-header {
   margin: 0px;
   padding: 2px !important;
+}
+
+.commands-panel-custom .p-panel-content {
+  margin: 0px;
+  padding: 2px !important;
+  height: 100%;
 }
 </style>

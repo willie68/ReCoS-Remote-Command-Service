@@ -127,7 +127,7 @@
 import ArgumentList from "./ArgumentList.vue";
 import AddName from "../components/AddName.vue";
 import DropdownParameter from "./DropdownParameter.vue";
-//import { ObjectUtils } from "primevue/utils";
+import { ObjectUtils } from "primevue/utils";
 
 export default {
   name: "Step2",
@@ -206,6 +206,37 @@ export default {
         this.localValue.parameters[this.activeParam].push(data);
       }
       this.addArgDialog = false;
+    },
+    removeArgument(param, data) {
+      let value = data;
+      if (Array.isArray(data)) {
+        value = data[0];
+      }
+      this.$confirm.require({
+        message:
+          "Deleting argument: " +
+          param +
+          ":" +
+          value +
+          ". Are you sure you want to proceed?",
+        header: "Confirmation",
+        icon: "pi pi-exclamation-triangle",
+        accept: () => {
+          this.deleteArgument(param, value);
+        },
+        reject: () => {
+          //callback to execute when user rejects the action
+        },
+      });
+    },
+    deleteArgument(param, value) {
+      let index = ObjectUtils.findIndexInList(
+        value,
+        this.localValue.parameters[param]
+      );
+      if (index >= 0) {
+        this.localValue.parameters[param].splice(index, 1);
+      }
     },
     checkType() {
       if (!this.localValue) {

@@ -25,7 +25,7 @@
     </template>
 
     <template #right>
-      <span class="p-input-icon-right">
+      <span v-if="isPWDNeeded" class="p-input-icon-right">
         Password
         <InputText
           ref="pwd"
@@ -76,6 +76,7 @@ export default {
   data() {
     return {
       name: "RecosAdmin",
+      isPWDNeeded: true,
       pwd: "",
       showPwd: false,
       pwdType: "password",
@@ -144,7 +145,7 @@ export default {
         if (newPassword) {
           let that = this;
           that.isPwdOK = false;
-          fetch(this.$store.state.baseURL + "/config/check", {
+          fetch(this.$store.state.baseURL + "config/check", {
             method: "GET",
             headers: new Headers({
               Authorization: `Basic ${btoa(`admin:${newPassword}`)}`,
@@ -172,11 +173,11 @@ export default {
       window.location.hostname +
       ":" +
       servicePort +
-      "/api/v1";
+      "/api/v1/";
     this.$store.commit("baseURL", basepath);
     console.log(`Updating to ${basepath}`);
     let that = this;
-    that.profileURL = basepath + "/profiles";
+    that.profileURL = basepath + "profiles";
     console.log("page profiles url:" + that.profileURL);
 
     fetch(that.profileURL)
@@ -184,6 +185,7 @@ export default {
       .then((data) => {
         that.profiles = data;
         that.activeProfileName = that.profiles[0];
+        this.needPWd();
       })
       .catch((err) => {
         console.log(err.message);
@@ -194,8 +196,34 @@ export default {
           life: 3000,
         });
       });
+    let iconurl = basepath + "config/icons";
+    fetch(iconurl)
+      .then((res) => res.json())
+      .then((data) => {
+        //console.log(data);
+        that.$store.commit("iconlist", data);
+      })
+      .catch((err) => console.log(err.message));
   },
   methods: {
+    needPWd() {
+      let that = this;
+      fetch(this.$store.state.baseURL + "config/check")
+        .then((response) => {
+          if (response.ok) {
+            console.log("APP: no authentication needed");
+            that.isPWDNeeded = false;
+            that.isPwdOK = true;
+            that.$store.commit("password", "");
+          } else {
+            console.log("APP: authentication needed");
+          }
+        })
+        .catch((err) => {
+          console.log("APP: authentication needed");
+          console.log(err.message);
+        });
+    },
     actionWizard() {
       if (!this.isPwdOK) {
         this.$toast.add({

@@ -33,7 +33,7 @@ func GetUIProfilesEndpoint(response http.ResponseWriter, request *http.Request) 
 		profileInfos = append(profileInfos, info)
 	}
 
-	sort.Slice(profileInfos, func(i, j int) bool { return profileInfos[i].Name < profileInfos[j].Name })
+	sort.Slice(profileInfos, func(i, j int) bool { return strings.ToLower(profileInfos[i].Name) < strings.ToLower(profileInfos[j].Name) })
 
 	result := models.ProfileInfos{
 		Profiles: profileInfos,

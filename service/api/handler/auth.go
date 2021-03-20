@@ -20,19 +20,22 @@ type AuthConfig struct {
 func AuthCheck() func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			auth := strings.SplitN(r.Header.Get("Authorization"), " ", 2)
+			if AuthenticationConfig.Password != "" {
 
-			if len(auth) != 2 || auth[0] != "Basic" {
-				http.Error(w, "{\"message\": \"authorization failed\"}", http.StatusUnauthorized)
-				return
-			}
+				auth := strings.SplitN(r.Header.Get("Authorization"), " ", 2)
 
-			payload, _ := base64.StdEncoding.DecodeString(auth[1])
-			pair := strings.SplitN(string(payload), ":", 2)
+				if len(auth) != 2 || auth[0] != "Basic" {
+					http.Error(w, "{\"message\": \"authorization failed\"}", http.StatusUnauthorized)
+					return
+				}
 
-			if len(pair) != 2 || !validate(pair[0], pair[1]) {
-				http.Error(w, "{\"message\": \"authorization failed\"}", http.StatusUnauthorized)
-				return
+				payload, _ := base64.StdEncoding.DecodeString(auth[1])
+				pair := strings.SplitN(string(payload), ":", 2)
+
+				if len(pair) != 2 || !validate(pair[0], pair[1]) {
+					http.Error(w, "{\"message\": \"authorization failed\"}", http.StatusUnauthorized)
+					return
+				}
 			}
 
 			next.ServeHTTP(w, r)

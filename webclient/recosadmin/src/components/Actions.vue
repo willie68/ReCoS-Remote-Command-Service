@@ -1,7 +1,7 @@
 <template>
-  <Splitter :style="{ height: splitterHeight }">
+  <Splitter class="actions-splitter no-border">
     <SplitterPanel :size="20" style="height: 100%">
-      <Panel header="Actions" class="actions-panel-custom">
+      <Panel header="Actions" class="actions-panel-custom no-border">
         <template #icons>
           <button
             class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
@@ -20,13 +20,21 @@
           v-model="activeAction"
           :options="profile.actions"
           optionLabel="name"
-          listStyle="height: 100%"
+          listStyle="max-height:500px"
+          class="no-border"
+          v-on:change="checkChange($event)"
         >
         </Listbox>
       </Panel>
     </SplitterPanel>
-    <SplitterPanel :size="80">
-      <Action :action="activeAction" :profile="activeProfile"></Action>
+    <SplitterPanel class="no-border" :size="80">
+      <Panel
+        v-show="activeAction"
+        :header="'Action: ' + activeActionName"
+        class="actions-panel-custom no-border"
+      >
+        <Action :action="activeAction" :profile="activeProfile"></Action>
+      </Panel>
     </SplitterPanel>
   </Splitter>
   <AddName
@@ -57,13 +65,22 @@ export default {
     return {
       activeProfile: null,
       activeAction: {},
-      splitterHeight: "600px",
+      activeActionName: "",
       addActionDialog: false,
       actionNames: null,
       newActionName: null,
     };
   },
   methods: {
+    checkChange(event) {
+      let action = event.value;
+      console.log("Actions: changed", JSON.stringify(action));
+      if (action) {
+        this.activeActionName = action.name;
+      } else {
+        this.activeActionName = "";
+      }
+    },
     addAction() {
       this.activeProfile.actions.forEach((element) => {
         this.actionNames.push(element.name);
@@ -81,6 +98,7 @@ export default {
       this.activeProfile.actions.push(newAction);
       this.activeAction = newAction;
       this.actionNames.push(newAction.name);
+      this.activeActionName = this.activeAction.name;
     },
     deleteConfirm() {
       if (this.activeAction) {
@@ -122,6 +140,7 @@ export default {
       this.actionNames = [];
       if (profile.actions) {
         this.activeAction = profile.actions[0];
+        this.activeActionName = this.activeAction.name;
       } else {
         this.activeAction = {};
       }
@@ -131,6 +150,11 @@ export default {
 </script>
 
 <style>
+.actions-splitter {
+  border-width: 0px;
+  height: 500px;
+}
+
 .actions-panel-custom {
   height: 100%;
 }
@@ -138,14 +162,12 @@ export default {
 .actions-panel-custom .p-panel-header {
   margin: 0px;
   padding: 2px !important;
+  height: 34px;
 }
 
 .actions-panel-custom .p-panel-content {
   margin: 0px;
   padding: 2px !important;
-  height: 100%;
-}
-.p-toggleable-content {
   height: 100%;
 }
 </style>

@@ -44,6 +44,7 @@ var DefaulConfig = Config{
 	Sslport:    0,
 	ServiceURL: "http://127.0.0.1:9280",
 	SecretFile: "",
+	Password:   "recosadmin",
 	HealthCheck: HealthCheck{
 		Period: 30,
 	},

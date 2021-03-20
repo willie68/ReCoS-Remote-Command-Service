@@ -11,6 +11,7 @@ import (
 // ExecuteCommandTypeInfo start an application or shell script and optionally waits for it's finishing
 var ExecuteCommandTypeInfo = models.CommandTypeInfo{"EXECUTE", "Execute", "Execute an application", true, []models.CommandParameterInfo{
 	{"command", "string", "the command to execute", "", true, make([]string, 0)},
+	{"waitOnClose", "bool", "wait's till the command is finnished", "", true, make([]string, 0)},
 	{"args", "[]string", "a list of arguments", "", true, make([]string, 0)},
 }}
 
@@ -38,7 +39,15 @@ func (e *ExecuteCommand) Stop(a *Action) (bool, error) {
 
 // Execute the command
 func (e *ExecuteCommand) Execute(a *Action, requestMessage models.Message) (bool, error) {
-	value, found := e.Parameters["command"]
+	waitOnExit := true
+	value, found := e.Parameters["waitOnClose"]
+	if found {
+		waitValue, ok := value.(bool)
+		if ok {
+			waitOnExit = waitValue
+		}
+	}
+	value, found = e.Parameters["command"]
 	if found {
 		cmdValue, ok := value.(string)
 		if ok {
@@ -57,10 +66,22 @@ func (e *ExecuteCommand) Execute(a *Action, requestMessage models.Message) (bool
 
 			clog.Logger.Debugf("execute command line: %v", cmd.String())
 
-			if output, err := cmd.Output(); err != nil {
-				clog.Logger.Errorf("error: %v\r\n", err)
+			if waitOnExit {
+				err := cmd.Run()
+				if err != nil {
+					clog.Logger.Errorf("error: %v\r\n", err)
+				}
 			} else {
-				clog.Logger.Debug(string(output))
+				err := cmd.Start()
+				if err != nil {
+					clog.Logger.Errorf("error: %v\r\n", err)
+				}
+				go func() {
+					err = cmd.Wait()
+					if err != nil {
+						clog.Logger.Errorf("error: %v\r\n", err)
+					}
+				}()
 			}
 		} else {
 			return false, fmt.Errorf("The command parameter is in wrong format. Please use string as format")
