@@ -476,6 +476,7 @@ Parameter:
 
 `command`: the executable or shell script to execute, with or without path
 `args`: list of string arguments to this executable
+`waitOnClose`: waits until the executable is closed or script is finnished.
 
 Example
 
@@ -486,6 +487,7 @@ parameters:
   command: go.exe 
   args:
     - "version"
+  waitOnClose: true
 ```
 
 ##### Page
