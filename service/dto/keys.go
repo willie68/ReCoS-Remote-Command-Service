@@ -14,8 +14,8 @@ import (
 
 // KeysCommandTypeInfo sending key strokes to the active program
 var KeysCommandTypeInfo = models.CommandTypeInfo{"KEYS", "Keys", "Typing on a virtual keyboard", true, []models.CommandParameterInfo{
-	{"layout", "string", "defining the layout of the keyboard used to send the data", "", false, []string{"en", "de"}},
-	{"keys", "string", "keys are the string with the keys used to send, example: 'akteon{enter}'", "", true, make([]string, 0)},
+	{"keylayout", "string", "defining the layout of the keyboard used to send the data", "", false, []string{"en", "de"}},
+	{"keystrokes", "string", "keys are the string with the keys used to send, example: 'akteon{enter}'", "", true, make([]string, 0)},
 }}
 
 // KeysCommand is a command to send keystroke to the active application.
@@ -53,7 +53,7 @@ func (p *KeysCommand) Execute(a *Action, requestMessage models.Message) (bool, e
 	}
 
 	layout := "en"
-	lvalue, found := p.Parameters["layout"]
+	lvalue, found := p.Parameters["keylayout"]
 	if found {
 		layoutValue, ok := lvalue.(string)
 		if ok {
@@ -66,7 +66,7 @@ func (p *KeysCommand) Execute(a *Action, requestMessage models.Message) (bool, e
 		keyboardLayout = utils.KeyGerman
 	}
 
-	value, found := p.Parameters["keys"]
+	value, found := p.Parameters["keystrokes"]
 	if found {
 		keyValue, ok := value.(string)
 		if ok {

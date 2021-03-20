@@ -48,7 +48,8 @@ const store = createStore({
         servicePort: 9280,
         baseURL: window.location.protocol + "//localhost:9280/api/v1/",
         password: "",
-        authheader: {}
+        authheader: {},
+        inconlist: [],
       }
     },
     mutations: {
@@ -56,12 +57,18 @@ const store = createStore({
         state.count++
       },
       baseURL (state, baseurl) {
-          state.baseURL = baseurl
+        state.baseURL = baseurl
+        if (!baseurl.endsWith("/")) {
+          state.baseURL = state.baseURL + "/"
+        }
       },
       password (state, password) {
         state.password = password
         state.authheader = {Authorization: `Basic ${btoa(`admin:${password}`)}`}
-      }
+      },
+      iconlist (state, iconlist) {
+        state.iconlist = iconlist
+      },
     }
   })
 

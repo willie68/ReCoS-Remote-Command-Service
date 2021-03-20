@@ -17,7 +17,6 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/dto"
 	"wkla.no-ip.biz/remote-desk-service/error/serror"
 	"wkla.no-ip.biz/remote-desk-service/health"
-	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 	"wkla.no-ip.biz/remote-desk-service/pkg/osdependent"
 
 	config "wkla.no-ip.biz/remote-desk-service/config"
@@ -189,32 +188,9 @@ func main() {
 	}
 
 	if len(config.Profiles) == 0 {
-		newProfile := models.Profile{
-			Name:        "Default",
-			Description: "This is the default profile",
-			Pages:       make([]models.Page, 0),
-			Actions:     make([]*models.Action, 0),
-		}
-		newProfile.Pages = append(newProfile.Pages, models.Page{
-			Name:        "Default",
-			Description: "This is the default page",
-			Rows:        5,
-			Columns:     3,
-			Toolbar:     models.ToolbarShow,
-			Cells:       make([]string, 0),
-		})
-
-		newProfile.Actions = append(newProfile.Actions, &models.Action{
-			Type:  models.Display,
-			Name:  "Clock",
-			Title: "Clock",
-		})
-
-		if err := config.SaveProfileFile(newProfile); err != nil {
-			clog.Logger.Alertf("can't create profiles: %s", err.Error())
-			os.Exit(1)
-		}
-		config.Profiles = append(config.Profiles, newProfile)
+		profileFolder, _ := config.GetProfileFolder(serviceConfig.Profiles)
+		clog.Logger.Alertf("no profiles found: %s", profileFolder)
+		os.Exit(1)
 	}
 
 	if err := dto.InitProfiles(config.Profiles); err != nil {

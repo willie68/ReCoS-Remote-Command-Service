@@ -30,75 +30,229 @@ In the root you will find the following parameters
 This is an example
 
 ```yaml
-name: Default
-description: description for default
+name: default
+description: This is the default configuration, just to have one starting point
 pages:
-    - name: page1
-      columns: 5
-      rows: 5
-      cells:
-        - action1
-        - action2
-        - action3
-    - name: page2
+    - name: Default
+      description: Some default command for every operating system
       columns: 3
-      rows: 3
+      rows: 2
+      toolbar: ""
       cells:
-        - action1
-        - action2
+        - Hello_World
+        - clocks
+        - timer
+        - analogclock
+        - cpuload
+        - stopwatch
+    - name: clocks
+      description: clocks only
+      columns: 2
+      rows: 2
+      toolbar: hide
+      cells:
+        - Back
+        - none
+        - clock
+        - analogclock
 actions:
     - type: SINGLE
-      name: action1
-      title: Action Title Sync
-      description: description for action
+      name: Hello_World
+      title: Hello World
+      icon: chat.png
+      description: Execute notepad and wirte Hello ReCoS to it.
+      fontsize: 0
+      fontcolor: ""
+      outlined: false
       runone: true
       commands:
-        - type: DELAY
-          name: delay
-          parameters:
-            time: 2
-        - type: EXECUTE
+        - id: EXECUTE_0
+          type: EXECUTE
           name: execute
+          description: ""
+          icon: ""
+          title: ""
           parameters:
-            command: echo.bat 
-            args:
-              - "Hello world"
-        - type: DELAY
+            args: []
+            command: notepad.exe
+            waitOnClose: false
+        - id: DELAY_1
+          type: DELAY
           name: delay
+          description: ""
+          icon: ""
+          title: delay
           parameters:
-            time: 1
+            time: 3
+        - id: KEYS_2
+          type: KEYS
+          name: typeit
+          description: ""
+          icon: ""
+          title: typeit
+          parameters:
+            keys: Hello ReCoS
+            layout: de
+      actions: []
     - type: SINGLE
-      name: action2
-      title: Action Title Async
-      description: description for action
+      name: clocks
+      title: Clocks
+      icon: clock.png
+      description: Goto clocks page
+      fontsize: 0
+      fontcolor: ""
+      outlined: false
+      runone: true
+      commands:
+        - id: PAGE_3
+          type: PAGE
+          name: page
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            page: clocks
+      actions: []
+    - type: SINGLE
+      name: timer
+      title: Timer 10 sec
+      icon: alarm_bell.png
+      description: timer counting down 10 sec
+      fontsize: 0
+      fontcolor: ""
+      outlined: false
+      runone: true
+      commands:
+        - id: TIMER_4
+          type: TIMER
+          name: timer
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            finished: Fertig
+            format: noch %ds
+            time: 10
+      actions: []
+    - type: DISPLAY
+      name: analogclock
+      title: Analogclock
+      icon: ""
+      description: ""
+      fontsize: 0
+      fontcolor: white
+      outlined: false
+      runone: true
+      commands:
+        - id: CLOCK_5
+          type: CLOCK
+          name: clock
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            analog: true
+            format: "15:04:05\r\n02 Jan 06"
+      actions: []
+    - type: SINGLE
+      name: screenshot
+      title: Screenshot
+      icon: monitor.png
+      description: doing a screenshot
+      fontsize: 0
+      fontcolor: ""
+      outlined: false
+      runone: true
+      commands:
+        - id: SCREENSHOT_6
+          type: SCREENSHOT
+          name: screenshot
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            display: 1
+            saveto: e:/temp/screenshot
+      actions: []
+    - type: DISPLAY
+      name: cpuload
+      title: CPU Load
+      icon: company.png
+      description: cpu usage
+      fontsize: 0
+      fontcolor: white
+      outlined: false
+      runone: true
+      commands:
+        - id: HARDWAREMONITOR_7
+          type: HARDWAREMONITOR
+          name: cpu
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            color: '#ffff00'
+            display: both
+            format: '%0.1f %'
+            sensor: CPU/Intel Core i7-6820HQ/Load/CPU Total
+      actions: []
+    - type: SINGLE
+      name: stopwatch
+      title: Stopwatch
+      icon: timer.png
+      description: simple stop watch
+      fontsize: 0
+      fontcolor: black
+      outlined: true
+      runone: true
+      commands:
+        - id: STOPWATCH_8
+          type: STOPWATCH
+          name: stp1
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            format: 'Mom: %0m:%0s'
+      actions: []
+    - type: SINGLE
+      name: clock
+      title: text clock
+      icon: clock.png
+      description: ""
+      fontsize: 0
+      fontcolor: ""
+      outlined: false
       runone: false
       commands:
-        - type: DELAY
-          name: delay
-          parameters:
-            time: 2
-        - type: EXECUTE
-          name: execute
-          parameters:
-            command: echo.bat 
-            args: 
-              - "Hello world"
-        - type: DELAY
-          name: delay
-          parameters:
-            time: 1
+        - id: CLOCK_9
+          type: CLOCK
+          name: clock
+          description: ""
+          icon: ""
+          title: clock
+          parameters: {}
+      actions: []
     - type: SINGLE
-      name: action3
-      title: Execute go version
-      description: description for action
-      runone: true
+      name: Back
+      title: ""
+      icon: ""
+      description: ""
+      fontsize: 0
+      fontcolor: ""
+      outlined: false
+      runone: false
       commands:
-        - type: EXECUTE
-          name: execute
+        - id: PAGE_10
+          type: PAGE
+          name: Back
+          description: ""
+          icon: ""
+          title: Back
           parameters:
-            command: go.exe 
-            args:
-              - "version"
+            page: Default
+      actions: []
+
 ```
 
 
@@ -287,7 +441,7 @@ parameters:
 
 A simple textual stopwatch.
 
-`Type`: STOPWATCH
+`Type`: `STOPWATCH`
 
 `Parameter`: 
 
@@ -316,12 +470,13 @@ parameters:
 
 ##### Execute
 
-Type: EXECUTE
+Type: `EXECUTE`
 
 Parameter:
 
-command: the executable or shell script to execute, with or without path
-args: list of string arguments to this executable
+`command`: the executable or shell script to execute, with or without path
+`args`: list of string arguments to this executable
+`waitOnClose`: waits until the executable is closed or script is finnished.
 
 Example
 
@@ -332,16 +487,17 @@ parameters:
   command: go.exe 
   args:
     - "version"
+  waitOnClose: true
 ```
 
 ##### Page
 
 Switch to another page.
 
-type: PAGE
+type: `PAGE`
 
 Parameter:
-page: the name of the page to switch to
+`page`: the name of the page to switch to
 
 ```yaml
 type: PAGE
@@ -354,11 +510,11 @@ parameters:
 
 Sending keys to the active application. This command is emulating a keyboard input by sending key strokes of a keyboard to the active application. You can use different keyboard layouts and there are some macros defining special keys.
 
-type: KEYS
+type: `KEYS`
 
-layout: defining the layout of the keyboard used to send the data. en for English (us) "qwerty" and de for a German "qwertz" keyboard layout. Default is "de"
+`keylayout`: defining the layout of the keyboard used to send the data. en for English (us) "qwerty" and de for a German "qwertz" keyboard layout. Default is "de"
 
-keys: are the string with the keys used to send. For special keys there are defined special macros. Every macro starts with an "{" and ends than with "}". If you want to send the "{" as a character simply double this. ("{" -> "{{"). 
+`keystrokes`: are the string with the keys used to send. For special keys there are defined special macros. Every macro starts with an "{" and ends than with "}". If you want to send the "{" as a character simply double this. ("{" -> "{{"). 
 
 Another specialized character is the "~" char. It will lead into a 1 second delay between the typing. To get the "~" Character, simple double it.
 
@@ -393,22 +549,22 @@ The following macros are defined:
 type: KEYS
 name: sendkeys
 parameters:
-  layout: de
-  keys: "akteon00{enter}"
+  keylayout: de
+  keystrokes: "akteon00{enter}"
 ```
 
 ##### Controlling Application Main Window
 
 With this command, you can control the main window of an application.
 
-type: WINDOWCTRL
+type: `WINDOWCTRL`
 
 Parameter:
-caption: the caption of the application window
-command: the command to execute on this window. Possible values are:
-minimize: for minimizing the application window
-activate: for activating the application window again. (restore it if minimized and active/bring it to front) 
-move  x y: moving the window to the new position x,y
+`caption`: the caption of the application window
+`command`: the command to execute on this window. Possible values are:
+`minimize`: for minimizing the application window
+`activate`: for activating the application window again. (restore it if minimized and active/bring it to front) 
+`move  x y`: moving the window to the new position x,y
 
 ```yaml
 # activate the german calculator program
@@ -435,11 +591,11 @@ move  x y: moving the window to the new position x,y
 
 With this command, you can take a screenshot. 
 
-type: SCREENSHOT
+type: `SCREENSHOT`
 
 Parameter:
-saveto: the folder, where the screen shot will be saved. Format is `screen_<#number>_<display>.png`
-display: optional, the number of the display, if you want to store screen shot of every display please use -1. Getting the right display, simply do a screen shot with display = -1. Than look at the screen shots and look in the name at the last number of the right image. That is your display.
+`saveto`: the folder, where the screen shot will be saved. Format is `screen_<#number>_<display>.png`
+`display`: optional, the number of the display, if you want to store screen shot of every display please use -1. Getting the right display, simply do a screen shot with display = -1. Than look at the screen shots and look in the name at the last number of the right image. That is your display.
 
 ```yaml
 type: SCREENSHOT
@@ -502,15 +658,15 @@ e.g.:
 
 On the action side you have to configure this:
 
-type: HARDWAREMONITOR
+type: `HARDWAREMONITOR`
 
 Parameter:
-sensor: the sensor name like given above.
-format: the format string for the textual representation
-display: text, graph,  text shows only the textual representation, graph shows both
-ymin: the value for the floor of the graph
-ymax: the value for the bottom of the graph
-color: color of the graph
+`sensor`: the sensor name like given above.
+`format`: the format string for the textual representation
+`display`: text, graph,  text shows only the textual representation, graph shows both
+`ymin`: the value for the floor of the graph
+`ymax`: the value for the bottom of the graph
+`color`: color of the graph
 
 ```yaml
 type: HARDWAREMONITOR

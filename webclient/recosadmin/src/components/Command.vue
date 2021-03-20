@@ -185,12 +185,10 @@ export default {
     },
   },
   created() {
-    this.updateIcons();
     this.upadteCommandTypes();
     let that = this;
     this.unsubscribe = this.$store.subscribe((mutation) => {
       if (mutation.type === "baseURL") {
-        that.updateIcons();
         that.upadteCommandTypes();
       }
     });
@@ -212,44 +210,38 @@ export default {
       this.addArgDialog = false;
     },
     removeArgument(param, data) {
-      console.log("Command: remove argument.", param, JSON.stringify(data));
+      let value = data;
+      if (Array.isArray(data)) {
+        value = data[0];
+      }
       this.$confirm.require({
         message:
           "Deleting argument: " +
           param +
           ":" +
-          data +
+          value +
           ". Are you sure you want to proceed?",
         header: "Confirmation",
         icon: "pi pi-exclamation-triangle",
         accept: () => {
-          this.deleteCommand(param, data);
+          this.deleteArgument(param, value);
         },
         reject: () => {
           //callback to execute when user rejects the action
         },
       });
     },
-    deleteCommand(param, data) {
-      console.log("Command: delete argument ", param, data);
+    deleteArgument(param, value) {
       let index = ObjectUtils.findIndexInList(
-        this.data,
+        value,
         this.activeCommand.parameters[param]
       );
-      this.activeCommand.parameters[param].splice(index, 1);
-    },
-    updateIcons() {
-      let iconurl = this.$store.state.baseURL + "/config/icons";
-      fetch(iconurl)
-        .then((res) => res.json())
-        .then((data) => {
-          //console.log(data);
-          this.iconlist = data;
-        })
-        .catch((err) => console.log(err.message));
+      if (index >= 0) {
+        this.activeCommand.parameters[param].splice(index, 1);
+      }
     },
     upadteCommandTypes() {
-      let url = this.$store.state.baseURL + "/config/commands";
+      let url = this.$store.state.baseURL + "config/commands";
       fetch(url)
         .then((res) => res.json())
         .then((data) => {
@@ -263,8 +255,15 @@ export default {
     this.unsubscribe();
   },
   mounted() {
+    this.iconlist = this.$store.state.iconlist;
+    let that = this;
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type === "iconlist") {
+        that.iconlist = state.iconlist;
+      }
+    });
     if (this.command) {
-      console.log("Commands: action: " + JSON.stringify(this.command));
+      console.log("Command: monuted: " + JSON.stringify(this.command));
       this.activeCommand = this.command;
       this.commandtypes.forEach((commandType) => {
         if (commandType.type === this.activeCommand.type) {

@@ -1,25 +1,5 @@
 <template>
   <div class="p-orderlist p-component">
-    <div class="p-orderlist-controls">
-      <OLButton type="button" icon="pi pi-plus" @click="add"></OLButton>
-      <OLButton type="button" icon="pi pi-minus" @click="remove"></OLButton>
-      <OLButton
-        type="button"
-        icon="pi pi-angle-double-up"
-        @click="moveTop"
-      ></OLButton>
-      <OLButton type="button" icon="pi pi-angle-up" @click="moveUp"></OLButton>
-      <OLButton
-        type="button"
-        icon="pi pi-angle-down"
-        @click="moveDown"
-      ></OLButton>
-      <OLButton
-        type="button"
-        icon="pi pi-angle-double-down"
-        @click="moveBottom"
-      ></OLButton>
-    </div>
     <div class="p-orderlist-list-container">
       <div class="p-orderlist-header" v-if="$slots.header">
         <slot name="header"></slot>
@@ -28,7 +8,7 @@
         ref="list"
         name="p-orderlist-flip"
         tag="ul"
-        class="p-orderlist-list"
+        class="p-orderlist-list p-arument-list"
         :style="listStyle"
         role="listbox"
         aria-multiselectable="multiple"
@@ -48,6 +28,40 @@
           </li>
         </template>
       </transition-group>
+    </div>
+    <div class="p-orderlist-controls">
+      <OLButton
+        type="button"
+        icon="pi pi-plus"
+        @click="add"
+      />
+      <OLButton
+        type="button"
+        icon="pi pi-angle-up"
+        @click="moveUp"
+      />
+      <OLButton
+        type="button"
+        icon="pi pi-angle-down"
+        @click="moveDown"
+      />
+    </div>
+    <div class="p-orderlist-controls">
+      <OLButton
+        type="button"
+        icon="pi pi-minus"
+        @click="remove"
+      />
+      <OLButton
+        type="button"
+        icon="pi pi-angle-double-up"
+        @click="moveTop"
+      />
+      <OLButton
+        type="button"
+        icon="pi pi-angle-double-down"
+        @click="moveBottom"
+      />
     </div>
   </div>
 </template>
@@ -408,35 +422,7 @@ export default {
 </script>
 
 <style>
-.p-orderlist {
-  display: flex;
-}
-.p-orderlist-controls {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.p-orderlist-list-container {
-  flex: 1 1 auto;
-}
-.p-orderlist-list {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: auto;
-  min-height: 12rem;
-  max-height: 24rem;
-}
-.p-orderlist-item {
-  cursor: pointer;
-  overflow: hidden;
-  position: relative;
-}
-.p-orderlist.p-state-disabled .p-orderlist-item,
-.p-orderlist.p-state-disabled .p-button {
-  cursor: default;
-}
-.p-orderlist.p-state-disabled .p-orderlist-list {
-  overflow: hidden;
+.p-arument-list {
+  min-height: 10rem !important;
 }
 </style>

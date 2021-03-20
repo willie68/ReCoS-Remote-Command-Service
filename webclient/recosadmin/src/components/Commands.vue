@@ -31,17 +31,18 @@
             optionLabel="name"
             listStyle="max-height:240px"
             class="no-border"
+            v-on:change="changeCommand($event)"
           >
           </Listbox>
         </Panel>
       </SplitterPanel>
       <SplitterPanel :size="80">
         <Panel
-          v-if="activeCommand != null"
-          :header="'Command: ' + activeCommand.name"
+          v-show="activeCommand != null"
+          :header="'Command: ' + activeCommandName"
           class="commands-panel-custom no-border"
         >
-          <Command :command="activeCommand" v-on:change="changeCommand" />
+          <Command :command="activeCommand" />
         </Panel>
       </SplitterPanel>
     </Splitter>
@@ -74,27 +75,21 @@ export default {
     return {
       activeAction: { name: "" },
       activeCommand: {},
+      activeCommandName: "",
       addCmdDialog: false,
       newCmdName: null,
       cmdNames: [],
     };
   },
-  watch: {
-    action(action) {
-      if (action) {
-        console.log("Commands: action: " + JSON.stringify(action));
-        this.activeAction = action;
-        if (action.commands && action.commands.length > 0) {
-          this.activeCommand = action.commands[0];
-        }
-      } else {
-        this.activeAction = { name: "", commands: [] };
-      }
-    },
-  },
   methods: {
-    changeCommand(command) {
+    changeCommand(event) {
+      let command = event.value;
       console.log("Commands: command changed:" + command.name);
+      if (command) {
+        this.activeCommandName = command.name;
+      } else {
+        this.activeCommandName = "";
+      }
       //      console.log(JSON.stringify(this.action));
     },
     addCommand() {
@@ -118,7 +113,15 @@ export default {
         this.activeAction.commands = [];
       }
       this.activeAction.commands.push(newCommand);
-      this.activeCommand = newCommand;
+      this.$nextTick(function () {
+        console.log(
+          "Commands: set active commnad to: ",
+          this.activeAction.commands[this.activeAction.commands.length - 1]
+        );
+        this.activeCommand = this.activeAction.commands[
+          this.activeAction.commands.length - 1
+        ];
+      });
     },
     deleteConfirm() {
       if (this.activeCommand) {
@@ -182,10 +185,37 @@ export default {
       this.activeAction = this.action;
       if (this.action.commands && this.action.commands.length > 0) {
         this.activeCommand = this.action.commands[0];
+        this.activeCommandName = this.activeCommand.name;
       }
     } else {
       this.activeAction = { name: "", commands: [] };
     }
+  },
+  watch: {
+    activeProfile: {
+      deep: true,
+      handler(newProfile) {
+        console.log("app: changing profile " + newProfile.name);
+        //console.log(JSON.stringify(newProfile));
+        this.profileDirty = true;
+      },
+    },
+    action: {
+      deep: false,
+      handler(action) {
+        if (action) {
+          if (this.activeAction != action) {
+            console.log("Commands: action: changed: ", action);
+            this.activeAction = action;
+            if (action.commands && action.commands.length > 0) {
+              this.activeCommand = action.commands[0];
+            }
+          } else {
+            this.activeAction = { name: "", commands: [] };
+          }
+        }
+      },
+    },
   },
 };
 </script>

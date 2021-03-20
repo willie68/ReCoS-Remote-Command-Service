@@ -12,6 +12,12 @@
     />
     <template #footer>
       <Button
+        label="Remove"
+        icon="pi pi-times"
+        class="p-button-text"
+        @click="remove"
+      />
+      <Button
         label="Cancel"
         icon="pi pi-times"
         class="p-button-text"
@@ -40,6 +46,7 @@ export default {
     visible: Boolean,
     selectByName: String,
   },
+  emits: ["cancel", "save" , "remove"],
   data() {
     return {
       selectedAction: {},
@@ -53,6 +60,9 @@ export default {
     },
     save() {
       this.$emit("save", this.selectedAction);
+    },
+    remove() {
+      this.$emit("remove");
     },
     checkName(name) {
       if (name == "") {

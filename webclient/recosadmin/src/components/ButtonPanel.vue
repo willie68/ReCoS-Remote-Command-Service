@@ -17,14 +17,14 @@
             :label="
               cellActions[(row - 1) * activePage.columns + (col - 1)].name
             "
-          ></Button>
+          />
           <Button
             :ref="'btn' + ((row - 1) * activePage.columns + (col - 1))"
             @click="clickButton((row - 1) * activePage.columns + (col - 1))"
             v-if="!cellActions[(row - 1) * activePage.columns + (col - 1)]"
             class="p-button-success"
             label="empty"
-          ></Button>
+          />
         </div>
       </div>
     </transition-group>
@@ -33,6 +33,7 @@
     :visible="dialogActionVisible"
     v-on:save="assignAction($event)"
     v-on:cancel="this.dialogActionVisible = false"
+    v-on:remove="removeAction()"
     :sourceValue="profile.actions"
     :selectByName="buttonActionSelected"
   ></SelectAction>
@@ -66,10 +67,6 @@ export default {
       this.saveIndex = index;
       this.dialogActionVisible = true;
     },
-    displayAllRefs() {
-      console.log("refs");
-      console.log(this.$refs);
-    },
     assignAction(action) {
       this.activePage.cells[this.saveIndex] = action.name;
       this.updateCellActions();
@@ -85,6 +82,11 @@ export default {
           }
         }
       }
+    },
+    removeAction() {
+      this.activePage.cells[this.saveIndex] = null;
+      this.updateCellActions();
+      this.dialogActionVisible = false;
     },
     getAction(index) {
       if (index < this.activePage.cells.length) {

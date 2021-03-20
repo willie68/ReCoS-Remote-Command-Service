@@ -94,11 +94,11 @@ export default {
       this.$emit("cancel");
     },
     save() {
-      let actionNames = this.activeProfile.actions.map(
-        (elem) => elem.name.toLowerCase()
+      let actionNames = this.activeProfile.actions.map((elem) =>
+        elem.name.toLowerCase()
       );
-      let pageNames = this.activeProfile.pages.map(
-        (elem) => elem.name.toLowerCase()
+      let pageNames = this.activeProfile.pages.map((elem) =>
+        elem.name.toLowerCase()
       );
       // creating a new action in the profile
       //   creating a unique name for the action
@@ -203,19 +203,8 @@ export default {
         }
       }
     },
-    updateIcons() {
-      let iconurl = this.$store.state.baseURL + "config/icons";
-      fetch(iconurl)
-        .then((res) => res.json())
-        .then((data) => {
-          //console.log(data);
-          this.iconlist = [];
-          this.iconlist = data;
-        })
-        .catch((err) => console.log(err.message));
-    },
     updateCommands() {
-      let url = this.$store.state.baseURL + "/config/commands";
+      let url = this.$store.state.baseURL + "config/commands";
       const myHeaders = new Headers();
 
       myHeaders.append("Content-Type", "application/json");
@@ -243,7 +232,16 @@ export default {
     },
   },
   mounted() {
-    this.updateIcons();
+    this.iconlist = this.$store.state.iconlist;
+    let that = this;
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type === "iconlist") {
+        that.iconlist = state.iconlist;
+      }
+    });
+  },
+  beforeUnmount() {
+    this.unsubscribe();
   },
   watch: {
     visible(visible) {
