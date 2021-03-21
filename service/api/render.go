@@ -51,6 +51,16 @@ func Param(r *http.Request, name string) (string, error) {
 	return cid, nil
 }
 
+// Query gets the url query param of the given request
+func Query(r *http.Request, name string) (string, error) {
+	cid := r.URL.Query().Get(name)
+	if cid == "" {
+		msg := fmt.Sprintf("missing %s in query", name)
+		return "", serror.BadRequest(nil, "missing-query", msg)
+	}
+	return cid, nil
+}
+
 // Created object created
 func Created(w http.ResponseWriter, r *http.Request, id string, v interface{}) {
 	// TODO add relative path to location

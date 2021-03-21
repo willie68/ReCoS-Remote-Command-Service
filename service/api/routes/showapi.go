@@ -3,12 +3,14 @@ package routes
 import (
 	"net/http"
 	"sort"
+	"strconv"
 	"strings"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
 	"wkla.no-ip.biz/remote-desk-service/api"
 	"wkla.no-ip.biz/remote-desk-service/config"
+	"wkla.no-ip.biz/remote-desk-service/dto"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
@@ -18,6 +20,7 @@ func ShowRoutes() *chi.Mux {
 	router := chi.NewRouter()
 	router.Get("/", GetUIProfilesEndpoint)
 	router.Get("/{profileName}", GetUIProfileEndpoint)
+	router.Get("/{profileName}/{actionName}/{commandName}/{id}", GetGraphics)
 	return router
 }
 
@@ -33,7 +36,9 @@ func GetUIProfilesEndpoint(response http.ResponseWriter, request *http.Request) 
 		profileInfos = append(profileInfos, info)
 	}
 
-	sort.Slice(profileInfos, func(i, j int) bool { return strings.ToLower(profileInfos[i].Name) < strings.ToLower(profileInfos[j].Name) })
+	sort.Slice(profileInfos, func(i, j int) bool {
+		return strings.ToLower(profileInfos[i].Name) < strings.ToLower(profileInfos[j].Name)
+	})
 
 	result := models.ProfileInfos{
 		Profiles: profileInfos,
@@ -90,6 +95,61 @@ func GetUIProfileEndpoint(response http.ResponseWriter, request *http.Request) {
 			render.JSON(response, request, uiProfile)
 			return
 		}
+	}
+	return
+}
+
+// GetGraphics getting the graphics of the id
+func GetGraphics(response http.ResponseWriter, request *http.Request) {
+	profileName, err := api.Param(request, "profileName")
+	if err != nil {
+		clog.Logger.Debug("Error reading profile name: \n" + err.Error())
+		api.Err(response, request, err)
+		return
+	}
+	actionName, err := api.Param(request, "actionName")
+	if err != nil {
+		clog.Logger.Debug("Error reading action name: \n" + err.Error())
+		api.Err(response, request, err)
+		return
+	}
+	commandName, err := api.Param(request, "commandName")
+	if err != nil {
+		clog.Logger.Debug("Error reading command name: \n" + err.Error())
+		api.Err(response, request, err)
+		return
+	}
+	id, err := api.Param(request, "id")
+	if err != nil {
+		clog.Logger.Debug("Error reading id: \n" + err.Error())
+		api.Err(response, request, err)
+		return
+	}
+	width := 0
+	widthStr, err := api.Query(request, "width")
+	if err == nil {
+		width, _ = strconv.Atoi(widthStr)
+	}
+	height := 0
+	heightStr, err := api.Query(request, "height")
+	if err == nil {
+		height, _ = strconv.Atoi(heightStr)
+	}
+
+	graphicsInfo, err := dto.Graphics(profileName, actionName, commandName, id, width, height)
+	if err != nil {
+		clog.Logger.Debug("Error reading action name: \n" + err.Error())
+		api.Err(response, request, err)
+		return
+	}
+
+	response.Header().Set("Content-Type", graphicsInfo.Mimetype)
+	response.Header().Set("Content-Length", strconv.Itoa(len(graphicsInfo.Data)))
+	response.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	response.WriteHeader(http.StatusOK)
+
+	if request.Method != "HEAD" {
+		response.Write(graphicsInfo.Data)
 	}
 	return
 }

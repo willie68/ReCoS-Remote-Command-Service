@@ -23,7 +23,7 @@ func (d *DelayCommand) EnrichType(profile models.Profile) (models.CommandTypeInf
 }
 
 // Init a delay in the actual context
-func (d *DelayCommand) Init(a *Action) (bool, error) {
+func (d *DelayCommand) Init(a *Action, commandName string) (bool, error) {
 	return true, nil
 }
 

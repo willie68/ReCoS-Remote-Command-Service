@@ -29,7 +29,7 @@ func (s *ScreenshotCommand) EnrichType(profile models.Profile) (models.CommandTy
 }
 
 // Init a delay in the actual context
-func (s *ScreenshotCommand) Init(a *Action) (bool, error) {
+func (s *ScreenshotCommand) Init(a *Action, commandName string) (bool, error) {
 	return true, nil
 }
 

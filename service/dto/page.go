@@ -40,7 +40,7 @@ func (p *PageCommand) EnrichType(profile models.Profile) (models.CommandTypeInfo
 }
 
 // Init the command
-func (p *PageCommand) Init(a *Action) (bool, error) {
+func (p *PageCommand) Init(a *Action, commandName string) (bool, error) {
 	return true, nil
 }
 

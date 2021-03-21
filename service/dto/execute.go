@@ -28,7 +28,7 @@ func (e *ExecuteCommand) EnrichType(profile models.Profile) (models.CommandTypeI
 }
 
 // Init the command
-func (e *ExecuteCommand) Init(a *Action) (bool, error) {
+func (e *ExecuteCommand) Init(a *Action, commandName string) (bool, error) {
 	return true, nil
 }
 

@@ -34,3 +34,7 @@ func deg2Rad(deg float64) float64 {
 func rad2Deg(rad float64) float64 {
 	return rad * (180.0 / math.Pi)
 }
+
+func GetIMageURL(action *Action, commandName string, id string) string {
+	return fmt.Sprintf("/api/v1/show/%s/%s/%s/%s", action.Profile, action.Name, commandName, id)
+}

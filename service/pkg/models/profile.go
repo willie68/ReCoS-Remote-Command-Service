@@ -96,6 +96,11 @@ type CommandTypeInfo struct {
 	Parameters []CommandParameterInfo `json:"parameter"`
 }
 
+type GraphicsInfo struct {
+	Mimetype string
+	Data     []byte
+}
+
 type CommandParameterInfo struct {
 	// Name is the command
 	Name string `json:"name"`

@@ -31,7 +31,7 @@ func (p *KeysCommand) EnrichType(profile models.Profile) (models.CommandTypeInfo
 }
 
 // Init the command
-func (p *KeysCommand) Init(a *Action) (bool, error) {
+func (p *KeysCommand) Init(a *Action, commandName string) (bool, error) {
 	return true, nil
 }
 

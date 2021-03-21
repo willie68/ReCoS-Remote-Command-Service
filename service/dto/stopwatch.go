@@ -40,7 +40,7 @@ func (s *StopwatchCommand) EnrichType(profile models.Profile) (models.CommandTyp
 }
 
 // Init initialise the stopwatch parmeters
-func (s *StopwatchCommand) Init(a *Action) (bool, error) {
+func (s *StopwatchCommand) Init(a *Action, commandName string) (bool, error) {
 	s.action = a
 	s.stop = false
 	s.format = "%0h:%0m:%0s"
