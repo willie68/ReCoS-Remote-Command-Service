@@ -20,9 +20,14 @@ var count int
 // CommandExecutor is an interface for executing a command. Every command implementation has to implement this.
 type CommandExecutor interface {
 	EnrichType(profile models.Profile) (models.CommandTypeInfo, error)
-	Init(a *Action) (bool, error)
+	Init(a *Action, commandName string) (bool, error)
 	Execute(a *Action, requestMessage models.Message) (bool, error)
 	Stop(a *Action) (bool, error)
+}
+
+// CommandExecutor is an interface for executing a command. Every command implementation has to implement this.
+type GraphicsCommandExecutor interface {
+	GetGraphics(id string, width int, height int) (models.GraphicsInfo, error)
 }
 
 // Profile holding state informations about one profile
@@ -90,7 +95,7 @@ func InitProfile(profileName string) (*Profile, error) {
 			for _, command := range configAction.Commands {
 				commandExecutor := GetCommand(*command)
 				if commandExecutor != nil {
-					ok, err := commandExecutor.Init(&action)
+					ok, err := commandExecutor.Init(&action, command.Name)
 					if ok {
 						action.Commands[command.ID] = commandExecutor
 					}
@@ -177,6 +182,19 @@ func doExecute(action *Action, message models.Message) {
 	if err != nil {
 		clog.Logger.Errorf("Error executing action: %v", err)
 	}
+}
+
+func Graphics(profileName string, actionName string, commandName string, id string, width int, height int) (models.GraphicsInfo, error) {
+	empty := models.GraphicsInfo{}
+	profile, err := GetProfile(profileName)
+	if err != nil {
+		return empty, err
+	}
+	action, err := profile.GetAction(actionName)
+	if err != nil {
+		return empty, err
+	}
+	return action.GetGraphics(commandName, id, width, height)
 }
 
 // GetProfile return the action with the name actionName if present otherwise an error
@@ -267,7 +285,7 @@ func doWorkSingle(a *Action, sendingAction *Action, requestMessage models.Messag
 		if err != nil {
 			clog.Logger.Errorf("error executing command: %v", err)
 		}
-		clog.Logger.Debugf("executing command result: %v", ok)
+		//clog.Logger.Debugf("executing command result: %v", ok)
 		sendPostMessage = sendPostMessage && ok
 	}
 	if sendPostMessage {
@@ -292,6 +310,32 @@ func doWorkSingle(a *Action, sendingAction *Action, requestMessage models.Messag
 			api.SendMessage(message)
 		}()
 	}
+}
+
+func (a *Action) GetGraphics(commandName string, id string, width int, height int) (models.GraphicsInfo, error) {
+	empty := models.GraphicsInfo{}
+	for _, command := range a.Config.Commands {
+		if command.Name == commandName {
+			cmdExecutor := a.Commands[command.ID]
+			if cmdExecutor == nil {
+				clog.Logger.Errorf("can't find command with type: %s", command.Type)
+				return empty, errors.New(fmt.Sprintf("can't find command with type: %s", command.Type))
+			}
+			v, ok := interface{}(cmdExecutor).(GraphicsCommandExecutor)
+			if !ok {
+				clog.Logger.Errorf("command can't create graphics: %s", command.Type)
+				return empty, errors.New(fmt.Sprintf("command can't create graphics: %s", command.Type))
+			}
+			graphicsInfo, err := v.GetGraphics(id, width, height)
+			if err != nil {
+				clog.Logger.Errorf("error executing command: %v", err)
+				return empty, err
+			}
+			//clog.Logger.Debugf("executing command result: true", ok)
+			return graphicsInfo, nil
+		}
+	}
+	return empty, errors.New(fmt.Sprintf("can't find command with name: %s", commandName))
 }
 
 // Close an action will close/stop all dedicated commands

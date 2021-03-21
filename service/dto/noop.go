@@ -19,7 +19,7 @@ func (d *NoopCommand) EnrichType(profile models.Profile) (models.CommandTypeInfo
 }
 
 // Init nothing
-func (d *NoopCommand) Init(a *Action) (bool, error) {
+func (d *NoopCommand) Init(a *Action, commandName string) (bool, error) {
 	return true, nil
 }
 

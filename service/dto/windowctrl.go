@@ -32,7 +32,7 @@ func (e *WindowCtrlCommand) EnrichType(profile models.Profile) (models.CommandTy
 }
 
 // Init the command
-func (e *WindowCtrlCommand) Init(a *Action) (bool, error) {
+func (e *WindowCtrlCommand) Init(a *Action, commandName string) (bool, error) {
 	return true, nil
 }
 

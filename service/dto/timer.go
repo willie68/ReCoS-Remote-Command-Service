@@ -29,7 +29,7 @@ func (d *TimerCommand) EnrichType(profile models.Profile) (models.CommandTypeInf
 }
 
 // Init a timer in the actual context
-func (d *TimerCommand) Init(a *Action) (bool, error) {
+func (d *TimerCommand) Init(a *Action, commandName string) (bool, error) {
 	return true, nil
 }
 
