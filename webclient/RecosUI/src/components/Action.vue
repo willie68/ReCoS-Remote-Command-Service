@@ -33,6 +33,7 @@ export default {
     "fontcolor",
     "outlined",
     "actionType",
+    "action",
   ],
   data() {
     return {
@@ -40,6 +41,7 @@ export default {
       saveImg: "",
       saveTitle: "",
       saveText: "",
+      myTimeout: null,
     };
   },
   computed: {
@@ -47,7 +49,9 @@ export default {
       return {
         fontSize: this.fontsize ? this.fontsize + "px" : "14px",
         color: this.fontcolor ? this.fontcolor : "black",
-        textShadow: this.outlined ? "-1px 1px 2px #fff, 1px 1px 2px #fff, 1px -1px 0 #fff, -1px -1px 0 #fff" : ""
+        textShadow: this.outlined
+          ? "-1px 1px 2px #fff, 1px 1px 2px #fff, 1px -1px 0 #fff, -1px -1px 0 #fff"
+          : "",
       };
     },
     imageUrl() {
@@ -55,7 +59,7 @@ export default {
         if (this.saveImg) {
           return this.buildImageSrc(this.saveImg);
         }
-        return this.icon ? this.buildImageSrc(this.icon) : "";
+        return this.action.icon ? this.buildImageSrc(this.action.icon) : "";
       }
       return "";
     },
@@ -64,7 +68,7 @@ export default {
         if (this.saveTitle) {
           return this.saveTitle;
         }
-        return this.title;
+        return this.action.title;
       }
       return "";
     },
@@ -110,13 +114,13 @@ export default {
           },
         };
         this.saveImg = "hourglass.png";
-        let that = this
+        let that = this;
         fetch(actionPostUrl, options)
           .then((res) => res.json())
           .then((data) => {
-            console.log(that.actionType)
+            console.log(that.actionType);
             if (that.actionType != "MULTI") {
-              console.log("set timeout")
+              console.log("set timeout");
               setTimeout(() => (that.saveImg = ""), 20000);
             }
           })
@@ -150,6 +154,24 @@ export default {
           })
           .catch((err) => console.log(err.message));
       }
+    },
+  },
+  mounted() {
+    console.log("Action: mounted ", this.action.name);
+    this.saveImg = "";
+  },
+  unmounted() {
+    console.log("Action: unmounted ", this.action.name);
+  },
+  watch: {
+    action: {
+      deep: true,
+      handler(newAction) {
+        console.log("Action: changing action " + JSON.stringify(newAction));
+        this.saveImg = "";
+        this.saveTitle = "";
+        this.saveText = "";
+      },
     },
   },
 };
