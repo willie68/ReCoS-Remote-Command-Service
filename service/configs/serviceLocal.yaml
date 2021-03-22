@@ -8,7 +8,7 @@ serviceURL: http://127.0.0.1:9280
 secretfile:
 
 #admin password for the admin interface
-password: recosadmin
+password:
 
 webclient: ./devdata/webclient
 adminclient: ./devdata/webadmin

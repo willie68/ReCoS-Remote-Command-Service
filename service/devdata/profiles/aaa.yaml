@@ -196,8 +196,6 @@ actions:
           parameters:
             args:
                 - version
-                - help
-                - doit
             command: go.exe
       actions: []
     - type: SINGLE
@@ -236,7 +234,15 @@ actions:
           icon: ""
           title: ""
           parameters:
-            page: Default
+            page: clocks
+        - id: ""
+          type: PAGE
+          name: page2
+          description: ""
+          icon: ""
+          title: page2
+          parameters:
+            page: hardware
       actions: []
     - type: SINGLE
       name: sendkeys
@@ -255,7 +261,7 @@ actions:
           icon: ""
           title: ""
           parameters:
-            time: 5
+            time: 8
         - id: KEYS_17
           type: KEYS
           name: sendkeys
@@ -263,7 +269,9 @@ actions:
           icon: ""
           title: ""
           parameters:
+            keylayout: en
             keys: '{esc}1+1{enter}'
+            keystrokes: asdasdasdasdasdasd
             layout: de
       actions: []
     - type: SINGLE
@@ -382,7 +390,7 @@ actions:
           parameters:
             finished: Fertig
             format: noch %ds
-            time: 10
+            time: 5
       actions: []
     - type: SINGLE
       name: timer2
@@ -484,7 +492,7 @@ actions:
             color: '#00ff00'
             display: both
             format: '%0.1f °C'
-            sensor: CPU/Intel Core i7-6820HQ/Temperature/CPU Package
+            sensor:
             ymax: 80
             ymin: 30
       actions: []
@@ -508,7 +516,7 @@ actions:
             color: '#ffff00'
             display: both
             format: '%0.1f %'
-            sensor: CPU/Intel Core i7-6820HQ/Load/CPU Total
+            sensor: CPU/Intel Core i7-10750H/Load/CPU Total
       actions: []
     - type: SINGLE
       name: stopwatch
@@ -539,7 +547,7 @@ actions:
       outlined: false
       runone: true
       commands:
-        - id: ""
+        - id: PAGE_35
           type: PAGE
           name: page_0
           description: new PAGE command created by ActionWizard

@@ -17,6 +17,7 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/dto"
 	"wkla.no-ip.biz/remote-desk-service/error/serror"
 	"wkla.no-ip.biz/remote-desk-service/health"
+	"wkla.no-ip.biz/remote-desk-service/pkg/audio"
 	"wkla.no-ip.biz/remote-desk-service/pkg/osdependent"
 
 	config "wkla.no-ip.biz/remote-desk-service/config"
@@ -175,6 +176,8 @@ func main() {
 	serviceConfig = config.Get()
 	initConfig()
 
+	initAudioHardware()
+
 	if err := config.InitProfiles(serviceConfig.Profiles); err != nil {
 		if !os.IsNotExist(err) {
 			clog.Logger.Alertf("can't load profile files: %s", err.Error())
@@ -306,6 +309,10 @@ func main() {
 	clog.Logger.Info("finished")
 
 	os.Exit(0)
+}
+
+func initAudioHardware() error {
+	return audio.InitAudioSessions()
 }
 
 func initConfig() {

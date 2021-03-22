@@ -16,6 +16,7 @@ require (
 	github.com/go-chi/cors v1.1.1
 	github.com/go-chi/httptracer v0.2.0 // indirect
 	github.com/go-chi/render v1.0.1
+	github.com/go-ole/go-ole v1.2.4
 	github.com/go-playground/validator/v10 v10.4.1
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/golang/protobuf v1.4.3 // indirect
@@ -32,11 +33,15 @@ require (
 	github.com/kbinani/screenshot v0.0.0-20191211154542-3a185f1ce18f
 	github.com/lxn/win v0.0.0-20201111105847-2a20daff6a55 // indirect
 	github.com/micmonay/keybd_event v1.1.0
+	github.com/mitchellh/go-ps v1.0.0
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
 	github.com/mitchellh/mapstructure v1.3.3 // indirect
+	github.com/moutend/go-wca v0.1.2-0.20190422112502-0fa027b3d89a
+	github.com/omriharel/deej v0.9.10
 	github.com/onsi/ginkgo v1.14.2 // indirect
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
 	github.com/spf13/pflag v1.0.5
+	github.com/thoas/go-funk v0.8.0
 	github.com/uber/jaeger-client-go v2.25.0+incompatible // indirect
 	github.com/uber/jaeger-lib v2.4.0+incompatible // indirect
 	github.com/vova616/screenshot v0.0.0-20191005130345-da36db2560ab
