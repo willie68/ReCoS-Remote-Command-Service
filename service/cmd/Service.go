@@ -17,6 +17,7 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/dto"
 	"wkla.no-ip.biz/remote-desk-service/error/serror"
 	"wkla.no-ip.biz/remote-desk-service/health"
+	"wkla.no-ip.biz/remote-desk-service/logging"
 	"wkla.no-ip.biz/remote-desk-service/pkg/audio"
 	"wkla.no-ip.biz/remote-desk-service/pkg/osdependent"
 
@@ -312,7 +313,10 @@ func main() {
 }
 
 func initAudioHardware() error {
-	return audio.InitAudioSessions()
+	err := audio.InitAudioSessions()
+	sessionMap := audio.SessionMapInstance
+	sessionMap.PrintSessionNames()
+	return err
 }
 
 func initConfig() {
@@ -352,6 +356,8 @@ func initConfig() {
 		clog.Logger.Alertf("error starting os dependend worker: %s", err.Error())
 		os.Exit(1)
 	}
+
+	logging.Logger.SetLevel(serviceConfig.Logging.Level)
 
 	err = osdependent.InitOSDependend(serviceConfig)
 	if err != nil {

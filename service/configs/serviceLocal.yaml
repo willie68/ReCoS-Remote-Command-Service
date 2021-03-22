@@ -19,6 +19,9 @@ healthcheck:
 
 profiles: ./devdata/profiles
 
+logging:
+    level: debug
+
 extconfig:
     openhardwaremonitor:
         url: http://127.0.0.1:12999/data.json

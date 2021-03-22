@@ -3,23 +3,18 @@ package audio
 import (
 	"fmt"
 	"regexp"
-	"strings"
 	"sync"
 	"time"
 
-	"github.com/omriharel/deej/util"
 	"github.com/thoas/go-funk"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
 )
 
 type SessionMap struct {
-	m    map[string][]Session
-	lock sync.Locker
-
-	sessionFinder SessionFinder
-
+	sessions           []Session
+	lock               sync.Locker
+	sessionFinder      SessionFinder
 	lastSessionRefresh time.Time
-	unmappedSessions   []Session
 }
 
 var SessionMapInstance *SessionMap
@@ -40,6 +35,29 @@ func InitAudioSessions() error {
 	if err := SessionMapInstance.initialize(); err != nil {
 		return fmt.Errorf("init session map: %w", err)
 	}
+
+	return nil
+}
+
+func GetSessionNames() []string {
+	names := make([]string, 0)
+	for _, session := range SessionMapInstance.sessions {
+		names = append(names, session.Key())
+	}
+	return names
+}
+
+func GetSession(key string) (Session, bool) {
+	index := -1
+	for x, session := range SessionMapInstance.sessions {
+		if key == session.Key() {
+			index = x
+		}
+	}
+	if index < 0 {
+		return nil, false
+	}
+	return SessionMapInstance.sessions[index], true
 }
 
 const (
@@ -76,7 +94,7 @@ var deviceSessionKeyPattern = regexp.MustCompile(`^.+ \(.+\)$`)
 
 func newSessionMap(sessionFinder SessionFinder) (*SessionMap, error) {
 	m := &SessionMap{
-		m:             make(map[string][]Session),
+		sessions:      make([]Session, 0),
 		lock:          &sync.Mutex{},
 		sessionFinder: sessionFinder,
 	}
@@ -94,7 +112,7 @@ func (m *SessionMap) initialize() error {
 	return nil
 }
 
-func (m *SessionMap) release() error {
+func (m *SessionMap) Release() error {
 	if err := m.sessionFinder.Release(); err != nil {
 		return fmt.Errorf("release session finder during release: %w", err)
 	}
@@ -106,18 +124,17 @@ func (m *SessionMap) release() error {
 // only call on a new session map or as part of refreshSessions which calls reset
 func (m *SessionMap) getAndAddSessions() error {
 
+	m.clear()
+
 	// mark that we're refreshing before anything else
 	m.lastSessionRefresh = time.Now()
-	m.unmappedSessions = nil
 
 	sessions, err := m.sessionFinder.GetAllSessions()
 	if err != nil {
 		return fmt.Errorf("get sessions from SessionFinder: %w", err)
 	}
 
-	for _, session := range sessions {
-		m.add(session)
-	}
+	m.sessions = sessions
 
 	clog.Logger.Debugf("Got all audio sessions successfully\r\nsessionMap: %v", m)
 
@@ -125,7 +142,7 @@ func (m *SessionMap) getAndAddSessions() error {
 }
 
 // performance: explain why force == true at every such use to avoid unintended forced refresh spams
-func (m *SessionMap) refreshSessions(force bool) {
+func (m *SessionMap) RefreshSessions(force bool) {
 
 	// make sure enough time passed since the last refresh, unless force is true in which case always clear
 	if !force && m.lastSessionRefresh.Add(minTimeBetweenSessionRefreshes).After(time.Now()) {
@@ -256,78 +273,19 @@ func (m *sessionMap) handleSliderMoveEvent(event SliderMoveEvent) {
 	}
 */
 
-func (m *SessionMap) targetHasSpecialTransform(target string) bool {
-	return strings.HasPrefix(target, specialTargetTransformPrefix)
-}
-
-func (m *SessionMap) resolveTarget(target string) []string {
-
-	// start by ignoring the case
-	target = strings.ToLower(target)
-
-	// look for any special targets first, by examining the prefix
-	if m.targetHasSpecialTransform(target) {
-		return m.applyTargetTransform(strings.TrimPrefix(target, specialTargetTransformPrefix))
-	}
-
-	return []string{target}
-}
-
-func (m *SessionMap) applyTargetTransform(specialTargetName string) []string {
-
-	// select the transformation based on its name
-	switch specialTargetName {
-
-	// get current active window
-	case specialTargetCurrentWindow:
-		currentWindowProcessNames, err := util.GetCurrentWindowProcessNames()
-
-		// silently ignore errors here, as this is on deej's "hot path" (and it could just mean the user's running linux)
-		if err != nil {
-			return nil
-		}
-
-		// we could have gotten a non-lowercase names from that, so let's ensure we return ones that are lowercase
-		for targetIdx, target := range currentWindowProcessNames {
-			currentWindowProcessNames[targetIdx] = strings.ToLower(target)
-		}
-
-		// remove dupes
-		return funk.UniqString(currentWindowProcessNames)
-
-	// get currently unmapped sessions
-	case specialTargetAllUnmapped:
-		targetKeys := make([]string, len(m.unmappedSessions))
-		for sessionIdx, session := range m.unmappedSessions {
-			targetKeys[sessionIdx] = session.Key()
-		}
-
-		return targetKeys
-	}
-
-	return nil
-}
-
-func (m *SessionMap) add(value Session) {
+func (m *SessionMap) get(key string) (Session, bool) {
 	m.lock.Lock()
 	defer m.lock.Unlock()
-
-	key := value.Key()
-
-	existing, ok := m.m[key]
-	if !ok {
-		m.m[key] = []Session{value}
-	} else {
-		m.m[key] = append(existing, value)
+	index := -1
+	for x, session := range m.sessions {
+		if session.Key() == key {
+			index = x
+		}
 	}
-}
-
-func (m *SessionMap) get(key string) ([]Session, bool) {
-	m.lock.Lock()
-	defer m.lock.Unlock()
-
-	value, ok := m.m[key]
-	return value, ok
+	if index >= 0 {
+		return m.sessions[index], true
+	}
+	return nil, false
 }
 
 func (m *SessionMap) clear() {
@@ -336,12 +294,8 @@ func (m *SessionMap) clear() {
 
 	clog.Logger.Debug("Releasing and clearing all audio sessions")
 
-	for key, sessions := range m.m {
-		for _, session := range sessions {
-			session.Release()
-		}
-
-		delete(m.m, key)
+	for _, session := range m.sessions {
+		session.Release()
 	}
 
 	clog.Logger.Debug("Session map cleared")
@@ -351,11 +305,11 @@ func (m *SessionMap) String() string {
 	m.lock.Lock()
 	defer m.lock.Unlock()
 
-	sessionCount := 0
+	return fmt.Sprintf("<%d audio sessions>", len(m.sessions))
+}
 
-	for _, value := range m.m {
-		sessionCount += len(value)
+func (m *SessionMap) PrintSessionNames() {
+	for _, session := range m.sessions {
+		clog.Logger.Infof("Session sessionKey: %s, desc: %s", session.Key(), session.String())
 	}
-
-	return fmt.Sprintf("<%d audio sessions>", sessionCount)
 }

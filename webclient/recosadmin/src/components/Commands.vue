@@ -153,7 +153,11 @@ export default {
         if (this.activeAction.commands.length > 0) {
           this.activeCommand = this.activeAction.commands[0];
         } else {
-          this.activeCommand = null;
+          try {
+            this.activeCommand = null;
+          } catch (err) {
+            console.log(err)
+          }
         }
       }
     },

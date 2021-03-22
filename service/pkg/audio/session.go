@@ -9,12 +9,15 @@ type Session interface {
 	GetVolume() float32
 	SetVolume(v float32) error
 
-	// TODO: future mute support
 	GetMute() bool
 	SetMute(m bool) error
 
+	IsInput() bool
+
 	Key() string
 	Release()
+
+	String() string
 }
 
 const (
@@ -24,12 +27,13 @@ const (
 	sessionCreationLogMessage = "Created audio session instance"
 
 	// format this with s.humanReadableDesc and whatever the current volume is
-	sessionStringFormat = "<session: %s, vol: %.2f>"
+	sessionStringFormat = "<session: %s, Input: %t, mute: %t, vol: %.2f>"
 )
 
 type baseSession struct {
-	system bool
-	master bool
+	inputDevice bool
+	system      bool
+	master      bool
 
 	// used by Key(), needs to be set by child
 	name string
@@ -48,4 +52,8 @@ func (s *baseSession) Key() string {
 	}
 
 	return strings.ToLower(s.name)
+}
+
+func (s *baseSession) IsInput() bool {
+	return s.inputDevice
 }

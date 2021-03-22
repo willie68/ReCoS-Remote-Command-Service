@@ -100,20 +100,21 @@ func (sf *wcaSessionFinder) GetAllSessions() ([]Session, error) {
 	}
 
 	// get the master output session
-	sf.masterOut, err = sf.getMasterSession(defaultOutputEndpoint, masterSessionName, masterSessionName)
+	sf.masterOut, err = sf.getMasterSession(defaultOutputEndpoint, masterSessionName)
 	if err != nil {
 		return nil, fmt.Errorf("get master audio output session: %w", err)
 	}
+	sf.masterOut.inputDevice = false
 
 	sessions = append(sessions, sf.masterOut)
 
 	// get the master input session, if a default input device exists
 	if defaultInputEndpoint != nil {
-		sf.masterIn, err = sf.getMasterSession(defaultInputEndpoint, inputSessionName, inputSessionName)
+		sf.masterIn, err = sf.getMasterSession(defaultInputEndpoint, inputSessionName)
 		if err != nil {
 			return nil, fmt.Errorf("get master audio input session: %w", err)
 		}
-
+		sf.masterIn.inputDevice = true
 		sessions = append(sessions, sf.masterIn)
 	}
 
@@ -197,7 +198,7 @@ func (sf *wcaSessionFinder) registerDefaultDeviceChangeCallback() error {
 	return nil
 }
 
-func (sf *wcaSessionFinder) getMasterSession(mmDevice *wca.IMMDevice, key string, loggerKey string) (*masterSession, error) {
+func (sf *wcaSessionFinder) getMasterSession(mmDevice *wca.IMMDevice, key string) (*masterSession, error) {
 
 	var audioEndpointVolume *wca.IAudioEndpointVolume
 
@@ -206,7 +207,7 @@ func (sf *wcaSessionFinder) getMasterSession(mmDevice *wca.IMMDevice, key string
 	}
 
 	// create the master session
-	master, err := newMasterSession(audioEndpointVolume, sf.eventCtx, key, loggerKey)
+	master, err := newMasterSession(audioEndpointVolume, sf.eventCtx, key)
 	if err != nil {
 		return nil, fmt.Errorf("create master session: %w", err)
 	}
@@ -287,21 +288,22 @@ func (sf *wcaSessionFinder) enumerateAndAddSessions(sessions *[]Session) error {
 			dataFlow)
 
 		// if the device is an output device, enumerate and add its per-process audio sessions
-		if dataFlow == wca.ERender {
-			if err := sf.enumerateAndAddProcessSessions(endpoint, endpointFriendlyName, sessions); err != nil {
-				return fmt.Errorf("enumerate and add device %d process sessions: %w", deviceIdx, err)
-			}
-		}
+//		if dataFlow == wca.ERender {
+//			if err := sf.enumerateAndAddProcessSessions(endpoint, endpointFriendlyName, sessions); err != nil {
+//				return fmt.Errorf("enumerate and add device %d process sessions: %w", deviceIdx, err)
+//			}
+//		}
 
 		// for all devices (both input and output), add a named "master" session that can be addressed
 		// by using the device's friendly name (as appears when the user left-clicks the speaker icon in the tray)
-		newSession, err := sf.getMasterSession(endpoint,
-			endpointFriendlyName,
-			fmt.Sprintf(deviceSessionFormat, endpointDescription))
+		newSession, err := sf.getMasterSession(endpoint, endpointFriendlyName)
 
 		if err != nil {
 			return fmt.Errorf("get device %d master session: %w", deviceIdx, err)
 		}
+
+		// Session is an input device
+		newSession.inputDevice = dataFlow == wca.ECapture
 
 		// add it to our slice
 		*sessions = append(*sessions, newSession)
@@ -310,23 +312,14 @@ func (sf *wcaSessionFinder) enumerateAndAddSessions(sessions *[]Session) error {
 	return nil
 }
 
-func (sf *wcaSessionFinder) enumerateAndAddProcessSessions(
-	endpoint *wca.IMMDevice,
-	endpointFriendlyName string,
-	sessions *[]Session,
-) error {
+func (sf *wcaSessionFinder) enumerateAndAddProcessSessions(endpoint *wca.IMMDevice, endpointFriendlyName string, sessions *[]Session) error {
 
 	clog.Logger.Debugf("Enumerating and adding process sessions for audio output device\r\ndeviceFriendlyName: %s", endpointFriendlyName)
 
 	// query the given IMMDevice's IAudioSessionManager2 interface
 	var audioSessionManager2 *wca.IAudioSessionManager2
 
-	if err := endpoint.Activate(
-		wca.IID_IAudioSessionManager2,
-		wca.CLSCTX_ALL,
-		nil,
-		&audioSessionManager2,
-	); err != nil {
+	if err := endpoint.Activate(wca.IID_IAudioSessionManager2,wca.CLSCTX_ALL,nil,&audioSessionManager2,); err != nil {
 		return fmt.Errorf("activate endpoint: %w", err)
 	}
 	defer audioSessionManager2.Release()
@@ -414,7 +407,7 @@ func (sf *wcaSessionFinder) enumerateAndAddProcessSessions(
 
 			continue
 		}
-
+		newSession.inputDevice = false //because processes alway have only output devices?
 		// add it to our slice
 		*sessions = append(*sessions, newSession)
 	}

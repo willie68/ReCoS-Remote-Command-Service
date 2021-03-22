@@ -35,12 +35,7 @@ type masterSession struct {
 	stale bool // when set to true, we should refresh sessions on the next call to SetVolume
 }
 
-func newWCASession(
-	control *wca.IAudioSessionControl2,
-	volume *wca.ISimpleAudioVolume,
-	pid uint32,
-	eventCtx *ole.GUID,
-) (*wcaSession, error) {
+func newWCASession(control *wca.IAudioSessionControl2, volume *wca.ISimpleAudioVolume, pid uint32, eventCtx *ole.GUID) (*wcaSession, error) {
 
 	s := &wcaSession{
 		control:  control,
@@ -80,12 +75,7 @@ func newWCASession(
 	return s, nil
 }
 
-func newMasterSession(
-	volume *wca.IAudioEndpointVolume,
-	eventCtx *ole.GUID,
-	key string,
-	loggerKey string,
-) (*masterSession, error) {
+func newMasterSession(volume *wca.IAudioEndpointVolume, eventCtx *ole.GUID, key string) (*masterSession, error) {
 
 	s := &masterSession{
 		volume:   volume,
@@ -161,7 +151,7 @@ func (s *wcaSession) Release() {
 }
 
 func (s *wcaSession) String() string {
-	return fmt.Sprintf(sessionStringFormat, s.humanReadableDesc, s.GetVolume())
+	return fmt.Sprintf(sessionStringFormat, s.humanReadableDesc, s.IsInput(), s.GetMute(), s.GetVolume())
 }
 
 func (s *masterSession) GetVolume() float32 {
@@ -216,7 +206,7 @@ func (s *masterSession) Release() {
 }
 
 func (s *masterSession) String() string {
-	return fmt.Sprintf(sessionStringFormat, s.humanReadableDesc, s.GetVolume())
+	return fmt.Sprintf(sessionStringFormat, s.humanReadableDesc, s.IsInput(), s.GetMute(), s.GetVolume())
 }
 
 func (s *masterSession) markAsStale() {

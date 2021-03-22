@@ -1,7 +1,6 @@
 package config
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -77,8 +76,6 @@ func setupCommandID(profile models.Profile) models.Profile {
 			count++
 		}
 	}
-	jsonProfile, _ := json.Marshal(profile)
-	fmt.Println(string(jsonProfile))
 	return profile
 }
 

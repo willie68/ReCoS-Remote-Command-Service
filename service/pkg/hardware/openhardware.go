@@ -64,7 +64,7 @@ func (o *OpenHardwareMonitor) Connect() error {
 		return err
 	}
 	for _, sensor := range OpenHardwareMonitorInstance.Sensorlist {
-		clog.Logger.Infof("found sensor with name: %s", sensor.GetFullSensorName())
+		clog.Logger.Debugf("found sensor with name: %s", sensor.GetFullSensorName())
 	}
 	writingSensorList(OpenHardwareMonitorInstance.Sensorlist)
 	go func() {

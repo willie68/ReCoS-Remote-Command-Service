@@ -37,8 +37,6 @@ func newSessionFinder() (SessionFinder, error) {
 		conn:          conn,
 	}
 
-	clog.Logger.Debug("Created PA session finder instance")
-
 	return sf, nil
 }
 
@@ -73,8 +71,6 @@ func (sf *paSessionFinder) Release() error {
 	if err := sf.conn.Close(); err != nil {
 		return fmt.Errorf("close PulseAudio connection: %w", err)
 	}
-
-	clog.Logger.Debug("Released PA session finder instance")
 
 	return nil
 }

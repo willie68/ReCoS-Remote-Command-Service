@@ -127,7 +127,7 @@ func (s *paSession) Release() {
 }
 
 func (s *paSession) String() string {
-	return fmt.Sprintf(sessionStringFormat, s.humanReadableDesc, s.GetVolume())
+	return fmt.Sprintf(sessionStringFormat, s.humanReadableDesc, s.IsInput(), s.GetMute(), s.GetVolume())
 }
 
 func (s *masterSession) GetVolume() float32 {
@@ -193,7 +193,7 @@ func (s *masterSession) Release() {
 }
 
 func (s *masterSession) String() string {
-	return fmt.Sprintf(sessionStringFormat, s.humanReadableDesc, s.GetVolume())
+	return fmt.Sprintf(sessionStringFormat, s.humanReadableDesc, s.IsInput(), s.GetMute(), s.GetVolume())
 }
 
 func createChannelVolumes(channels byte, volume float32) []uint32 {
