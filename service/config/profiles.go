@@ -1,7 +1,6 @@
 package config
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -53,6 +52,7 @@ func InitProfiles(folder string) error {
 	}
 	for _, file := range files {
 		fileContent, err := ioutil.ReadFile(file)
+//		fmt.Println(string(fileContent))
 		if err != nil {
 			return err
 		}
@@ -61,6 +61,8 @@ func InitProfiles(folder string) error {
 		if err != nil {
 			return err
 		}
+		//		data, _ := json.Marshal(profile)
+		//		fmt.Println(string(data))
 		profile = setupCommandID(profile)
 		Profiles = append(Profiles, profile)
 	}
@@ -77,8 +79,6 @@ func setupCommandID(profile models.Profile) models.Profile {
 			count++
 		}
 	}
-	jsonProfile, _ := json.Marshal(profile)
-	fmt.Println(string(jsonProfile))
 	return profile
 }
 

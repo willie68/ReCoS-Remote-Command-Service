@@ -238,7 +238,7 @@ func (d *HardwareMonitorCommand) GetGraphics(id string, width int, height int) (
 // SendPNG sending this array to the client
 func (d *HardwareMonitorCommand) SendGraphics(value string) {
 	id := strconv.Itoa(rand.Intn(999999))
-	image := GetIMageURL(d.action, d.commandName, id)
+	image := GetImageURL(d.action, d.commandName, id)
 	message := models.Message{
 		Profile:  d.action.Profile,
 		Action:   d.action.Name,

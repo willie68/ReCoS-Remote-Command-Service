@@ -49,7 +49,7 @@ export default {
       };
     },
     imageUrl() {
-      console.log("actionName:" + this.actionName);
+//      console.log("actionName:" + this.actionName);
       if (this.actionName) {
         if (this.saveImg) {
           return this.buildImageSrc(this.saveImg);
@@ -59,7 +59,7 @@ export default {
       return "";
     },
     mytitle() {
-      console.log("actionName:" + this.actionName);
+//      console.log("actionName:" + this.actionName);
       if (this.actionName) {
         if (this.saveTitle) {
           return this.saveTitle;
@@ -69,7 +69,7 @@ export default {
       return "";
     },
     mytext() {
-      console.log("actionName:" + this.actionName);
+//      console.log("actionName:" + this.actionName);
       if (this.actionName) {
         if (this.saveText) {
           return this.saveText;
