@@ -33,6 +33,7 @@
           </div>
         </template>
       </Dropdown>
+      <Button icon="pi pi-bars" class="p-mr-1" @click="selectDialog = true" />
     </div>
     <div class="p-field p-col">
       <label for="fontsize">Font size</label>
@@ -82,17 +83,26 @@
     :profile="activeProfile"
     v-show="activeAction.type == `MULTI`"
   />
+  <SelectIcon
+    :visible="selectDialog"
+    :v-model="activeAction.icon"
+    :iconlist="iconlist"
+    @cancel="this.selectDialog = false"
+    ><template #sourceHeader>Select Icon</template></SelectIcon
+  >
 </template>
 
 <script>
 import Commands from "./Commands.vue";
 import MultiAction from "./MultiAction.vue";
+import SelectIcon from "./SelectIcon.vue";
 
 export default {
   name: "Action",
   components: {
     Commands,
     MultiAction,
+    SelectIcon,
   },
   props: {
     action: {},
@@ -127,6 +137,7 @@ export default {
       ],
       iconlist: [],
       activeCommand: {},
+      selectDialog: false,
     };
   },
   watch: {
