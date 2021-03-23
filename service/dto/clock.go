@@ -142,7 +142,7 @@ func (c *ClockCommand) SendGraphics(value string) {
 	// You can embed it in an html doc with this string
 	//	image := "data:image/bmp;base64," + encodedString
 	id := timeToID(now)
-	image := GetIMageURL(c.action, c.commandName, id)
+	image := GetImageURL(c.action, c.commandName, id)
 	message := models.Message{
 		Profile:  c.action.Profile,
 		Action:   c.action.Name,

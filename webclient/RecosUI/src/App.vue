@@ -54,6 +54,7 @@
             cellactions[x][y].type == 'SINGLE' ||
             cellactions[x][y].type == 'MULTI'
           "
+          :action="cellactions[x][y]"
         />
         <Display
           :title="cellactions[x][y].title"

@@ -165,7 +165,7 @@ export default {
         console.log("Command: changing command to " + command.name);
         this.activeCommand = command;
       } else {
-        this.activeCommand = { name: "" };
+        this.activeCommand = { name: "", parameters: [] };
       }
     },
     activeCommand: {
@@ -183,6 +183,34 @@ export default {
         }
       },
     },
+    activeCommandType: {
+      deep: false,
+      handler(newCommandType) {
+        if (newCommandType) {
+          console.log("Command: command ytpe changed: command type: ", JSON.stringify(newCommandType))       
+          newCommandType.parameter.forEach((parameter) => {
+            if (!this.activeCommand.parameters[parameter.name]) {
+              if (parameter.type == "string") {
+                this.activeCommand.parameters[parameter.name] = ""
+              }
+              if (parameter.type == "[]string") {
+                this.activeCommand.parameters[parameter.name] = [""]
+              }
+              if (parameter.type == "int") {
+                this.activeCommand.parameters[parameter.name] = 0
+              }
+              if (parameter.type == "bool") {
+                this.activeCommand.parameters[parameter.name] = false
+              }
+              if (parameter.type == "color") {
+                this.activeCommand.parameters[parameter.name] = ""
+              }
+            }
+          });
+          console.log("Command: command ytpe changed: active command: ", JSON.stringify(this.activeCommand))       
+        }
+      },
+    }
   },
   created() {
     this.upadteCommandTypes();

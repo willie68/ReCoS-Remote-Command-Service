@@ -280,6 +280,7 @@ func doWorkSingle(a *Action, sendingAction *Action, requestMessage models.Messag
 		cmdExecutor := a.Commands[command.ID]
 		if cmdExecutor == nil {
 			clog.Logger.Errorf("can't find command with type: %s", command.Type)
+			return
 		}
 		ok, err := cmdExecutor.Execute(sendingAction, requestMessage)
 		if err != nil {

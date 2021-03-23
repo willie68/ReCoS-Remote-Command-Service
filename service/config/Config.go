@@ -32,11 +32,17 @@ type Config struct {
 	Profiles string `yaml:"profiles"`
 
 	ExternalConfig map[string]interface{} `yaml:"extconfig"`
+
+	Logging LoggingConfig `yaml:"logging"`
 }
 
 // HealthCheck configuration for the health check system
 type HealthCheck struct {
 	Period int `yaml:"period"`
+}
+
+type LoggingConfig struct {
+	Level string `yaml:"level"`
 }
 
 var DefaulConfig = Config{
@@ -56,6 +62,9 @@ var DefaulConfig = Config{
 			"url":          "http://127.0.0.1:12999/data.json",
 			"updateperiod": "5",
 		},
+	},
+	Logging: LoggingConfig {
+		Level: "INFO",
 	},
 }
 

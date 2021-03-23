@@ -23,3 +23,7 @@ service/cmd/__debug_bin
 3rd party/openhardwaremonitor-v0.9.6/OpenHardwareMonitor/
 
 3rd party/open-cue-service/
+
+webclient/RecosUI/public/assets/
+
+webclient/recosadmin/public/assets/
