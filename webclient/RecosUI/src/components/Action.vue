@@ -41,7 +41,7 @@ export default {
       saveImg: "",
       saveTitle: "",
       saveText: "",
-      myTimeout: null,
+      timerID: null,
     };
   },
   computed: {
@@ -121,7 +121,11 @@ export default {
             console.log(that.actionType);
             if (that.actionType != "MULTI") {
               console.log("set timeout");
-              setTimeout(() => (that.saveImg = ""), 20000);
+              if (that.timerID) {
+                clearTimeout(that.timerID);
+                that.timerID = null;
+              }
+              that.timerID = setTimeout(() => (that.saveImg = ""), 20000);
             }
           })
           .catch((err) => console.log(err.message));
@@ -150,7 +154,11 @@ export default {
         fetch(actionPostUrl, options)
           .then((res) => res.json())
           .then((data) => {
-            setTimeout(() => (this.saveImg = ""), 20000);
+            if (that.timerID) {
+              clearTimeout(that.timerID);
+              that.timerID = null;
+            }
+            that.timerID = setTimeout(() => (that.saveImg = ""), 20000);
           })
           .catch((err) => console.log(err.message));
       }
@@ -171,6 +179,16 @@ export default {
         this.saveImg = "";
         this.saveTitle = "";
         this.saveText = "";
+      },
+    },
+    saveImg: {
+      deep: false,
+      handler(newImg) {
+        if (this.timerID) {
+          console.log("stop timer")
+          clearTimeout(this.timerID);
+          this.timerID = null;
+        }
       },
     },
   },

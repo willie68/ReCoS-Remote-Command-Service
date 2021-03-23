@@ -605,6 +605,27 @@ parameters:
   display: 1
 ```
 
+##### Audiocontrol, taking control over your audio devices
+
+With this command, you can take control different audio devices for setting volume and mute. 
+
+type: `AUDIOVOLUME`
+
+Parameter:
+`device`: the device that you would like to control. There are different devices in your system. Which one you can select, can be seen in the admin interface or on startup in the console. There are 2 defaults: `master` for the master output. This is on widows the one that you can control directly with the taskbar icon. And `mic` which is for the default input device. 
+`command`: this is the command you want to fire. `mute`, which toggles the mute state. `volume up` for increase and `volume down` for decreasing the volume of that device.
+
+```yaml
+type: AUDIOVOLUME
+name: audiovolume_3
+description: new AUDIOVOLUME command created by ActionWizard
+icon: ""
+title: ""
+parameters:
+  command: volume up
+  device: master
+```
+
 ##### Hardware monitor
 
 This command connects to the openhardwaremonitor application on windows. With this you can get different sensors of your computer. For using the webserver of the openhardwaremonitor app, you have to add another external configurationinto the main service configuration. The url is the url to the app webserver added with data.json. the `updateperiod` is the update time in seconds. 
@@ -683,3 +704,7 @@ parameters:
 # UI
 
 As this project is in an early development stage, i have nothing to show here. But if you like, you can simply checkout the develop branch, starting 2 Instances of Visual Studio Code, one with the frontend, one with the service backend. Than start the backend server in VS, and same for the frontend (npm run serve). After some hacking with configuration you may be able to see something. :-) Good Luck to you.
+
+# Thanks
+
+Thanks goes to iconshock for the great icons set.

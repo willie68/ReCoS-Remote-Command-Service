@@ -13,6 +13,7 @@ pages:
         - analogclock
         - cpuload
         - stopwatch
+        - Audio
     - name: clocks
       description: clocks only
       columns: 2
@@ -23,6 +24,16 @@ pages:
         - none
         - clock
         - analogclock
+    - name: Audio
+      description: commands for audio volume 
+      columns: 2
+      rows: 2
+      toolbar: ""
+      cells:
+        - audiovolume_0
+        - audiovolume_1
+        - audiovolume_3
+        - audiovolume_2
 actions:
     - type: SINGLE
       name: Hello_World
@@ -221,4 +232,103 @@ actions:
           title: Back
           parameters:
             page: Default
+      actions: []
+    - type: SINGLE
+      name: Audio
+      title: ""
+      icon: ""
+      description: ""
+      fontsize: 0
+      fontcolor: ""
+      outlined: false
+      runone: false
+      commands:
+        - id: PAGE_10
+          type: PAGE
+          name: Audio
+          description: ""
+          icon: ""
+          title: Back
+          parameters:
+            page: Audio
+      actions: []
+    - type: SINGLE
+      name: audiovolume_0
+      title: Mute Mic
+      icon: ""
+      description: new AUDIOVOLUME action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: AUDIOVOLUME_0
+          type: AUDIOVOLUME
+          name: audiovolume_0
+          description: new AUDIOVOLUME command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            command: mute
+            device: mic
+      actions: []
+    - type: SINGLE
+      name: audiovolume_1
+      title: Mute Master
+      icon: ""
+      description: new AUDIOVOLUME action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: AUDIOVOLUME_1
+          type: AUDIOVOLUME
+          name: audiovolume_1
+          description: new AUDIOVOLUME command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            command: mute
+            device: master
+      actions: []
+    - type: SINGLE
+      name: audiovolume_2
+      title: Master Volume Down
+      icon: ""
+      description: new AUDIOVOLUME action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: AUDIOVOLUME_2
+          type: AUDIOVOLUME
+          name: audiovolume_2
+          description: new AUDIOVOLUME command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            command: volume down
+            device: master
+      actions: []
+    - type: SINGLE
+      name: audiovolume_3
+      title: Master Volume Up
+      icon: ""
+      description: new AUDIOVOLUME action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: AUDIOVOLUME_3
+          type: AUDIOVOLUME
+          name: audiovolume_3
+          description: new AUDIOVOLUME command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            command: volume up
+            device: master
       actions: []

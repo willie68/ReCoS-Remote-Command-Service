@@ -1,17 +1,23 @@
 package dto
 
 import (
+	"errors"
+	"fmt"
+	"math"
+	"time"
+
+	"wkla.no-ip.biz/remote-desk-service/api"
 	"wkla.no-ip.biz/remote-desk-service/pkg/audio"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
-var deviceName = "device name"
-var commandName = "command name"
+var parameterDeviceName = "device"
+var parameterCommandName = "command"
 
 // AudioVolumeCommandTypeInfo switch to another page
 var AudioVolumeCommandTypeInfo = models.CommandTypeInfo{"AUDIOVOLUME", "AudioVolume", "setting the volume of an audio device", true, []models.CommandParameterInfo{
-	{deviceName, "string", "name of the device to control", "", true, make([]string, 0)},
-	{commandName, "string", "the command to send", "", true, make([]string, 0)},
+	{parameterDeviceName, "string", "name of the device to control", "", true, make([]string, 0)},
+	{parameterCommandName, "string", "the command to send", "", true, make([]string, 0)},
 }}
 
 var audioCommandArray = []string{"mute", "volume up", "volume down"}
@@ -19,7 +25,13 @@ var audioCommandArray = []string{"mute", "volume up", "volume down"}
 // AudioVolumeCommand is a command to switch to another page.
 // Using "page" for the page name
 type AudioVolumeCommand struct {
-	Parameters map[string]interface{}
+	Parameters  map[string]interface{}
+	action      *Action
+	commandName string
+	devicename  string
+	command     string
+	ticker      *time.Ticker
+	done        chan bool
 }
 
 // EnrichType enrich the type info with the informations from the profile
@@ -27,7 +39,7 @@ func (v *AudioVolumeCommand) EnrichType(profile models.Profile) (models.CommandT
 	commandInfo := AudioVolumeCommandTypeInfo
 	index := -1
 	for x, param := range commandInfo.Parameters {
-		if param.Name == commandName {
+		if param.Name == parameterCommandName {
 			index = x
 		}
 	}
@@ -40,7 +52,7 @@ func (v *AudioVolumeCommand) EnrichType(profile models.Profile) (models.CommandT
 
 	index = -1
 	for x, param := range commandInfo.Parameters {
-		if param.Name == deviceName {
+		if param.Name == parameterDeviceName {
 			index = x
 		}
 	}
@@ -55,15 +67,125 @@ func (v *AudioVolumeCommand) EnrichType(profile models.Profile) (models.CommandT
 
 // Init the command
 func (v *AudioVolumeCommand) Init(a *Action, commandName string) (bool, error) {
+	v.commandName = commandName
+	v.action = a
+
+	object, ok := v.Parameters[parameterDeviceName]
+	if !ok {
+		return false, fmt.Errorf("The device parameter is empty.")
+	}
+
+	v.devicename, ok = object.(string)
+	if !ok {
+		return false, fmt.Errorf("The device parameter should be a string.")
+	}
+
+	object, ok = v.Parameters[parameterCommandName]
+	if !ok {
+		return false, fmt.Errorf("The command parameter is empty.")
+	}
+
+	v.command, ok = object.(string)
+	if !ok {
+		return false, fmt.Errorf("The command parameter should be a string.")
+	}
+
+	v.ticker = time.NewTicker(1 * time.Second)
+	v.done = make(chan bool)
+	go func() {
+		for {
+			select {
+			case <-v.done:
+				return
+			case <-v.ticker.C:
+				if api.HasConnectionWithProfile(a.Profile) {
+					session, ok := audio.GetSession(v.devicename)
+					if ok {
+						v.SendSessionMute(session.GetMute(), session.GetVolume(), session.IsInput())
+					}
+					continue
+				}
+			}
+		}
+	}()
+
 	return true, nil
 }
 
 // Stop the command
 func (v *AudioVolumeCommand) Stop(a *Action) (bool, error) {
+	v.done <- true
 	return true, nil
 }
 
 // Execute the command
 func (v *AudioVolumeCommand) Execute(a *Action, requestMessage models.Message) (bool, error) {
-	return true, nil
+	session, ok := audio.GetSession(v.devicename)
+	if !ok {
+		return false, errors.New(fmt.Sprintf("Device %s not found", v.devicename))
+	}
+	switch v.command {
+	case audioCommandArray[0]:
+		{
+			muted := session.GetMute()
+			session.SetMute(!muted)
+		}
+	case audioCommandArray[1]:
+		{
+			volume := session.GetVolume()
+			volume += 0.05
+			if volume > 1 {
+				volume = 1.0
+			}
+			session.SetVolume(volume)
+		}
+	case audioCommandArray[2]:
+		{
+			volume := session.GetVolume()
+			volume -= 0.05
+			if volume < 0 {
+				volume = 0.0
+			}
+			session.SetVolume(volume)
+		}
+	}
+
+	v.SendSessionMute(session.GetMute(), session.GetVolume(), session.IsInput())
+
+	return false, nil
+}
+
+func (v *AudioVolumeCommand) SendSessionMute(muted bool, volume float32, isInput bool) {
+	var image string
+	var text string
+	if isInput {
+		image = "radio_microphone.png"
+		text = " "
+		if muted {
+			image = "radio_microphone_off.png"
+			text = "muted"
+		}
+	} else {
+		image = "audio_volume_high.png"
+		percent := int(math.Round(float64(volume) * 100.0))
+		text = fmt.Sprintf("Volume: %d%%", percent)
+		if volume < 0.66 {
+			image = "audio_volume_medium.png"
+		}
+		if volume < 0.33 {
+			image = "audio_volume_low.png"
+		}
+		if muted {
+			image = "audio_volume_mute.png"
+			text = "muted"
+		}
+	}
+	message := models.Message{
+		Profile:  v.action.Profile,
+		Action:   v.action.Name,
+		ImageURL: image,
+		Text:     text,
+		State:    0,
+	}
+	api.SendMessage(message)
 }

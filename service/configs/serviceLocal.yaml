@@ -20,7 +20,7 @@ healthcheck:
 profiles: ./devdata/profiles
 
 logging:
-    level: debug
+    level: info
 
 extconfig:
     openhardwaremonitor:
