@@ -1,5 +1,5 @@
 <template>
-  <Dialog v-model:visible="dialogVisible">
+  <Dialog v-model:visible="dialogVisible" style="width: 600px; height: 400px">
     <template #header>
       <h3>
         <div class="p-orderlist-header" v-if="$slots.sourceHeader">
@@ -7,13 +7,22 @@
         </div>
       </h3>
     </template>
-    <div v-for="(param, x) in iconlist" :key="x">
-      {{ param }}
-      <div class="icon-item">
-        <img :src="'assets/' + param" />
-        <div>{{ param }}</div>
-      </div>
-    </div>
+    <span
+      v-for="(param, x) in iconlist"
+      :key="x"
+      class="icon-item"
+      @click="select(param)"
+    >
+      <a href="#" @keydown="onOptionKeyDown($event, option)">
+        <img
+          class="p-mb-2 p-mr-2"
+          :class="{ 'icon-selected': isSelected(param) }"
+          :src="'assets/' + param"
+          @click="select(param)"
+          width="36"
+        />
+      </a>
+    </span>
     <template #footer>
       <Button
         label="Cancel"
@@ -31,16 +40,12 @@ export default {
   name: "SelectIcon",
   components: {},
   props: {
-    modelValue: {
-      type: String,
-      default: "",
-    },
     iconlist: {
       type: Array,
     },
     visible: Boolean,
   },
-  emits: ["save", "cancel", "update:modelValue"],
+  emits: ["save", "cancel"],
   data() {
     return {
       dialogVisible: false,
@@ -52,7 +57,46 @@ export default {
       this.$emit("cancel");
     },
     save() {
-      this.$emit("update:modelValue", this.icon);
+      console.log("SelectIcon saved: " + this.icon);
+      this.$emit("save", this.icon);
+    },
+    select(item) {
+      console.log("SelectIcon: select new icon: ", item);
+      this.icon = item;
+    },
+    isSelected(item) {
+      return this.icon == item;
+    },
+    onOptionKeyDown(event, option) {
+      let item = event.currentTarget;
+      console.log("onOptionKeyDown", event, option);
+      switch (event.which) {
+        //down
+        case 40:
+          var nextItem = this.findNextItem(item);
+          if (nextItem) {
+            nextItem.focus();
+          }
+
+          event.preventDefault();
+          break;
+
+        //up
+        case 38:
+          var prevItem = this.findPrevItem(item);
+          if (prevItem) {
+            prevItem.focus();
+          }
+
+          event.preventDefault();
+          break;
+
+        //enter
+        case 13:
+          this.onOptionSelect(event, option);
+          event.preventDefault();
+          break;
+      }
     },
   },
   watch: {
@@ -65,3 +109,13 @@ export default {
   },
 };
 </script>
+
+<style>
+.icon-item {
+}
+
+.icon-selected {
+  border: 1px;
+  background-color: #2a435e;
+}
+</style>

@@ -20,20 +20,14 @@
     </div>
     <div class="p-field p-col">
       <label for="icon">Icon</label>
-      <Dropdown
-        id="icon"
-        v-model="activeAction.icon"
-        :options="iconlist"
-        placeholder="select a icon"
-      >
-        <template #option="slotProps">
-          <div class="icon-item">
-            <img :src="'assets/' + slotProps.option" />
-            <div>{{ slotProps.option }}</div>
-          </div>
-        </template>
-      </Dropdown>
-      <Button icon="pi pi-bars" class="p-mr-1" @click="selectDialog = true" />
+      <span class="p-input-icon-right">
+        <InputText
+          id="icon"
+          v-model="activeAction.icon"
+          placeholder="select a icon"
+        />
+        <i class="pi pi-chevron-down" @click="selectIconDialog = true" />
+      </span>
     </div>
     <div class="p-field p-col">
       <label for="fontsize">Font size</label>
@@ -84,10 +78,10 @@
     v-show="activeAction.type == `MULTI`"
   />
   <SelectIcon
-    :visible="selectDialog"
-    :v-model="activeAction.icon"
+    :visible="selectIconDialog"
     :iconlist="iconlist"
-    @cancel="this.selectDialog = false"
+    @cancel="this.selectIconDialog = false"
+    @save="this.saveIcon($event)"
     ><template #sourceHeader>Select Icon</template></SelectIcon
   >
 </template>
@@ -137,8 +131,15 @@ export default {
       ],
       iconlist: [],
       activeCommand: {},
-      selectDialog: false,
+      selectIconDialog: false,
     };
+  },
+  methods: {
+    saveIcon(icon) {
+      console.log("Action: save icon: " + icon);
+      this.activeAction.icon = icon;
+      this.selectIconDialog = false;
+    },
   },
   watch: {
     action(action) {
@@ -155,6 +156,10 @@ export default {
     profile(profile) {
       //      console.log("Action change profile to " + profile.name);
       this.activeProfile = profile;
+    },
+    newIcon(icon) {
+      console.log("Action: newIcon changed: " + icon);
+      this.newIcon = icon;
     },
   },
   mounted() {
