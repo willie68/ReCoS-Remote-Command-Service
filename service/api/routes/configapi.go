@@ -40,8 +40,8 @@ func GetIcons(response http.ResponseWriter, request *http.Request) {
 	if icons == nil || len(icons) == 0 {
 
 		icons = make([]string, 0)
-
-		err := filepath.Walk(config.Get().Icons, func(path string, info os.FileInfo, err error) error {
+		iconfolder, _ := config.ReplaceConfigdir(config.Get().Icons)
+		err := filepath.Walk(iconfolder, func(path string, info os.FileInfo, err error) error {
 			pathNames := strings.Split(path, "/")
 			if len(pathNames) == 1 {
 				pathNames = strings.Split(path, "\\")
