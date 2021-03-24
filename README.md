@@ -22,7 +22,20 @@ The client has a small toolbar and a big area, presenting the different actions.
 
 Each profile has different **pages** for further structuring. When the client starts, the first page is automatically selected. A page then consists of rows and columns. You can set the size in the Admin Client. The more rows and columns you have, the smaller the individual actions become. The page adapts its actions to the possible space. Pages can be changed directly via the toolbar (shown as buttons) or via special actions. Whether a page appears at the top of the bar can be set in the page configuration. If the page has no icon, only the name is displayed.
 
+In the client area you will see 2 types of buttons and maybe some empty space. First, all buttons with the gray background are buttons that you can press. (**Single** Action)This is the default behavior. On Press the underlying commands will be executed on the computer where the service is running.
 
+The buttons with the black background are for display purposes only. (**Display** Action) System states or other parameters are displayed there.
+
+The empty fields are waiting for you so that you can store something there.
+
+If you see a field with the red warning Action not defined, there is a misconfiguration. You may have deleted an action, but not removed it from the button.
+
+<img src="documentation/assets/action_not_found.png" alt="action_not_found" style="zoom: 50%;" />
+
+Buttons or actions can have several statuses. Depending on the situation, different icons are then displayed there. When a command is running, the hourglass is usually displayed. The turning position of the hourglass shows how many commands are currently being carried out. (Yes, actions can contain a command list)
+In the case of so-called **multi**-actions, this action runs through a list of actions. The 1st action is carried out with the 1st press, the 2nd with the 2nd press and so on. The respective status is represented by the icon of the corresponding action.
+
+As already mentioned, an action can contain several commands. (The "Hello World" action contains e.g. 3 commands: start notepad, wait a few seconds, write "Hello ReCoS"
 
 # ReCoS Admin - Web Admin Interface
 
