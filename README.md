@@ -296,6 +296,7 @@ parameters:
 
 `name`: The name of the page
 `description`: a user readable description
+`icon`: the icon of this page
 `columns`: Number of columns on the page
 `rows`: Number of rows on the page
 `toolbar`: `show`, this page will appear in the toolbar to directly switch to, `hide`, if this page should appear in the toolbar. With the page command you can switch to this page.
@@ -305,6 +306,7 @@ Example:
 
 ```yaml
 name: page1
+icon: clock.png
 columns: 5
 rows: 5
 cells:
