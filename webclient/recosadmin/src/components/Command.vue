@@ -21,19 +21,14 @@
     </div>
     <div class="p-field p-col">
       <label for="icon">Icon</label>
-      <Dropdown
-        id="icon"
-        v-model="activeCommand.icon"
-        :options="iconlist"
-        placeholder="select a icon"
-      >
-        <template #option="slotProps">
-          <div class="icon-item">
-            <img :src="'assets/' + slotProps.option" />
-            <div>{{ slotProps.option }}</div>
-          </div>
-        </template>
-      </Dropdown>
+      <span class="p-input-icon-right">
+        <InputText
+          id="icon"
+          v-model="activeCommand.icon"
+          placeholder="select a icon"
+        />
+        <i class="pi pi-chevron-down" @click="selectIconDialog = true" />
+      </span>
     </div>
   </div>
   <div class="p-fluid">
@@ -131,11 +126,19 @@
     v-on:cancel="this.addArgDialog = false"
     ><template #sourceHeader>New Argument</template></AddName
   >
+  <SelectIcon
+    :visible="selectIconDialog"
+    :iconlist="iconlist"
+    @cancel="this.selectIconDialog = false"
+    @save="this.saveIcon($event)"
+    ><template #sourceHeader>Select Icon</template></SelectIcon
+  >
 </template>
 
 <script>
 import ArgumentList from "./ArgumentList.vue";
 import AddName from "./AddName.vue";
+import SelectIcon from "./SelectIcon.vue";
 import { ObjectUtils } from "primevue/utils";
 
 export default {
@@ -143,6 +146,7 @@ export default {
   components: {
     ArgumentList,
     AddName,
+    SelectIcon,
   },
   props: {
     command: {},
@@ -157,6 +161,7 @@ export default {
       addArgDialog: false,
       newArgName: "",
       activeParam: null,
+      selectIconDialog: false,
     };
   },
   watch: {
@@ -187,30 +192,28 @@ export default {
       deep: false,
       handler(newCommandType) {
         if (newCommandType) {
-          console.log("Command: command ytpe changed: command type: ", JSON.stringify(newCommandType))       
           newCommandType.parameter.forEach((parameter) => {
             if (!this.activeCommand.parameters[parameter.name]) {
               if (parameter.type == "string") {
-                this.activeCommand.parameters[parameter.name] = ""
+                this.activeCommand.parameters[parameter.name] = "";
               }
               if (parameter.type == "[]string") {
-                this.activeCommand.parameters[parameter.name] = [""]
+                this.activeCommand.parameters[parameter.name] = [""];
               }
               if (parameter.type == "int") {
-                this.activeCommand.parameters[parameter.name] = 0
+                this.activeCommand.parameters[parameter.name] = 0;
               }
               if (parameter.type == "bool") {
-                this.activeCommand.parameters[parameter.name] = false
+                this.activeCommand.parameters[parameter.name] = false;
               }
               if (parameter.type == "color") {
-                this.activeCommand.parameters[parameter.name] = ""
+                this.activeCommand.parameters[parameter.name] = "";
               }
             }
           });
-          console.log("Command: command ytpe changed: active command: ", JSON.stringify(this.activeCommand))       
         }
       },
-    }
+    },
   },
   created() {
     this.upadteCommandTypes();
@@ -277,6 +280,11 @@ export default {
           this.commandtypes = data;
         })
         .catch((err) => console.log(err.message));
+    },
+    saveIcon(icon) {
+      console.log("Action: save icon: " + icon);
+      this.activeCommand.icon = icon;
+      this.selectIconDialog = false;
     },
   },
   beforeUnmount() {

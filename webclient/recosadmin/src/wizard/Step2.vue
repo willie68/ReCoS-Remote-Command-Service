@@ -22,21 +22,10 @@
         >Icon</label
       >
       <div class="p-col-12 p-md-8">
-        <Dropdown
-          id="icon"
-          v-model="icon"
-          :options="iconlist"
-          placeholder="select a icon"
-          scrollHeight="120px"
-          class="fullwidth"
-        >
-          <template #option="slotProps">
-            <div class="icon-item">
-              <img :src="'assets/' + slotProps.option" />
-              <div>{{ slotProps.option }}</div>
-            </div>
-          </template>
-        </Dropdown>
+        <span class="p-input-icon-right fullwidth">
+          <InputText id="icon" v-model="icon" placeholder="select a icon" class="fullwidth"/>
+          <i class="pi pi-chevron-down" @click="selectIconDialog = true" />
+        </span>
       </div>
     </div>
     <div
@@ -121,12 +110,20 @@
     v-on:cancel="this.addArgDialog = false"
     ><template #sourceHeader>New Argument</template></AddName
   >
+  <SelectIcon
+    :visible="selectIconDialog"
+    :iconlist="iconlist"
+    @cancel="this.selectIconDialog = false"
+    @save="this.saveIcon($event)"
+    ><template #sourceHeader>Select Icon</template></SelectIcon
+  >
 </template>
 
 <script>
 import ArgumentList from "./ArgumentList.vue";
 import AddName from "../components/AddName.vue";
 import DropdownParameter from "./DropdownParameter.vue";
+import SelectIcon from "./../components/SelectIcon.vue";
 import { ObjectUtils } from "primevue/utils";
 
 export default {
@@ -135,6 +132,7 @@ export default {
     ArgumentList,
     AddName,
     DropdownParameter,
+    SelectIcon,
   },
   props: {
     value: {},
@@ -150,6 +148,7 @@ export default {
       addArgDialog: false,
       newArgName: null,
       activeParam: null,
+      selectIconDialog: false,
     };
   },
   computed: {
@@ -252,6 +251,11 @@ export default {
         this.localValue.parameters = new Map();
       }
     },
+    saveIcon(icon) {
+      console.log("Step2: save icon: " + icon);
+      this.localValue.icon = icon;
+      this.selectIconDialog = false;
+    },
   },
   mounted() {
     console.log("Step2: mounted value: ", JSON.stringify(this.value));
@@ -273,6 +277,9 @@ export default {
         this.localValue = value;
         console.log("Step2: watch value: ", JSON.stringify(this.localValue));
         this.checkType();
+        if (!this.localValue.icon) {
+          this.localValue.icon = this.activeCommandType.icon
+        }
       },
     },
   },

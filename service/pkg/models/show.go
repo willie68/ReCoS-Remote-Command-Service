@@ -40,6 +40,7 @@ type ActionInfo struct {
 type PageInfo struct {
 	Name        string      `json:"name"`
 	Description string      `json:"description"`
+	Icon        string      `json:"icon"`
 	Columns     int         `json:"columns"`
 	Rows        int         `json:"rows"`
 	Toolbar     ToolbarType `json:"toolbar"`

@@ -13,10 +13,31 @@ import (
 )
 
 // KeysCommandTypeInfo sending key strokes to the active program
-var KeysCommandTypeInfo = models.CommandTypeInfo{"KEYS", "Keys", "Typing on a virtual keyboard", true, []models.CommandParameterInfo{
-	{"keylayout", "string", "defining the layout of the keyboard used to send the data", "", false, []string{"en", "de"}},
-	{"keystrokes", "string", "keys are the string with the keys used to send, example: 'akteon{enter}'", "", true, make([]string, 0)},
-}}
+var KeysCommandTypeInfo = models.CommandTypeInfo{
+	Type:           "KEYS",
+	Name:           "Keys",
+	Description:    "Typing on a virtual keyboard",
+	Icon:           "keystroke_monitoring.png",
+	WizardPossible: true,
+	Parameters: []models.CommandParameterInfo{
+		{
+			Name:           "keylayout",
+			Type:           "string",
+			Description:    "defining the layout of the keyboard used to send the data",
+			Unit:           "",
+			WizardPossible: false,
+			List:           []string{"en", "de"},
+		},
+		{
+			Name:           "keystrokes",
+			Type:           "string",
+			Description:    "keys are the string with the keys used to send, example: 'akteon{enter}'",
+			Unit:           "",
+			WizardPossible: true,
+			List:           make([]string, 0),
+		},
+	},
+}
 
 // KeysCommand is a command to send keystroke to the active application.
 // parameters: layout for the keyboard layout: en or de

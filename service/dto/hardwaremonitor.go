@@ -20,14 +20,63 @@ import (
 )
 
 // HardwareMonitorCommandTypeInfo showing hardware sensor data
-var HardwareMonitorCommandTypeInfo = models.CommandTypeInfo{"HARDWAREMONITOR", "HardwareMonitor", "Displaying data from a sensors", true, []models.CommandParameterInfo{
-	{"sensor", "string", "the sensor name like given above", "", true, make([]string, 0)},
-	{"format", "string", "the format string for the textual representation", "", false, make([]string, 0)},
-	{"display", "string", "text shows only the textual representation, graph shows both", "", true, []string{"text", "graph"}},
-	{"ymin", "int", "the value for the floor of the graph", "", true, make([]string, 0)},
-	{"ymax", "int", "the value for the top of the graph", "", true, make([]string, 0)},
-	{"color", "color", "color of the graph", "", true, make([]string, 0)},
-}}
+var HardwareMonitorCommandTypeInfo = models.CommandTypeInfo{
+	Type:           "HARDWAREMONITOR",
+	Name:           "HardwareMonitor",
+	Description:    "Displaying data from a sensors",
+	Icon:           "tools.png",
+	WizardPossible: true,
+	Parameters: []models.CommandParameterInfo{
+		{
+			Name:           "sensor",
+			Type:           "string",
+			Description:    "the sensor name like given above",
+			Unit:           "",
+			WizardPossible: true,
+			List:           make([]string, 0),
+		},
+		{
+			Name:           "format",
+			Type:           "string",
+			Description:    "the format string for the textual representation",
+			Unit:           "",
+			WizardPossible: false,
+			List:           make([]string, 0),
+		},
+		{
+			Name:           "display",
+			Type:           "string",
+			Description:    "text shows only the textual representation, graph shows both",
+			Unit:           "",
+			WizardPossible: true,
+			List:           []string{"text", "graph"},
+		},
+		{
+			Name:           "ymin",
+			Type:           "int",
+			Description:    "the value for the floor of the graph",
+			Unit:           "",
+			WizardPossible: true,
+			List:           make([]string, 0),
+		},
+		{
+			Name:           "ymax",
+			Type:           "int",
+			Description:    "the value for the top of the graph",
+			Unit:           "",
+			WizardPossible: true,
+			List:           make([]string, 0),
+		},
+		{
+			Name:           "color",
+			Type:           "color",
+			Description:    "color of the graph",
+			Unit:           "",
+			WizardPossible: true,
+			List:           make([]string, 0),
+		},
+	},
+}
 
 const measurepoints = 500
 

@@ -9,11 +9,38 @@ import (
 )
 
 // ExecuteCommandTypeInfo start an application or shell script and optionally waits for it's finishing
-var ExecuteCommandTypeInfo = models.CommandTypeInfo{"EXECUTE", "Execute", "Execute an application", true, []models.CommandParameterInfo{
-	{"command", "string", "the command to execute", "", true, make([]string, 0)},
-	{"waitOnClose", "bool", "wait's till the command is finnished", "", true, make([]string, 0)},
-	{"args", "[]string", "a list of arguments", "", true, make([]string, 0)},
-}}
+var ExecuteCommandTypeInfo = models.CommandTypeInfo{
+	Type:           "EXECUTE",
+	Name:           "Execute",
+	Description:    "Execute an application",
+	Icon:           "flash.png",
+	WizardPossible: true,
+	Parameters: []models.CommandParameterInfo{
+		{
+			Name:           "command",
+			Type:           "string",
+			Description:    "the command to execute",
+			Unit:           "",
+			WizardPossible: true,
+			List:           make([]string, 0),
+		},
+		{
+			Name:           "waitOnClose",
+			Type:           "bool",
+			Description:    "wait's till the command is finnished",
+			Unit:           "",
+			WizardPossible: true,
+			List:           make([]string, 0),
+		},
+		{
+			Name:           "args",
+			Type:           "[]string",
+			Description:    "a list of arguments",
+			Unit:           "",
+			WizardPossible: true,
+			List:           make([]string, 0),
+		},
+	}}
 
 // ExecuteCommand is a command to execute a program or batch file.
 // Using "command" for getting the command line to execute.

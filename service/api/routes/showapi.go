@@ -68,6 +68,7 @@ func GetUIProfileEndpoint(response http.ResponseWriter, request *http.Request) {
 				pageInfo := models.PageInfo{
 					Name:        page.Name,
 					Description: page.Description,
+					Icon:        page.Icon,
 					Columns:     page.Columns,
 					Rows:        page.Rows,
 					Toolbar:     page.Toolbar,

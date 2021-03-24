@@ -2,20 +2,22 @@ name: aaa
 description: This is the default configuration, just to have one starting point
 pages:
     - name: Volume
-      description: commands for audio volume 
+      description: commands for audio volume
+      icon: tax.png
       columns: 2
-      rows: 2
+      rows: 3
       toolbar: ""
       cells:
         - audiovolume_0
         - audiovolume_1
         - audiovolume_3
         - audiovolume_2
+        - ""
 actions:
     - type: SINGLE
       name: audiovolume_0
       title: Mute Mic
-      icon: ""
+      icon: radio_microphone_color.png
       description: new AUDIOVOLUME action created by ActionWizard
       fontsize: 10
       fontcolor: '#000000'
@@ -35,7 +37,7 @@ actions:
     - type: SINGLE
       name: audiovolume_1
       title: Mute Master
-      icon: ""
+      icon: speaker.png
       description: new AUDIOVOLUME action created by ActionWizard
       fontsize: 10
       fontcolor: '#000000'
@@ -55,7 +57,7 @@ actions:
     - type: SINGLE
       name: audiovolume_2
       title: Master Volume Down
-      icon: ""
+      icon: audio_volume_low.png
       description: new AUDIOVOLUME action created by ActionWizard
       fontsize: 10
       fontcolor: '#000000'
@@ -75,7 +77,7 @@ actions:
     - type: SINGLE
       name: audiovolume_3
       title: Master Volume Up
-      icon: ""
+      icon: audio_volume_high.png
       description: new AUDIOVOLUME action created by ActionWizard
       fontsize: 10
       fontcolor: '#000000'
@@ -102,7 +104,7 @@ actions:
       outlined: false
       runone: true
       commands:
-        - id: DELAY_3
+        - id: DELAY_4
           type: DELAY
           name: delay
           description: ""
@@ -110,7 +112,7 @@ actions:
           title: ""
           parameters:
             time: 8
-        - id: KEYS_4
+        - id: KEYS_5
           type: KEYS
           name: sendkeys
           description: ""
