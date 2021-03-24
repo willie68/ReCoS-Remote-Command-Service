@@ -92,6 +92,8 @@ type CommandTypeInfo struct {
 	Name string `json:"name"`
 	// Description of this action for information
 	Description string `json:"description"`
+	// a nice icon as default
+	Icon string `json:"icon"`
 	// WizardPossible this command can be used in the wizard
 	WizardPossible bool `json:"wizard"`
 	// Parameters describes the needed parameters

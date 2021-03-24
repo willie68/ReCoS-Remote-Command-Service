@@ -15,10 +15,31 @@ import (
 )
 
 // ClockCommandTypeInfo is a clock
-var ClockCommandTypeInfo = models.CommandTypeInfo{"CLOCK", "Clock", "Displaying a nice clock", true, []models.CommandParameterInfo{
-	{"format", "string", "Format string for formatting the clock", "", false, make([]string, 0)},
-	{"analog", "bool", "Showing a nice analog clock", "", true, make([]string, 0)},
-}}
+var ClockCommandTypeInfo = models.CommandTypeInfo{
+	Type:           "CLOCK",
+	Name:           "Clock",
+	Description:    "Displaying a nice clock",
+	Icon:           "clock.png",
+	WizardPossible: true,
+	Parameters: []models.CommandParameterInfo{
+		{
+			Name:           "format",
+			Type:           "string",
+			Description:    "Format string for formatting the clock",
+			Unit:           "",
+			WizardPossible: false,
+			List:           make([]string, 0),
+		},
+		{
+			Name:           "analog",
+			Type:           "bool",
+			Description:    "Showing a nice analog clock",
+			Unit:           "",
+			WizardPossible: true,
+			List:           make([]string, 0),
+		},
+	},
+}
 
 // ClockCommand is a command to execute a delay. Using time for getting the ttime in seconds to delay the execution.
 type ClockCommand struct {

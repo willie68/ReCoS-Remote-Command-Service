@@ -277,6 +277,9 @@ export default {
         this.localValue = value;
         console.log("Step2: watch value: ", JSON.stringify(this.localValue));
         this.checkType();
+        if (!this.localValue.icon) {
+          this.localValue.icon = this.activeCommandType.icon
+        }
       },
     },
   },
