@@ -1,5 +1,5 @@
 <template>
-  <Panel class="page-panel-custom" v-if="activePage && (activePage.name != '')">
+  <Panel class="page-panel-custom" v-if="activePage && activePage.name != ''">
     <template #header>
       <b>{{ profile.name }} # {{ activePage.name }}</b>
     </template>
@@ -14,6 +14,17 @@
       <div class="p-field p-col">
         <label for="name">name</label>
         <InputText id="name" type="text" v-model="activePage.name" />
+      </div>
+      <div class="p-field p-col">
+        <label for="icon">Icon</label>
+        <span class="p-input-icon-right">
+          <InputText
+            id="icon"
+            v-model="activePage.icon"
+            placeholder="select a icon"
+          />
+          <i class="pi pi-chevron-down" @click="selectIconDialog = true" />
+        </span>
       </div>
       <div class="p-field p-col">
         <label for="rows">rows</label>
@@ -53,14 +64,24 @@
     :page="activePage"
     :profile="profile"
   ></ButtonPanel>
+  <SelectIcon
+    :visible="selectIconDialog"
+    :iconlist="iconlist"
+    @cancel="this.selectIconDialog = false"
+    @save="this.saveIcon($event)"
+    ><template #sourceHeader>Select Icon</template></SelectIcon
+  >
 </template>
 
 <script>
 import ButtonPanel from "./ButtonPanel.vue";
+import SelectIcon from "./SelectIcon.vue";
+
 export default {
   name: "PageSettings",
   components: {
     ButtonPanel,
+    SelectIcon,
   },
   props: {
     page: {},
@@ -119,6 +140,8 @@ export default {
         { name: "Show", type: "show" },
         { name: "Hide", type: "hide" },
       ],
+      iconlist: [],
+      selectIconDialog: false,
     };
   },
   methods: {
@@ -126,8 +149,24 @@ export default {
       this.$refs.menu.toggle(event);
     },
     changePage() {},
+    saveIcon(icon) {
+      console.log("Action: save icon: " + icon);
+      this.activePage.icon = icon;
+      this.selectIconDialog = false;
+    },
   },
-  mounted() {},
+  mounted() {
+    this.iconlist = this.$store.state.iconlist;
+    let that = this;
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type === "iconlist") {
+        that.iconlist = state.iconlist;
+      }
+    });
+  },
+  beforeUnmount() {
+    this.unsubscribe();
+  },
   created() {},
   watch: {
     page(page) {

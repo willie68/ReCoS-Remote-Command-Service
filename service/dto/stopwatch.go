@@ -15,9 +15,23 @@ import (
 )
 
 // StopwatchCommandTypeInfo is a stopwatch with seconds
-var StopwatchCommandTypeInfo = models.CommandTypeInfo{"STOPWATCH", "Stopwatch", "Measure time with a stopwatch", true, []models.CommandParameterInfo{
-	{"format", "string", "the format of the time", "", false, make([]string, 0)},
-}}
+var StopwatchCommandTypeInfo = models.CommandTypeInfo{
+	Type:           "STOPWATCH",
+	Name:           "Stopwatch",
+	Description:    "Measure time with a stopwatch",
+	Icon:           "rate.png",
+	WizardPossible: true,
+	Parameters: []models.CommandParameterInfo{
+		{
+			Name:           "format",
+			Type:           "string",
+			Description:    "the format of the time",
+			Unit:           "",
+			WizardPossible: false,
+			List:           make([]string, 0),
+		},
+	},
+}
 
 // StopwatchCommand is a command to simulate a stopwatch.
 type StopwatchCommand struct {
@@ -110,32 +124,48 @@ func (s *StopwatchCommand) stopStopwatch() {
 // Execute a delay in the actual context
 func (s *StopwatchCommand) Execute(a *Action, requestMessage models.Message) (bool, error) {
 	timeNow := time.Now()
-	if s.running {
-		// stop the running clock
-		s.stopTime = timeNow
-		s.stopStopwatch()
-
-		go func() {
-			tdelta := s.stopTime.Sub(s.startTime)
-			title, _ := durationfmt.Format(tdelta, s.format)
-			if s.analog {
-				s.SendPNG(title)
-			} else {
-				message := models.Message{
-					Profile: s.action.Profile,
-					Action:  s.action.Name,
-					State:   1,
-					Title:   s.action.Config.Title,
-					Text:    title,
-				}
-				api.SendMessage(message)
-			}
-			time.Sleep(3 * time.Second)
-		}()
+	if IsDblClick(requestMessage) {
+		if s.running {
+			s.stopTime = timeNow
+			s.stopStopwatch()
+		}
+		title, _ := durationfmt.Format(0, s.format)
+		message := models.Message{
+			Profile: s.action.Profile,
+			Action:  s.action.Name,
+			State:   1,
+			Title:   s.action.Config.Title,
+			Text:    title,
+		}
+		api.SendMessage(message)
 	} else {
-		// start the stopwatch
-		s.startTime = timeNow
-		s.startStopwatch()
+		if s.running {
+			// stop the running clock
+			s.stopTime = timeNow
+			s.stopStopwatch()
+
+			go func() {
+				tdelta := s.stopTime.Sub(s.startTime)
+				title, _ := durationfmt.Format(tdelta, s.format)
+				if s.analog {
+					s.SendPNG(title)
+				} else {
+					message := models.Message{
+						Profile: s.action.Profile,
+						Action:  s.action.Name,
+						State:   1,
+						Title:   s.action.Config.Title,
+						Text:    title,
+					}
+					api.SendMessage(message)
+				}
+				time.Sleep(3 * time.Second)
+			}()
+		} else {
+			// start the stopwatch
+			s.startTime = timeNow
+			s.startStopwatch()
+		}
 	}
 	return false, nil
 }

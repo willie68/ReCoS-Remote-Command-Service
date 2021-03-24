@@ -17,7 +17,11 @@
             :label="
               cellActions[(row - 1) * activePage.columns + (col - 1)].name
             "
-          />
+            v-tooltip="cellActions[(row - 1) * activePage.columns + (col - 1)].name"
+          >
+            <img v-if="cellActions[(row - 1) * activePage.columns + (col - 1)].icon" :src="'assets/' + cellActions[(row - 1) * activePage.columns + (col - 1)].icon"/>
+            <div v-if="!cellActions[(row - 1) * activePage.columns + (col - 1)].icon">{{ cellActions[(row - 1) * activePage.columns + (col - 1)].name }}</div>
+          </Button>
           <Button
             :ref="'btn' + ((row - 1) * activePage.columns + (col - 1))"
             @click="clickButton((row - 1) * activePage.columns + (col - 1))"

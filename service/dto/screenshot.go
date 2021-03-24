@@ -13,10 +13,31 @@ import (
 )
 
 // ScreenshotCommandTypeInfo saving to the file system
-var ScreenshotCommandTypeInfo = models.CommandTypeInfo{"SCREENSHOT", "Screenshot", "Taking a Screenshot", true, []models.CommandParameterInfo{
-	{"saveto", "string", "the folder where the screenshot should be saved", "", true, make([]string, 0)},
-	{"display", "int", "the display number", "", false, make([]string, 0)},
-}}
+var ScreenshotCommandTypeInfo = models.CommandTypeInfo{
+	Type:           "SCREENSHOT",
+	Name:           "Screenshot",
+	Description:    "Taking a Screenshot",
+	Icon:           "camera.png",
+	WizardPossible: true,
+	Parameters: []models.CommandParameterInfo{
+		{
+			Name:           "saveto",
+			Type:           "string",
+			Description:    "the folder where the screenshot should be saved",
+			Unit:           "",
+			WizardPossible: true,
+			List:           make([]string, 0),
+		},
+		{
+			Name:           "display",
+			Type:           "int",
+			Description:    "the display number",
+			Unit:           "",
+			WizardPossible: false,
+			List:           make([]string, 0),
+		},
+	},
+}
 
 // ScreenshotCommand is a command to do a sceen shot and store this into the filesystem
 type ScreenshotCommand struct {

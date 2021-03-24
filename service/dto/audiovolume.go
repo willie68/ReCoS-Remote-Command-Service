@@ -15,10 +15,26 @@ var parameterDeviceName = "device"
 var parameterCommandName = "command"
 
 // AudioVolumeCommandTypeInfo switch to another page
-var AudioVolumeCommandTypeInfo = models.CommandTypeInfo{"AUDIOVOLUME", "AudioVolume", "setting the volume of an audio device", true, []models.CommandParameterInfo{
-	{parameterDeviceName, "string", "name of the device to control", "", true, make([]string, 0)},
-	{parameterCommandName, "string", "the command to send", "", true, make([]string, 0)},
-}}
+var AudioVolumeCommandTypeInfo = models.CommandTypeInfo{
+	Type:           "AUDIOVOLUME",
+	Name:           "AudioVolume",
+	Description:    "setting the volume of an audio device",
+	Icon:           "speaker.png",
+	WizardPossible: true,
+	Parameters: []models.CommandParameterInfo{
+		{Name: parameterDeviceName,
+			Type:        "string",
+			Description: "name of the device to control",
+			Unit:        "", WizardPossible: true,
+			List: make([]string, 0),
+		},
+		{Name: parameterCommandName,
+			Type:           "string",
+			Description:    "the command to send",
+			Unit:           "",
+			WizardPossible: true,
+			List:           make([]string, 0)},
+	}}
 
 var audioCommandArray = []string{"mute", "volume up", "volume down"}
 
