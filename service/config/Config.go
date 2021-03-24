@@ -57,13 +57,14 @@ var DefaulConfig = Config{
 	Profiles:    "${configdir}/profiles",
 	WebClient:   "${configdir}/webclient",
 	AdminClient: "${configdir}/webadmin",
+	Icons:       "${configdir}/webclient/assets",
 	ExternalConfig: map[string]interface{}{
 		"openhardwaremonitor": map[string]interface{}{
 			"url":          "http://127.0.0.1:12999/data.json",
 			"updateperiod": "5",
 		},
 	},
-	Logging: LoggingConfig {
+	Logging: LoggingConfig{
 		Level: "INFO",
 	},
 }
