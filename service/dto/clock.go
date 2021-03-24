@@ -147,7 +147,7 @@ func (c *ClockCommand) SendGraphics(value string) {
 		Profile:  c.action.Profile,
 		Action:   c.action.Name,
 		ImageURL: image,
-		Text:     value,
+		Title:    value,
 		State:    0,
 	}
 	api.SendMessage(message)

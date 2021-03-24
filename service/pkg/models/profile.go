@@ -29,6 +29,8 @@ type Page struct {
 	Name string `json:"name"`
 	// Description of this action for information
 	Description string `json:"description"`
+	// Title of this action for display
+	Icon string `json:"icon"`
 	// Columns of this page
 	Columns int `json:"columns"`
 	// Rows of this page

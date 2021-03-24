@@ -19,10 +19,13 @@
       v-for="page in toolbarPages"
       :value="page.name"
       :key="page.name"
-      v-text="page.name"
       :title="page.description"
       @click="changePage(page.name)"
-    ></button>
+      class="pagebuttons"
+    >
+      <img v-if="page.icon" :src="buildImageSrc(page.icon)" height="20"/>
+      <span v-if="!page.icon">{{ page.name }}</span>
+    </button>
   </div>
   <div class="display" ref="display">
     <div
@@ -49,6 +52,7 @@
           :fontsize="cellactions[x][y].fontsize"
           :fontcolor="cellactions[x][y].fontcolor"
           :outlined="cellactions[x][y].outlined"
+          :baseURL="this.baseURL"
           :actionType="cellactions[x][y].type"
           v-if="
             cellactions[x][y].type == 'SINGLE' ||
@@ -67,6 +71,7 @@
           :fontsize="cellactions[x][y].fontsize"
           :fontcolor="cellactions[x][y].fontcolor"
           :outlined="cellactions[x][y].outlined"
+          :baseURL="this.baseURL"
           v-if="cellactions[x][y].type == 'DISPLAY'"
         />
         <None
@@ -295,6 +300,19 @@ export default {
         this.actionHeight = this.cellHeight - 4;
       }
     },
+    buildImageSrc(data) {
+      if (!data) {
+        console.log("no data")
+        return "data:image/bmp;base64,Qk1CAAAAAAAAAD4AAAAoAAAAAQAAAAEAAAABAAEAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wCAAAAA"
+      }
+      if (data.startsWith("/")) {
+        return this.baseURL + data;
+      }
+      if (data.startsWith("data:")) {
+        return data;
+      }
+      return "assets/" + data;
+    },
   },
 };
 </script>
@@ -311,11 +329,16 @@ export default {
 
 .display {
   position: absolute;
-  top: 24px;
+  top: 32px;
   bottom: 0;
   width: 100%;
   background: black;
 }
+
+.pagebuttons{
+  height: 32px;
+}
+
 .row {
   display: flex;
 }

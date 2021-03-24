@@ -1,12 +1,28 @@
 # Remote Command Service, ReCoS
 
-Remote Command Service, for executing scripts remotely but secure. This project consists of 2 components. One is the service, a small go based microservice, which delivers all the functionality behind the UI. This service is responsible for the execution of the different actions. The other project is the UI Web Component, build on top of VUE as the main UI Framework. 
+Remote Command Service, for executing scripts remotely but secure. This project consists of different components. One is the service, a small golang based microservice, which delivers all the functionality behind the UI. This service is responsible for the execution of the different actions. 
+On the other side there are two Web applications, build on top of VUE as the main UI Framework. One for the client controlling the actions, one for the administration. 
 
 # Installation
 
-I'll created a simple installer with inno setup for install the pre release. After installation you have to start the service itself. It's called `recos-service.exe`. Nothing else to do here. After the sevice is up, simply go to the web page http://localhost:9280/webadmin for the admin client. 
+Installation is simple. Execute the installer. After installation you have to start the service itself. It's called `recos-service.exe`. Nothing else to do here. After the sevice is up, simply go to the web page http://localhost:9280/webadmin for the admin client. 
 
-For the normal execution client please use http://localhost:9280/webclient. On other machines simply change localhost to the ip of the computer where the service is running.
+For the normal execution client please use http://localhost:9280/webclient. On other machines simply change localhost to the ip of the computer where the service is running, like http://192.168.178.34/webclient
+
+# ReCoS Client - Web Client Interface
+
+This is the ReCoS web client. After successful installation you can access it with 
+http://127.0.0.1:9280/webclient on the same computer.
+
+# <img src="documentation/assets/webclient.png" alt="webclient" style="zoom:50%;" />
+
+
+
+The client has a small toolbar and a big area, presenting the different actions. But let us start at the very beginning. First, everything is organized in a **profile**. You can have different profiles for different clients, or different scenarios. One client can only present one profile at a time, but you can have different profiles in different browser open. As an example, you can have a special profile for your Phone and another for the Pad and a really big one for the PC. And all can be active at the same time. But to emphasize again, you can of course also operate the same profile on 2 different devices at the same time. When starting the client, the first profile is selected. You can select profiles using the Profile Combobox.
+
+Each profile has different **pages** for further structuring. When the client starts, the first page is automatically selected. A page then consists of rows and columns. You can set the size in the Admin Client. The more rows and columns you have, the smaller the individual actions become. The page adapts its actions to the possible space. Pages can be changed directly via the toolbar (shown as buttons) or via special actions. Whether a page appears at the top of the bar can be set in the page configuration. If the page has no icon, only the name is displayed.
+
+
 
 # ReCoS Admin - Web Admin Interface
 

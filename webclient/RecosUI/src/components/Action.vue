@@ -32,6 +32,7 @@ export default {
     "fontsize",
     "fontcolor",
     "outlined",
+    "baseURL",
     "actionType",
     "action",
   ],
@@ -41,6 +42,7 @@ export default {
       saveImg: "",
       saveTitle: "",
       saveText: "",
+      myBaseUrl: "",      
       timerID: null,
     };
   },
@@ -87,7 +89,7 @@ export default {
     },
     buildImageSrc(data) {
       if (data.startsWith("/")) {
-        return data;
+        return this.myBaseUrl + data;
       }
       if (data.startsWith("data:")) {
         return data;
@@ -166,6 +168,7 @@ export default {
   },
   mounted() {
     console.log("Action: mounted ", this.action.name);
+    this.myBaseUrl = this.baseURL.substring(0, this.baseURL.indexOf("/", 8));
     this.saveImg = "";
   },
   unmounted() {
@@ -180,6 +183,9 @@ export default {
         this.saveTitle = "";
         this.saveText = "";
       },
+    },
+    baseURL(baseURL) {
+      this.myBaseUrl = baseURL.substring(0, baseURL.indexOf("/", 8));
     },
     saveImg: {
       deep: false,

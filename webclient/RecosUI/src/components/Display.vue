@@ -29,6 +29,7 @@ export default {
     "fontsize",
     "fontcolor",
     "outlined",
+    "baseURL",
   ],
   data() {
     return {
@@ -36,6 +37,7 @@ export default {
       saveImg: "",
       saveTitle: "",
       saveText: "",
+      myBaseUrl: "",
     };
   },
   computed: {
@@ -49,7 +51,7 @@ export default {
       };
     },
     imageUrl() {
-//      console.log("actionName:" + this.actionName);
+      //      console.log("actionName:" + this.actionName);
       if (this.actionName) {
         if (this.saveImg) {
           return this.buildImageSrc(this.saveImg);
@@ -59,7 +61,7 @@ export default {
       return "";
     },
     mytitle() {
-//      console.log("actionName:" + this.actionName);
+      //      console.log("actionName:" + this.actionName);
       if (this.actionName) {
         if (this.saveTitle) {
           return this.saveTitle;
@@ -69,7 +71,7 @@ export default {
       return "";
     },
     mytext() {
-//      console.log("actionName:" + this.actionName);
+      //      console.log("actionName:" + this.actionName);
       if (this.actionName) {
         if (this.saveText) {
           return this.saveText;
@@ -84,12 +86,29 @@ export default {
     },
     buildImageSrc(data) {
       if (data.startsWith("/")) {
-        return data;
+        return this.myBaseUrl + data;
       }
       if (data.startsWith("data:")) {
         return data;
       }
       return "assets/" + data;
+    },
+  },
+  mounted() {
+    this.myBaseUrl = this.baseURL.substring(0, this.baseURL.indexOf("/", 8));
+  },
+  watch: {
+    action: {
+      deep: true,
+      handler(newAction) {
+        console.log("Action: changing action " + JSON.stringify(newAction));
+        this.saveImg = "";
+        this.saveTitle = "";
+        this.saveText = "";
+      },
+    },
+    baseURL(baseURL) {
+      this.myBaseUrl = baseURL.substring(0, baseURL.indexOf("/", 8));
     },
   },
 };
@@ -114,8 +133,8 @@ export default {
 }
 
 .acdisplay .acimage {
-   widht: 80%;
-   height: 80%;
+  widht: 80%;
+  height: 80%;
 }
 
 .acdisplay .textbox {
@@ -127,7 +146,6 @@ export default {
   font-size: 16px;
   font-weight: bold;
   position: relative;
-
 }
 
 .acdisplay .text {
