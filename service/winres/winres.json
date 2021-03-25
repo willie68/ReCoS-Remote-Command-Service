@@ -2,8 +2,8 @@
   "RT_GROUP_ICON": {
     "APP": {
       "0000": [
-        "icon.png",
-        "icon16.png"
+        "logo.png",
+		"logo16.png"
       ]
     }
   },
@@ -36,8 +36,8 @@
     "#1": {
       "0000": {
         "fixed": {
-          "file_version": "0.0.0.0",
-          "product_version": "0.0.0.0"
+          "file_version": "0.0.0.56",
+          "product_version": "0.0.0.56"
         },
         "info": {
           "0409": {
@@ -45,13 +45,13 @@
             "CompanyName": "MCS",
             "FileDescription": "",
             "FileVersion": "",
-            "InternalName": "",
-            "LegalCopyright": "",
+            "InternalName": "ReCoS-Service",
+            "LegalCopyright": "MCS 2021",
             "LegalTrademarks": "",
             "OriginalFilename": "",
             "PrivateBuild": "",
-            "ProductName": "",
-            "ProductVersion": "",
+            "ProductName": "ReCoS-Service",
+            "ProductVersion": "0.0.0.56",
             "SpecialBuild": ""
           }
         }
