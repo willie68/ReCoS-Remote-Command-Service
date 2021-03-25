@@ -20,9 +20,9 @@ func check() (bool, string) {
 	myhealthy = true
 	message := ""
 	if myhealthy {
-		clog.Logger.Info("healthy")
+		clog.Logger.Debug("healthy")
 	} else {
-		clog.Logger.Info("not healthy")
+		clog.Logger.Alert("not healthy")
 		message = "ungesund"
 	}
 	return myhealthy, message

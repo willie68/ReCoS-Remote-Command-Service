@@ -1,3 +1,4 @@
+// go: generate goversioninfo -icon = ../../general/favicon.ico
 package main
 
 import (
@@ -17,16 +18,19 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/dto"
 	"wkla.no-ip.biz/remote-desk-service/error/serror"
 	"wkla.no-ip.biz/remote-desk-service/health"
+	"wkla.no-ip.biz/remote-desk-service/icon"
 	"wkla.no-ip.biz/remote-desk-service/logging"
 	"wkla.no-ip.biz/remote-desk-service/pkg/audio"
 	"wkla.no-ip.biz/remote-desk-service/pkg/osdependent"
 
 	config "wkla.no-ip.biz/remote-desk-service/config"
 
+	"github.com/getlantern/systray"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
 	"github.com/go-chi/render"
+	"github.com/skratchdot/open-golang/open"
 	"wkla.no-ip.biz/remote-desk-service/crypt"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
 
@@ -46,6 +50,8 @@ var apikey string
 var ssl bool
 var configFile string
 var serviceConfig config.Config
+var sslsrv *http.Server
+var srv *http.Server
 
 func init() {
 	// variables for parameter override
@@ -142,6 +148,24 @@ func FileServer(r chi.Router, path string, root http.FileSystem) {
 }
 
 func main() {
+	systray.Run(onReady, onExit)
+}
+
+func onReady() {
+	systray.SetIcon(icon.Data)
+	systray.SetTitle("Awesome App")
+	systray.SetTooltip("Pretty awesome超级棒")
+
+	mAdmin := systray.AddMenuItem("WebAdmin", "Start the webadmin")
+	mClient := systray.AddMenuItem("WebClient", "Start the client")
+	systray.AddSeparator()
+
+	mQuit := systray.AddMenuItem("Quit", "Quit ReCoS")
+	mQuit.SetIcon(icon.Data)
+
+	// Sets the icon of a menu item. Only available on Mac and Windows.
+	clog.Logger.Info("systray established")
+
 	clog.Logger.Info("starting server")
 	defer clog.Logger.Close()
 
@@ -176,6 +200,19 @@ func main() {
 
 	serviceConfig = config.Get()
 	initConfig()
+
+	go func() {
+		for {
+			select {
+			case <-mClient.ClickedCh:
+				open.Run(fmt.Sprintf("http://localhost:%d/webclient", serviceConfig.Port))
+			case <-mAdmin.ClickedCh:
+				open.Run(fmt.Sprintf("http://localhost:%d/webadmin", serviceConfig.Port))
+			case <-mQuit.ClickedCh:
+				systray.Quit()
+			}
+		}
+	}()
 
 	initAudioHardware()
 
@@ -231,8 +268,6 @@ func main() {
 		clog.Logger.Alertf("could not walk health routes. %s", err.Error())
 	}
 
-	var sslsrv *http.Server
-	var srv *http.Server
 	if ssl {
 		gc := crypt.GenerateCertificate{
 			Organization: "MCS",
@@ -294,11 +329,17 @@ func main() {
 	clog.Logger.Infof("start web client: http://localhost:%d/webclient", serviceConfig.Port)
 	clog.Logger.Infof("start admin client: http://localhost:%d/webadmin", serviceConfig.Port)
 
+	clog.Logger.Info("waiting for clients")
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
 	<-c
 
-	clog.Logger.Info("waiting for clients")
+	systray.Quit()
+
+}
+
+func onExit() {
+
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
 	defer cancel()
 
@@ -310,6 +351,8 @@ func main() {
 	clog.Logger.Info("finished")
 
 	os.Exit(0)
+
+	// clean up here
 }
 
 func initAudioHardware() error {

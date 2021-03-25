@@ -1,12 +1,31 @@
 name: aaa
 description: This is the default configuration, just to have one starting point
 pages:
-    - name: Media
-      description: clock
-      icon: clock.png
-      columns: 2
-      rows: 2
-      toolbar: ""
-      cells:
-        - clock_0
-actions: []
+  - name: Media
+    description: clock
+    icon: clock.png
+    columns: 2
+    rows: 2
+    toolbar: ""
+    cells:
+      - clock_0
+actions:
+  - type: DISPLAY
+    name: clock_0
+    title: asfAFaqsFA
+    icon: clock.png
+    description: new CLOCK action created by ActionWizard
+    fontsize: 10
+    fontcolor: "#000000"
+    outlined: false
+    runone: true
+    commands:
+      - id: ""
+        type: CLOCK
+        name: clock_0
+        description: new CLOCK command created by ActionWizard
+        icon: ""
+        title: SAd
+        parameters:
+          analog: true
+    actions: []

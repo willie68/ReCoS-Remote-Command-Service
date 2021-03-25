@@ -9,9 +9,11 @@ require (
 	github.com/aphistic/golf v0.0.0-20180712155816-02c07f170c5a
 	github.com/aphistic/sweet v0.3.0 // indirect
 	github.com/armon/go-metrics v0.3.4 // indirect
+	github.com/cratonica/2goarray v0.0.0-20190331194516-514510793eaa // indirect
 	github.com/davidscholberg/go-durationfmt v0.0.0-20170122144659-64843a2083d3
 	github.com/fogleman/gg v1.3.0
 	github.com/gen2brain/shm v0.0.0-20200228170931-49f9650110c5 // indirect
+	github.com/getlantern/systray v1.1.0
 	github.com/go-chi/chi v4.1.2+incompatible
 	github.com/go-chi/cors v1.1.1
 	github.com/go-chi/httptracer v0.2.0 // indirect
@@ -40,6 +42,7 @@ require (
 	github.com/omriharel/deej v0.9.10
 	github.com/onsi/ginkgo v1.14.2 // indirect
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
+	github.com/skratchdot/open-golang v0.0.0-20200116055534-eef842397966
 	github.com/spf13/pflag v1.0.5
 	github.com/thoas/go-funk v0.8.0
 	github.com/uber/jaeger-client-go v2.25.0+incompatible // indirect
