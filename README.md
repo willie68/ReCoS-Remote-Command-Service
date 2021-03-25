@@ -657,6 +657,23 @@ parameters:
   device: master
 ```
 
+##### Mediacontrol, taking control over your media player
+
+With this command, you can take simple control of your media player. The commands are Start, Stop, Next and Provious. 
+
+type: `MEDIAPLAY`
+
+Parameter:
+`command`: this is the command you want to fire. `start`, which starts the mediaplayer or pause it, if it's already started. `stop` for stopping the player and `next` and  `previous` for going to the next/previous part.
+
+```yaml
+type: MEDIAPLAY
+name: mediastart_0
+description: new MEDIAPLAY command created by ActionWizard
+parameters:
+  command: start
+```
+
 ##### Hardware monitor
 
 This command connects to the openhardwaremonitor application on windows. With this you can get different sensors of your computer. For using the webserver of the openhardwaremonitor app, you have to add another external configurationinto the main service configuration. The url is the url to the app webserver added with data.json. the `updateperiod` is the update time in seconds. 
