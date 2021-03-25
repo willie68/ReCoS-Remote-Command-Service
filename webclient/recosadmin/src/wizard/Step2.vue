@@ -23,7 +23,12 @@
       >
       <div class="p-col-12 p-md-8">
         <span class="p-input-icon-right fullwidth">
-          <InputText id="icon" v-model="icon" placeholder="select a icon" class="fullwidth"/>
+          <InputText
+            id="icon"
+            v-model="icon"
+            placeholder="select a icon"
+            class="fullwidth"
+          />
           <i class="pi pi-chevron-down" @click="selectIconDialog = true" />
         </span>
       </div>
@@ -56,6 +61,7 @@
           :placeholder="param.unit"
           scrollHeight="120px"
           class="fullwidth"
+          @change="update()"
         />
         <InputNumber
           v-if="param.type == 'int'"
@@ -75,6 +81,7 @@
           v-model="localValue.parameters[param.name]"
           :binary="true"
           class="fullwidth"
+          @change="update()"
         />
         <ArgumentList
           v-if="param.type == '[]string'"
@@ -99,6 +106,7 @@
           v-tooltip="param.description"
           v-model="localValue.parameters[param.name]"
           class="fullwidth"
+          @change="update()"
         />
       </div>
     </div>
@@ -256,6 +264,9 @@ export default {
       this.localValue.icon = icon;
       this.selectIconDialog = false;
     },
+    update() {
+      this.$forceUpdate();
+    },
   },
   mounted() {
     console.log("Step2: mounted value: ", JSON.stringify(this.value));
@@ -278,7 +289,7 @@ export default {
         console.log("Step2: watch value: ", JSON.stringify(this.localValue));
         this.checkType();
         if (!this.localValue.icon) {
-          this.localValue.icon = this.activeCommandType.icon
+          this.localValue.icon = this.activeCommandType.icon;
         }
       },
     },
