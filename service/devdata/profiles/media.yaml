@@ -1,0 +1,91 @@
+name: aaa
+description: This is the default configuration, just to have one starting point
+pages:
+    - name: Media
+      description: commands for media control
+      icon: music_beamed_note.png
+      columns: 2
+      rows: 2
+      toolbar: ""
+      cells:
+        - mediaplay_0
+        - mediastop_0
+        - medianext_0
+        - mediaprevious_0
+actions:
+    - type: SINGLE
+      name: mediaplay_0
+      title: Play/Pause
+      icon: play_pause.png
+      description: new MEDIAPLAY action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: MEDIAPLAY_0
+          type: MEDIAPLAY
+          name: mediaplay_0
+          description: new MEDIAPLAY command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            command: play
+      actions: []
+    - type: SINGLE
+      name: mediastop_0
+      title: Stop
+      icon: stop.png
+      description: new MEDIAPLAY action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: MEDIAPLAY_1
+          type: MEDIAPLAY
+          name: mediastop_0
+          description: new MEDIAPLAY command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            command: stop
+      actions: []
+    - type: SINGLE
+      name: medianext_0
+      title: Next
+      icon: next.png
+      description: new MEDIAPLAY action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: MEDIAPLAY_2
+          type: MEDIAPLAY
+          name: medianext_0
+          description: new MEDIAPLAY command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            command: next
+      actions: []
+    - type: SINGLE
+      name: mediaprevious_0
+      title: Prev
+      icon: previous.png
+      description: new MEDIAPLAY action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: MEDIAPLAY_3
+          type: MEDIAPLAY
+          name: mediaprev_0
+          description: new MEDIAPLAY command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            command: previous
+      actions: []
