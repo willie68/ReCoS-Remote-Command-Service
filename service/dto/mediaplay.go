@@ -17,11 +17,12 @@ var mediaParameterCommandName = "command"
 
 // MediaPlayCommandTypeInfo switch to another page
 var MediaPlayCommandTypeInfo = models.CommandTypeInfo{
-	Type:           "MEDIAPLAY",
-	Name:           "Mediaplay",
-	Description:    "controlling a media player",
-	Icon:           "music_beamed_note.png",
-	WizardPossible: true,
+	Type:             "MEDIAPLAY",
+	Name:             "Mediaplay",
+	Description:      "controlling a media player",
+	Icon:             "music_beamed_note.png",
+	WizardPossible:   true,
+	WizardActionType: models.Single,
 	Parameters: []models.CommandParameterInfo{
 		{
 			Name:           mediaParameterCommandName,

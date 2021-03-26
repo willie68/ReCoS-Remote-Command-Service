@@ -9,11 +9,12 @@ import (
 )
 
 var DelayCommandTypeInfo = models.CommandTypeInfo{
-	Type:           "DELAY",
-	Name:           "Delay",
-	Description:    "Setting up a short delay",
-	Icon:           "",
-	WizardPossible: false,
+	Type:             "DELAY",
+	Name:             "Delay",
+	Description:      "Setting up a short delay",
+	Icon:             "",
+	WizardPossible:   false,
+	WizardActionType: models.Single,
 	Parameters: []models.CommandParameterInfo{
 		{
 			Name:           "time",

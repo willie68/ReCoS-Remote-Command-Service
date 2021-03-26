@@ -10,11 +10,12 @@ import (
 
 // ExecuteCommandTypeInfo start an application or shell script and optionally waits for it's finishing
 var ExecuteCommandTypeInfo = models.CommandTypeInfo{
-	Type:           "EXECUTE",
-	Name:           "Execute",
-	Description:    "Execute an application",
-	Icon:           "flash.png",
-	WizardPossible: true,
+	Type:             "EXECUTE",
+	Name:             "Execute",
+	Description:      "Execute an application",
+	Icon:             "flash.png",
+	WizardPossible:   true,
+	WizardActionType: models.Single,
 	Parameters: []models.CommandParameterInfo{
 		{
 			Name:           "command",

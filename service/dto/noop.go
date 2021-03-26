@@ -5,7 +5,15 @@ import (
 )
 
 // NoopCommandTypeInfo is a command with no operation, but the possibility to change text and icon
-var NoopCommandTypeInfo = models.CommandTypeInfo{"NOOP", "Noop", "do nothing", "", false, []models.CommandParameterInfo{}}
+var NoopCommandTypeInfo = models.CommandTypeInfo{
+	Type:             "NOOP",
+	Name:             "Noop",
+	Description:      "do nothing",
+	Icon:             "",
+	WizardPossible:   false,
+	WizardActionType: models.Single,
+	Parameters:       []models.CommandParameterInfo{},
+}
 
 // NoopCommand is a command to do nothing.
 type NoopCommand struct {

@@ -38,8 +38,14 @@ export default {
       set: function (newType) {
         if (newType) {
           this.localValue.type = newType;
+          console.log("Step1: commandTypes", JSON.stringify(this.commandTypes));
+          this.commandTypes.forEach((element) => {
+            if (element.type == newType) {
+              this.localValue.actiontype = element.wizardactiontype;
+            }
+          });
         } else {
-          this.localValue = { type: "" };
+          this.localValue = { type: "", actiontype: "SINGLE" };
         }
         this.check();
       },

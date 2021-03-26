@@ -14,11 +14,12 @@ import (
 
 // KeysCommandTypeInfo sending key strokes to the active program
 var KeysCommandTypeInfo = models.CommandTypeInfo{
-	Type:           "KEYS",
-	Name:           "Keys",
-	Description:    "Typing on a virtual keyboard",
-	Icon:           "keystroke_monitoring.png",
-	WizardPossible: true,
+	Type:             "KEYS",
+	Name:             "Keys",
+	Description:      "Typing on a virtual keyboard",
+	Icon:             "keystroke_monitoring.png",
+	WizardPossible:   true,
+	WizardActionType: models.Single,
 	Parameters: []models.CommandParameterInfo{
 		{
 			Name:           "keylayout",

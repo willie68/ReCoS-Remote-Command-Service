@@ -129,9 +129,11 @@ export default {
           addCommand.parameters = this.newAction.parameters;
         }
 
+        console.log("ActionWizard: newAction: ", JSON.stringify(this.newAction))
+
         //   creating action
         let addAction = {
-          type: "SINGLE",
+          type: this.newAction.actiontype,
           name: actionName,
           title: this.newAction.title,
           icon: this.newAction.icon,

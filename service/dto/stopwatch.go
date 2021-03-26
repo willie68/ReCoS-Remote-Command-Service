@@ -16,11 +16,12 @@ import (
 
 // StopwatchCommandTypeInfo is a stopwatch with seconds
 var StopwatchCommandTypeInfo = models.CommandTypeInfo{
-	Type:           "STOPWATCH",
-	Name:           "Stopwatch",
-	Description:    "Measure time with a stopwatch",
-	Icon:           "rate.png",
-	WizardPossible: true,
+	Type:             "STOPWATCH",
+	Name:             "Stopwatch",
+	Description:      "Measure time with a stopwatch",
+	Icon:             "rate.png",
+	WizardPossible:   true,
+	WizardActionType: models.Single,
 	Parameters: []models.CommandParameterInfo{
 		{
 			Name:           "format",

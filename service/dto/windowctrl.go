@@ -15,11 +15,12 @@ import (
 
 // WindowCtrlCommandTypeInfo sending key strokes to the active program
 var WindowCtrlCommandTypeInfo = models.CommandTypeInfo{
-	Type:           "WINDOWCTRL",
-	Name:           "WindowCtrl",
-	Description:    "controlling windows on the desktop",
-	Icon:           "window.png",
-	WizardPossible: false,
+	Type:             "WINDOWCTRL",
+	Name:             "WindowCtrl",
+	Description:      "controlling windows on the desktop",
+	Icon:             "window.png",
+	WizardPossible:   false,
+	WizardActionType: models.Single,
 	Parameters: []models.CommandParameterInfo{
 		{
 			Name:           "caption",
