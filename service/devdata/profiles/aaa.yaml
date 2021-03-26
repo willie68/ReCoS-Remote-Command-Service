@@ -1,126 +1,58 @@
 name: aaa
 description: This is the default configuration, just to have one starting point
 pages:
-    - name: Volume
-      description: commands for audio volume
-      icon: tax.png
+    - name: Media
+      description: clock
+      icon: clock.png
       columns: 2
-      rows: 3
+      rows: 2
       toolbar: ""
       cells:
-        - audiovolume_0
-        - audiovolume_1
-        - audiovolume_3
-        - audiovolume_2
+        - daysremain_0
+        - daysremain_1
         - ""
+        - daysremain_1
 actions:
     - type: SINGLE
-      name: audiovolume_0
-      title: Mute Mic
-      icon: radio_microphone_color.png
-      description: new AUDIOVOLUME action created by ActionWizard
+      name: daysremain_0
+      title: Days
+      icon: calendar_year.png
+      description: ""
+      fontsize: 30
+      fontcolor: '#000000'
+      outlined: true
+      runone: true
+      commands:
+        - id: DAYSREMAIN_0
+          type: DAYSREMAIN
+          name: daysremain_0
+          description: new Days remain command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            date: "2021-03-09"
+            finished: ""
+            finnished: "53"
+            formattext: bis 53
+            formattitle: '%d'
+      actions: []
+    - type: DISPLAY
+      name: daysremain_1
+      title: tzu
+      icon: calendar_year.png
+      description: new DAYSREMAIN action created by ActionWizard
       fontsize: 10
       fontcolor: '#000000'
       outlined: false
       runone: true
       commands:
-        - id: AUDIOVOLUME_0
-          type: AUDIOVOLUME
-          name: audiovolume_0
-          description: new AUDIOVOLUME command created by ActionWizard
+        - id: ""
+          type: DAYSREMAIN
+          name: daysremain_1
+          description: new DAYSREMAIN command created by ActionWizard
           icon: ""
           title: ""
           parameters:
-            command: mute
-            device: mic
-      actions: []
-    - type: SINGLE
-      name: audiovolume_1
-      title: Mute Master
-      icon: speaker.png
-      description: new AUDIOVOLUME action created by ActionWizard
-      fontsize: 10
-      fontcolor: '#000000'
-      outlined: false
-      runone: true
-      commands:
-        - id: AUDIOVOLUME_1
-          type: AUDIOVOLUME
-          name: audiovolume_1
-          description: new AUDIOVOLUME command created by ActionWizard
-          icon: ""
-          title: ""
-          parameters:
-            command: mute
-            device: master
-      actions: []
-    - type: SINGLE
-      name: audiovolume_2
-      title: Master Volume Down
-      icon: audio_volume_low.png
-      description: new AUDIOVOLUME action created by ActionWizard
-      fontsize: 10
-      fontcolor: '#000000'
-      outlined: false
-      runone: true
-      commands:
-        - id: AUDIOVOLUME_2
-          type: AUDIOVOLUME
-          name: audiovolume_2
-          description: new AUDIOVOLUME command created by ActionWizard
-          icon: ""
-          title: ""
-          parameters:
-            command: volume down
-            device: master
-      actions: []
-    - type: SINGLE
-      name: audiovolume_3
-      title: Master Volume Up
-      icon: audio_volume_high.png
-      description: new AUDIOVOLUME action created by ActionWizard
-      fontsize: 10
-      fontcolor: '#000000'
-      outlined: false
-      runone: true
-      commands:
-        - id: AUDIOVOLUME_3
-          type: AUDIOVOLUME
-          name: audiovolume_3
-          description: new AUDIOVOLUME command created by ActionWizard
-          icon: ""
-          title: ""
-          parameters:
-            command: volume up
-            device: master
-      actions: []
-    - type: SINGLE
-      name: sendkeys
-      title: Sending some keys
-      icon: ""
-      description: description for page
-      fontsize: 0
-      fontcolor: ""
-      outlined: false
-      runone: true
-      commands:
-        - id: DELAY_4
-          type: DELAY
-          name: delay
-          description: ""
-          icon: ""
-          title: ""
-          parameters:
-            time: 8
-        - id: KEYS_5
-          type: KEYS
-          name: sendkeys
-          description: ""
-          icon: ""
-          title: ""
-          parameters:
-            keylayout: en
-            keys: '{esc}1+1{enter}'
-            keystrokes: asdasdasdasdasdasd
-            layout: de
+            date: "2021-03-28T22:00:00.000Z"
+            finished: ttzu
       actions: []

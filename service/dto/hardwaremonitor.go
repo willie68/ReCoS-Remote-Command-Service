@@ -21,11 +21,12 @@ import (
 
 // HardwareMonitorCommandTypeInfo showing hardware sensor data
 var HardwareMonitorCommandTypeInfo = models.CommandTypeInfo{
-	Type:           "HARDWAREMONITOR",
-	Name:           "HardwareMonitor",
-	Description:    "Displaying data from a sensors",
-	Icon:           "tools.png",
-	WizardPossible: true,
+	Type:             "HARDWAREMONITOR",
+	Name:             "HardwareMonitor",
+	Description:      "Displaying data from a sensors",
+	Icon:             "tools.png",
+	WizardPossible:   true,
+	WizardActionType: models.Display,
 	Parameters: []models.CommandParameterInfo{
 		{
 			Name:           "sensor",

@@ -96,6 +96,8 @@ type CommandTypeInfo struct {
 	Icon string `json:"icon"`
 	// WizardPossible this command can be used in the wizard
 	WizardPossible bool `json:"wizard"`
+	// WizardActionType is the action type for the wizard, mainly single or display
+	WizardActionType ActionType `json:"wizardactiontype"`
 	// Parameters describes the needed parameters
 	Parameters []CommandParameterInfo `json:"parameter"`
 }

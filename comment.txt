@@ -1,0 +1,12 @@
+Taskbar unterstützung
+https://github.com/getlantern/systray
+
+Resourcen, also icon
+https://github.com/tc-hib/go-winres
+
+Installation
+go install github.com/tc-hib/go-winres@latest
+
+
+Öffnen, Start...
+https://github.com/skratchdot/open-golang

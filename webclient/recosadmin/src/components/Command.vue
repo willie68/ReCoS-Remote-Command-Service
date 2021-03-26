@@ -115,6 +115,14 @@
             v-tooltip="param.description"
             v-model="activeCommand.parameters[param.name]"
           />
+          <Calendar 
+            v-if="param.type == 'date'"
+            :id="param.name"
+            :inline="false"
+            dateFormat="yy-mm-dd"
+            :showIcon="true"
+            v-model="activeCommand.parameters[param.name]"
+          />
         </div>
       </div>
     </div>

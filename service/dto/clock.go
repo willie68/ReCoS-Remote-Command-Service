@@ -16,11 +16,12 @@ import (
 
 // ClockCommandTypeInfo is a clock
 var ClockCommandTypeInfo = models.CommandTypeInfo{
-	Type:           "CLOCK",
-	Name:           "Clock",
-	Description:    "Displaying a nice clock",
-	Icon:           "clock.png",
-	WizardPossible: true,
+	Type:             "CLOCK",
+	Name:             "Clock",
+	Description:      "Displaying a nice clock",
+	Icon:             "clock.png",
+	WizardPossible:   true,
+	WizardActionType: models.Display,
 	Parameters: []models.CommandParameterInfo{
 		{
 			Name:           "format",

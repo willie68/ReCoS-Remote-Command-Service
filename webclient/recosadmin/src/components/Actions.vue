@@ -138,7 +138,7 @@ export default {
     profile(profile) {
       this.activeProfile = profile;
       this.actionNames = [];
-      if (profile.actions) {
+      if (profile.actions && profile.actions.length > 0) {
         this.activeAction = profile.actions[0];
         this.activeActionName = this.activeAction.name;
       } else {

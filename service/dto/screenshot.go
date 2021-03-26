@@ -14,11 +14,12 @@ import (
 
 // ScreenshotCommandTypeInfo saving to the file system
 var ScreenshotCommandTypeInfo = models.CommandTypeInfo{
-	Type:           "SCREENSHOT",
-	Name:           "Screenshot",
-	Description:    "Taking a Screenshot",
-	Icon:           "camera.png",
-	WizardPossible: true,
+	Type:             "SCREENSHOT",
+	Name:             "Screenshot",
+	Description:      "Taking a Screenshot",
+	Icon:             "camera.png",
+	WizardPossible:   true,
+	WizardActionType: models.Single,
 	Parameters: []models.CommandParameterInfo{
 		{
 			Name:           "saveto",

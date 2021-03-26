@@ -16,11 +16,12 @@ var parameterCommandName = "command"
 
 // AudioVolumeCommandTypeInfo switch to another page
 var AudioVolumeCommandTypeInfo = models.CommandTypeInfo{
-	Type:           "AUDIOVOLUME",
-	Name:           "AudioVolume",
-	Description:    "setting the volume of an audio device",
-	Icon:           "speaker.png",
-	WizardPossible: true,
+	Type:             "AUDIOVOLUME",
+	Name:             "AudioVolume",
+	Description:      "setting the volume of an audio device",
+	Icon:             "speaker.png",
+	WizardPossible:   true,
+	WizardActionType: models.Single,
 	Parameters: []models.CommandParameterInfo{
 		{Name: parameterDeviceName,
 			Type:        "string",
