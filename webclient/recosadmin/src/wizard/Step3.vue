@@ -121,7 +121,7 @@ export default {
         console.log("Step3: add page is present: ", isPresent);
         if (!isPresent) {
           let myname = this.localPage;
-          this.newPage = { name: myname, rows: 3, columns: 5, cells: [] };
+          this.newPage = { name: myname, icon: "", rows: 3, columns: 5, cells: [] };
           this.localPage = this.newPage;
         }
       }
@@ -132,6 +132,9 @@ export default {
     },
     isSet(index) {
       if (this.page) {
+        if (!this.page.cells) {
+          this.page.cells = new Array()
+        }
         let cell = this.page.cells[index];
         if (cell && cell != "none") {
           return true;

@@ -448,6 +448,32 @@ parameters:
   finished: Fertig
 ```
 
+##### Days remain, show the days remains to a end date
+
+This will show the days remain until a end date.
+
+`Type`: DAYSREMAIN
+
+`Parameter`: 
+
+`date`: end date in format "yyyy-mm-dd"
+`formatTitle`: the title message for the response, defaults %d
+`formatText`: the text message for the response, defaults %d
+`finished`: the message at the end of the days remain, defaults: finished
+
+Example
+
+```yaml
+type: DAYSREMAIN
+name: daysremain_0
+description: new Days remain command created by ActionWizard
+parameters:
+  date: "2021-11-26"
+  formattitle: "%d"
+  formattext: "bis 53"
+  finnished: "53"
+```
+
 ##### Clock
 
 Just a simple textual clock.
@@ -655,6 +681,23 @@ title: ""
 parameters:
   command: volume up
   device: master
+```
+
+##### Mediacontrol, taking control over your media player
+
+With this command, you can take simple control of your media player. The commands are Start, Stop, Next and Provious. 
+
+type: `MEDIAPLAY`
+
+Parameter:
+`command`: this is the command you want to fire. `start`, which starts the mediaplayer or pause it, if it's already started. `stop` for stopping the player and `next` and  `previous` for going to the next/previous part.
+
+```yaml
+type: MEDIAPLAY
+name: mediastart_0
+description: new MEDIAPLAY command created by ActionWizard
+parameters:
+  command: start
 ```
 
 ##### Hardware monitor

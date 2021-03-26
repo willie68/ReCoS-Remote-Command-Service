@@ -15,6 +15,8 @@ var CommandTypes = []models.CommandTypeInfo{
 	StopwatchCommandTypeInfo,
 	ScreenshotCommandTypeInfo,
 	AudioVolumeCommandTypeInfo,
+	MediaPlayCommandTypeInfo,
+	DaysRemainCommandTypeInfo,
 }
 
 func InitCommand() {
@@ -98,6 +100,18 @@ func GetCommand(command models.Command) CommandExecutor {
 	case AudioVolumeCommandTypeInfo.Type:
 		{
 			cmdExecutor = &AudioVolumeCommand{
+				Parameters: command.Parameters,
+			}
+		}
+	case MediaPlayCommandTypeInfo.Type:
+		{
+			cmdExecutor = &MediaPlayCommand{
+				Parameters: command.Parameters,
+			}
+		}
+	case DaysRemainCommandTypeInfo.Type:
+		{
+			cmdExecutor = &DaysRemainCommand{
 				Parameters: command.Parameters,
 			}
 		}

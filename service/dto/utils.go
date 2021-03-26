@@ -38,3 +38,16 @@ func rad2Deg(rad float64) float64 {
 func GetImageURL(action *Action, commandName string, id string) string {
 	return fmt.Sprintf("/api/v1/show/%s/%s/%s/%s", action.Profile, action.Name, commandName, id)
 }
+
+func ConvertParameter2String(parameters map[string]interface{}, parameterName string) (string, error) {
+	valueStr := ""
+	value, found := parameters[parameterName]
+	if found {
+		var ok bool
+		valueStr, ok = value.(string)
+		if !ok {
+			return "", fmt.Errorf("%s is in wrong format. Please use string as format", parameterName)
+		}
+	}
+	return valueStr, nil
+}

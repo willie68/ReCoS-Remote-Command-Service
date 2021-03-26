@@ -94,70 +94,83 @@ export default {
       this.$emit("cancel");
     },
     save() {
-      let actionNames = this.activeProfile.actions.map((elem) =>
-        elem.name.toLowerCase()
-      );
-      let pageNames = this.activeProfile.pages.map((elem) =>
-        elem.name.toLowerCase()
-      );
-      // creating a new action in the profile
-      //   creating a unique name for the action
-      let actionName = this.newAction.type.toLowerCase() + "_0";
-      for (let i = 0; actionNames.includes(actionName); i++) {
-        actionName = this.newAction.type.toLowerCase() + "_" + i;
-      }
-      //   creating command
-      let addCommand = {
-        //ID: actionName,
-        type: this.newAction.type,
-        name: actionName,
-        description:
-          "new " + this.newAction.type + " command created by ActionWizard",
-        icon: "",
-        title: "",
-        parameters: new Map(),
-      };
-
-      if (this.newAction.parameters) {
-        addCommand.parameters = this.newAction.parameters;
-      }
-
-      //   creating action
-      let addAction = {
-        type: "SINGLE",
-        name: actionName,
-        title: this.newAction.title,
-        icon: this.newAction.icon,
-        description:
-          "new " + this.newAction.type + " action created by ActionWizard",
-        fontsize: 10,
-        fontcolor: "#000000",
-        outlined: false,
-        runone: true,
-        //   adding command to action
-        commands: [addCommand],
-      };
-      //   adding action to profile
-      this.activeProfile.actions.push(addAction);
-      // creating the new page if needed
-      var addPage;
-      if (!pageNames.includes(this.newAction.page.toLowerCase())) {
-        addPage = {
-          name: this.newAction.page,
-          rows: 3,
-          columns: 5,
-          cells: [],
+      if (this.activeProfile) {
+        let actionNames = new Array();
+        if (this.activeProfile.actions) {
+          actionNames = this.activeProfile.actions.map((elem) =>
+            elem.name.toLowerCase()
+          );
+        }
+        let pageNames = new Array();
+        if (this.activeProfile.pages) {
+          pageNames = this.activeProfile.pages.map((elem) =>
+            elem.name.toLowerCase()
+          );
+        }
+        // creating a new action in the profile
+        //   creating a unique name for the action
+        let actionName = this.newAction.type.toLowerCase() + "_0";
+        for (let i = 0; actionNames.includes(actionName); i++) {
+          actionName = this.newAction.type.toLowerCase() + "_" + i;
+        }
+        //   creating command
+        let addCommand = {
+          //ID: actionName,
+          type: this.newAction.type,
+          name: actionName,
+          description:
+            "new " + this.newAction.type + " command created by ActionWizard",
+          icon: "",
+          title: "",
+          parameters: new Map(),
         };
-        this.activeProfile.pages.push(addPage);
-      } else {
-        this.activeProfile.pages.forEach((page) => {
-          if (page.name == this.newAction.page) {
-            addPage = page;
-          }
-        });
+
+        if (this.newAction.parameters) {
+          addCommand.parameters = this.newAction.parameters;
+        }
+
+        console.log("ActionWizard: newAction: ", JSON.stringify(this.newAction))
+
+        //   creating action
+        let addAction = {
+          type: this.newAction.actiontype,
+          name: actionName,
+          title: this.newAction.title,
+          icon: this.newAction.icon,
+          description:
+            "new " + this.newAction.type + " action created by ActionWizard",
+          fontsize: 10,
+          fontcolor: "#000000",
+          outlined: false,
+          runone: true,
+          //   adding command to action
+          commands: [addCommand],
+        };
+        if (!this.activeProfile.actions) {
+          this.activeProfile.actions = new Array()
+        }
+        //   adding action to profile
+        this.activeProfile.actions.push(addAction);
+        // creating the new page if needed
+        var addPage;
+        if (!pageNames.includes(this.newAction.page.toLowerCase())) {
+          addPage = {
+            name: this.newAction.page,
+            rows: 3,
+            columns: 5,
+            cells: [],
+          };
+          this.activeProfile.pages.push(addPage);
+        } else {
+          this.activeProfile.pages.forEach((page) => {
+            if (page.name == this.newAction.page) {
+              addPage = page;
+            }
+          });
+          addPage.cells[this.newAction.index] = actionName;
+          this.$emit("save", this.activeProfile);
+        }
       }
-      addPage.cells[this.newAction.index] = actionName;
-      this.$emit("save", this.activeProfile);
     },
     updateAction(data) {
       this.newAction = data;

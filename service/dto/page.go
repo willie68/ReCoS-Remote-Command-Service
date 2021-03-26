@@ -9,11 +9,12 @@ import (
 
 // PageCommandTypeInfo switch to another page
 var PageCommandTypeInfo = models.CommandTypeInfo{
-	Type:           "PAGE",
-	Name:           "Page",
-	Description:    "Switching to another page",
-	Icon:           "view_mode_small_icons.png",
-	WizardPossible: true,
+	Type:             "PAGE",
+	Name:             "Page",
+	Description:      "Switching to another page",
+	Icon:             "view_mode_small_icons.png",
+	WizardPossible:   true,
+	WizardActionType: models.Single,
 	Parameters: []models.CommandParameterInfo{
 		{
 			Name:           "page",
