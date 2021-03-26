@@ -40,6 +40,7 @@ import PickList from 'primevue/picklist';
 import OrderList from 'primevue/orderlist';
 import ConfirmationService from 'primevue/confirmationservice';
 import ConfirmDialog from 'primevue/confirmdialog';
+import Calendar from 'primevue/calendar';
 
 const store = createStore({
     state () {
@@ -108,5 +109,6 @@ app.component('Toast', Toast)
 app.component('PickList', PickList)
 app.component('OrderList', OrderList)
 app.component('ConfirmDialog', ConfirmDialog)
+app.component('Calendar', Calendar)
 
 app.mount('#app')

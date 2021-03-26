@@ -448,6 +448,32 @@ parameters:
   finished: Fertig
 ```
 
+##### Days remain, show the days remains to a end date
+
+This will show the days remain until a end date.
+
+`Type`: DAYSREMAIN
+
+`Parameter`: 
+
+`date`: end date in format "yyyy-mm-dd"
+`formatTitle`: the title message for the response, defaults %d
+`formatText`: the text message for the response, defaults %d
+`finished`: the message at the end of the days remain, defaults: finished
+
+Example
+
+```yaml
+type: DAYSREMAIN
+name: daysremain_0
+description: new Days remain command created by ActionWizard
+parameters:
+  date: "2021-11-26"
+  formattitle: "%d"
+  formattext: "bis 53"
+  finnished: "53"
+```
+
 ##### Clock
 
 Just a simple textual clock.

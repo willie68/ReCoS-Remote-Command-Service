@@ -1,31 +1,58 @@
 name: aaa
 description: This is the default configuration, just to have one starting point
 pages:
-  - name: Media
-    description: clock
-    icon: clock.png
-    columns: 2
-    rows: 2
-    toolbar: ""
-    cells:
-      - clock_0
+    - name: Media
+      description: clock
+      icon: clock.png
+      columns: 2
+      rows: 2
+      toolbar: ""
+      cells:
+        - daysremain_0
+        - daysremain_1
+        - ""
+        - daysremain_1
 actions:
-  - type: DISPLAY
-    name: clock_0
-    title: asfAFaqsFA
-    icon: clock.png
-    description: new CLOCK action created by ActionWizard
-    fontsize: 10
-    fontcolor: "#000000"
-    outlined: false
-    runone: true
-    commands:
-      - id: ""
-        type: CLOCK
-        name: clock_0
-        description: new CLOCK command created by ActionWizard
-        icon: ""
-        title: SAd
-        parameters:
-          analog: true
-    actions: []
+    - type: SINGLE
+      name: daysremain_0
+      title: Days
+      icon: calendar_year.png
+      description: ""
+      fontsize: 30
+      fontcolor: '#000000'
+      outlined: true
+      runone: true
+      commands:
+        - id: DAYSREMAIN_0
+          type: DAYSREMAIN
+          name: daysremain_0
+          description: new Days remain command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            date: "2021-03-09"
+            finished: ""
+            finnished: "53"
+            formattext: bis 53
+            formattitle: '%d'
+      actions: []
+    - type: DISPLAY
+      name: daysremain_1
+      title: tzu
+      icon: calendar_year.png
+      description: new DAYSREMAIN action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: ""
+          type: DAYSREMAIN
+          name: daysremain_1
+          description: new DAYSREMAIN command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            date: "2021-03-28T22:00:00.000Z"
+            finished: ttzu
+      actions: []

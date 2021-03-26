@@ -108,6 +108,15 @@
           class="fullwidth"
           @change="update()"
         />
+        <Calendar
+          v-if="param.type == 'date'"
+          :id="param.name"
+          :inline="false"
+          dateFormat="yy-mm-dd"
+          :showIcon="true"
+          v-model="localValue.parameters[param.name]"
+          @change="update()"
+        />
       </div>
     </div>
   </div>
