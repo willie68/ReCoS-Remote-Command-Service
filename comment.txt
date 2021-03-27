@@ -18,14 +18,5 @@ audio player
 https://github.com/hajimehoshi/oto
 
 Neue Commands
-Soundboard: abspielen von dateien
-Webseite starten
-Würfeln: beliebig, mit netter Anzeige
-iCue: profile (evtl. auch OpenRGB)
-Worktimer: mit Pausen und ein/ausloggen....
-Ping
-Start Explorer direct on directory
-Zähler: zähle die Tastendrücke (Persistens oder auch Reset on Restart)
-WorldClock: eine Weltzeituhr
-Spiele; TikTok, oder tetris...
+
 

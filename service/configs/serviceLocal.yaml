@@ -18,6 +18,7 @@ healthcheck:
     period: 30
 
 profiles: ./devdata/profiles
+sessions: ./devdata/sessions
 
 logging:
     level: info

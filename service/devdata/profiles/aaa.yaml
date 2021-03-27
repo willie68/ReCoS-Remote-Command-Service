@@ -1,58 +1,70 @@
 name: aaa
 description: This is the default configuration, just to have one starting point
 pages:
-    - name: Media
-      description: clock
-      icon: clock.png
+    - name: default
+      description: defaul
+      icon:
       columns: 2
       rows: 2
       toolbar: ""
       cells:
-        - daysremain_0
-        - daysremain_1
-        - ""
-        - daysremain_1
+        - browser
+        - ping
+        - counterLocal
 actions:
     - type: SINGLE
-      name: daysremain_0
-      title: Days
-      icon: calendar_year.png
+      name: counterLocal
+      title: Counter local
+      icon: slot_machine.png
       description: ""
-      fontsize: 30
+      fontsize: 20
       fontcolor: '#000000'
       outlined: true
       runone: true
       commands:
-        - id: DAYSREMAIN_0
-          type: DAYSREMAIN
-          name: daysremain_0
-          description: new Days remain command created by ActionWizard
-          icon: ""
-          title: ""
+        - id: COUNTER_0
+          type: COUNTER
+          name: counter_0
+          description: count the clicks locally
           parameters:
-            date: "2021-03-09"
-            finished: ""
-            finnished: "53"
-            formattext: bis 53
-            formattitle: '%d'
+            persist: true 
       actions: []
-    - type: DISPLAY
-      name: daysremain_1
-      title: tzu
-      icon: calendar_year.png
-      description: new DAYSREMAIN action created by ActionWizard
-      fontsize: 10
+    - type: SINGLE
+      name: browser
+      title: wk-music
+      icon: world.png
+      description: ""
+      fontsize: 20
       fontcolor: '#000000'
-      outlined: false
+      outlined: true
       runone: true
       commands:
-        - id: ""
-          type: DAYSREMAIN
-          name: daysremain_1
-          description: new DAYSREMAIN command created by ActionWizard
+        - id: BROWSE_0
+          type: BROWSE
+          name: browse_0
+          description: start a new browser windows with a url
           icon: ""
           title: ""
           parameters:
-            date: "2021-03-28T22:00:00.000Z"
-            finished: ttzu
+            url: https://www.wk-music.de
+      actions: []
+    - type: DISPLAY
+      name: ping
+      title: Ping
+      icon: world_shipping.png
+      description: ""
+      fontsize: 20
+      fontcolor: '#000000'
+      outlined: true
+      runone: true
+      commands:
+        - id: PING_0
+          type: PING
+          name: ping_0
+          description: check ping with a url
+          icon: ""
+          title: ""
+          parameters:
+            name: www.wk-music.de
+            period: 10
       actions: []
