@@ -549,21 +549,33 @@ parameters:
 
 ##### Start Browser
 
-`Type`: `BROWSERSTART`
+`Type`: `BROWSE`
 
 Parameter:
 
-`url`: the URL to show in the system browser
+`url`: the URL to show in the system browser. On Windows if you choose a normal filesystem folder, it will automatically start the explorer on this path.
 
-Example
+Example 1
 
 ```yaml
-type: BROWSERSTART
-name: browserstart
+type: BROWSE
+name: browse
 description: start a new browser windows with a url
 parameters:
   url: https://www.wk-music.de
 ```
+
+Example 2
+
+```yaml
+type: BROWSE
+name: browse
+description: start a new explorer windows with a filepath
+parameters:
+  url: c:\windows
+```
+
+
 
 ##### Page
 

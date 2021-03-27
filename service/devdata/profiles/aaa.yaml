@@ -9,6 +9,7 @@ pages:
       toolbar: ""
       cells:
         - browser
+        - recospath
 actions:
     - type: SINGLE
       name: browser
@@ -20,12 +21,31 @@ actions:
       outlined: true
       runone: true
       commands:
-        - id: BROWSERSTART_0
-          type: BROWSERSTART
-          name: browserstart_0
+        - id: BROWSE_0
+          type: BROWSE
+          name: browse_0
           description: start a new browser windows with a url
           icon: ""
           title: ""
           parameters:
             url: https://www.wk-music.de
+      actions: []
+    - type: SINGLE
+      name: recospath
+      title: ReCoS
+      icon: folder.png
+      description: ""
+      fontsize: 20
+      fontcolor: '#000000'
+      outlined: true
+      runone: true
+      commands:
+        - id: BROWSE_0
+          type: BROWSE
+          name: browse_0
+          description: start a new browser windows with a url
+          icon: ""
+          title: ""
+          parameters:
+            url: C:\windows
       actions: []

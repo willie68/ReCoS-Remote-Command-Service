@@ -8,11 +8,11 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
-// BrowserCommandTypeInfo start an browser with directly with a web page
-var BrowserCommandTypeInfo = models.CommandTypeInfo{
-	Type:             "BROWSERSTART",
-	Name:             "Browser",
-	Description:      "Execute the default browser",
+// BrowseCommandTypeInfo start an browser with directly with a url or filepath
+var BrowseCommandTypeInfo = models.CommandTypeInfo{
+	Type:             "BROWSE",
+	Name:             "Browse",
+	Description:      "Execute the default browser with a url or a filepath",
 	Icon:             "world.png",
 	WizardPossible:   true,
 	WizardActionType: models.Single,
@@ -20,36 +20,36 @@ var BrowserCommandTypeInfo = models.CommandTypeInfo{
 		{
 			Name:           "url",
 			Type:           "string",
-			Description:    "the url to show",
+			Description:    "the url/filepath to show",
 			Unit:           "",
 			WizardPossible: true,
 			List:           make([]string, 0),
 		},
 	}}
 
-// BrowserCommand is a command to execute the internet browser.
+// BrowseCommand is a command to execute the internet browser.
 // Using "webpage" for getting the webpage to show.
-type BrowserCommand struct {
+type BrowseCommand struct {
 	Parameters map[string]interface{}
 }
 
 // EnrichType enrich the type info with the informations from the profile
-func (e *BrowserCommand) EnrichType(profile models.Profile) (models.CommandTypeInfo, error) {
-	return BrowserCommandTypeInfo, nil
+func (e *BrowseCommand) EnrichType(profile models.Profile) (models.CommandTypeInfo, error) {
+	return BrowseCommandTypeInfo, nil
 }
 
 // Init the command
-func (e *BrowserCommand) Init(a *Action, commandName string) (bool, error) {
+func (e *BrowseCommand) Init(a *Action, commandName string) (bool, error) {
 	return true, nil
 }
 
 // Stop the command
-func (e *BrowserCommand) Stop(a *Action) (bool, error) {
+func (e *BrowseCommand) Stop(a *Action) (bool, error) {
 	return true, nil
 }
 
 // Execute the command
-func (e *BrowserCommand) Execute(a *Action, requestMessage models.Message) (bool, error) {
+func (e *BrowseCommand) Execute(a *Action, requestMessage models.Message) (bool, error) {
 	value, found := e.Parameters["url"]
 	if found {
 		url, ok := value.(string)
@@ -61,10 +61,10 @@ func (e *BrowserCommand) Execute(a *Action, requestMessage models.Message) (bool
 				return false, fmt.Errorf("Error executing the url. %v", err)
 			}
 		} else {
-			return false, fmt.Errorf("The command parameter is in wrong format. Please use string as format")
+			return false, fmt.Errorf("The url parameter is in wrong format. Please use string as format")
 		}
 	} else {
-		return false, fmt.Errorf("The command parameter is missing")
+		return false, fmt.Errorf("The url parameter is missing")
 	}
 	return true, nil
 }

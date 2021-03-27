@@ -115,9 +115,9 @@ func GetCommand(command models.Command) CommandExecutor {
 				Parameters: command.Parameters,
 			}
 		}
-	case BrowserCommandTypeInfo.Type:
+	case BrowseCommandTypeInfo.Type:
 		{
-			cmdExecutor = &BrowserCommand{
+			cmdExecutor = &BrowseCommand{
 				Parameters: command.Parameters,
 			}
 		}
