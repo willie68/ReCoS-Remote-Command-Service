@@ -30,6 +30,7 @@ type Config struct {
 	HealthCheck HealthCheck `yaml:"healthcheck"`
 
 	Profiles string `yaml:"profiles"`
+	Sessions string `yaml:"sessions"`
 
 	ExternalConfig map[string]interface{} `yaml:"extconfig"`
 
@@ -58,6 +59,7 @@ var DefaulConfig = Config{
 	WebClient:   "${configdir}/webclient",
 	AdminClient: "${configdir}/webadmin",
 	Icons:       "${configdir}/webclient/assets",
+	Sessions:    "${configdir}/sessions",
 	ExternalConfig: map[string]interface{}{
 		"openhardwaremonitor": map[string]interface{}{
 			"url":          "http://127.0.0.1:12999/data.json",

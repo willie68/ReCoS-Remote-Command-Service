@@ -547,6 +547,58 @@ parameters:
   waitOnClose: true
 ```
 
+##### Start Browser
+
+`Type`: `BROWSE`
+
+Parameter:
+
+`url`: the URL to show in the system browser. On Windows if you choose a normal filesystem folder, it will automatically start the explorer on this path.
+
+Example 1
+
+```yaml
+type: BROWSE
+name: browse
+description: start a new browser windows with a url
+parameters:
+  url: https://www.wk-music.de
+```
+
+Example 2
+
+```yaml
+type: BROWSE
+name: browse
+description: start a new explorer windows with a filepath
+parameters:
+  url: c:\windows
+```
+
+
+
+##### Ping, shows ping times to a server
+
+Here you can test your connection to a server. Ping will test the connection to a server, You can use an IP Address or a server name (without any http...) If you put this command to an display action you can set a period so that the command will automatically start every #period seconds a test.  The result is the actual ping time in ms.
+
+`Type`: `PING`
+
+Parameter:
+
+`name`: the URL to ping to. You can use the Internet address name (without the protocol) or a simple IP address
+`period`: the period in seconds when the command should automatically be executed. 
+
+Example 1
+
+```yaml
+type: PING
+name: ping_0
+description: check ping with a url
+parameters:
+  name: www.wk-music.de
+  period: 10
+```
+
 ##### Page
 
 Switch to another page.

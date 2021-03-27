@@ -21,6 +21,7 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/logging"
 	"wkla.no-ip.biz/remote-desk-service/pkg/audio"
 	"wkla.no-ip.biz/remote-desk-service/pkg/osdependent"
+	"wkla.no-ip.biz/remote-desk-service/pkg/session"
 
 	config "wkla.no-ip.biz/remote-desk-service/config"
 
@@ -347,6 +348,7 @@ func onExit() {
 		sslsrv.Shutdown(ctx)
 	}
 
+	session.SessionCache.Destroy()
 	clog.Logger.Info("finished")
 
 	os.Exit(0)
@@ -385,17 +387,17 @@ func initConfig() {
 	var err error
 	serviceConfig.Profiles, err = config.ReplaceConfigdir(serviceConfig.Profiles)
 	if err != nil {
-		clog.Logger.Alertf("error starting os dependend worker: %s", err.Error())
+		clog.Logger.Alertf("error wrong profiles folder: %s", err.Error())
 		os.Exit(1)
 	}
 	serviceConfig.AdminClient, err = config.ReplaceConfigdir(serviceConfig.AdminClient)
 	if err != nil {
-		clog.Logger.Alertf("error starting os dependend worker: %s", err.Error())
+		clog.Logger.Alertf("error wrong admin client folder: %s", err.Error())
 		os.Exit(1)
 	}
 	serviceConfig.WebClient, err = config.ReplaceConfigdir(serviceConfig.WebClient)
 	if err != nil {
-		clog.Logger.Alertf("error starting os dependend worker: %s", err.Error())
+		clog.Logger.Alertf("error wrong web client folder: %s", err.Error())
 		os.Exit(1)
 	}
 
@@ -408,6 +410,13 @@ func initConfig() {
 	}
 
 	dto.InitCommand()
+
+	configDir, err := config.ReplaceConfigdir(serviceConfig.Sessions)
+	if err != nil {
+		clog.Logger.Alertf("error wrong sessions folder: %s", err.Error())
+		os.Exit(1)
+	}
+	session.Init(configDir)
 }
 
 func getApikey() string {

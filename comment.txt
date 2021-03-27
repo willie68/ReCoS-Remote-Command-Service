@@ -10,3 +10,13 @@ go install github.com/tc-hib/go-winres@latest
 
 Öffnen, Start...
 https://github.com/skratchdot/open-golang
+
+mp3 decoder....
+https://github.com/tosone/minimp3
+
+audio player
+https://github.com/hajimehoshi/oto
+
+Neue Commands
+
+

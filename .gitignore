@@ -27,3 +27,9 @@ service/cmd/__debug_bin
 webclient/RecosUI/public/assets/
 
 webclient/recosadmin/public/assets/
+
+*.syso
+
+*.bak
+
+service/devdata/sessions/sessions/
