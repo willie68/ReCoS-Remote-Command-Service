@@ -19,6 +19,7 @@ require (
 	github.com/go-chi/httptracer v0.2.0 // indirect
 	github.com/go-chi/render v1.0.1
 	github.com/go-ole/go-ole v1.2.4
+	github.com/go-ping/ping v0.0.0-20210327002015-80a511380375
 	github.com/go-playground/validator/v10 v10.4.1
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/golang/protobuf v1.4.3 // indirect
@@ -51,8 +52,10 @@ require (
 	go.uber.org/atomic v1.7.0 // indirect
 	golang.org/x/crypto v0.0.0-20201112155050-0c6587e931a9 // indirect
 	golang.org/x/image v0.0.0-20210216034530-4410531fe030
+	golang.org/x/mod v0.4.2 // indirect
 	golang.org/x/net v0.0.0-20201110031124-69a78807bb2b // indirect
-	golang.org/x/sys v0.0.0-20201112073958-5cba982894dd // indirect
-	golang.org/x/text v0.3.4 // indirect
+	golang.org/x/sys v0.0.0-20210326220804-49726bf1d181 // indirect
+	golang.org/x/text v0.3.5
+	golang.org/x/tools v0.1.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776
 )

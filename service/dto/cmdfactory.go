@@ -121,6 +121,12 @@ func GetCommand(command models.Command) CommandExecutor {
 				Parameters: command.Parameters,
 			}
 		}
+	case PingCommandTypeInfo.Type:
+		{
+			cmdExecutor = &PingCommand{
+				Parameters: command.Parameters,
+			}
+		}
 	}
 	if cmdExecutor == nil {
 		cmdExecutor = GetOSCommand(command)

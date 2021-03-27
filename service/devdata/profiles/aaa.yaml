@@ -9,7 +9,7 @@ pages:
       toolbar: ""
       cells:
         - browser
-        - recospath
+        - ping
 actions:
     - type: SINGLE
       name: browser
@@ -30,22 +30,23 @@ actions:
           parameters:
             url: https://www.wk-music.de
       actions: []
-    - type: SINGLE
-      name: recospath
-      title: ReCoS
-      icon: folder.png
+    - type: DISPLAY
+      name: ping
+      title: Ping
+      icon: world_shipping.png
       description: ""
       fontsize: 20
       fontcolor: '#000000'
       outlined: true
       runone: true
       commands:
-        - id: BROWSE_0
-          type: BROWSE
-          name: browse_0
-          description: start a new browser windows with a url
+        - id: PING_0
+          type: PING
+          name: ping_0
+          description: check ping with a url
           icon: ""
           title: ""
           parameters:
-            url: C:\windows
+            url: www.wk-music.de
+            period: 10
       actions: []

@@ -577,6 +577,26 @@ parameters:
 
 
 
+##### Ping, shows ping times to a server
+
+`Type`: `PING`
+
+Parameter:
+
+`url`: the URL to ping to. You can use the Internet address name (without the protocol) or a simple IP address
+`period`: the period in seconds when the command should automatically be executed 
+
+Example 1
+
+```yaml
+type: PING
+name: ping_0
+description: check ping with a url
+parameters:
+  url: www.wk-music.de
+  period: 10
+```
+
 ##### Page
 
 Switch to another page.
