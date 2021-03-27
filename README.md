@@ -547,6 +547,24 @@ parameters:
   waitOnClose: true
 ```
 
+##### Start Browser
+
+`Type`: `BROWSERSTART`
+
+Parameter:
+
+`url`: the URL to show in the system browser
+
+Example
+
+```yaml
+type: BROWSERSTART
+name: browserstart
+description: start a new browser windows with a url
+parameters:
+  url: https://www.wk-music.de
+```
+
 ##### Page
 
 Switch to another page.

@@ -115,6 +115,12 @@ func GetCommand(command models.Command) CommandExecutor {
 				Parameters: command.Parameters,
 			}
 		}
+	case BrowserCommandTypeInfo.Type:
+		{
+			cmdExecutor = &BrowserCommand{
+				Parameters: command.Parameters,
+			}
+		}
 	}
 	if cmdExecutor == nil {
 		cmdExecutor = GetOSCommand(command)
