@@ -30,6 +30,11 @@ type GraphicsCommandExecutor interface {
 	GetGraphics(id string, width int, height int) (models.GraphicsInfo, error)
 }
 
+// ClientUpdatesCommandExecutor is an intrefce for the command executor, which methods will be called to update the clients with the alst state of the underlying command
+type ClientUpdatesCommandExecutor interface {
+	UpdateClients(a *Action, commandName string) (bool, error)
+}
+
 // Profile holding state informations about one profile
 type Profile struct {
 	Name    string
@@ -53,6 +58,9 @@ type Action struct {
 
 // InitProfiles initialse the dto profiles for saving/retrieving status of and executing every action
 func InitProfiles(configProfiles []models.Profile) error {
+	api.ClientUpdateCallback = func(profileName string) {
+		UpdateClient4Profile(profileName)
+	}
 	Profiles = make([]*Profile, 0)
 	for _, configProfile := range configProfiles {
 		dtoProfile, err := InitProfile(configProfile.Name)
@@ -129,6 +137,14 @@ func ReinitProfiles(configProfiles []models.Profile) error {
 	}
 	InitProfiles(configProfiles)
 	return nil
+}
+
+func UpdateClient4Profile(profileName string) {
+	for _, profile := range Profiles {
+		if profile.Name == profileName {
+			profile.UpdateClients()
+		}
+	}
 }
 
 // CloseProfile closes a profiles
@@ -216,6 +232,14 @@ func (p *Profile) GetAction(actionName string) (*Action, error) {
 		}
 	}
 	return nil, fmt.Errorf("Action %s not found", actionName)
+}
+
+// GetAction return the action with the name actionName if present otherwise an error
+func (p *Profile) UpdateClients() {
+	for index := range p.Actions {
+		action := p.Actions[index]
+		action.UpdateClients()
+	}
 }
 
 // Execute an action
@@ -337,6 +361,21 @@ func (a *Action) GetGraphics(commandName string, id string, width int, height in
 		}
 	}
 	return empty, errors.New(fmt.Sprintf("can't find command with name: %s", commandName))
+}
+
+// UpdateClients updating all clients with the atual state
+func (a *Action) UpdateClients() {
+	for _, command := range a.Config.Commands {
+		cmdExecutor := a.Commands[command.ID]
+		if cmdExecutor == nil {
+			continue
+		}
+		clientUpdates, ok := interface{}(cmdExecutor).(ClientUpdatesCommandExecutor)
+		if !ok {
+			continue
+		}
+		clientUpdates.UpdateClients(a, command.Name)
+	}
 }
 
 // Close an action will close/stop all dedicated commands

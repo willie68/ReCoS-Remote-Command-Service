@@ -127,6 +127,12 @@ func GetCommand(command models.Command) CommandExecutor {
 				Parameters: command.Parameters,
 			}
 		}
+	case CounterCommandTypeInfo.Type:
+		{
+			cmdExecutor = &CounterCommand{
+				Parameters: command.Parameters,
+			}
+		}
 	}
 	if cmdExecutor == nil {
 		cmdExecutor = GetOSCommand(command)

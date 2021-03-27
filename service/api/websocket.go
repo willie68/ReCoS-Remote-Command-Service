@@ -26,6 +26,8 @@ var (
 	count = 0
 )
 
+var ClientUpdateCallback func(profileName string)
+
 type Connection struct {
 	conn         *websocket.Conn
 	Connected    bool
@@ -146,7 +148,12 @@ func readMessage(conn *Connection) {
 							index = i
 						}
 					}
-					Connections[index].profile = myMessage.Profile
+					if Connections[index].profile != myMessage.Profile {
+						Connections[index].profile = myMessage.Profile
+						if ClientUpdateCallback != nil {
+							ClientUpdateCallback(myMessage.Profile)
+						}
+					}
 				}
 			}
 			clog.Logger.Infof("recv: %d %s", mt, message)

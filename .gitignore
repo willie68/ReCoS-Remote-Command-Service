@@ -31,3 +31,5 @@ webclient/recosadmin/public/assets/
 *.syso
 
 *.bak
+
+service/devdata/sessions/sessions/

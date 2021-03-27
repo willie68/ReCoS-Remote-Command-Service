@@ -21,9 +21,9 @@ var PingCommandTypeInfo = models.CommandTypeInfo{
 	WizardActionType: models.Display,
 	Parameters: []models.CommandParameterInfo{
 		{
-			Name:           "url",
+			Name:           "name",
 			Type:           "string",
-			Description:    "the url to ping to",
+			Description:    "the name to ping to",
 			Unit:           "",
 			WizardPossible: true,
 			List:           make([]string, 0),
@@ -57,16 +57,16 @@ func (p *PingCommand) EnrichType(profile models.Profile) (models.CommandTypeInfo
 // Init the command
 func (p *PingCommand) Init(a *Action, commandName string) (bool, error) {
 	p.action = a
-	value, found := p.Parameters["url"]
+	value, found := p.Parameters["name"]
 	if found {
 		url, ok := value.(string)
 		if ok {
 			p.url = url
 		} else {
-			return false, fmt.Errorf("The url parameter is in wrong format. Please use string as format")
+			return false, fmt.Errorf("The name parameter is in wrong format. Please use string as format")
 		}
 	} else {
-		return false, fmt.Errorf("The url parameter is missing")
+		return false, fmt.Errorf("The name parameter is missing")
 	}
 	value, found = p.Parameters["period"]
 	if found {
@@ -77,34 +77,36 @@ func (p *PingCommand) Init(a *Action, commandName string) (bool, error) {
 			return false, fmt.Errorf("The period parameter is in wrong format. Please use int as format")
 		}
 	} else {
-		return false, fmt.Errorf("The period parameter is missing")
+		p.period = 0
 	}
 
-	p.ticker = time.NewTicker(time.Duration(p.period) * time.Second)
-	p.done = make(chan bool)
-	go func() {
-		for {
-			select {
-			case <-p.done:
-				return
-			case <-p.ticker.C:
-				text := ""
-				pingtime, err := p.getPingTime(p.url)
-				if err != nil {
-					text = fmt.Sprintf("error %v", err)
+	if p.period > 0 {
+		p.ticker = time.NewTicker(time.Duration(p.period) * time.Second)
+		p.done = make(chan bool)
+		go func() {
+			for {
+				select {
+				case <-p.done:
+					return
+				case <-p.ticker.C:
+					text := ""
+					pingtime, err := p.getPingTime(p.url)
+					if err != nil {
+						text = fmt.Sprintf("error %v", err)
+					}
+					text = fmt.Sprintf("%.2fms", pingtime)
+					message := models.Message{
+						Profile: p.action.Profile,
+						Action:  p.action.Name,
+						Text:    text,
+						State:   0,
+					}
+					api.SendMessage(message)
+					continue
 				}
-				text = fmt.Sprintf("%.2fms", pingtime)
-				message := models.Message{
-					Profile: p.action.Profile,
-					Action:  p.action.Name,
-					Text:    text,
-					State:   0,
-				}
-				api.SendMessage(message)
-				continue
 			}
-		}
-	}()
+		}()
+	}
 	return true, nil
 }
 
