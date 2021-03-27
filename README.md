@@ -478,7 +478,7 @@ parameters:
 
 Just a simple textual clock.
 
-`Type`: CLOCK
+`Type`: `CLOCK`
 
 `Parameter`: 
 
@@ -493,6 +493,27 @@ name: clock
 parameters:
   format: "15:04:05 02 Jan 06"
 ```
+
+##### Counter, just a simple counter
+
+A simple counter, with persisting value.
+
+`Type`: `COUNTER`
+
+`Parameter`: 
+`persist`: true or false, if true, the counter will persist between service restarts
+
+Example
+
+```yaml
+type: COUNTER
+name: counter_0
+description: count the clicks
+parameters:
+  persist: true 
+```
+
+##### 
 
 ##### Stopwatch
 

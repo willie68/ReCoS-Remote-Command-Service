@@ -3,7 +3,7 @@ description: This is the default configuration, just to have one starting point
 pages:
     - name: default
       description: defaul
-      icon:
+      icon: ""
       columns: 2
       rows: 2
       toolbar: ""
@@ -11,6 +11,7 @@ pages:
         - browser
         - ping
         - counterLocal
+        - page_0
 actions:
     - type: SINGLE
       name: counterLocal
@@ -26,8 +27,10 @@ actions:
           type: COUNTER
           name: counter_0
           description: count the clicks locally
+          icon: ""
+          title: ""
           parameters:
-            persist: true 
+            persist: true
       actions: []
     - type: SINGLE
       name: browser
@@ -39,7 +42,7 @@ actions:
       outlined: true
       runone: true
       commands:
-        - id: BROWSE_0
+        - id: BROWSE_1
           type: BROWSE
           name: browse_0
           description: start a new browser windows with a url
@@ -58,7 +61,7 @@ actions:
       outlined: true
       runone: true
       commands:
-        - id: PING_0
+        - id: PING_2
           type: PING
           name: ping_0
           description: check ping with a url
@@ -67,4 +70,23 @@ actions:
           parameters:
             name: www.wk-music.de
             period: 10
+      actions: []
+    - type: SINGLE
+      name: page_0
+      title: ""
+      icon: view_mode_small_icons.png
+      description: new PAGE action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: ""
+          type: PAGE
+          name: page_0
+          description: new PAGE command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            page: default
       actions: []

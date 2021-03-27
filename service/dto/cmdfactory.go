@@ -17,6 +17,9 @@ var CommandTypes = []models.CommandTypeInfo{
 	AudioVolumeCommandTypeInfo,
 	MediaPlayCommandTypeInfo,
 	DaysRemainCommandTypeInfo,
+	BrowseCommandTypeInfo,
+	PingCommandTypeInfo,
+	CounterCommandTypeInfo,
 }
 
 func InitCommand() {
