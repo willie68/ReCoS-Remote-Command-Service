@@ -852,6 +852,35 @@ parameters:
 
 As this project is in an early development stage, i have nothing to show here. But if you like, you can simply checkout the develop branch, starting 2 Instances of Visual Studio Code, one with the frontend, one with the service backend. Than start the backend server in VS, and same for the frontend (npm run serve). After some hacking with configuration you may be able to see something. :-) Good Luck to you.
 
+# Installing 3'rd Party products
+
+## Installation of OpenHardwareMonitor
+
+For hardware sensor reading ReCoS relies on the OpenHardwareMonitor Software. (https://openhardwaremonitor.org/) To get use of it, simply install the software. After installation, go to  Option/Remote Web Server/Port. 
+
+![ohm_02](C:\e-platte\daten\git-sourcen\ReCoS-Remote-Command-Service\documentation\assets\ohm_02.png)
+
+
+
+# ![ohm_03](C:\e-platte\daten\git-sourcen\ReCoS-Remote-Command-Service\documentation\assets\ohm_03.png)
+
+As Portnumber enter 12999 (which is the default for Combination of ReCoS and OHM)
+
+After that simply activate the OHM Webserver via Option/Remote Web Server/Run.
+The OHM should be available after restart of wndows, so please tick the following options on. Now everything of the OHM side is ready. The ReCoS service will now automatically connect to the OHM and get all Sensors. 
+![ohm_04](C:\e-platte\daten\git-sourcen\ReCoS-Remote-Command-Service\documentation\assets\ohm_04.png)
+
+If you have already installed the OHM (maybe for another App) and you can't reconfigure the port option, you can simply change the port for ReCoS in the service.yaml.   Same for the part where you want to get Sensors from another Computer.
+
+Here is the snippet:
+
+```yaml
+extconfig:
+  openhardwaremonitor:
+    url: http://127.0.0.1:12999/data.json
+    updateperiod: 5
+```
+
 # Thanks
 
 Thanks goes to iconshock for the great icons set.
