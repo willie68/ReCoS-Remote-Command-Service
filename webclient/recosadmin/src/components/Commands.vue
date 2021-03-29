@@ -226,10 +226,11 @@ export default {
 
 <style>
 .commands-list {
-  max-height: 250px;
+  height: 350px;
+
 }
 .commands-panel-custom {
-  height: 100%;
+  height: 410px;
 }
 
 .commands-panel-custom .p-panel-content {
@@ -244,6 +245,6 @@ export default {
 .commands-panel-custom .p-panel-content {
   margin: 0px;
   padding: 2px !important;
-  height: 100%;
 }
+
 </style>

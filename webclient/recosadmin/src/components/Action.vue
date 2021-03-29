@@ -193,7 +193,7 @@ export default {
 
 .action-panel-custom .p-panel-content {
   margin: 0px;
-  height: 100%;
+  height: 400px;
   border-width: 0px;
 }
 </style>

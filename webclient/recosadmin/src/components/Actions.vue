@@ -21,7 +21,7 @@
           :options="profile.actions"
           optionLabel="name"
           listStyle="max-height:500px"
-          class="no-border"
+          class="no-border actions-listbox"
           v-on:change="checkChange($event)"
         >
         </Listbox>
@@ -152,11 +152,11 @@ export default {
 <style>
 .actions-splitter {
   border-width: 0px;
-  height: 500px;
+  height: 600px;
 }
 
 .actions-panel-custom {
-  height: 100%;
+  height: 600px;
 }
 
 .actions-panel-custom .p-panel-header {
@@ -168,6 +168,9 @@ export default {
 .actions-panel-custom .p-panel-content {
   margin: 0px;
   padding: 2px !important;
-  height: 100%;
+}
+
+.actions-listbox {
+  height: 560px;
 }
 </style>
