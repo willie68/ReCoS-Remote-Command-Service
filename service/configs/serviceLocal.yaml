@@ -21,7 +21,7 @@ profiles: ./devdata/profiles
 sessions: ./devdata/sessions
 
 logging:
-    level: info
+    level: debug
 
 extconfig:
     openhardwaremonitor:

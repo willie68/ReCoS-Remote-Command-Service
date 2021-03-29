@@ -42,7 +42,7 @@ export default {
       saveImg: "",
       saveTitle: "",
       saveText: "",
-      myBaseUrl: "",      
+      myBaseUrl: "",
       timerID: null,
     };
   },
@@ -116,19 +116,19 @@ export default {
           },
         };
         this.saveImg = "hourglass.png";
+        if (this.actionType != "MULTI") {
+          console.log("set timeout");
+          if (this.timerID) {
+            clearTimeout(this.timerID);
+            this.timerID = null;
+          }
+          this.timerID = setTimeout(() => (this.saveImg = ""), 20000);
+        }
         let that = this;
         fetch(actionPostUrl, options)
           .then((res) => res.json())
           .then((data) => {
             console.log(that.actionType);
-            if (that.actionType != "MULTI") {
-              console.log("set timeout");
-              if (that.timerID) {
-                clearTimeout(that.timerID);
-                that.timerID = null;
-              }
-              that.timerID = setTimeout(() => (that.saveImg = ""), 20000);
-            }
           })
           .catch((err) => console.log(err.message));
       }
@@ -152,16 +152,17 @@ export default {
             "Content-Type": "application/json",
           },
         };
-        this.saveImg = "hourglass.png";
+        if (this.actionType != "MULTI") {
+          this.saveImg = "hourglass.png";
+          if (this.timerID) {
+            clearTimeout(this.timerID);
+            this.timerID = null;
+          }
+          this.timerID = setTimeout(() => (this.saveImg = ""), 20000);
+        }
         fetch(actionPostUrl, options)
           .then((res) => res.json())
-          .then((data) => {
-            if (that.timerID) {
-              clearTimeout(that.timerID);
-              that.timerID = null;
-            }
-            that.timerID = setTimeout(() => (that.saveImg = ""), 20000);
-          })
+          .then((data) => {})
           .catch((err) => console.log(err.message));
       }
     },
@@ -191,7 +192,7 @@ export default {
       deep: false,
       handler(newImg) {
         if (this.timerID) {
-          console.log("stop timer")
+          console.log("stop timer");
           clearTimeout(this.timerID);
           this.timerID = null;
         }
