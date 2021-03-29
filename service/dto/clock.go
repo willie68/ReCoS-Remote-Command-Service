@@ -364,7 +364,6 @@ func (c *ClockCommand) generateDigital(timeToRender time.Time, width int, height
 
 	xPos := xStartDigit + (xWidthDigit * 2.25)
 	yPos := yStartDigit + yHeightDigit/3.0
-	clog.Logger.Debugf("Clock circle: %.0f %.0f %.0f", xPos, yPos, segmentThickness)
 	dc.SetColor(c.color)
 	if (timeToRender.Second()%2) == 1 && !c.showseconds {
 		dc.SetColor(colorDarkSegment)
@@ -390,7 +389,6 @@ func (c *ClockCommand) generateDigital(timeToRender time.Time, width int, height
 	if c.showseconds {
 		xPos := xStartDigit + (xWidthDigit * 4.75)
 		yPos := yStartDigit + yHeightDigit/3.0
-		clog.Logger.Debugf("Clock circle: %.0f %.0f %.0f", xPos, yPos, segmentThickness)
 		dc.SetColor(c.color)
 		if (timeToRender.Second()%2) == 1 && !c.showseconds {
 			dc.SetColor(colorDarkSegment)
