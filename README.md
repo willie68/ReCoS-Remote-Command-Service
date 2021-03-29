@@ -484,8 +484,11 @@ Just a simple textual clock.
 
 `format`: the format of the clock in Golang format syntax, defaults: 15:04:05
 `analog`: true or false, shows an analog clock
+`design`: the desing of the clock. `analog` is for a analog clock, `digital` showing a nice digital clock
+`showseconds`: showing the seconds in the design. 
+`color`: the color of the segmants of the digital clock
 
-Example
+Example 1: simple textual clock
 
 ```yaml
 type: CLOCK
@@ -493,6 +496,22 @@ name: clock
 parameters:
   format: "15:04:05 02 Jan 06"
 ```
+
+Example 2: showing a nice digital clock with red 7-segment digits 
+
+```yaml
+type: CLOCK
+name: clock_1
+description: new CLOCK command created by ActionWizard
+parameters:
+  format: "02-01"
+  analog: true
+  design: digital
+  showseconds: true
+  color: "#ff0000"
+```
+
+
 
 ##### Counter, just a simple counter
 

@@ -4,14 +4,16 @@ pages:
     - name: default
       description: defaul
       icon: ""
-      columns: 2
+      columns: 3
       rows: 2
       toolbar: ""
       cells:
         - browser
         - ping
+        - ""
         - counterLocal
-        - page_0
+        - clock
+        - clock_1
 actions:
     - type: SINGLE
       name: counterLocal
@@ -31,6 +33,8 @@ actions:
           title: ""
           parameters:
             persist: true
+            oldschool: true
+            color: "#00ff00"
       actions: []
     - type: SINGLE
       name: browser
@@ -71,22 +75,49 @@ actions:
             name: www.wk-music.de
             period: 10
       actions: []
-    - type: SINGLE
-      name: page_0
+    - type: DISPLAY
+      name: clock
       title: ""
-      icon: view_mode_small_icons.png
+      icon: 
       description: new PAGE action created by ActionWizard
       fontsize: 10
       fontcolor: '#000000'
-      outlined: false
+      outlined: true
       runone: true
       commands:
         - id: ""
-          type: PAGE
-          name: page_0
-          description: new PAGE command created by ActionWizard
+          type: CLOCK
+          name: clock_0
+          description: new CLOCK command created by ActionWizard
           icon: ""
           title: ""
           parameters:
-            page: default
+            format: "02-01"
+            analog: true
+            design: digital
+            showseconds: false
+            color: "#00ff00"
+      actions: []
+    - type: DISPLAY
+      name: clock_1
+      title: ""
+      icon: 
+      description: new PAGE action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: true
+      runone: true
+      commands:
+        - id: ""
+          type: CLOCK
+          name: clock_1
+          description: new CLOCK command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            format: "02-01"
+            analog: true
+            design: digital
+            showseconds: true
+            color: "#ff0000"
       actions: []
