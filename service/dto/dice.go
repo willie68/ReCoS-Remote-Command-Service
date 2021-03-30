@@ -82,8 +82,9 @@ func (d *DiceCommand) Execute(a *Action, requestMessage models.Message) (bool, e
 		State:   0,
 	}
 	api.SendMessage(message)
-
-	d.SendGraphics()
+	if d.sides < 10 {
+		d.SendGraphics()
+	}
 	return false, nil
 }
 
