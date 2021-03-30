@@ -534,6 +534,24 @@ parameters:
   persist: true 
 ```
 
+##### Dice, rolling the dice
+
+A simple dice implementation with nice ui and different values.
+
+`Type`: `DICE`
+
+`Parameter`: 
+`sides`: the number of sides of the dice. For sides <= 9a nice UI is implemented.
+
+Example
+
+```yaml
+type: DICE
+name: dice_0
+parameters:
+  sides: 6 
+```
+
 
 
 ##### Stopwatch
