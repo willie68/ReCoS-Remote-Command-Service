@@ -8,116 +8,45 @@ pages:
       rows: 2
       toolbar: ""
       cells:
-        - browser
-        - ping
-        - ""
-        - counterLocal
-        - clock
-        - clock_1
+        - dice_6
+        - ping_0
 actions:
     - type: SINGLE
-      name: counterLocal
-      title: Counter local
-      icon: slot_machine.png
+      name: dice_6
+      title: Rolling the dice
+      icon: games_dice.png
       description: ""
       fontsize: 20
       fontcolor: '#000000'
       outlined: true
       runone: true
       commands:
-        - id: COUNTER_0
-          type: COUNTER
-          name: counter_0
-          description: count the clicks locally
+        - id: DICE_0
+          type: DICE
+          name: dice_0
+          description: ""
           icon: ""
           title: ""
           parameters:
-            persist: true
-            oldschool: true
-            color: "#00ff00"
-      actions: []
-    - type: SINGLE
-      name: browser
-      title: wk-music
-      icon: world.png
-      description: ""
-      fontsize: 20
-      fontcolor: '#000000'
-      outlined: true
-      runone: true
-      commands:
-        - id: BROWSE_1
-          type: BROWSE
-          name: browse_0
-          description: start a new browser windows with a url
-          icon: ""
-          title: ""
-          parameters:
-            url: https://www.wk-music.de
+            sides: 9
       actions: []
     - type: DISPLAY
-      name: ping
+      name: ping_0
       title: Ping
       icon: world_shipping.png
-      description: ""
-      fontsize: 20
+      description: new PING action created by ActionWizard
+      fontsize: 10
       fontcolor: '#000000'
-      outlined: true
+      outlined: false
       runone: true
       commands:
-        - id: PING_2
+        - id: PING_1
           type: PING
           name: ping_0
-          description: check ping with a url
+          description: new PING command created by ActionWizard
           icon: ""
           title: ""
           parameters:
-            name: www.wk-music.de
+            name: wk-music.de
             period: 10
-      actions: []
-    - type: DISPLAY
-      name: clock
-      title: ""
-      icon: 
-      description: new PAGE action created by ActionWizard
-      fontsize: 10
-      fontcolor: '#000000'
-      outlined: true
-      runone: true
-      commands:
-        - id: ""
-          type: CLOCK
-          name: clock_0
-          description: new CLOCK command created by ActionWizard
-          icon: ""
-          title: ""
-          parameters:
-            format: "02-01"
-            analog: true
-            design: digital
-            showseconds: false
-            color: "#00ff00"
-      actions: []
-    - type: DISPLAY
-      name: clock_1
-      title: ""
-      icon: 
-      description: new PAGE action created by ActionWizard
-      fontsize: 10
-      fontcolor: '#000000'
-      outlined: true
-      runone: true
-      commands:
-        - id: ""
-          type: CLOCK
-          name: clock_1
-          description: new CLOCK command created by ActionWizard
-          icon: ""
-          title: ""
-          parameters:
-            format: "02-01"
-            analog: true
-            design: digital
-            showseconds: true
-            color: "#ff0000"
       actions: []
