@@ -10,6 +10,9 @@ pages:
       cells:
         - dice_6
         - ping_0
+        - ""
+        - ""
+        - timer_0
 actions:
     - type: SINGLE
       name: dice_6
@@ -17,7 +20,7 @@ actions:
       icon: games_dice.png
       description: ""
       fontsize: 20
-      fontcolor: '#000000'
+      fontcolor: ffe699
       outlined: true
       runone: true
       commands:
@@ -35,9 +38,9 @@ actions:
       title: Ping
       icon: world_shipping.png
       description: new PING action created by ActionWizard
-      fontsize: 10
+      fontsize: 40
       fontcolor: '#000000'
-      outlined: false
+      outlined: true
       runone: true
       commands:
         - id: PING_1
@@ -49,4 +52,24 @@ actions:
           parameters:
             name: wk-music.de
             period: 10
+      actions: []
+    - type: SINGLE
+      name: timer_0
+      title: Count down
+      icon: timer.png
+      description: new TIMER action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: ""
+          type: TIMER
+          name: timer_0
+          description: new TIMER command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            finished: Ready
+            time: 60
       actions: []

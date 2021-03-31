@@ -43,6 +43,11 @@ type DiceCommand struct {
 	sides       int
 }
 
+var (
+	diceColorDot   color.Color = color.RGBA{R: 0xff, G: 0x00, B: 0x00, A: 0xFF}
+	diceColorSides color.Color = color.RGBA{R: 0xff, G: 0xe6, B: 0x99, A: 0xFF}
+)
+
 // EnrichType enrich the type info with the informations from the profile
 func (d *DiceCommand) EnrichType(profile models.Profile) (models.CommandTypeInfo, error) {
 	return DiceCommandTypeInfo, nil
@@ -171,7 +176,11 @@ func (d *DiceCommand) generateDice(number int, width int, height int) []byte {
 
 	dc.SetLineWidth(1.0)
 	dc.DrawRoundedRectangle(padding, padding, floatEdgeSize, floatEdgeSize, floatEdgeSize/10.0)
+	dc.SetColor(diceColorSides)
+	dc.Fill()
 	dc.Stroke()
+
+	dc.SetColor(diceColorDot)
 	myNum2Dice := num2DiceArray[number]
 
 	if myNum2Dice.a {
