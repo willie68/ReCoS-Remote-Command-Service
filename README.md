@@ -14,9 +14,7 @@ For the normal execution client please use http://localhost:9280/webclient. On o
 This is the ReCoS web client. After successful installation you can access it with 
 http://127.0.0.1:9280/webclient on the same computer.
 
-# <img src="documentation/assets/webclient.png" alt="webclient" style="zoom:50%;" />
-
-
+<img src="documentation/assets/webclient.png" alt="webclient" style="zoom:50%;" />
 
 The client has a small toolbar and a big area, presenting the different actions. But let us start at the very beginning. First, everything is organized in a **profile**. You can have different profiles for different clients, or different scenarios. One client can only present one profile at a time, but you can have different profiles in different browser open. As an example, you can have a special profile for your Phone and another for the Pad and a really big one for the PC. And all can be active at the same time. But to emphasize again, you can of course also operate the same profile on 2 different devices at the same time. When starting the client, the first profile is selected. You can select profiles using the Profile Combobox.
 
@@ -582,6 +580,33 @@ parameters:
   sides: 6 
 ```
 
+##### Random words
+
+![image-20210331164704159](documentation/assets/rndwords.png)
+
+Choose a random word/phrase out of a list
+
+`Type`: `RNDWORDS`
+
+`Parameter`: 
+`words`: The list of words/phrases to choose one randomly from
+
+Example
+
+```yaml
+type: RNDWORDS
+name: words_0
+description: new RNDWORDS command created by ActionWizard
+parameters:
+  words: 
+    - "Harry Belafonte"
+    - "Willie Klaas"
+    - "Lukas Lars"
+    - "Luke Skywalker"
+    - "Lord Voldemort"
+    - "Harry Potter"
+```
+
 
 
 ##### Stopwatch
@@ -929,17 +954,17 @@ As this project is in an early development stage, i have nothing to show here. B
 
 For hardware sensor reading ReCoS relies on the OpenHardwareMonitor Software. (https://openhardwaremonitor.org/) To get use of it, simply install the software. After installation, go to  Option/Remote Web Server/Port. 
 
-![ohm_02](C:\e-platte\daten\git-sourcen\ReCoS-Remote-Command-Service\documentation\assets\ohm_02.png)
+![ohm_02](.\documentation\assets\ohm_02.png)
 
 
 
-# ![ohm_03](C:\e-platte\daten\git-sourcen\ReCoS-Remote-Command-Service\documentation\assets\ohm_03.png)
+# ![ohm_03](./documentation/assets/ohm_03.png)
 
 As Portnumber enter 12999 (which is the default for Combination of ReCoS and OHM)
 
 After that simply activate the OHM Webserver via Option/Remote Web Server/Run.
 The OHM should be available after restart of wndows, so please tick the following options on. Now everything of the OHM side is ready. The ReCoS service will now automatically connect to the OHM and get all Sensors. 
-![ohm_04](C:\e-platte\daten\git-sourcen\ReCoS-Remote-Command-Service\documentation\assets\ohm_04.png)
+![ohm_04](.\documentation\assets\ohm_04.png)
 
 If you have already installed the OHM (maybe for another App) and you can't reconfigure the port option, you can simply change the port for ReCoS in the service.yaml.   Same for the part where you want to get Sensors from another Computer.
 

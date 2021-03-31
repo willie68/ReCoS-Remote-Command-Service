@@ -30,6 +30,7 @@ var CommandTypes = []models.CommandTypeInfo{
 	PingCommandTypeInfo,
 	CounterCommandTypeInfo,
 	DiceCommandTypeInfo,
+	RndWordsCommandTypeInfo,
 }
 
 func InitCommand() {
@@ -149,6 +150,12 @@ func GetCommand(command models.Command) CommandExecutor {
 	case DiceCommandTypeInfo.Type:
 		{
 			cmdExecutor = &DiceCommand{
+				Parameters: command.Parameters,
+			}
+		}
+	case RndWordsCommandTypeInfo.Type:
+		{
+			cmdExecutor = &RndWordsCommand{
 				Parameters: command.Parameters,
 			}
 		}
