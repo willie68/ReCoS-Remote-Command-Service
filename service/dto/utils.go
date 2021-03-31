@@ -69,3 +69,17 @@ func ConvertParameter2Int(parameters map[string]interface{}, parameterName strin
 	}
 	return valueInt, nil
 }
+
+func ConvertParameter2StringArray(parameters map[string]interface{}, parameterName string) ([]string, error) {
+	values := make([]string, 0)
+	value, found := parameters[parameterName]
+	if found {
+		for _, iValue := range value.([]interface{}) {
+			myValue, ok := iValue.(string)
+			if ok {
+				values = append(values, myValue)
+			}
+		}
+	}
+	return values, nil
+}

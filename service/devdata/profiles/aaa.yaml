@@ -10,7 +10,7 @@ pages:
       cells:
         - dice_6
         - ping_0
-        - ""
+        - words_0
         - ""
         - timer_0
 actions:
@@ -72,4 +72,29 @@ actions:
           parameters:
             finished: Ready
             time: 60
+      actions: []
+    - type: SINGLE
+      name: words_0
+      title: Random words
+      icon: games_dice.png
+      description: 
+      fontsize: 40
+      fontcolor: '#000000'
+      outlined: true
+      runone: true
+      commands:
+        - id: ""
+          type: RNDWORDS
+          name: words_0
+          description: new TIMER command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            words: 
+              - "Harry Belafonte"
+              - "Willie Klaas"
+              - "Lukas Lars"
+              - "Luke Skywalker"
+              - "Lord Voldemort"
+              - "Harry Potter"
       actions: []
