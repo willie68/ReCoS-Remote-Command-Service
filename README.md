@@ -14,9 +14,7 @@ For the normal execution client please use http://localhost:9280/webclient. On o
 This is the ReCoS web client. After successful installation you can access it with 
 http://127.0.0.1:9280/webclient on the same computer.
 
-# <img src="documentation/assets/webclient.png" alt="webclient" style="zoom:50%;" />
-
-
+<img src="documentation/assets/webclient.png" alt="webclient" style="zoom:50%;" />
 
 The client has a small toolbar and a big area, presenting the different actions. But let us start at the very beginning. First, everything is organized in a **profile**. You can have different profiles for different clients, or different scenarios. One client can only present one profile at a time, but you can have different profiles in different browser open. As an example, you can have a special profile for your Phone and another for the Pad and a really big one for the PC. And all can be active at the same time. But to emphasize again, you can of course also operate the same profile on 2 different devices at the same time. When starting the client, the first profile is selected. You can select profiles using the Profile Combobox.
 
@@ -42,6 +40,34 @@ As already mentioned, an action can contain several commands. (The "Hello World"
 Writing to the service will be protected with a password. You can set this password in the service configuration. The default password is `recosadmin`. The username is `admin`. (But will not need this, until you try to access the Service interfaces directly)
 
 To deactivate password check simply add an empty password to the configuration.
+
+## Action Wizard
+
+With the Action Wizard you can quickly and easily create new commands. You start the Action Wizard with this button.
+
+![image-20210331152330271](documentation/assets/aw_0.png)
+First you will see this preface page:
+
+![image-20210331150718589](documentation/assets/aw_1.png)
+
+On the next page you can choose the command that should be generated. You can use the search field to search through the list of commands.
+
+![image-20210331152810341](documentation/assets/aw_2.png)
+
+Go on with Next. 
+In the next dialog you can provide some information about the command. You can assign a title for the button, assign an icon (a default is given directly by the command), and you can make various other settings depending on the command. Continue here with Next.
+
+![image-20210331155924900](documentation/assets/aw_3a.png)
+
+![image-20210331155948763](documentation/assets/aw_3b.png)
+
+On this last page you can determine where the action should be displayed. You can select different pages here, or create a new page. Simply click on a free button where the action should be stored. To save the action and the profile, please select Finish.
+
+![image-20210331160031731](documentation/assets/aw_4.png)
+
+In the Admin Client you can then see what the wizard has generated for you.
+
+![image-20210331160145334](documentation/assets/aw_05.png)
 
 # Service
 
@@ -484,8 +510,11 @@ Just a simple textual clock.
 
 `format`: the format of the clock in Golang format syntax, defaults: 15:04:05
 `analog`: true or false, shows an analog clock
+`design`: the desing of the clock. `analog` is for a analog clock, `digital` showing a nice digital clock
+`showseconds`: showing the seconds in the design. 
+`color`: the color of the segmants of the digital clock
 
-Example
+Example 1: simple textual clock
 
 ```yaml
 type: CLOCK
@@ -493,6 +522,22 @@ name: clock
 parameters:
   format: "15:04:05 02 Jan 06"
 ```
+
+Example 2: showing a nice digital clock with red 7-segment digits 
+
+```yaml
+type: CLOCK
+name: clock_1
+description: new CLOCK command created by ActionWizard
+parameters:
+  format: "02-01"
+  analog: true
+  design: digital
+  showseconds: true
+  color: "#ff0000"
+```
+
+
 
 ##### Counter, just a simple counter
 
@@ -502,6 +547,8 @@ A simple counter, with persisting value.
 
 `Parameter`: 
 `persist`: true or false, if true, the counter will persist between service restarts
+`oldschool`: rendering an old school counter with 7-segment digits
+`color`: the color of the segments
 
 Example
 
@@ -513,7 +560,54 @@ parameters:
   persist: true 
 ```
 
-##### 
+##### Dice, rolling the dice
+
+![image-20210331150258831](documentation/assets/dice.png)
+
+A simple dice implementation with nice ui and different values.
+
+`Type`: `DICE`
+
+`Parameter`: 
+`sides`: the number of sides of the dice. For sides <= 9a nice UI is implemented.
+
+Example
+
+```yaml
+type: DICE
+name: dice_0
+parameters:
+  sides: 6 
+```
+
+##### Random words
+
+![image-20210331164704159](documentation/assets/rndwords.png)
+
+Choose a random word/phrase out of a list
+
+`Type`: `RNDWORDS`
+
+`Parameter`: 
+`words`: The list of words/phrases to choose one randomly from
+
+Example
+
+```yaml
+type: RNDWORDS
+name: words_0
+description: new RNDWORDS command created by ActionWizard
+parameters:
+  words: 
+    - "Harry Belafonte"
+    - "Willie Klaas"
+    - "Lukas Lars"
+    - "Luke Skywalker"
+    - "Lord Voldemort"
+    - "Harry Potter"
+```
+
+
 
 ##### Stopwatch
 
@@ -599,6 +693,8 @@ parameters:
 
 
 ##### Ping, shows ping times to a server
+
+![image-20210331150154168](documentation/assets/ping.png)
 
 Here you can test your connection to a server. Ping will test the connection to a server, You can use an IP Address or a server name (without any http...) If you put this command to an display action you can set a period so that the command will automatically start every #period seconds a test.  The result is the actual ping time in ms.
 
@@ -851,6 +947,35 @@ parameters:
 # UI
 
 As this project is in an early development stage, i have nothing to show here. But if you like, you can simply checkout the develop branch, starting 2 Instances of Visual Studio Code, one with the frontend, one with the service backend. Than start the backend server in VS, and same for the frontend (npm run serve). After some hacking with configuration you may be able to see something. :-) Good Luck to you.
+
+# Installing 3'rd Party products
+
+## Installation of OpenHardwareMonitor
+
+For hardware sensor reading ReCoS relies on the OpenHardwareMonitor Software. (https://openhardwaremonitor.org/) To get use of it, simply install the software. After installation, go to  Option/Remote Web Server/Port. 
+
+![ohm_02](.\documentation\assets\ohm_02.png)
+
+
+
+# ![ohm_03](./documentation/assets/ohm_03.png)
+
+As Portnumber enter 12999 (which is the default for Combination of ReCoS and OHM)
+
+After that simply activate the OHM Webserver via Option/Remote Web Server/Run.
+The OHM should be available after restart of wndows, so please tick the following options on. Now everything of the OHM side is ready. The ReCoS service will now automatically connect to the OHM and get all Sensors. 
+![ohm_04](.\documentation\assets\ohm_04.png)
+
+If you have already installed the OHM (maybe for another App) and you can't reconfigure the port option, you can simply change the port for ReCoS in the service.yaml.   Same for the part where you want to get Sensors from another Computer.
+
+Here is the snippet:
+
+```yaml
+extconfig:
+  openhardwaremonitor:
+    url: http://127.0.0.1:12999/data.json
+    updateperiod: 5
+```
 
 # Thanks
 

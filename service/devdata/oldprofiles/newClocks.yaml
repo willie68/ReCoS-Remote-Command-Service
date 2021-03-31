@@ -1,0 +1,123 @@
+name: aaa
+description: This is the default configuration, just to have one starting point
+pages:
+    - name: default
+      description: defaul
+      icon: ""
+      columns: 3
+      rows: 2
+      toolbar: ""
+      cells:
+        - browser
+        - ping
+        - ""
+        - counterLocal
+        - clock
+        - clock_1
+actions:
+    - type: SINGLE
+      name: counterLocal
+      title: Counter local
+      icon: slot_machine.png
+      description: ""
+      fontsize: 20
+      fontcolor: '#000000'
+      outlined: true
+      runone: true
+      commands:
+        - id: COUNTER_0
+          type: COUNTER
+          name: counter_0
+          description: count the clicks locally
+          icon: ""
+          title: ""
+          parameters:
+            persist: true
+            oldschool: true
+            color: "#00ff00"
+      actions: []
+    - type: SINGLE
+      name: browser
+      title: wk-music
+      icon: world.png
+      description: ""
+      fontsize: 20
+      fontcolor: '#000000'
+      outlined: true
+      runone: true
+      commands:
+        - id: BROWSE_1
+          type: BROWSE
+          name: browse_0
+          description: start a new browser windows with a url
+          icon: ""
+          title: ""
+          parameters:
+            url: https://www.wk-music.de
+      actions: []
+    - type: DISPLAY
+      name: ping
+      title: Ping
+      icon: world_shipping.png
+      description: ""
+      fontsize: 20
+      fontcolor: '#000000'
+      outlined: true
+      runone: true
+      commands:
+        - id: PING_2
+          type: PING
+          name: ping_0
+          description: check ping with a url
+          icon: ""
+          title: ""
+          parameters:
+            name: www.wk-music.de
+            period: 10
+      actions: []
+    - type: DISPLAY
+      name: clock
+      title: ""
+      icon: 
+      description: new PAGE action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: true
+      runone: true
+      commands:
+        - id: ""
+          type: CLOCK
+          name: clock_0
+          description: new CLOCK command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            format: "02-01"
+            analog: true
+            design: digital
+            showseconds: false
+            color: "#00ff00"
+      actions: []
+    - type: DISPLAY
+      name: clock_1
+      title: ""
+      icon: 
+      description: new PAGE action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: true
+      runone: true
+      commands:
+        - id: ""
+          type: CLOCK
+          name: clock_1
+          description: new CLOCK command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            format: "02-01"
+            analog: true
+            design: digital
+            showseconds: true
+            color: "#ff0000"
+      actions: []

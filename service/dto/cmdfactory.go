@@ -1,8 +1,17 @@
 package dto
 
 import (
+	"reflect"
+
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
+
+var typeRegistry = make(map[string]reflect.Type)
+
+func RegisterType(typedNil interface{}) {
+	t := reflect.TypeOf(typedNil).Elem()
+	typeRegistry[t.PkgPath()+"."+t.Name()] = t
+}
 
 var CommandTypes = []models.CommandTypeInfo{
 	DelayCommandTypeInfo,
@@ -20,6 +29,8 @@ var CommandTypes = []models.CommandTypeInfo{
 	BrowseCommandTypeInfo,
 	PingCommandTypeInfo,
 	CounterCommandTypeInfo,
+	DiceCommandTypeInfo,
+	RndWordsCommandTypeInfo,
 }
 
 func InitCommand() {
@@ -133,6 +144,18 @@ func GetCommand(command models.Command) CommandExecutor {
 	case CounterCommandTypeInfo.Type:
 		{
 			cmdExecutor = &CounterCommand{
+				Parameters: command.Parameters,
+			}
+		}
+	case DiceCommandTypeInfo.Type:
+		{
+			cmdExecutor = &DiceCommand{
+				Parameters: command.Parameters,
+			}
+		}
+	case RndWordsCommandTypeInfo.Type:
+		{
+			cmdExecutor = &RndWordsCommand{
 				Parameters: command.Parameters,
 			}
 		}

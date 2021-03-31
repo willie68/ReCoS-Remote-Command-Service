@@ -32,7 +32,7 @@ var PingCommandTypeInfo = models.CommandTypeInfo{
 			Name:           "period",
 			Type:           "int",
 			Description:    "period in secods",
-			Unit:           "Seconds",
+			Unit:           " Seconds",
 			WizardPossible: true,
 			List:           make([]string, 0),
 		},
@@ -45,7 +45,7 @@ type PingCommand struct {
 	action     *Action
 	ticker     *time.Ticker
 	done       chan bool
-	url        string
+	name       string
 	period     int
 }
 
@@ -59,26 +59,21 @@ func (p *PingCommand) Init(a *Action, commandName string) (bool, error) {
 	p.action = a
 	value, found := p.Parameters["name"]
 	if found {
-		url, ok := value.(string)
+		name, ok := value.(string)
 		if ok {
-			p.url = url
+			p.name = name
 		} else {
 			return false, fmt.Errorf("The name parameter is in wrong format. Please use string as format")
 		}
 	} else {
 		return false, fmt.Errorf("The name parameter is missing")
 	}
-	value, found = p.Parameters["period"]
-	if found {
-		period, ok := value.(int)
-		if ok {
-			p.period = period
-		} else {
-			return false, fmt.Errorf("The period parameter is in wrong format. Please use int as format")
-		}
-	} else {
-		p.period = 0
+
+	valueInt, err := ConvertParameter2Int(p.Parameters, "period")
+	if err != nil {
+		return false, fmt.Errorf("The period parameter is in wrong format. Please use int as format")
 	}
+	p.period = valueInt
 
 	if p.period > 0 {
 		p.ticker = time.NewTicker(time.Duration(p.period) * time.Second)
@@ -90,7 +85,7 @@ func (p *PingCommand) Init(a *Action, commandName string) (bool, error) {
 					return
 				case <-p.ticker.C:
 					text := ""
-					pingtime, err := p.getPingTime(p.url)
+					pingtime, err := p.getPingTime(p.name)
 					if err != nil {
 						text = fmt.Sprintf("error %v", err)
 					}
@@ -118,22 +113,12 @@ func (p *PingCommand) Stop(a *Action) (bool, error) {
 
 // Execute the command
 func (p *PingCommand) Execute(a *Action, requestMessage models.Message) (bool, error) {
-	value, found := p.Parameters["url"]
-	if found {
-		url, ok := value.(string)
-		if ok {
-			pingtime, err := p.getPingTime(url)
-			if err != nil {
-				clog.Logger.Errorf("error: %v\r\n", err)
-				return false, fmt.Errorf("Error executing the url. %v", err)
-			}
-			clog.Logger.Infof("Ping time: %.2fms", pingtime)
-		} else {
-			return false, fmt.Errorf("The url parameter is in wrong format. Please use string as format")
-		}
-	} else {
-		return false, fmt.Errorf("The url parameter is missing")
+	pingtime, err := p.getPingTime(p.name)
+	if err != nil {
+		clog.Logger.Errorf("error: %v\r\n", err)
+		return false, fmt.Errorf("Error executing the url. %v", err)
 	}
+	clog.Logger.Infof("Ping time: %.2fms", pingtime)
 	return true, nil
 }
 
@@ -151,7 +136,7 @@ func (p *PingCommand) getPingTime2(url string) (float64, error) {
 func (p *PingCommand) getPingTime(url string) (float64, error) {
 	pinger, err := ping.NewPinger(url)
 	if err != nil {
-		panic(err)
+		return 0, err
 	}
 	pinger.SetPrivileged(true)
 

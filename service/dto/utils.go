@@ -51,3 +51,35 @@ func ConvertParameter2String(parameters map[string]interface{}, parameterName st
 	}
 	return valueStr, nil
 }
+
+func ConvertParameter2Int(parameters map[string]interface{}, parameterName string) (int, error) {
+	valueInt := 0
+	value, found := parameters[parameterName]
+	if found {
+		var ok bool
+		valueInt, ok = value.(int)
+		if !ok {
+			fValue, ok := value.(float64)
+			if ok {
+				valueInt = int(fValue)
+			} else {
+				return 0, fmt.Errorf("%s is in wrong format. Please use string as format", parameterName)
+			}
+		}
+	}
+	return valueInt, nil
+}
+
+func ConvertParameter2StringArray(parameters map[string]interface{}, parameterName string) ([]string, error) {
+	values := make([]string, 0)
+	value, found := parameters[parameterName]
+	if found {
+		for _, iValue := range value.([]interface{}) {
+			myValue, ok := iValue.(string)
+			if ok {
+				values = append(values, myValue)
+			}
+		}
+	}
+	return values, nil
+}
