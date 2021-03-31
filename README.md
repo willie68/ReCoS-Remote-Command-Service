@@ -43,6 +43,34 @@ Writing to the service will be protected with a password. You can set this passw
 
 To deactivate password check simply add an empty password to the configuration.
 
+## Action Wizard
+
+With the Action Wizard you can quickly and easily create new commands. You start the Action Wizard with this button.
+
+![image-20210331152330271](documentation/assets/aw_0.png)
+First you will see this preface page:
+
+![image-20210331150718589](documentation/assets/aw_1.png)
+
+On the next page you can choose the command that should be generated. You can use the search field to search through the list of commands.
+
+![image-20210331152810341](documentation/assets/aw_2.png)
+
+Go on with Next. 
+In the next dialog you can provide some information about the command. You can assign a title for the button, assign an icon (a default is given directly by the command), and you can make various other settings depending on the command. Continue here with Next.
+
+![image-20210331155924900](documentation/assets/aw_3a.png)
+
+![image-20210331155948763](documentation/assets/aw_3b.png)
+
+On this last page you can determine where the action should be displayed. You can select different pages here, or create a new page. Simply click on a free button where the action should be stored. To save the action and the profile, please select Finish.
+
+![image-20210331160031731](documentation/assets/aw_4.png)
+
+In the Admin Client you can then see what the wizard has generated for you.
+
+![image-20210331160145334](documentation/assets/aw_05.png)
+
 # Service
 
 ## Profileconfiguration
@@ -536,6 +564,8 @@ parameters:
 
 ##### Dice, rolling the dice
 
+![image-20210331150258831](documentation/assets/dice.png)
+
 A simple dice implementation with nice ui and different values.
 
 `Type`: `DICE`
@@ -638,6 +668,8 @@ parameters:
 
 
 ##### Ping, shows ping times to a server
+
+![image-20210331150154168](documentation/assets/ping.png)
 
 Here you can test your connection to a server. Ping will test the connection to a server, You can use an IP Address or a server name (without any http...) If you put this command to an display action you can set a period so that the command will automatically start every #period seconds a test.  The result is the actual ping time in ms.
 

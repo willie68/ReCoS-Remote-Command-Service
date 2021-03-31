@@ -1,6 +1,6 @@
 <template>
   <Panel header="Commands" class="commands-panel-custom">
-    <Splitter style="height: 300px">
+    <Splitter style="height: 400px">
       <SplitterPanel :size="20">
         <Panel header=" " class="commands-panel-custom no-border">
           <template #icons>
@@ -84,8 +84,8 @@ export default {
   methods: {
     changeCommand(event) {
       let command = event.value;
-      console.log("Commands: command changed:" + command.name);
       if (command) {
+        console.log("Commands: command changed:" + command.name);
         this.activeCommandName = command.name;
       } else {
         this.activeCommandName = "";
@@ -230,11 +230,11 @@ export default {
 
 }
 .commands-panel-custom {
-  height: 410px;
+  height: 435px;
 }
 
 .commands-panel-custom .p-panel-content {
-  border-width: 0px;
+  border-width: 0px !important;
 }
 
 .commands-panel-custom .p-panel-header {
