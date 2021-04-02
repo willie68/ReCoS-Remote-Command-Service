@@ -43,7 +43,8 @@ type HealthCheck struct {
 }
 
 type LoggingConfig struct {
-	Level string `yaml:"level"`
+	Level    string `yaml:"level"`
+	Filename string `yaml:"filename"`
 }
 
 var DefaulConfig = Config{
@@ -67,7 +68,8 @@ var DefaulConfig = Config{
 		},
 	},
 	Logging: LoggingConfig{
-		Level: "INFO",
+		Level:    "INFO",
+		Filename: "${configdir}/logging.log",
 	},
 }
 

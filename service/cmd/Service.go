@@ -170,7 +170,6 @@ func onReady() {
 		DisplayName: "eCoS Service App",
 		Exec:        []string{ex},
 	}
-	clog.Logger.Infof("app is anabled: %t", app.IsEnabled())
 
 	mAdmin := systray.AddMenuItem("WebAdmin", "Start the webadmin")
 	mClient := systray.AddMenuItem("WebClient", "Start the client")
@@ -186,13 +185,10 @@ func onReady() {
 	mQuit := systray.AddMenuItem("Quit", "Quit ReCoS")
 	mQuit.SetIcon(icon.Data)
 
-	// Sets the icon of a menu item. Only available on Mac and Windows.
-	clog.Logger.Info("systray established")
+	flag.Parse()
 
 	clog.Logger.Info("starting server")
 	defer clog.Logger.Close()
-
-	flag.Parse()
 
 	serror.Service = servicename
 	if configFile == "" {
@@ -224,6 +220,7 @@ func onReady() {
 	serviceConfig = config.Get()
 	initConfig()
 
+	clog.Logger.Info("service is starting")
 	go func() {
 		for {
 			select {
@@ -442,6 +439,14 @@ func initConfig() {
 	}
 
 	logging.Logger.SetLevel(serviceConfig.Logging.Level)
+	serviceConfig.Logging.Filename, err = config.ReplaceConfigdir(serviceConfig.Logging.Filename)
+	if err != nil {
+		clog.Logger.Alertf("error wrong logging folder: %s", err.Error())
+		os.Exit(1)
+	}
+
+	logging.Logger.Filename = serviceConfig.Logging.Filename
+	logging.Logger.InitGelf()
 
 	err = osdependent.InitOSDependend(serviceConfig)
 	if err != nil {
