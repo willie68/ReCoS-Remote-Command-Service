@@ -8,6 +8,7 @@ require (
 	github.com/aphistic/golf v0.0.0-20180712155816-02c07f170c5a
 	github.com/aphistic/sweet v0.3.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/emersion/go-autostart v0.0.0-20210130080809-00ed301c8e9a // indirect
 	github.com/fogleman/gg v1.3.0
 	github.com/gen2brain/shm v0.0.0-20200228170931-49f9650110c5 // indirect
 	github.com/getlantern/ops v0.0.0-20200403153110-8476b16edcd6 // indirect
@@ -42,7 +43,7 @@ require (
 	golang.org/x/crypto v0.0.0-20201112155050-0c6587e931a9 // indirect
 	golang.org/x/image v0.0.0-20210216034530-4410531fe030
 	golang.org/x/net v0.0.0-20201110031124-69a78807bb2b // indirect
-	golang.org/x/sys v0.0.0-20210326220804-49726bf1d181 // indirect
+	golang.org/x/sys v0.0.0-20210326220804-49726bf1d181
 	golang.org/x/text v0.3.5 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect

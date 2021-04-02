@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
@@ -20,12 +21,13 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/icon"
 	"wkla.no-ip.biz/remote-desk-service/logging"
 	"wkla.no-ip.biz/remote-desk-service/pkg/audio"
+	"wkla.no-ip.biz/remote-desk-service/pkg/autostart"
 	"wkla.no-ip.biz/remote-desk-service/pkg/osdependent"
 	"wkla.no-ip.biz/remote-desk-service/pkg/session"
 
+	"github.com/getlantern/systray"
 	config "wkla.no-ip.biz/remote-desk-service/config"
 
-	"github.com/getlantern/systray"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
@@ -153,13 +155,34 @@ func main() {
 
 func onReady() {
 	systray.SetIcon(icon.Data)
-	systray.SetTitle("Awesome App")
-	systray.SetTooltip("Pretty awesome超级棒")
+	systray.SetTitle("ReCoS Service")
+	systray.SetTooltip("ReCoS Service App")
+	ex, err := os.Executable()
+	if err != nil {
+		panic(err)
+	}
+
+	exPath := filepath.Dir(ex)
+	fmt.Println(exPath)
+
+	app := &autostart.App{
+		Name:        "ReCoS",
+		DisplayName: "eCoS Service App",
+		Exec:        []string{ex},
+	}
+	clog.Logger.Infof("app is anabled: %t", app.IsEnabled())
 
 	mAdmin := systray.AddMenuItem("WebAdmin", "Start the webadmin")
 	mClient := systray.AddMenuItem("WebClient", "Start the client")
 	systray.AddSeparator()
 
+	mAutostart := systray.AddMenuItem("Autostart", "Disable the serivce on Windows startup")
+	if app.IsEnabled() {
+		mAutostart.Check()
+	} else {
+		mAutostart.Uncheck()
+	}
+	systray.AddSeparator()
 	mQuit := systray.AddMenuItem("Quit", "Quit ReCoS")
 	mQuit.SetIcon(icon.Data)
 
@@ -204,6 +227,23 @@ func onReady() {
 	go func() {
 		for {
 			select {
+			case <-mAutostart.ClickedCh:
+				if app.IsEnabled() {
+					clog.Logger.Info("App is aready enabled, removing it...")
+					if err := app.Disable(); err != nil {
+						clog.Logger.Errorf("Error disabling app:%v", err)
+					}
+				} else {
+					clog.Logger.Info("Enabling app...")
+					if err := app.Enable(); err != nil {
+						clog.Logger.Errorf("Error enabling app:%v", err)
+					}
+				}
+				if app.IsEnabled() {
+					mAutostart.Check()
+				} else {
+					mAutostart.Uncheck()
+				}
 			case <-mClient.ClickedCh:
 				open.Run(fmt.Sprintf("http://localhost:%d/webclient", serviceConfig.Port))
 			case <-mAdmin.ClickedCh:
