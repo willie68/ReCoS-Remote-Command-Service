@@ -93,30 +93,21 @@ func (d *DaysRemainCommand) Init(a *Action, commandName string) (bool, error) {
 		d.date = ddate
 	}
 
-	format, err := ConvertParameter2String(d.Parameters, "formattitle")
+	format, err := ConvertParameter2String(d.Parameters, "formattitle", "%d")
 	if err != nil {
 		return false, err
-	}
-	if format == "" {
-		format = "%d"
 	}
 	d.formatTitle = format
 
-	format, err = ConvertParameter2String(d.Parameters, "formattext")
+	format, err = ConvertParameter2String(d.Parameters, "formattext", "days remain")
 	if err != nil {
 		return false, err
-	}
-	if format == "" {
-		format = "days remain"
 	}
 	d.formatText = format
 
-	format, err = ConvertParameter2String(d.Parameters, "finished")
+	format, err = ConvertParameter2String(d.Parameters, "finished", "finnished")
 	if err != nil {
 		return false, err
-	}
-	if format == "" {
-		format = "finnished"
 	}
 	d.finished = format
 

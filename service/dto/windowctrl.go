@@ -66,28 +66,18 @@ func (e *WindowCtrlCommand) Stop(a *Action) (bool, error) {
 // Execute the command
 func (e *WindowCtrlCommand) Execute(a *Action, requestMessage models.Message) (bool, error) {
 
-	value, found := e.Parameters["caption"]
-	if !found {
-		return false, fmt.Errorf("The caption parameter is missing")
-	}
-	caption, ok := value.(string)
-	if !ok {
-		return false, fmt.Errorf("The caption parameter is in wrong format. Please use string as format")
+	caption, err := ConvertParameter2String(e.Parameters, "caption", "")
+	if err != nil {
+		return false, err
 	}
 	if caption == "" {
 		return false, fmt.Errorf("The caption parameter should not be empty")
 	}
 
-	value, found = e.Parameters["command"]
-	if !found {
-		return false, fmt.Errorf("The command parameter is missing")
+	cmdValue, err := ConvertParameter2String(e.Parameters, "command", "")
+	if err != nil {
+		return false, err
 	}
-
-	cmdValue, ok := value.(string)
-	if !ok {
-		return false, fmt.Errorf("The command parameter is in wrong format. Please use string as format")
-	}
-
 	if cmdValue == "" {
 		return false, fmt.Errorf("The command parameter should not be empty")
 	}

@@ -18,7 +18,7 @@ require (
 	github.com/go-ole/go-ole v1.2.4
 	github.com/go-ping/ping v0.0.0-20210327002015-80a511380375
 	github.com/go-playground/validator/v10 v10.4.1
-	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
+	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
 	github.com/golang/protobuf v1.4.3 // indirect
 	github.com/google/go-cmp v0.5.2 // indirect
 	github.com/google/uuid v1.0.0 // indirect

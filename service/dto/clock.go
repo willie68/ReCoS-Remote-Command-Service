@@ -2,15 +2,17 @@ package dto
 
 import (
 	"bytes"
-	"fmt"
 	"image/color"
 	"image/png"
+	"log"
 	"math"
 	"strconv"
 	"time"
 
 	"github.com/fogleman/gg"
+	"github.com/golang/freetype/truetype"
 	"golang.org/x/image/bmp"
+	"golang.org/x/image/font/gofont/goregular"
 	"wkla.no-ip.biz/remote-desk-service/api"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
@@ -34,6 +36,14 @@ var ClockCommandTypeInfo = models.CommandTypeInfo{
 			List:           make([]string, 0),
 		},
 		{
+			Name:           "dateformat",
+			Type:           "string",
+			Description:    "Format string for formatting the date",
+			Unit:           "",
+			WizardPossible: false,
+			List:           make([]string, 0),
+		},
+		{
 			Name:           "analog",
 			Type:           "bool",
 			Description:    "Showing a nice analog clock",
@@ -45,6 +55,14 @@ var ClockCommandTypeInfo = models.CommandTypeInfo{
 			Name:           "showseconds",
 			Type:           "bool",
 			Description:    "Showing seconds on a analog clock",
+			Unit:           "",
+			WizardPossible: true,
+			List:           make([]string, 0),
+		},
+		{
+			Name:           "showdate",
+			Type:           "bool",
+			Description:    "Showing the date on a analog clock",
 			Unit:           "",
 			WizardPossible: true,
 			List:           make([]string, 0),
@@ -76,8 +94,10 @@ type ClockCommand struct {
 	ticker      *time.Ticker
 	done        chan bool
 	format      string
+	dateformat  string
 	analog      bool
 	showseconds bool
+	showdate    bool
 	commandName string
 	design      string
 	color       color.Color
@@ -107,57 +127,57 @@ func (c *ClockCommand) Init(a *Action, commandName string) (bool, error) {
 	c.format = "15:04:05"
 	c.analog = false
 	c.commandName = commandName
-
-	value, found := c.Parameters["analog"]
-	if found {
-		var ok bool
-		c.analog, ok = value.(bool)
-		if !ok {
-			return false, fmt.Errorf("Analog is in wrong format. Please use boolean as format")
-		}
-	}
-
-	c.showseconds = false
-	value, found = c.Parameters["showseconds"]
-	if found {
-		var ok bool
-		c.showseconds, ok = value.(bool)
-		if !ok {
-			return false, fmt.Errorf("Showseconds is in wrong format. Please use boolean as format")
-		}
-	}
-
 	c.done = make(chan bool)
-	value, found = c.Parameters["format"]
-	if found {
-		var ok bool
-		c.format, ok = value.(string)
-		if !ok {
-			return false, fmt.Errorf("Format is in wrong format. Please use string as format")
-		}
+
+	value, err := ConvertParameter2Bool(c.Parameters, "analog", false)
+	if err != nil {
+		clog.Logger.Errorf("error in getting analog: %v", err)
+		return false, err
 	}
+	c.analog = value
+
+	value, err = ConvertParameter2Bool(c.Parameters, "showseconds", false)
+	if err != nil {
+		clog.Logger.Errorf("error in getting showseconds: %v", err)
+		return false, err
+	}
+	c.showseconds = value
+
+	value, err = ConvertParameter2Bool(c.Parameters, "showdate", false)
+	if err != nil {
+		clog.Logger.Errorf("error in getting showdate: %v", err)
+		return false, err
+	}
+	c.showdate = value
+
+	svalue, err := ConvertParameter2String(c.Parameters, "format", "15:04:05")
+	if err != nil {
+		clog.Logger.Errorf("error in getting format: %v", err)
+		return false, err
+	}
+	c.format = svalue
+
+	svalue, err = ConvertParameter2String(c.Parameters, "dateformat", "02.01")
+	if err != nil {
+		clog.Logger.Errorf("error in getting format: %v", err)
+		return false, err
+	}
+	c.dateformat = svalue
 
 	c.design = "analog"
-	value, found = c.Parameters["design"]
-	if found {
-		var ok bool
-		c.design, ok = value.(string)
-		if !ok {
-			return false, fmt.Errorf("Design is in wrong format. Please use string as format")
-		}
+	svalue, err = ConvertParameter2String(c.Parameters, "design", "analog")
+	if err != nil {
+		clog.Logger.Errorf("error in getting format: %v", err)
+		return false, err
 	}
+	c.design = svalue
 
-	value, found = c.Parameters["color"]
-	if !found {
-		c.color = colorSegments
-	} else {
-		myColor, err := parseHexColor(value.(string))
-		if err != nil {
-			clog.Logger.Errorf("error in getting sensors: %v", err)
-			return false, err
-		}
-		c.color = myColor
+	cvalue, err := ConvertParameter2Color(c.Parameters, "color", colorSegments)
+	if err != nil {
+		clog.Logger.Errorf("error in getting color: %v", err)
+		return false, err
 	}
+	c.color = cvalue
 
 	go func() {
 		for {
@@ -229,13 +249,6 @@ func (c *ClockCommand) GetGraphics(id string, width int, height int) (models.Gra
 func (c *ClockCommand) SendGraphics(value string) {
 	now := time.Now()
 
-	//	buff := c.generateBMP(now)
-
-	// Encode the bytes in the buffer to a base64 string
-	//	encodedString := base64.StdEncoding.EncodeToString(buff)
-
-	// You can embed it in an html doc with this string
-	//	image := "data:image/bmp;base64," + encodedString
 	id := timeToID(now)
 	image := GetImageURL(c.action, c.commandName, id)
 	message := models.Message{
@@ -260,6 +273,23 @@ func (c *ClockCommand) generateAnalog(timeToRender time.Time, width int, height 
 	halfHeight := float64(edgeSize / 2)
 	floatEdgeSize := float64(edgeSize)
 	myTicklength := tickLength * floatEdgeSize / float64(clockImageHeight)
+
+	if c.showdate {
+		font, err := truetype.Parse(goregular.TTF)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		face := truetype.NewFace(font, &truetype.Options{Size: float64(c.action.Config.Fontsize)})
+		dc.SetFontFace(face)
+		dc.SetColor(colorArSecond)
+		dc.SetLineWidth(2.0)
+		dateStr := timeToRender.Format(c.dateformat)
+
+		dc.DrawStringAnchored(dateStr, halfWidth, halfHeight/2.0, 0.5, 0.5)
+
+		dc.Stroke()
+	}
 	dc.SetColor(colorTicks)
 	dc.InvertY()
 
@@ -286,7 +316,6 @@ func (c *ClockCommand) generateAnalog(timeToRender time.Time, width int, height 
 	dc.LineTo(myTicklength, halfHeight-1)
 	dc.MoveTo(floatEdgeSize-myTicklength, halfHeight-1)
 	dc.LineTo(floatEdgeSize, halfHeight-1)
-
 	dc.Stroke()
 
 	if c.showseconds {
