@@ -22,7 +22,7 @@ require (
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
 	github.com/golang/protobuf v1.4.3 // indirect
 	github.com/google/go-cmp v0.5.2 // indirect
-	github.com/google/uuid v1.0.0 // indirect
+	github.com/google/uuid v1.0.0
 	github.com/gorilla/websocket v1.4.2
 	github.com/hnakamur/w32syscall v0.0.0-20150329104255-b8b99ed86a56
 	github.com/jfreymuth/pulse v0.0.0-20200608153616-84b2d752b9d4

@@ -206,7 +206,7 @@ func onReady() {
 		configFile = configFolder + "/service.yaml"
 
 		if _, err := os.Stat(configFile); os.IsNotExist(err) {
-			config.SaveConfig(configFolder, config.DefaulConfig)
+			config.SaveConfig(configFile, config.DefaulConfig)
 		}
 	}
 
@@ -401,6 +401,14 @@ func initAudioHardware() error {
 }
 
 func initConfig() {
+	if config.Get().AppUUID == "" {
+		err := config.Save()
+		if err != nil {
+			clog.Logger.Alertf("error can't save config file: %s\r\n%v", config.File, err)
+			os.Exit(1)
+		}
+	}
+
 	if port > 0 {
 		serviceConfig.Port = port
 	}
@@ -448,6 +456,8 @@ func initConfig() {
 	logging.Logger.Filename = serviceConfig.Logging.Filename
 	logging.Logger.InitGelf()
 
+	checkVersion()
+
 	err = osdependent.InitOSDependend(serviceConfig)
 	if err != nil {
 		clog.Logger.Alertf("error starting os dependend worker: %s", err.Error())
@@ -468,4 +478,15 @@ func getApikey() string {
 	value := fmt.Sprintf("%s_%s", servicename, "default")
 	apikey := fmt.Sprintf("%x", md5.Sum([]byte(value)))
 	return strings.ToLower(apikey)
+}
+
+func checkVersion() {
+	url := fmt.Sprintf("http://wkla.no-ip.biz/willie/downloader/version.php?ID=%d&AppUUID=\"%s\"", serviceConfig.AppID, serviceConfig.AppUUID)
+	resp, err := http.Get(url)
+	if err != nil {
+		clog.Logger.Alertf("error connectiing to version service: %v", err)
+	}
+	if resp.StatusCode != 200 {
+		clog.Logger.Errorf("can'T connect to: \"%s\"\r\n%v", url, resp.Status)
+	}
 }

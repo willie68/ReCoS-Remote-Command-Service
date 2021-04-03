@@ -33,3 +33,5 @@ webclient/recosadmin/public/assets/
 *.bak
 
 service/devdata/sessions/sessions/
+
+*.log
