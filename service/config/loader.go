@@ -45,16 +45,16 @@ func Load() error {
 }
 
 func Save() error {
-	return SaveConfig(File, config)
+	return SaveConfig(File, config, true)
 }
 
 // SaveConfig saving the config
-func SaveConfig(filename string, config Config) error {
+func SaveConfig(filename string, config Config, overwrite bool) error {
 	if config.AppUUID == "" {
 		uuid := uuid.New()
 		config.AppUUID = uuid.String()
 	}
-	if _, err := os.Stat(filename); os.IsNotExist(err) {
+	if _, err := os.Stat(filename); os.IsNotExist(err) || overwrite {
 		// everything is ok, so please serialise the profile
 		f, err := os.Create(filename)
 		if err != nil {

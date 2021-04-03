@@ -32,7 +32,7 @@ actions:
           icon: ""
           title: ""
           parameters:
-            sides: 9
+            sides: 6
       actions: []
     - type: DISPLAY
       name: ping_0

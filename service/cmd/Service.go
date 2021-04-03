@@ -175,12 +175,13 @@ func onReady() {
 	mClient := systray.AddMenuItem("WebClient", "Start the client")
 	systray.AddSeparator()
 
-	mAutostart := systray.AddMenuItem("Autostart", "Disable the serivce on Windows startup")
+	mAutostart := systray.AddMenuItem("Autostart", "Enable the serivce on Windows startup")
 	if app.IsEnabled() {
 		mAutostart.Check()
 	} else {
 		mAutostart.Uncheck()
 	}
+	mConfig := systray.AddMenuItem("Edit config", "Edit the service config")
 	systray.AddSeparator()
 	mQuit := systray.AddMenuItem("Quit", "Quit ReCoS")
 	mQuit.SetIcon(icon.Data)
@@ -206,7 +207,7 @@ func onReady() {
 		configFile = configFolder + "/service.yaml"
 
 		if _, err := os.Stat(configFile); os.IsNotExist(err) {
-			config.SaveConfig(configFile, config.DefaulConfig)
+			config.SaveConfig(configFile, config.DefaulConfig, false)
 		}
 	}
 
@@ -224,6 +225,13 @@ func onReady() {
 	go func() {
 		for {
 			select {
+			case <-mConfig.ClickedCh:
+				url := config.File
+				url, err := filepath.Abs(url)
+				if err != nil {
+					clog.Logger.Errorf("Error getting filepath for config file:%v", err)
+				}
+				open.Run(url)
 			case <-mAutostart.ClickedCh:
 				if app.IsEnabled() {
 					clog.Logger.Info("App is aready enabled, removing it...")
