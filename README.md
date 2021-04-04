@@ -69,7 +69,14 @@ In the Admin Client you can then see what the wizard has generated for you.
 
 ![image-20210331160145334](documentation/assets/aw_05.png)
 
-# Service
+# ReCoS Service
+
+The service is the main component of the ReCoS. This is the unit of work, doing all the nice things. But you will only see a little Icon in the taskbar. And there is a small context menu.
+
+![image-20210404094515689](C:\e-platte\daten\git-sourcen\ReCoS-Remote-Command-Service\documentation\assets\taskbar_1.png)
+
+Here you can directly start the web interface or the admin client. And you can register the service to automatically start on windows start. Next option is to edit the service.yaml file, which contains all configuration for the service itself. Normally you don't need to do here anything, but just in case...
+The last Menu entry is for shutting down the Service. 
 
 ## Profileconfiguration
 
