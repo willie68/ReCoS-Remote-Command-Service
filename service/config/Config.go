@@ -1,12 +1,9 @@
 package config
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"strings"
-
-	"gopkg.in/yaml.v3"
 )
 
 // Config our service configuration
@@ -21,6 +18,9 @@ type Config struct {
 	SecretFile string `yaml:"secretfile"`
 
 	Password string `yaml:"password"`
+
+	AppID   int    `yaml:"appid"`
+	AppUUID string `yaml:"appuuid"`
 
 	WebClient   string `yaml:"webclient"`
 	AdminClient string `yaml:"adminclient"`
@@ -43,7 +43,8 @@ type HealthCheck struct {
 }
 
 type LoggingConfig struct {
-	Level string `yaml:"level"`
+	Level    string `yaml:"level"`
+	Filename string `yaml:"filename"`
 }
 
 var DefaulConfig = Config{
@@ -52,6 +53,8 @@ var DefaulConfig = Config{
 	ServiceURL: "http://127.0.0.1:9280",
 	SecretFile: "",
 	Password:   "recosadmin",
+	AppID:      73,
+	AppUUID:    "",
 	HealthCheck: HealthCheck{
 		Period: 30,
 	},
@@ -67,27 +70,9 @@ var DefaulConfig = Config{
 		},
 	},
 	Logging: LoggingConfig{
-		Level: "INFO",
+		Level:    "INFO",
+		Filename: "${configdir}/logging.log",
 	},
-}
-
-// SaveConfig saving the config
-func SaveConfig(folder string, config Config) error {
-	filename := fmt.Sprintf("%s/service.yaml", folder)
-	if _, err := os.Stat(filename); os.IsNotExist(err) {
-		// everything is ok, so please serialise the profile
-		f, err := os.Create(filename)
-		if err != nil {
-			return err
-		}
-		defer f.Close()
-		err = yaml.NewEncoder(f).Encode(config)
-		if err != nil {
-			return err
-		}
-		return nil
-	}
-	return errors.New("Config already exists")
 }
 
 // GetDefaultConfigFolder returning the default configuration folder of the system

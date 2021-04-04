@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
@@ -20,12 +21,13 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/icon"
 	"wkla.no-ip.biz/remote-desk-service/logging"
 	"wkla.no-ip.biz/remote-desk-service/pkg/audio"
+	"wkla.no-ip.biz/remote-desk-service/pkg/autostart"
 	"wkla.no-ip.biz/remote-desk-service/pkg/osdependent"
 	"wkla.no-ip.biz/remote-desk-service/pkg/session"
 
+	"github.com/getlantern/systray"
 	config "wkla.no-ip.biz/remote-desk-service/config"
 
-	"github.com/getlantern/systray"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
@@ -153,23 +155,41 @@ func main() {
 
 func onReady() {
 	systray.SetIcon(icon.Data)
-	systray.SetTitle("Awesome App")
-	systray.SetTooltip("Pretty awesome超级棒")
+	systray.SetTitle("ReCoS Service")
+	systray.SetTooltip("ReCoS Service App")
+	ex, err := os.Executable()
+	if err != nil {
+		panic(err)
+	}
+
+	exPath := filepath.Dir(ex)
+	fmt.Println(exPath)
+
+	app := &autostart.App{
+		Name:        "ReCoS",
+		DisplayName: "eCoS Service App",
+		Exec:        []string{ex},
+	}
 
 	mAdmin := systray.AddMenuItem("WebAdmin", "Start the webadmin")
 	mClient := systray.AddMenuItem("WebClient", "Start the client")
 	systray.AddSeparator()
 
+	mAutostart := systray.AddMenuItem("Autostart", "Enable the serivce on Windows startup")
+	if app.IsEnabled() {
+		mAutostart.Check()
+	} else {
+		mAutostart.Uncheck()
+	}
+	mConfig := systray.AddMenuItem("Edit config", "Edit the service config")
+	systray.AddSeparator()
 	mQuit := systray.AddMenuItem("Quit", "Quit ReCoS")
 	mQuit.SetIcon(icon.Data)
 
-	// Sets the icon of a menu item. Only available on Mac and Windows.
-	clog.Logger.Info("systray established")
+	flag.Parse()
 
 	clog.Logger.Info("starting server")
 	defer clog.Logger.Close()
-
-	flag.Parse()
 
 	serror.Service = servicename
 	if configFile == "" {
@@ -187,7 +207,7 @@ func onReady() {
 		configFile = configFolder + "/service.yaml"
 
 		if _, err := os.Stat(configFile); os.IsNotExist(err) {
-			config.SaveConfig(configFolder, config.DefaulConfig)
+			config.SaveConfig(configFile, config.DefaulConfig, false)
 		}
 	}
 
@@ -201,9 +221,34 @@ func onReady() {
 	serviceConfig = config.Get()
 	initConfig()
 
+	clog.Logger.Info("service is starting")
 	go func() {
 		for {
 			select {
+			case <-mConfig.ClickedCh:
+				url := config.File
+				url, err := filepath.Abs(url)
+				if err != nil {
+					clog.Logger.Errorf("Error getting filepath for config file:%v", err)
+				}
+				open.Run(url)
+			case <-mAutostart.ClickedCh:
+				if app.IsEnabled() {
+					clog.Logger.Info("App is aready enabled, removing it...")
+					if err := app.Disable(); err != nil {
+						clog.Logger.Errorf("Error disabling app:%v", err)
+					}
+				} else {
+					clog.Logger.Info("Enabling app...")
+					if err := app.Enable(); err != nil {
+						clog.Logger.Errorf("Error enabling app:%v", err)
+					}
+				}
+				if app.IsEnabled() {
+					mAutostart.Check()
+				} else {
+					mAutostart.Uncheck()
+				}
 			case <-mClient.ClickedCh:
 				open.Run(fmt.Sprintf("http://localhost:%d/webclient", serviceConfig.Port))
 			case <-mAdmin.ClickedCh:
@@ -364,6 +409,14 @@ func initAudioHardware() error {
 }
 
 func initConfig() {
+	if config.Get().AppUUID == "" {
+		err := config.Save()
+		if err != nil {
+			clog.Logger.Alertf("error can't save config file: %s\r\n%v", config.File, err)
+			os.Exit(1)
+		}
+	}
+
 	if port > 0 {
 		serviceConfig.Port = port
 	}
@@ -402,6 +455,16 @@ func initConfig() {
 	}
 
 	logging.Logger.SetLevel(serviceConfig.Logging.Level)
+	serviceConfig.Logging.Filename, err = config.ReplaceConfigdir(serviceConfig.Logging.Filename)
+	if err != nil {
+		clog.Logger.Alertf("error wrong logging folder: %s", err.Error())
+		os.Exit(1)
+	}
+
+	logging.Logger.Filename = serviceConfig.Logging.Filename
+	logging.Logger.InitGelf()
+
+	checkVersion()
 
 	err = osdependent.InitOSDependend(serviceConfig)
 	if err != nil {
@@ -423,4 +486,15 @@ func getApikey() string {
 	value := fmt.Sprintf("%s_%s", servicename, "default")
 	apikey := fmt.Sprintf("%x", md5.Sum([]byte(value)))
 	return strings.ToLower(apikey)
+}
+
+func checkVersion() {
+	url := fmt.Sprintf("http://wkla.no-ip.biz/willie/downloader/version.php?ID=%d&AppUUID=\"%s\"", serviceConfig.AppID, serviceConfig.AppUUID)
+	resp, err := http.Get(url)
+	if err != nil {
+		clog.Logger.Alertf("error connectiing to version service: %v", err)
+	}
+	if resp.StatusCode != 200 {
+		clog.Logger.Errorf("can'T connect to: \"%s\"\r\n%v", url, resp.Status)
+	}
 }

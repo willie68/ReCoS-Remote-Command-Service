@@ -57,19 +57,17 @@ func (p *PingCommand) EnrichType(profile models.Profile) (models.CommandTypeInfo
 // Init the command
 func (p *PingCommand) Init(a *Action, commandName string) (bool, error) {
 	p.action = a
-	value, found := p.Parameters["name"]
-	if found {
-		name, ok := value.(string)
-		if ok {
-			p.name = name
-		} else {
-			return false, fmt.Errorf("The name parameter is in wrong format. Please use string as format")
-		}
-	} else {
+
+	name, err := ConvertParameter2String(p.Parameters, "name", "")
+	if err != nil {
+		return false, err
+	}
+	if name == "" {
 		return false, fmt.Errorf("The name parameter is missing")
 	}
+	p.name = name
 
-	valueInt, err := ConvertParameter2Int(p.Parameters, "period")
+	valueInt, err := ConvertParameter2Int(p.Parameters, "period", 10)
 	if err != nil {
 		return false, fmt.Errorf("The period parameter is in wrong format. Please use int as format")
 	}
@@ -88,8 +86,10 @@ func (p *PingCommand) Init(a *Action, commandName string) (bool, error) {
 					pingtime, err := p.getPingTime(p.name)
 					if err != nil {
 						text = fmt.Sprintf("error %v", err)
+						clog.Logger.Errorf("error: %v\r\n", err)
+					} else {
+						text = fmt.Sprintf("%.2fms", pingtime)
 					}
-					text = fmt.Sprintf("%.2fms", pingtime)
 					message := models.Message{
 						Profile: p.action.Profile,
 						Action:  p.action.Name,

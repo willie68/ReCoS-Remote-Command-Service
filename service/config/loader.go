@@ -1,10 +1,12 @@
 package config
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
 
+	"github.com/google/uuid"
 	"gopkg.in/yaml.v3"
 )
 
@@ -39,7 +41,34 @@ func Load() error {
 	if err != nil {
 		return fmt.Errorf("can't unmarshal config file: %s", err.Error())
 	}
+	config.AppID = DefaulConfig.AppID
 	return readSecret()
+}
+
+func Save() error {
+	return SaveConfig(File, config, true)
+}
+
+// SaveConfig saving the config
+func SaveConfig(filename string, config Config, overwrite bool) error {
+	if config.AppUUID == "" {
+		uuid := uuid.New()
+		config.AppUUID = uuid.String()
+	}
+	if _, err := os.Stat(filename); os.IsNotExist(err) || overwrite {
+		// everything is ok, so please serialise the profile
+		f, err := os.Create(filename)
+		if err != nil {
+			return err
+		}
+		defer f.Close()
+		err = yaml.NewEncoder(f).Encode(config)
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+	return errors.New("Config already exists")
 }
 
 func readSecret() error {

@@ -7,8 +7,18 @@
         </div>
       </h3>
     </template>
+    <span class="p-input-icon-right">
+      <InputText
+        id="icon"
+        v-model="searchTerm"
+        placeholder="select a icon"
+        @input="onFilterChange"
+      />
+      <i class="pi pi-search" />
+    </span>
+    <br />
     <span
-      v-for="(param, x) in iconlist"
+      v-for="(param, x) in filteredIconlist"
       :key="x"
       class="icon-item"
       @click="select(param)"
@@ -20,6 +30,7 @@
           :src="'assets/' + param"
           @click="select(param)"
           width="36"
+          :title="param"
         />
       </a>
     </span>
@@ -46,13 +57,33 @@ export default {
     visible: Boolean,
   },
   emits: ["save", "cancel"],
+  computed: {
+    filteredIconlist: {
+      get: function () {
+        let ficons = Array();
+        if ((this.searchTerm == "")) {
+          return this.iconlist;
+        }
+        this.iconlist.forEach((icon) => {
+          if (icon.toLowerCase().includes(this.searchTerm)) {
+            ficons.push(icon)
+          }
+        });
+        return ficons;
+      },
+    },
+  },
   data() {
     return {
       dialogVisible: false,
       icon: "",
+      searchTerm: "",
     };
   },
   methods: {
+    onFilterChange() {
+      console.log("SelectIcon: search:", this.searchTerm);
+    },
     cancel() {
       this.$emit("cancel");
     },

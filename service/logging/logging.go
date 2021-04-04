@@ -2,10 +2,13 @@ package logging
 
 import (
 	"fmt"
+	"io"
 	"log"
+	"os"
 	"strings"
 
 	"github.com/aphistic/golf"
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 const (
@@ -30,6 +33,7 @@ type serviceLogger struct {
 	Attrs      map[string]interface{}
 	gelfActive bool
 	c          *golf.Client
+	Filename   string
 }
 
 // Logger to use for all logging
@@ -53,6 +57,14 @@ func (s *serviceLogger) InitGelf() {
 		l.SetAttr("system_id", s.SystemID)
 		s.gelfActive = true
 	}
+	w := io.MultiWriter(os.Stdout, &lumberjack.Logger{
+		Filename:   s.Filename,
+		MaxSize:    100, // megabytes
+		MaxBackups: 3,
+		MaxAge:     28,    //days
+		Compress:   false, // disabled by default
+	})
+	log.SetOutput(w)
 }
 
 func (s *serviceLogger) SetLevel(level string) {

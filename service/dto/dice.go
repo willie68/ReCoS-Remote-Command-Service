@@ -58,15 +58,11 @@ func (d *DiceCommand) Init(a *Action, commandName string) (bool, error) {
 	d.action = a
 	d.commandName = commandName
 
-	valueInt, err := ConvertParameter2Int(d.Parameters, "sides")
+	valueInt, err := ConvertParameter2Int(d.Parameters, "sides", 6)
 	if err != nil {
 		return false, fmt.Errorf("The sides parameter is in wrong format. Please use int as format")
 	}
 	d.sides = valueInt
-
-	if valueInt == 0 {
-		d.sides = 6
-	}
 
 	rand.Seed(time.Now().UnixNano())
 	return true, nil

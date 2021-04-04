@@ -408,7 +408,7 @@ commands:
 
 #### Command
 
-This is the command, which should be executed
+This is the unit of work, which should be executed
 
 `type`: the type of the command
 `name`: names the command
@@ -421,7 +421,7 @@ This is the command, which should be executed
 
 Do nothing.
 
-`Type`: NOOP
+`Type`: `NOOP`
 
 `Parameter`:  none
 
@@ -434,70 +434,27 @@ icon: accesibility.png
 title: Do Nothing
 ```
 
-##### Delay
+##### Audiocontrol
 
-`Type`: DELAY
+taking control over your audio devices.
 
-`Parameter`: 
+With this command, you can take control different audio devices for setting volume and mute. 
 
-`time`: time to delay in Seconds
+type: `AUDIOVOLUME`
 
-Example
-
-```yaml
-type: DELAY
-name: delay
-parameters:
-  time: 2
-```
-
-##### Timer
-
-Starting a timer with a response every second. You can define the format of the timer message and the message on finish.
-
-`Type`: TIMER
-
-`Parameter`: 
-
-`time`: time to delay in Seconds
-`format`: the message for the response, defaults %d seconds
-`finished`: the message at the end of the timer, defaults: finished
-
-Example
+Parameter:
+`device`: the device that you would like to control. There are different devices in your system. Which one you can select, can be seen in the admin interface or on startup in the console. There are 2 defaults: `master` for the master output. This is on widows the one that you can control directly with the taskbar icon. And `mic` which is for the default input device. 
+`command`: this is the command you want to fire. `mute`, which toggles the mute state. `volume up` for increase and `volume down` for decreasing the volume of that device.
 
 ```yaml
-type: TIMER
-name: timer
+type: AUDIOVOLUME
+name: audiovolume_3
+description: new AUDIOVOLUME command created by ActionWizard
+icon: ""
+title: ""
 parameters:
-  time: 10
-  format: noch %ds
-  finished: Fertig
-```
-
-##### Days remain, show the days remains to a end date
-
-This will show the days remain until a end date.
-
-`Type`: DAYSREMAIN
-
-`Parameter`: 
-
-`date`: end date in format "yyyy-mm-dd"
-`formatTitle`: the title message for the response, defaults %d
-`formatText`: the text message for the response, defaults %d
-`finished`: the message at the end of the days remain, defaults: finished
-
-Example
-
-```yaml
-type: DAYSREMAIN
-name: daysremain_0
-description: new Days remain command created by ActionWizard
-parameters:
-  date: "2021-11-26"
-  formattitle: "%d"
-  formattext: "bis 53"
-  finnished: "53"
+  command: volume up
+  device: master
 ```
 
 ##### Clock
@@ -508,11 +465,13 @@ Just a simple textual clock.
 
 `Parameter`: 
 
-`format`: the format of the clock in Golang format syntax, defaults: 15:04:05
+`format`: the format of the time in Golang format syntax, defaults: 15:04:05
+`dateformat`: the format of the date in Golang format syntax, used by different designs, defaults: 02.01
 `analog`: true or false, shows an analog clock
 `design`: the desing of the clock. `analog` is for a analog clock, `digital` showing a nice digital clock
 `showseconds`: showing the seconds in the design. 
-`color`: the color of the segmants of the digital clock
+`showdate`: showing the date in the design formatted with dateformat. 
+`color`: the color of the segments of the digital clock
 
 Example 1: simple textual clock
 
@@ -539,7 +498,9 @@ parameters:
 
 
 
-##### Counter, just a simple counter
+##### Counter
+
+just a simple counter.
 
 A simple counter, with persisting value.
 
@@ -560,10 +521,58 @@ parameters:
   persist: true 
 ```
 
-##### Dice, rolling the dice
+##### Days remain
+
+show the days remains to a end date.
+
+This will show the days remain until a end date.
+
+`Type`: DAYSREMAIN
+
+`Parameter`: 
+
+`date`: end date in format "yyyy-mm-dd"
+`formatTitle`: the title message for the response, defaults %d
+`formatText`: the text message for the response, defaults %d
+`finished`: the message at the end of the days remain, defaults: finished
+
+Example
+
+```yaml
+type: DAYSREMAIN
+name: daysremain_0
+description: new Days remain command created by ActionWizard
+parameters:
+  date: "2021-11-26"
+  formattitle: "%d"
+  formattext: "bis 53"
+  finnished: "53"
+```
+
+
+
+##### Delay
+
+`Type`: DELAY
+
+`Parameter`: 
+
+`time`: time to delay in Seconds
+
+Example
+
+```yaml
+type: DELAY
+name: delay
+parameters:
+  time: 2
+```
+
+##### Dice
 
 ![image-20210331150258831](documentation/assets/dice.png)
 
+rolling the dice
 A simple dice implementation with nice ui and different values.
 
 `Type`: `DICE`
@@ -579,66 +588,6 @@ name: dice_0
 parameters:
   sides: 6 
 ```
-
-##### Random words
-
-![image-20210331164704159](documentation/assets/rndwords.png)
-
-Choose a random word/phrase out of a list
-
-`Type`: `RNDWORDS`
-
-`Parameter`: 
-`words`: The list of words/phrases to choose one randomly from
-
-Example
-
-```yaml
-type: RNDWORDS
-name: words_0
-description: new RNDWORDS command created by ActionWizard
-parameters:
-  words: 
-    - "Harry Belafonte"
-    - "Willie Klaas"
-    - "Lukas Lars"
-    - "Luke Skywalker"
-    - "Lord Voldemort"
-    - "Harry Potter"
-```
-
-
-
-##### Stopwatch
-
-A simple textual stopwatch.
-
-`Type`: `STOPWATCH`
-
-`Parameter`: 
-
-`format`: the format of the time. The `%` character signifies that the next character is a  modifier that specifies a particular duration unit. The following is the full list of modifiers supported by go-durationfmt:
-
-- `%y` - # of years
-- `%w` - # of weeks
-- `%d` - # of days
-- `%h` - # of hours
-- `%m` - # of minutes
-- `%s` - # of seconds
-- `%%` - print a percent sign
-
-You can place a `0` before the `h`, `m`, and `s` modifiers to zeropad those values to two digits. Zeropadding is undefined for the other modifiers.
-
-Example
-
-```yaml
-type: STOPWATCH
-name: stp1
-parameters:
-  format: "Mom: %0m:%0s "
-```
-
-
 
 ##### Execute
 
@@ -660,213 +609,6 @@ parameters:
   args:
     - "version"
   waitOnClose: true
-```
-
-##### Start Browser
-
-`Type`: `BROWSE`
-
-Parameter:
-
-`url`: the URL to show in the system browser. On Windows if you choose a normal filesystem folder, it will automatically start the explorer on this path.
-
-Example 1
-
-```yaml
-type: BROWSE
-name: browse
-description: start a new browser windows with a url
-parameters:
-  url: https://www.wk-music.de
-```
-
-Example 2
-
-```yaml
-type: BROWSE
-name: browse
-description: start a new explorer windows with a filepath
-parameters:
-  url: c:\windows
-```
-
-
-
-##### Ping, shows ping times to a server
-
-![image-20210331150154168](documentation/assets/ping.png)
-
-Here you can test your connection to a server. Ping will test the connection to a server, You can use an IP Address or a server name (without any http...) If you put this command to an display action you can set a period so that the command will automatically start every #period seconds a test.  The result is the actual ping time in ms.
-
-`Type`: `PING`
-
-Parameter:
-
-`name`: the URL to ping to. You can use the Internet address name (without the protocol) or a simple IP address
-`period`: the period in seconds when the command should automatically be executed. 
-
-Example 1
-
-```yaml
-type: PING
-name: ping_0
-description: check ping with a url
-parameters:
-  name: www.wk-music.de
-  period: 10
-```
-
-##### Page
-
-Switch to another page.
-
-type: `PAGE`
-
-Parameter:
-`page`: the name of the page to switch to
-
-```yaml
-type: PAGE
-name: page
-parameters:
-  page: page2
-```
-
-##### Keys
-
-Sending keys to the active application. This command is emulating a keyboard input by sending key strokes of a keyboard to the active application. You can use different keyboard layouts and there are some macros defining special keys.
-
-type: `KEYS`
-
-`keylayout`: defining the layout of the keyboard used to send the data. en for English (us) "qwerty" and de for a German "qwertz" keyboard layout. Default is "de"
-
-`keystrokes`: are the string with the keys used to send. For special keys there are defined special macros. Every macro starts with an "{" and ends than with "}". If you want to send the "{" as a character simply double this. ("{" -> "{{"). 
-
-Another specialized character is the "~" char. It will lead into a 1 second delay between the typing. To get the "~" Character, simple double it.
-
-The following macros are defined: 
-
-| Macro               | Keyboard key |
-| ------------------- | ------------ |
-| backspace, bs, bksp | backspace    |
-| break               | break        |
-| capslock            | caps lock    |
-| del, delete         | delete       |
-| down                | arrow down   |
-| end                 | end          |
-| enter               | enter        |
-| esc                 | esc          |
-| help                | help         |
-| home                | home         |
-| ins, insert         | insert       |
-| left                | arrow left   |
-| num                 | num lock     |
-| pgdn                | page down    |
-| pgup                | page up      |
-| prtsc               | print screen |
-| right               | arrow right  |
-| scrolllock          | scroll lock  |
-| tab                 | tab          |
-| up                  | arrow up     |
-| f1 .. f12           | function key 1 ... 12 |
-
-
-```yaml
-type: KEYS
-name: sendkeys
-parameters:
-  keylayout: de
-  keystrokes: "akteon00{enter}"
-```
-
-##### Controlling Application Main Window
-
-With this command, you can control the main window of an application.
-
-type: `WINDOWCTRL`
-
-Parameter:
-`caption`: the caption of the application window
-`command`: the command to execute on this window. Possible values are:
-`minimize`: for minimizing the application window
-`activate`: for activating the application window again. (restore it if minimized and active/bring it to front) 
-`move  x y`: moving the window to the new position x,y
-
-```yaml
-# activate the german calculator program
-- type: WINDOWCTRL
-  name: control window
-  parameters:
-    caption: Rechner 
-    command: activate
-# move it to it's new location
-- type: WINDOWCTRL
-  name: control window
-  parameters:
-    caption: Rechner 
-    command: move 700 300 
-# minimize it
-- type: WINDOWCTRL
-  name: control window
-  parameters:
-    caption: Rechner 
-    command: minimize 
-```
-
-##### Screenshot, making a screenshot
-
-With this command, you can take a screenshot. 
-
-type: `SCREENSHOT`
-
-Parameter:
-`saveto`: the folder, where the screen shot will be saved. Format is `screen_<#number>_<display>.png`
-`display`: optional, the number of the display, if you want to store screen shot of every display please use -1. Getting the right display, simply do a screen shot with display = -1. Than look at the screen shots and look in the name at the last number of the right image. That is your display.
-
-```yaml
-type: SCREENSHOT
-name: screenshot
-parameters:
-  saveto: e:/temp/screenshot
-  display: 1
-```
-
-##### Audiocontrol, taking control over your audio devices
-
-With this command, you can take control different audio devices for setting volume and mute. 
-
-type: `AUDIOVOLUME`
-
-Parameter:
-`device`: the device that you would like to control. There are different devices in your system. Which one you can select, can be seen in the admin interface or on startup in the console. There are 2 defaults: `master` for the master output. This is on widows the one that you can control directly with the taskbar icon. And `mic` which is for the default input device. 
-`command`: this is the command you want to fire. `mute`, which toggles the mute state. `volume up` for increase and `volume down` for decreasing the volume of that device.
-
-```yaml
-type: AUDIOVOLUME
-name: audiovolume_3
-description: new AUDIOVOLUME command created by ActionWizard
-icon: ""
-title: ""
-parameters:
-  command: volume up
-  device: master
-```
-
-##### Mediacontrol, taking control over your media player
-
-With this command, you can take simple control of your media player. The commands are Start, Stop, Next and Provious. 
-
-type: `MEDIAPLAY`
-
-Parameter:
-`command`: this is the command you want to fire. `start`, which starts the mediaplayer or pause it, if it's already started. `stop` for stopping the player and `next` and  `previous` for going to the next/previous part.
-
-```yaml
-type: MEDIAPLAY
-name: mediastart_0
-description: new MEDIAPLAY command created by ActionWizard
-parameters:
-  command: start
 ```
 
 ##### Hardware monitor
@@ -944,9 +686,283 @@ parameters:
   color: "#ff0000"
 ```
 
-# UI
+##### Keys
 
-As this project is in an early development stage, i have nothing to show here. But if you like, you can simply checkout the develop branch, starting 2 Instances of Visual Studio Code, one with the frontend, one with the service backend. Than start the backend server in VS, and same for the frontend (npm run serve). After some hacking with configuration you may be able to see something. :-) Good Luck to you.
+Sending keys to the active application. This command is emulating a keyboard input by sending key strokes of a keyboard to the active application. You can use different keyboard layouts and there are some macros defining special keys.
+
+type: `KEYS`
+
+`keylayout`: defining the layout of the keyboard used to send the data. en for English (us) "qwerty" and de for a German "qwertz" keyboard layout. Default is "de"
+
+`keystrokes`: are the string with the keys used to send. For special keys there are defined special macros. Every macro starts with an "{" and ends than with "}". If you want to send the "{" as a character simply double this. ("{" -> "{{"). 
+
+Another specialized character is the "~" char. It will lead into a 1 second delay between the typing. To get the "~" Character, simple double it.
+
+The following macros are defined: 
+
+| Macro               | Keyboard key          |
+| ------------------- | --------------------- |
+| backspace, bs, bksp | backspace             |
+| break               | break                 |
+| capslock            | caps lock             |
+| del, delete         | delete                |
+| down                | arrow down            |
+| end                 | end                   |
+| enter               | enter                 |
+| esc                 | esc                   |
+| help                | help                  |
+| home                | home                  |
+| ins, insert         | insert                |
+| left                | arrow left            |
+| num                 | num lock              |
+| pgdn                | page down             |
+| pgup                | page up               |
+| prtsc               | print screen          |
+| right               | arrow right           |
+| scrolllock          | scroll lock           |
+| tab                 | tab                   |
+| up                  | arrow up              |
+| f1 .. f12           | function key 1 ... 12 |
+
+
+```yaml
+type: KEYS
+name: sendkeys
+parameters:
+  keylayout: de
+  keystrokes: "akteon00{enter}"
+```
+
+##### Mediacontrol
+
+taking control over your media player.
+
+With this command, you can take simple control of your media player. The commands are Start, Stop, Next and Provious. 
+
+type: `MEDIAPLAY`
+
+Parameter:
+`command`: this is the command you want to fire. `start`, which starts the mediaplayer or pause it, if it's already started. `stop` for stopping the player and `next` and  `previous` for going to the next/previous part.
+
+```yaml
+type: MEDIAPLAY
+name: mediastart_0
+description: new MEDIAPLAY command created by ActionWizard
+parameters:
+  command: start
+```
+
+##### Page
+
+Switch to another page.
+
+type: `PAGE`
+
+Parameter:
+`page`: the name of the page to switch to
+
+```yaml
+type: PAGE
+name: page
+parameters:
+  page: page2
+```
+
+##### Ping
+
+![image-20210331150154168](documentation/assets/ping.png)
+
+Shows ping times to a server.
+Here you can test your connection to a server. Ping will test the connection to a server, You can use an IP Address or a server name (without any http...) If you put this command to an display action you can set a period so that the command will automatically start every #period seconds a test.  The result is the actual ping time in ms.
+
+`Type`: `PING`
+
+Parameter:
+
+`name`: the URL to ping to. You can use the Internet address name (without the protocol) or a simple IP address
+`period`: the period in seconds when the command should automatically be executed. 
+
+Example 1
+
+```yaml
+type: PING
+name: ping_0
+description: check ping with a url
+parameters:
+  name: www.wk-music.de
+  period: 10
+```
+
+##### Random words
+
+![image-20210331164704159](documentation/assets/rndwords.png)
+
+Choose a random word/phrase out of a list
+
+`Type`: `RNDWORDS`
+
+`Parameter`: 
+`words`: The list of words/phrases to choose one randomly from
+
+Example
+
+```yaml
+type: RNDWORDS
+name: words_0
+description: new RNDWORDS command created by ActionWizard
+parameters:
+  words: 
+    - "Harry Belafonte"
+    - "Willie Klaas"
+    - "Lukas Lars"
+    - "Luke Skywalker"
+    - "Lord Voldemort"
+    - "Harry Potter"
+```
+
+
+
+##### Screenshot
+
+making a screenshot.
+
+With this command, you can take a screenshot. 
+
+type: `SCREENSHOT`
+
+Parameter:
+`saveto`: the folder, where the screen shot will be saved. Format is `screen_<#number>_<display>.png`
+`display`: optional, the number of the display, if you want to store screen shot of every display please use -1. Getting the right display, simply do a screen shot with display = -1. Than look at the screen shots and look in the name at the last number of the right image. That is your display.
+
+```yaml
+type: SCREENSHOT
+name: screenshot
+parameters:
+  saveto: e:/temp/screenshot
+  display: 1
+```
+
+##### Start Browser
+
+`Type`: `BROWSE`
+
+Parameter:
+
+`url`: the URL to show in the system browser. On Windows if you choose a normal filesystem folder, it will automatically start the explorer on this path.
+
+Example 1
+
+```yaml
+type: BROWSE
+name: browse
+description: start a new browser windows with a url
+parameters:
+  url: https://www.wk-music.de
+```
+
+Example 2
+
+```yaml
+type: BROWSE
+name: browse
+description: start a new explorer windows with a filepath
+parameters:
+  url: c:\windows
+```
+
+
+
+##### Stopwatch
+
+A simple textual stopwatch.
+
+`Type`: `STOPWATCH`
+
+`Parameter`: 
+
+`format`: the format of the time. The `%` character signifies that the next character is a  modifier that specifies a particular duration unit. The following is the full list of modifiers supported by go-durationfmt:
+
+- `%y` - # of years
+- `%w` - # of weeks
+- `%d` - # of days
+- `%h` - # of hours
+- `%m` - # of minutes
+- `%s` - # of seconds
+- `%%` - print a percent sign
+
+You can place a `0` before the `h`, `m`, and `s` modifiers to zeropad those values to two digits. Zeropadding is undefined for the other modifiers.
+
+Example
+
+```yaml
+type: STOPWATCH
+name: stp1
+parameters:
+  format: "Mom: %0m:%0s "
+```
+
+
+
+
+
+##### Timer
+
+Starting a timer with a response every second. You can define the format of the timer message and the message on finish.
+
+`Type`: TIMER
+
+`Parameter`: 
+
+`time`: time to delay in Seconds
+`format`: the message for the response, defaults %d seconds
+`finished`: the message at the end of the timer, defaults: finished
+
+Example
+
+```yaml
+type: TIMER
+name: timer
+parameters:
+  time: 10
+  format: noch %ds
+  finished: Fertig
+```
+
+##### WindowCtrl
+
+Controlling Application Main Window.
+
+With this command, you can control the main window of an application.
+
+type: `WINDOWCTRL`
+
+Parameter:
+`caption`: the caption of the application window
+`command`: the command to execute on this window. Possible values are:
+`minimize`: for minimizing the application window
+`activate`: for activating the application window again. (restore it if minimized and active/bring it to front) 
+`move  x y`: moving the window to the new position x,y
+
+```yaml
+# activate the german calculator program
+- type: WINDOWCTRL
+  name: control window
+  parameters:
+    caption: Rechner 
+    command: activate
+# move it to it's new location
+- type: WINDOWCTRL
+  name: control window
+  parameters:
+    caption: Rechner 
+    command: move 700 300 
+# minimize it
+- type: WINDOWCTRL
+  name: control window
+  parameters:
+    caption: Rechner 
+    command: minimize 
+```
 
 # Installing 3'rd Party products
 

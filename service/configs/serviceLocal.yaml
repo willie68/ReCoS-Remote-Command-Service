@@ -1,29 +1,21 @@
-# port of the http server
-port: 9280 
-# port of the https server
+port: 9280
 sslport: 0
-# this is the servicURL from outside
 serviceURL: http://127.0.0.1:9280
-#sercret file for storing usernames and passwords
-secretfile:
-
-#admin password for the admin interface
-password:
-
+secretfile: ""
+password: ""
+appid: 0
+appuuid: 7f272c40-96c2-4c28-8926-9bf851175bb3
 webclient: ../webclient/RecosUI/dist
 adminclient: ../webclient/recosadmin/dist
 icons: ../general/assets
-
 healthcheck:
     period: 30
-
 profiles: ./devdata/profiles
 sessions: ./devdata/sessions
-
-logging:
-    level: debug
-
 extconfig:
     openhardwaremonitor:
-        url: http://127.0.0.1:12999/data.json
         updateperiod: 5
+        url: http://127.0.0.1:12999/data.json
+logging:
+    level: debug
+    filename: ./devdata/logging.log
