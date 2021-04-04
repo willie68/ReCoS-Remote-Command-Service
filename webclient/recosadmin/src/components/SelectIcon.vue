@@ -65,7 +65,7 @@ export default {
           return this.iconlist;
         }
         this.iconlist.forEach((icon) => {
-          if (icon.toLowerCase().includes(this.searchTerm)) {
+          if (icon.toLowerCase().includes(this.searchTerm.toLowerCase())) {
             ficons.push(icon)
           }
         });
