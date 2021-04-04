@@ -41,6 +41,7 @@ func Load() error {
 	if err != nil {
 		return fmt.Errorf("can't unmarshal config file: %s", err.Error())
 	}
+	config.AppID = DefaulConfig.AppID
 	return readSecret()
 }
 
