@@ -466,7 +466,9 @@ parameters:
 
 ##### Clock
 
-Just a simple textual clock.
+<img src="documentation\assets\clock_analog.png" alt="image-20210405121355233" style="zoom:50%;" /><img src="documentation\assets\clock_digital_2.png" alt="image-20210405121453465" style="zoom:50%;" /><img src="documentation\assets\clock_digital_1.png" alt="image-20210405121419437" style="zoom:50%;" /><img src="documentation\assets\clock_berlin.png" alt="image-20210405121311659" style="zoom:50%;" />
+
+Just a clock in different designs.
 
 `Type`: `CLOCK`
 
@@ -475,7 +477,7 @@ Just a simple textual clock.
 `format`: the format of the time in Golang format syntax, defaults: 15:04:05
 `dateformat`: the format of the date in Golang format syntax, used by different designs, defaults: 02.01
 `analog`: true or false, shows an analog clock
-`design`: the desing of the clock. `analog` is for a analog clock, `digital` showing a nice digital clock
+`design`: the desing of the clock. `analog` is for a analog clock, `digital` showing a nice digital clock, berlin is showing the berlin clock (https://en.wikipedia.org/wiki/Mengenlehreuhr). 
 `showseconds`: showing the seconds in the design. 
 `showdate`: showing the date in the design formatted with dateformat. 
 `color`: the color of the segments of the digital clock
