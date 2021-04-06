@@ -198,8 +198,11 @@ export default {
         if (jsonObject.profile == that.profileName) {
           if (jsonObject.action) {
             if (that.$refs[jsonObject.action]) {
-              // console.log(event.data);
+              console.log("Event:", event.data);
               // console.log("found action");
+              if (jsonObject.command == "sendmessage") {
+                alert("Message from ReCoS Service: \r\n"+ jsonObject.text);
+              } 
               that.$refs[jsonObject.action].saveImg = jsonObject.imageurl;
               that.$refs[jsonObject.action].saveTitle = jsonObject.title;
               that.$refs[jsonObject.action].saveText = jsonObject.text;

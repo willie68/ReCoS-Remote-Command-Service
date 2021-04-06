@@ -1,5 +1,6 @@
 <template>
   <div
+    ref="image"
     class="action"
     :class="{ noicon: icon === '', noaction: actionName === '' }"
     :style="{
@@ -89,7 +90,16 @@ export default {
     },
     buildImageSrc(data) {
       if (data.startsWith("/")) {
-        return this.myBaseUrl + data;
+        let imgWidth = this.actionWidth
+        let imgHeight = this.actionHeight
+        return (
+          this.myBaseUrl +
+          data +
+          "?width=" +
+          Math.floor(imgWidth) +
+          "&height=" +
+          Math.floor(imgHeight)
+        );
       }
       if (data.startsWith("data:")) {
         return data;

@@ -9,6 +9,7 @@ import (
 
 	"github.com/fogleman/gg"
 	"wkla.no-ip.biz/remote-desk-service/api"
+	"wkla.no-ip.biz/remote-desk-service/dto/clocks"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 	"wkla.no-ip.biz/remote-desk-service/pkg/session"
@@ -215,7 +216,7 @@ func (c *CounterCommand) generatePNG(value int, width int, height int) []byte {
 	x := digits - 1
 	for myValue > 0 {
 		digit := myValue % 10
-		writeSegment(digit, xStartDigit+(xWidthDigit*x), yStartDigit, xWidthDigit, yHeightDigit, segmentThickness, dc, c.color, false)
+		clocks.WriteSegment(digit, xStartDigit+(xWidthDigit*x), yStartDigit, xWidthDigit, yHeightDigit, segmentThickness, dc, c.color, false)
 		myValue = myValue / 10
 		x--
 	}

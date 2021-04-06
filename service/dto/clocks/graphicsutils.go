@@ -1,4 +1,4 @@
-package dto
+package clocks
 
 import (
 	"image/color"
@@ -29,11 +29,16 @@ var num2SegArray = []num2Seg{
 	{true, true, true, true, false, true, true},     //9
 }
 
+const ClockImageWidth = 200
+const ClockImageHeight = 200
+
 var (
 	colorDarkSegment color.Color = color.RGBA{R: 0x20, G: 0x20, B: 0x20, A: 0xFF}
+	colorSegments    color.Color = color.RGBA{R: 0xFF, G: 0x00, B: 0x00, A: 0xFF}
+	colorBlack       color.Color = color.RGBA{R: 0x00, G: 0x00, B: 0x00, A: 0xFF}
 )
 
-func writeSegment(digit int, xStart, yStart, width, height, thickness float64, dc *gg.Context, drawColor color.Color, showDarkSegments bool) {
+func WriteSegment(digit int, xStart, yStart, width, height, thickness float64, dc *gg.Context, drawColor color.Color, showDarkSegments bool) {
 	//clog.Logger.Debugf("Counter: start segment at :%.0f %.0f %.0f %.0f %.0f", xStart, yStart, width, height, thickness)
 	/*	dc.SetLineWidth(1)
 		dc.SetColor(color.White)

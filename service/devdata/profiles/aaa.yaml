@@ -11,9 +11,9 @@ pages:
         - clock_0
         - ping_0
         - words_0
+        - sendmsg_0
         - dice_6
         - timer_0
-        - ""
 actions:
     - type: SINGLE
       name: dice_6
@@ -126,4 +126,33 @@ actions:
             showdate: true
             showseconds: true
             waitOnClose: true
+      actions: []
+    - type: SINGLE
+      name: sendmsg_0
+      title: ""
+      icon: send.png
+      description: new SENDMESSAGE action created by ActionWizard
+      fontsize: 26
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: SNDMSG_5
+          type: SENDMESSAGE
+          name: sendmsg_0
+          description: new SENDMESSAGE command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            message: "Hallo Femder"
+            receiver: client
+        - id: SNDMSG_6
+          type: SENDMESSAGE
+          name: sendmsg_0
+          description: new SENDMESSAGE command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            message: "Hallo Femder"
+            receiver: service
       actions: []

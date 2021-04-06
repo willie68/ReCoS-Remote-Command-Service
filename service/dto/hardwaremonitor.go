@@ -112,6 +112,25 @@ type HardwareMonitorCommand struct {
 
 // EnrichType enrich the type info with the informations from the profile
 func (d *HardwareMonitorCommand) EnrichType(profile models.Profile) (models.CommandTypeInfo, error) {
+	sensors, err := hardware.OpenHardwareMonitorInstance.GetSensorList()
+	if err != nil {
+		clog.Logger.Errorf("error in getting sensors: %v", err)
+		return HardwareMonitorCommandTypeInfo, nil
+	}
+	d.sensors = sensors
+	index := -1
+	for x, parameter := range HardwareMonitorCommandTypeInfo.Parameters {
+		if parameter.Name == "sensor" {
+			index = x
+		}
+	}
+	if len(d.sensors) != len(HardwareMonitorCommandTypeInfo.Parameters[index].List) {
+		HardwareMonitorCommandTypeInfo.Parameters[index].List = make([]string, 0)
+		for _, sensor := range d.sensors {
+			HardwareMonitorCommandTypeInfo.Parameters[index].List = append(HardwareMonitorCommandTypeInfo.Parameters[index].List, sensor.GetFullSensorName())
+		}
+	}
+
 	return HardwareMonitorCommandTypeInfo, nil
 }
 
@@ -157,16 +176,9 @@ func (d *HardwareMonitorCommand) Init(a *Action, commandName string) (bool, erro
 	}
 	d.yDelta = d.yMaxValue - d.yMinValue
 
-	value, ok = d.Parameters["color"]
-	if !ok {
-		d.color = color.RGBA{
-			R: 255, G: 0, B: 0, A: 0,
-		}
-	}
-	color, err := parseHexColor(value.(string))
+	color, err := ConvertParameter2Color(d.Parameters, "color", color.RGBA{R: 0xFF, G: 0x00, B: 0x00, A: 0xFF})
 	if err != nil {
-		clog.Logger.Errorf("error in getting sensors: %v", err)
-		return false, err
+		return false, fmt.Errorf("The color parameter is in wrong format. Please use string as format")
 	}
 	d.color = color
 

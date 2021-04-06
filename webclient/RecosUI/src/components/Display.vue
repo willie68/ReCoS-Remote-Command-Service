@@ -7,7 +7,7 @@
       width: actionWidth + 'px',
     }"
   >
-    <img class="acimage" :src="imageUrl" />
+    <img ref="image" class="acimage" :src="imageUrl" />
     <div class="textbox">
       <p class="title" :style="textStyle">{{ mytitle }}</p>
       <p class="text" :style="textStyle">{{ mytext }}</p>
@@ -86,7 +86,16 @@ export default {
     },
     buildImageSrc(data) {
       if (data.startsWith("/")) {
-        return this.myBaseUrl + data;
+        let imgWidth = this.$refs.image.width
+        let imgHeight = this.$refs.image.height
+        return (
+          this.myBaseUrl +
+          data +
+          "?width=" +
+          Math.floor(imgWidth) +
+          "&height=" +
+          Math.floor(imgHeight)
+        );
       }
       if (data.startsWith("data:")) {
         return data;

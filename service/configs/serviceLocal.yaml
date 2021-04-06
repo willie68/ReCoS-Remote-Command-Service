@@ -4,7 +4,7 @@ serviceURL: http://127.0.0.1:9280
 secretfile: ""
 password: ""
 appid: 0
-appuuid: 7f272c40-96c2-4c28-8926-9bf851175bb3
+appuuid: dev_system
 webclient: ../webclient/RecosUI/dist
 adminclient: ../webclient/recosadmin/dist
 icons: ../general/assets

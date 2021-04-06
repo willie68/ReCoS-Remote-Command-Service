@@ -11,6 +11,7 @@ import (
 
 	"github.com/fogleman/gg"
 	"wkla.no-ip.biz/remote-desk-service/api"
+	"wkla.no-ip.biz/remote-desk-service/dto/clocks"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
@@ -97,10 +98,10 @@ func (d *DiceCommand) GetGraphics(id string, width int, height int) (models.Grap
 		return models.GraphicsInfo{}, err
 	}
 	if width <= 0 {
-		width = clockImageWidth
+		width = clocks.ClockImageWidth
 	}
 	if height <= 0 {
-		height = clockImageHeight
+		height = clocks.ClockImageHeight
 	}
 	var model models.GraphicsInfo
 	buff := d.generateDice(number, width, height)
