@@ -81,7 +81,7 @@ func (s *StopwatchCommand) Stop(a *Action) (bool, error) {
 
 func (s *StopwatchCommand) startStopwatch() {
 	s.running = true
-	s.ticker = time.NewTicker(1 * time.Millisecond)
+	s.ticker = time.NewTicker(1 * time.Second)
 	go func() {
 		for {
 			select {
