@@ -159,6 +159,12 @@ func GetCommand(command models.Command) CommandExecutor {
 				Parameters: command.Parameters,
 			}
 		}
+	case SendMessageCommandTypeInfo.Type:
+		{
+			cmdExecutor = &SendMessageCommand{
+				Parameters: command.Parameters,
+			}
+		}
 	}
 	if cmdExecutor == nil {
 		cmdExecutor = GetOSCommand(command)
