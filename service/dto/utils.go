@@ -6,6 +6,7 @@ import (
 	"image/color"
 	"log"
 	"math"
+	"sort"
 	"strings"
 	"sync"
 	"syscall"
@@ -133,6 +134,7 @@ func GetIANANames() []string {
 				zones = append(zones, f.Name)
 			}
 		}
+		sort.Slice(zones, func(i, j int) bool { return strings.ToLower(zones[i]) < strings.ToLower(zones[j]) })
 	})
 	return zones
 }

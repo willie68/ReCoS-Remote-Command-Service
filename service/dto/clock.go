@@ -29,6 +29,14 @@ var ClockCommandTypeInfo = models.CommandTypeInfo{
 			List:           make([]string, 0),
 		},
 		{
+			Name:           "timezone",
+			Type:           "string",
+			Description:    "time zone of the clock",
+			Unit:           "",
+			WizardPossible: false,
+			List:           make([]string, 0),
+		},
+		{
 			Name:           "dateformat",
 			Type:           "string",
 			Description:    "Format string for formatting the date",
@@ -65,7 +73,7 @@ var ClockCommandTypeInfo = models.CommandTypeInfo{
 			Type:           "string",
 			Description:    "design pattern for the clock",
 			Unit:           "",
-			WizardPossible: false,
+			WizardPossible: true,
 			List:           []string{"analog", "digital", "berlin", "roman"},
 		},
 		{
@@ -94,10 +102,20 @@ type ClockCommand struct {
 	commandName string
 	design      string
 	color       color.Color
+	timezone    string
 }
 
 // EnrichType enrich the type info with the informations from the profile
 func (c *ClockCommand) EnrichType(profile models.Profile) (models.CommandTypeInfo, error) {
+	index := -1
+	for x, parameter := range ClockCommandTypeInfo.Parameters {
+		if parameter.Name == "timezone" {
+			index = x
+		}
+	}
+	ClockCommandTypeInfo.Parameters[index].List = make([]string, 0)
+	ClockCommandTypeInfo.Parameters[index].List = append(ClockCommandTypeInfo.Parameters[index].List, GetIANANames()...)
+
 	return ClockCommandTypeInfo, nil
 }
 
@@ -111,7 +129,7 @@ func (c *ClockCommand) Init(a *Action, commandName string) (bool, error) {
 	c.commandName = commandName
 	c.done = make(chan bool)
 
-	GetIANANames()
+	//	GetIANANames()
 
 	value, err := ConvertParameter2Bool(c.Parameters, "analog", false)
 	if err != nil {
@@ -134,7 +152,14 @@ func (c *ClockCommand) Init(a *Action, commandName string) (bool, error) {
 	}
 	c.showdate = value
 
-	svalue, err := ConvertParameter2String(c.Parameters, "format", "15:04:05")
+	svalue, err := ConvertParameter2String(c.Parameters, "timezone", "")
+	if err != nil {
+		clog.Logger.Errorf("error in getting timezone: %v", err)
+		return false, err
+	}
+	c.timezone = svalue
+
+	svalue, err = ConvertParameter2String(c.Parameters, "format", "15:04:05")
 	if err != nil {
 		clog.Logger.Errorf("error in getting format: %v", err)
 		return false, err
@@ -171,14 +196,19 @@ func (c *ClockCommand) Init(a *Action, commandName string) (bool, error) {
 			case t := <-c.ticker.C:
 				if api.HasConnectionWithProfile(a.Profile) {
 					title := t.Format(c.format)
+					text := ""
+					if c.timezone != "" {
+						text = c.timezone
+					}
 					if c.analog {
-						c.SendGraphics(title)
+						c.SendGraphics(title, text)
 					} else {
 						message := models.Message{
 							Profile: a.Profile,
 							Action:  a.Name,
 							State:   1,
 							Title:   title,
+							Text:    text,
 						}
 						api.SendMessage(message)
 					}
@@ -210,6 +240,15 @@ func (c *ClockCommand) GetGraphics(id string, width int, height int) (models.Gra
 	if height <= 0 {
 		height = clocks.ClockImageHeight
 	}
+	if c.timezone != "" {
+		location, err := time.LoadLocation(c.timezone)
+		if err != nil {
+			clog.Logger.Errorf("can't load location of %s", c.timezone)
+		} else {
+			timeToRender = timeToRender.In(location)
+		}
+	}
+
 	var model models.GraphicsInfo
 	switch c.design {
 	case "analog":
@@ -242,8 +281,16 @@ func (c *ClockCommand) GetGraphics(id string, width int, height int) (models.Gra
 }
 
 // SendPNG sending this array to the client
-func (c *ClockCommand) SendGraphics(value string) {
+func (c *ClockCommand) SendGraphics(value, text string) {
 	now := time.Now()
+	if c.timezone != "" {
+		location, err := time.LoadLocation(c.timezone)
+		if err != nil {
+			clog.Logger.Errorf("can't load location of %s", c.timezone)
+			return
+		}
+		now = now.In(location)
+	}
 
 	id := timeToID(now)
 	image := GetImageURL(c.action, c.commandName, id)
@@ -252,7 +299,7 @@ func (c *ClockCommand) SendGraphics(value string) {
 		Action:   c.action.Name,
 		ImageURL: image,
 		Title:    "",
-		Text:     "",
+		Text:     text,
 		State:    0,
 	}
 	api.SendMessage(message)

@@ -104,9 +104,9 @@ actions:
       title: ""
       icon: clock.png
       description: new CLOCK action created by ActionWizard
-      fontsize: 26
-      fontcolor: '#000000'
-      outlined: false
+      fontsize: 20
+      fontcolor: fcfcfc
+      outlined: true
       runone: true
       commands:
         - id: CLOCK_4
@@ -121,10 +121,11 @@ actions:
             color: ""
             command: notepad.exe
             dateformat: "02.01"
-            design: analog
+            design: berlin
             format: ""
             showdate: true
             showseconds: true
+            timezone: Europe/Berlin
             waitOnClose: true
       actions: []
     - type: SINGLE
@@ -137,22 +138,22 @@ actions:
       outlined: false
       runone: true
       commands:
-        - id: SNDMSG_5
+        - id: SENDMESSAGE_5
           type: SENDMESSAGE
           name: sendmsg_0
           description: new SENDMESSAGE command created by ActionWizard
           icon: ""
           title: ""
           parameters:
-            message: "Hallo Fremder"
+            message: Hallo Fremder
             receiver: client
-        - id: SNDMSG_6
+        - id: SENDMESSAGE_6
           type: SENDMESSAGE
           name: sendmsg_0
           description: new SENDMESSAGE command created by ActionWizard
           icon: ""
           title: ""
           parameters:
-            message: "Hallo Fremder"
+            message: Hallo Fremder
             receiver: service
       actions: []
