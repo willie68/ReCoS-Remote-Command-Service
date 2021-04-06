@@ -66,7 +66,7 @@ var ClockCommandTypeInfo = models.CommandTypeInfo{
 			Description:    "design pattern for the clock",
 			Unit:           "",
 			WizardPossible: false,
-			List:           []string{"analog", "digital", "berlin"},
+			List:           []string{"analog", "digital", "berlin", "roman"},
 		},
 		{
 			Name:           "color",
@@ -224,6 +224,12 @@ func (c *ClockCommand) GetGraphics(id string, width int, height int) (models.Gra
 		}
 	case "digital":
 		buff := clocks.GenerateDigital(timeToRender, width, height, c.color, c.showseconds)
+		model = models.GraphicsInfo{
+			Mimetype: "image/png",
+			Data:     buff,
+		}
+	case "roman":
+		buff := clocks.GenerateRoman(timeToRender, width, height)
 		model = models.GraphicsInfo{
 			Mimetype: "image/png",
 			Data:     buff,

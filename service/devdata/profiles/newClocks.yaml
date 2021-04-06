@@ -11,6 +11,7 @@ pages:
         - clock_0
         - clock_1
         - clock_2
+        - clock_4
         - clock_3
 actions:
     - type: DISPLAY
@@ -103,6 +104,30 @@ actions:
             format: "02-01"
             analog: true
             design: berlin
+            showseconds: true
+            showdate: true
+            color: "#00ff00"
+      actions: []
+    - type: DISPLAY
+      name: clock_4
+      title: ""
+      icon: 
+      description: new PAGE action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: true
+      runone: true
+      commands:
+        - id: ""
+          type: CLOCK
+          name: clock_4
+          description: new CLOCK command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            format: "02-01"
+            analog: true
+            design: roman
             showseconds: true
             showdate: true
             color: "#00ff00"
