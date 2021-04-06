@@ -87,7 +87,7 @@ func (d *DaysRemainCommand) Init(a *Action, commandName string) (bool, error) {
 			ddate, err = time.Parse(layout, dateValue)
 			ddate = time.Date(ddate.Year(), ddate.Month(), ddate.Day(), 0, 0, 0, 0, ddate.Location())
 			if err != nil {
-				return false, fmt.Errorf("Date format is not correct.", err)
+				return false, fmt.Errorf("Date format is not correct. %v", err)
 			}
 		}
 		d.date = ddate
