@@ -851,6 +851,28 @@ parameters:
   display: 1
 ```
 
+##### Send message
+
+`Type`: `SENDMESSAGE`
+
+Parameter:
+
+`receiver`: the receiver of this message. `client` is for all clients having this particular action active, `service` is for the service itself. (Or more the user sitting on the service related desktop)
+`message`: the message to send
+
+Example 1
+
+```yaml
+type: SENDMESSAGE
+name: sendmsg_0
+description: new SENDMESSAGE command created by ActionWizard
+parameters:
+  message: "Hello World"
+  receiver: client
+```
+
+
+
 ##### Start Browser
 
 `Type`: `BROWSE`

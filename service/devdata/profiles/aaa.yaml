@@ -144,7 +144,7 @@ actions:
           icon: ""
           title: ""
           parameters:
-            message: "Hallo Femder"
+            message: "Hallo Fremder"
             receiver: client
         - id: SNDMSG_6
           type: SENDMESSAGE
@@ -153,6 +153,6 @@ actions:
           icon: ""
           title: ""
           parameters:
-            message: "Hallo Femder"
+            message: "Hallo Fremder"
             receiver: service
       actions: []
