@@ -111,6 +111,8 @@ func (c *ClockCommand) Init(a *Action, commandName string) (bool, error) {
 	c.commandName = commandName
 	c.done = make(chan bool)
 
+	GetIANANames()
+
 	value, err := ConvertParameter2Bool(c.Parameters, "analog", false)
 	if err != nil {
 		clog.Logger.Errorf("error in getting analog: %v", err)

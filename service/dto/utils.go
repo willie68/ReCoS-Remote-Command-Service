@@ -1,10 +1,14 @@
 package dto
 
 import (
+	"archive/zip"
 	"fmt"
 	"image/color"
+	"log"
 	"math"
 	"strings"
+	"sync"
+	"syscall"
 )
 
 func parseHexColor(s string) (c color.RGBA, err error) {
@@ -108,4 +112,27 @@ func ConvertParameter2Color(parameters map[string]interface{}, parameterName str
 		}
 	}
 	return valueColor, nil
+}
+
+var zones []string
+var loadIANAOnce sync.Once
+
+func GetIANANames() []string {
+	loadIANAOnce.Do(func() {
+		env, _ := syscall.Getenv("ZONEINFO")
+		zones = make([]string, 0)
+		r, err := zip.OpenReader(env)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer r.Close()
+		// Iterate through the files in the archive,
+		// printing some of their contents.
+		for _, f := range r.File {
+			if !strings.HasSuffix(f.Name, "/") {
+				zones = append(zones, f.Name)
+			}
+		}
+	})
+	return zones
 }
