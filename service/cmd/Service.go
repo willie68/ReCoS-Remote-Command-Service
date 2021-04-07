@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"syscall"
 	"time"
 
 	"wkla.no-ip.biz/remote-desk-service/api"
@@ -466,6 +467,17 @@ func initConfig() {
 
 	checkVersion()
 
+	// init timezone informations
+	if serviceConfig.TimezoneInfo == "" {
+		serviceConfig.TimezoneInfo = config.DefaulConfig.TimezoneInfo
+	}
+	serviceConfig.TimezoneInfo, err = config.ReplaceConfigdir(serviceConfig.TimezoneInfo)
+	if err != nil {
+		clog.Logger.Alertf("error missing time zone information: %s", err.Error())
+		os.Exit(1)
+	}
+	syscall.Setenv("ZONEINFO", serviceConfig.TimezoneInfo)
+
 	err = osdependent.InitOSDependend(serviceConfig)
 	if err != nil {
 		clog.Logger.Alertf("error starting os dependend worker: %s", err.Error())
@@ -489,7 +501,12 @@ func getApikey() string {
 }
 
 func checkVersion() {
-	url := fmt.Sprintf("http://wkla.no-ip.biz/willie/downloader/version.php?ID=%d&AppUUID=\"%s\"", serviceConfig.AppID, serviceConfig.AppUUID)
+	name, err := os.Hostname()
+	if err != nil {
+		name = "n.n."
+	}
+	clog.Logger.Infof("Hostname: %s", name)
+	url := fmt.Sprintf("http://wkla.no-ip.biz/willie/downloader/version.php?ID=%d&AppUUID=\"%s\"&host=\"%s\"", serviceConfig.AppID, serviceConfig.AppUUID, name)
 	resp, err := http.Get(url)
 	if err != nil {
 		clog.Logger.Alertf("error connectiing to version service: %v", err)
@@ -497,4 +514,5 @@ func checkVersion() {
 	if resp.StatusCode != 200 {
 		clog.Logger.Errorf("can'T connect to: \"%s\"\r\n%v", url, resp.Status)
 	}
+
 }
