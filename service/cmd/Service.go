@@ -25,6 +25,7 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/pkg/autostart"
 	"wkla.no-ip.biz/remote-desk-service/pkg/osdependent"
 	"wkla.no-ip.biz/remote-desk-service/pkg/session"
+	"wkla.no-ip.biz/remote-desk-service/web"
 
 	"github.com/getlantern/systray"
 	config "wkla.no-ip.biz/remote-desk-service/config"
@@ -94,38 +95,9 @@ func apiRoutes() *chi.Mux {
 		r.Mount("/health", health.Routes())
 	})
 
-	// Create a route along /files that will serve contents from
-	// the ./data/ folder.
-	webClientAppDir, err := config.ReplaceConfigdir(config.Get().WebClient)
-	if err != nil {
-		clog.Logger.Alertf("can't load web client files: %s", err.Error())
-	}
-	clog.Logger.Infof("webclient: using folder: %s", webClientAppDir)
-	webFilesDir := http.Dir(webClientAppDir)
-	FileServer(router, "/webclient", webFilesDir)
+	FileServer(router, "/webclient", http.FS(web.WebClientAssets))
+	FileServer(router, "/webadmin", http.FS(web.WebAdminAssets))
 
-	webAdminAppDir, err := config.ReplaceConfigdir(config.Get().AdminClient)
-	if err != nil {
-		clog.Logger.Alertf("can't load web admin files: %s", err.Error())
-	}
-	clog.Logger.Infof("webadmin: using folder: %s", webAdminAppDir)
-	adminFilesDir := http.Dir(webAdminAppDir)
-	FileServer(router, "/webadmin", adminFilesDir)
-	return router
-}
-
-func healthRoutes() *chi.Mux {
-	router := chi.NewRouter()
-	router.Use(
-		render.SetContentType(render.ContentTypeJSON),
-		middleware.Logger,
-		//middleware.DefaultCompress,
-		middleware.Recoverer,
-	)
-
-	router.Route("/", func(r chi.Router) {
-		r.Mount("/", health.Routes())
-	})
 	return router
 }
 
@@ -143,11 +115,26 @@ func FileServer(r chi.Router, path string, root http.FileSystem) {
 	path += "*"
 
 	r.Get(path, func(w http.ResponseWriter, r *http.Request) {
-		rctx := chi.RouteContext(r.Context())
-		pathPrefix := strings.TrimSuffix(rctx.RoutePattern(), "/*")
-		fs := http.StripPrefix(pathPrefix, http.FileServer(root))
+		//rctx := chi.RouteContext(r.Context())
+		//pathPrefix := strings.TrimSuffix(rctx.RoutePattern(), "/*")
+		fs := http.FileServer(root)
 		fs.ServeHTTP(w, r)
 	})
+}
+
+func healthRoutes() *chi.Mux {
+	router := chi.NewRouter()
+	router.Use(
+		render.SetContentType(render.ContentTypeJSON),
+		middleware.Logger,
+		//middleware.DefaultCompress,
+		middleware.Recoverer,
+	)
+
+	router.Route("/", func(r chi.Router) {
+		r.Mount("/", health.Routes())
+	})
+	return router
 }
 
 func main() {
@@ -183,6 +170,7 @@ func onReady() {
 		mAutostart.Uncheck()
 	}
 	mConfig := systray.AddMenuItem("Edit config", "Edit the service config")
+	mLog := systray.AddMenuItem("Show log", "Showing the logfile")
 	systray.AddSeparator()
 	mQuit := systray.AddMenuItem("Quit", "Quit ReCoS")
 	mQuit.SetIcon(icon.Data)
@@ -226,6 +214,13 @@ func onReady() {
 	go func() {
 		for {
 			select {
+			case <-mLog.ClickedCh:
+				url := serviceConfig.Logging.Filename
+				url, err := filepath.Abs(url)
+				if err != nil {
+					clog.Logger.Errorf("Error getting filepath for logfile:%v", err)
+				}
+				open.Run(url)
 			case <-mConfig.ClickedCh:
 				url := config.File
 				url, err := filepath.Abs(url)
@@ -428,30 +423,12 @@ func initConfig() {
 		serviceConfig.ServiceURL = serviceURL
 	}
 
-	if serviceConfig.AdminClient == "" {
-		serviceConfig.AdminClient = config.DefaulConfig.AdminClient
-	}
-
-	if serviceConfig.WebClient == "" {
-		serviceConfig.WebClient = config.DefaulConfig.WebClient
-	}
-
 	handler.AuthenticationConfig.Password = serviceConfig.Password
 
 	var err error
 	serviceConfig.Profiles, err = config.ReplaceConfigdir(serviceConfig.Profiles)
 	if err != nil {
 		clog.Logger.Alertf("error wrong profiles folder: %s", err.Error())
-		os.Exit(1)
-	}
-	serviceConfig.AdminClient, err = config.ReplaceConfigdir(serviceConfig.AdminClient)
-	if err != nil {
-		clog.Logger.Alertf("error wrong admin client folder: %s", err.Error())
-		os.Exit(1)
-	}
-	serviceConfig.WebClient, err = config.ReplaceConfigdir(serviceConfig.WebClient)
-	if err != nil {
-		clog.Logger.Alertf("error wrong web client folder: %s", err.Error())
 		os.Exit(1)
 	}
 
@@ -475,6 +452,12 @@ func initConfig() {
 	if err != nil {
 		clog.Logger.Alertf("error missing time zone information: %s", err.Error())
 		os.Exit(1)
+	}
+	if _, err := os.Stat(serviceConfig.TimezoneInfo); os.IsNotExist(err) {
+		if err := os.WriteFile(serviceConfig.TimezoneInfo, web.ZoneinfoAssets, 0644); err != nil {
+			clog.Logger.Alertf("error writing time zone information: %s", err.Error())
+			os.Exit(1)
+		}
 	}
 	syscall.Setenv("ZONEINFO", serviceConfig.TimezoneInfo)
 

@@ -2,8 +2,6 @@ package routes
 
 import (
 	"net/http"
-	"os"
-	"path/filepath"
 	"sort"
 	"strings"
 	"sync"
@@ -16,10 +14,12 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/dto"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
+	"wkla.no-ip.biz/remote-desk-service/web"
 )
 
 var icons []string
 var mu sync.Mutex
+var getIconsDo sync.Once
 
 /*
 ConfigRoutes getting all routes for the config endpoint
@@ -37,28 +37,23 @@ GetIcons list of all possible icon names
 */
 func GetIcons(response http.ResponseWriter, request *http.Request) {
 	mu.Lock()
-	if icons == nil || len(icons) == 0 {
-
+	getIconsDo.Do(func() {
 		icons = make([]string, 0)
-		iconfolder, _ := config.ReplaceConfigdir(config.Get().Icons)
-		err := filepath.Walk(iconfolder, func(path string, info os.FileInfo, err error) error {
-			pathNames := strings.Split(path, "/")
-			if len(pathNames) == 1 {
-				pathNames = strings.Split(path, "\\")
-			}
-			icon := pathNames[len(pathNames)-1]
-			if strings.HasSuffix(icon, ".png") {
-				icons = append(icons, icon)
-			}
-			return nil
-		})
+		files, err := web.WebClientAssets.ReadDir("webclient/assets")
 		if err != nil {
 			clog.Logger.Debug("Error reading icon files:" + err.Error())
 			api.Err(response, request, err)
 			return
 		}
+
+		for _, file := range files {
+			if strings.HasSuffix(file.Name(), ".png") {
+				icons = append(icons, file.Name())
+			}
+		}
+
 		sort.Slice(icons, func(i, j int) bool { return strings.ToLower(icons[i]) < strings.ToLower(icons[j]) })
-	}
+	})
 	mu.Unlock()
 	render.JSON(response, request, icons)
 }

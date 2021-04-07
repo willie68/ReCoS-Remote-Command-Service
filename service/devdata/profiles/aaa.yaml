@@ -14,6 +14,15 @@ pages:
         - sendmsg_0
         - dice_6
         - timer_0
+    - name: clock
+      description: ""
+      icon: ""
+      columns: 5
+      rows: 3
+      toolbar: ""
+      cells:
+        - clock_1
+        - ""
 actions:
     - type: SINGLE
       name: dice_6
@@ -125,7 +134,7 @@ actions:
             format: ""
             showdate: true
             showseconds: true
-            timezone: Europe/Berlin
+            timezone: local
             waitOnClose: true
       actions: []
     - type: SINGLE
@@ -156,4 +165,30 @@ actions:
           parameters:
             message: Hallo Fremder
             receiver: service
+      actions: []
+    - type: DISPLAY
+      name: clock_1
+      title: New York
+      icon: clock.png
+      description: new CLOCK action created by ActionWizard
+      fontsize: 10
+      fontcolor: ffffff
+      outlined: true
+      runone: true
+      commands:
+        - id: CLOCK_7
+          type: CLOCK
+          name: clock_1
+          description: new CLOCK command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            analog: true
+            color: ff0022
+            dateformat: ""
+            design: digital
+            format: ""
+            showdate: false
+            showseconds: true
+            timezone: America/New_York
       actions: []

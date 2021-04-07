@@ -11,6 +11,8 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
+var LocalTimezoneName = "local"
+
 // ClockCommandTypeInfo is a clock
 var ClockCommandTypeInfo = models.CommandTypeInfo{
 	Type:             "CLOCK",
@@ -114,6 +116,7 @@ func (c *ClockCommand) EnrichType(profile models.Profile) (models.CommandTypeInf
 		}
 	}
 	ClockCommandTypeInfo.Parameters[index].List = make([]string, 0)
+	ClockCommandTypeInfo.Parameters[index].List = append(ClockCommandTypeInfo.Parameters[index].List, LocalTimezoneName)
 	ClockCommandTypeInfo.Parameters[index].List = append(ClockCommandTypeInfo.Parameters[index].List, GetIANANames()...)
 
 	return ClockCommandTypeInfo, nil
@@ -197,7 +200,7 @@ func (c *ClockCommand) Init(a *Action, commandName string) (bool, error) {
 				if api.HasConnectionWithProfile(a.Profile) {
 					title := t.Format(c.format)
 					text := ""
-					if c.timezone != "" {
+					if c.timezone != "" && c.timezone != LocalTimezoneName {
 						text = c.timezone
 					}
 					if c.analog {
@@ -240,7 +243,7 @@ func (c *ClockCommand) GetGraphics(id string, width int, height int) (models.Gra
 	if height <= 0 {
 		height = clocks.ClockImageHeight
 	}
-	if c.timezone != "" {
+	if c.timezone != "" && c.timezone != LocalTimezoneName {
 		location, err := time.LoadLocation(c.timezone)
 		if err != nil {
 			clog.Logger.Errorf("can't load location of %s", c.timezone)
@@ -283,7 +286,7 @@ func (c *ClockCommand) GetGraphics(id string, width int, height int) (models.Gra
 // SendPNG sending this array to the client
 func (c *ClockCommand) SendGraphics(value, text string) {
 	now := time.Now()
-	if c.timezone != "" {
+	if c.timezone != "" && c.timezone != LocalTimezoneName {
 		location, err := time.LoadLocation(c.timezone)
 		if err != nil {
 			clog.Logger.Errorf("can't load location of %s", c.timezone)

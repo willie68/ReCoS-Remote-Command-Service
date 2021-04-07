@@ -22,11 +22,6 @@ type Config struct {
 	AppID   int    `yaml:"appid"`
 	AppUUID string `yaml:"appuuid"`
 
-	WebClient   string `yaml:"webclient"`
-	AdminClient string `yaml:"adminclient"`
-
-	Icons string `yaml:"icons"`
-
 	HealthCheck HealthCheck `yaml:"healthcheck"`
 
 	Profiles     string `yaml:"profiles"`
@@ -60,9 +55,6 @@ var DefaulConfig = Config{
 		Period: 30,
 	},
 	Profiles:     "${configdir}/profiles",
-	WebClient:    "${configdir}/webclient",
-	AdminClient:  "${configdir}/webadmin",
-	Icons:        "${configdir}/webclient/assets",
 	Sessions:     "${configdir}/sessions",
 	TimezoneInfo: "${configdir}/zoneinfo.zip",
 	ExternalConfig: map[string]interface{}{

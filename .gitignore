@@ -35,3 +35,6 @@ webclient/recosadmin/public/assets/
 service/devdata/sessions/sessions/
 
 *.log
+
+service/web/webadmin/
+service/web/webclient/
