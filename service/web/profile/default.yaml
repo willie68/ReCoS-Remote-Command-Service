@@ -1,0 +1,337 @@
+name: default
+description: This is the default configuration, just to have one starting point
+pages:
+    - name: Default
+      description: Some default command for every operating system
+      icon: view_mode_small_icons.png
+      columns: 3
+      rows: 2
+      toolbar: ""
+      cells:
+        - Hello_World
+        - clocks
+        - timer
+        - analogclock
+        - cpuload
+        - stopwatch
+        - Audio
+    - name: clocks
+      description: clocks only
+      icon: clock.png
+      columns: 2
+      rows: 2
+      toolbar: hide
+      cells:
+        - Back
+        - none
+        - clock
+        - analogclock
+    - name: Audio
+      description: commands for audio volume 
+      icon: audio_volume_none.png
+      columns: 2
+      rows: 2
+      toolbar: ""
+      cells:
+        - audiovolume_0
+        - audiovolume_1
+        - audiovolume_3
+        - audiovolume_2
+actions:
+    - type: SINGLE
+      name: Hello_World
+      title: Hello World
+      icon: chat.png
+      description: Execute notepad and wirte Hello ReCoS to it.
+      fontsize: 0
+      fontcolor: ""
+      outlined: false
+      runone: true
+      commands:
+        - id: EXECUTE_0
+          type: EXECUTE
+          name: execute
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            args: []
+            command: notepad.exe
+            waitOnClose: false
+        - id: DELAY_1
+          type: DELAY
+          name: delay
+          description: ""
+          icon: ""
+          title: delay
+          parameters:
+            time: 3
+        - id: KEYS_2
+          type: KEYS
+          name: typeit
+          description: ""
+          icon: ""
+          title: typeit
+          parameters:
+            keylayout: de
+            keys: Hello ReCoS
+            keystrokes: Hello ReCoS{enter}
+            layout: de
+      actions: []
+    - type: SINGLE
+      name: clocks
+      title: Clocks
+      icon: clock.png
+      description: Goto clocks page
+      fontsize: 0
+      fontcolor: ""
+      outlined: false
+      runone: true
+      commands:
+        - id: PAGE_3
+          type: PAGE
+          name: page
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            page: clocks
+      actions: []
+    - type: SINGLE
+      name: timer
+      title: Timer 10 sec
+      icon: alarm_bell.png
+      description: timer counting down 10 sec
+      fontsize: 0
+      fontcolor: ""
+      outlined: false
+      runone: true
+      commands:
+        - id: TIMER_4
+          type: TIMER
+          name: timer
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            finished: Fertig
+            format: noch %ds
+            time: 10
+      actions: []
+    - type: DISPLAY
+      name: analogclock
+      title: Analogclock
+      icon: ""
+      description: ""
+      fontsize: 0
+      fontcolor: white
+      outlined: false
+      runone: true
+      commands:
+        - id: CLOCK_5
+          type: CLOCK
+          name: clock
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            analog: true
+            format: "15:04:05\r\n02 Jan 06"
+      actions: []
+    - type: SINGLE
+      name: screenshot
+      title: Screenshot
+      icon: monitor.png
+      description: doing a screenshot
+      fontsize: 0
+      fontcolor: ""
+      outlined: false
+      runone: true
+      commands:
+        - id: SCREENSHOT_6
+          type: SCREENSHOT
+          name: screenshot
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            display: 1
+            saveto: e:/temp/screenshot
+      actions: []
+    - type: DISPLAY
+      name: cpuload
+      title: CPU Load
+      icon: company.png
+      description: cpu usage
+      fontsize: 0
+      fontcolor: white
+      outlined: false
+      runone: true
+      commands:
+        - id: HARDWAREMONITOR_7
+          type: HARDWAREMONITOR
+          name: cpu
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            color: '#ffff00'
+            display: both
+            format: '%0.1f %'
+            sensor: ""
+      actions: []
+    - type: SINGLE
+      name: stopwatch
+      title: Stopwatch
+      icon: timer.png
+      description: simple stop watch
+      fontsize: 0
+      fontcolor: black
+      outlined: true
+      runone: true
+      commands:
+        - id: STOPWATCH_8
+          type: STOPWATCH
+          name: stp1
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            format: 'Mom: %0m:%0s'
+      actions: []
+    - type: SINGLE
+      name: clock
+      title: text clock
+      icon: clock.png
+      description: ""
+      fontsize: 0
+      fontcolor: ""
+      outlined: false
+      runone: false
+      commands:
+        - id: CLOCK_9
+          type: CLOCK
+          name: clock
+          description: ""
+          icon: ""
+          title: clock
+          parameters: {}
+      actions: []
+    - type: SINGLE
+      name: Back
+      title: ""
+      icon: ""
+      description: ""
+      fontsize: 0
+      fontcolor: ""
+      outlined: false
+      runone: false
+      commands:
+        - id: PAGE_10
+          type: PAGE
+          name: Back
+          description: ""
+          icon: ""
+          title: Back
+          parameters:
+            page: Default
+      actions: []
+    - type: SINGLE
+      name: Audio
+      title: ""
+      icon: ""
+      description: ""
+      fontsize: 0
+      fontcolor: ""
+      outlined: false
+      runone: false
+      commands:
+        - id: PAGE_10
+          type: PAGE
+          name: Audio
+          description: ""
+          icon: ""
+          title: Back
+          parameters:
+            page: Audio
+      actions: []
+    - type: SINGLE
+      name: audiovolume_0
+      title: Mute Mic
+      icon: ""
+      description: new AUDIOVOLUME action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: AUDIOVOLUME_0
+          type: AUDIOVOLUME
+          name: audiovolume_0
+          description: new AUDIOVOLUME command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            command: mute
+            device: mic
+      actions: []
+    - type: SINGLE
+      name: audiovolume_1
+      title: Mute Master
+      icon: ""
+      description: new AUDIOVOLUME action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: AUDIOVOLUME_1
+          type: AUDIOVOLUME
+          name: audiovolume_1
+          description: new AUDIOVOLUME command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            command: mute
+            device: master
+      actions: []
+    - type: SINGLE
+      name: audiovolume_2
+      title: Master Volume Down
+      icon: ""
+      description: new AUDIOVOLUME action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: AUDIOVOLUME_2
+          type: AUDIOVOLUME
+          name: audiovolume_2
+          description: new AUDIOVOLUME command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            command: volume down
+            device: master
+      actions: []
+    - type: SINGLE
+      name: audiovolume_3
+      title: Master Volume Up
+      icon: ""
+      description: new AUDIOVOLUME action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: AUDIOVOLUME_3
+          type: AUDIOVOLUME
+          name: audiovolume_3
+          description: new AUDIOVOLUME command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            command: volume up
+            device: master
+      actions: []
