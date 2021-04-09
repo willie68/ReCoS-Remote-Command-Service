@@ -22,15 +22,11 @@ type Config struct {
 	AppID   int    `yaml:"appid"`
 	AppUUID string `yaml:"appuuid"`
 
-	WebClient   string `yaml:"webclient"`
-	AdminClient string `yaml:"adminclient"`
-
-	Icons string `yaml:"icons"`
-
 	HealthCheck HealthCheck `yaml:"healthcheck"`
 
-	Profiles string `yaml:"profiles"`
-	Sessions string `yaml:"sessions"`
+	Profiles     string `yaml:"profiles"`
+	Sessions     string `yaml:"sessions"`
+	TimezoneInfo string `yaml:"timezonezip"`
 
 	ExternalConfig map[string]interface{} `yaml:"extconfig"`
 
@@ -58,15 +54,16 @@ var DefaulConfig = Config{
 	HealthCheck: HealthCheck{
 		Period: 30,
 	},
-	Profiles:    "${configdir}/profiles",
-	WebClient:   "${configdir}/webclient",
-	AdminClient: "${configdir}/webadmin",
-	Icons:       "${configdir}/webclient/assets",
-	Sessions:    "${configdir}/sessions",
+	Profiles:     "${configdir}/profiles",
+	Sessions:     "${configdir}/sessions",
+	TimezoneInfo: "${configdir}/zoneinfo.zip",
 	ExternalConfig: map[string]interface{}{
 		"openhardwaremonitor": map[string]interface{}{
 			"url":          "http://127.0.0.1:12999/data.json",
 			"updateperiod": "5",
+		},
+		"audioplayer": map[string]interface{}{
+			"samplerate": 48000,
 		},
 	},
 	Logging: LoggingConfig{

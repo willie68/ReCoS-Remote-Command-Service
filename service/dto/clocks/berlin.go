@@ -19,15 +19,14 @@ var (
 func GenerateBerlin(timeToRender time.Time, width int, height int) []byte {
 	fheight := float64(height)
 	fwidth := float64(width)
-	dc := gg.NewContext(width, height)
-	dc.SetColor(clockBerlinCase)
-	dc.SetLineCapButt()
-
 	if fwidth > (0.8 * fheight) {
 		fwidth = 0.8 * fheight
 	} else {
 		fheight = 1.25 * fwidth
 	}
+	dc := gg.NewContext(int(fwidth), int(fheight))
+	dc.SetColor(clockBerlinCase)
+	dc.SetLineCapButt()
 
 	halfWidth := fwidth / 2.0
 	caseWidth := fheight / 40.0

@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "ReCoS"
-#define MyAppVersion "0.62a"
+#define MyAppVersion "0.63"
 #define MyAppPublisher "MCS Media Computer Software"
 #define MyAppURL "https://www.wk-music.de"
 #define MyAppExeName "recos-service.exe"
@@ -40,9 +40,6 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 
 [Files]
 Source: "..\service\recos-service.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\webclient\RecosUI\dist\*"; DestDir: "{userappdata}\ReCoS\webclient"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "..\webclient\recosadmin\dist\*"; DestDir: "{userappdata}\ReCoS\webadmin"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "..\general\default.yaml"; DestDir: "{userappdata}\ReCoS\profiles\"; Flags: confirmoverwrite onlyifdoesntexist
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

@@ -37,7 +37,7 @@ func InitOpenHardwareMonitor(extconfig map[string]interface{}) error {
 	if ok {
 		config := value.(map[string]interface{})
 		if config != nil {
-			clog.Logger.Info("found config")
+			clog.Logger.Debug("hardware:openhardwaremonitor: found config")
 			url, ok := config["url"].(string)
 			if !ok {
 				err = fmt.Errorf("can't find url to connect to. %s", url)

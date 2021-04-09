@@ -10,6 +10,7 @@ import (
 
 	"gopkg.in/yaml.v3"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
+	"wkla.no-ip.biz/remote-desk-service/web"
 )
 
 var Profiles []models.Profile
@@ -50,9 +51,16 @@ func InitProfiles(folder string) error {
 	if err != nil {
 		return err
 	}
+	if len(files) == 0 {
+		yamlFile := web.DefaultProfileAsset
+		file := folder + "/default.yaml"
+		os.WriteFile(file, []byte(yamlFile), 0644)
+		//clog.Logger.Infof("DefaultProfile: %s", yamlFile)
+		files = append(files, file)
+	}
 	for _, file := range files {
 		fileContent, err := ioutil.ReadFile(file)
-//		fmt.Println(string(fileContent))
+		//		fmt.Println(string(fileContent))
 		if err != nil {
 			return err
 		}

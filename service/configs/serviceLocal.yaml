@@ -12,10 +12,13 @@ healthcheck:
     period: 30
 profiles: ./devdata/profiles
 sessions: ./devdata/sessions
+timezonezip: ./devdata/zoneinfo.zip
 extconfig:
     openhardwaremonitor:
         updateperiod: 5
         url: http://127.0.0.1:12999/data.json
+    audioplayer:
+        samplerate: 48000
 logging:
-    level: debug
+    level: info
     filename: ./devdata/logging.log
