@@ -431,6 +431,11 @@ func initConfig() {
 		clog.Logger.Alertf("error wrong profiles folder: %s", err.Error())
 		os.Exit(1)
 	}
+	err = os.MkdirAll(serviceConfig.Profiles, os.ModePerm)
+	if err != nil {
+		clog.Logger.Alertf("can't create profiles folder: %s", err.Error())
+		os.Exit(1)
+	}
 
 	logging.Logger.SetLevel(serviceConfig.Logging.Level)
 	serviceConfig.Logging.Filename, err = config.ReplaceConfigdir(serviceConfig.Logging.Filename)
@@ -454,7 +459,7 @@ func initConfig() {
 		os.Exit(1)
 	}
 	if _, err := os.Stat(serviceConfig.TimezoneInfo); os.IsNotExist(err) {
-		if err := os.WriteFile(serviceConfig.TimezoneInfo, web.ZoneinfoAssets, 0644); err != nil {
+		if err := os.WriteFile(serviceConfig.TimezoneInfo, web.ZoneinfoAsset, 0644); err != nil {
 			clog.Logger.Alertf("error writing time zone information: %s", err.Error())
 			os.Exit(1)
 		}

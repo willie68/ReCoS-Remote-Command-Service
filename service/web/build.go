@@ -11,4 +11,7 @@ var WebClientAssets embed.FS
 var WebAdminAssets embed.FS
 
 //go:embed zoneinfo/zoneinfo.zip
-var ZoneinfoAssets []byte
+var ZoneinfoAsset []byte
+
+//go:embed profile/default.yaml
+var DefaultProfileAsset string

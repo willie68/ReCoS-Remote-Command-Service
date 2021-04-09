@@ -40,7 +40,6 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 
 [Files]
 Source: "..\service\recos-service.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\general\default.yaml"; DestDir: "{userappdata}\ReCoS\profiles\"; Flags: confirmoverwrite onlyifdoesntexist
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
