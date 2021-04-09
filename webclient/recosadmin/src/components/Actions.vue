@@ -27,7 +27,7 @@
         </Listbox>
       </Panel>
     </SplitterPanel>
-    <SplitterPanel class="no-border" :size="80">
+    <SplitterPanel :size="80">
       <Panel
         v-show="activeAction"
         :header="'Action: ' + activeActionName"

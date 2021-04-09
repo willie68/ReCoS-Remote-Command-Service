@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	"gopkg.in/yaml.v3"
-	clog "wkla.no-ip.biz/remote-desk-service/logging"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 	"wkla.no-ip.biz/remote-desk-service/web"
 )
@@ -56,7 +55,7 @@ func InitProfiles(folder string) error {
 		yamlFile := web.DefaultProfileAsset
 		file := folder + "/default.yaml"
 		os.WriteFile(file, []byte(yamlFile), 0644)
-		clog.Logger.Infof("DefaultProfile: %s", yamlFile)
+		//clog.Logger.Infof("DefaultProfile: %s", yamlFile)
 		files = append(files, file)
 	}
 	for _, file := range files {
