@@ -12,3 +12,17 @@ https://github.com/skratchdot/open-golang
 
 audio player
 https://github.com/faiface/beep/
+
+Soundpad integration
+https://www.leppsoft.com/soundpad/de/home/
+https://www.leppsoft.com/soundpad/files/rc/SoundpadRemoteControl.java
+https://github.com/natefinch/npipe
+
+
+Voicemeeter
+https://forum.vb-audio.com/viewtopic.php?f=8&t=346
+
+
+Spotify integration
+https://github.com/zmb3/spotify
+https://developer.spotify.com/dashboard/
