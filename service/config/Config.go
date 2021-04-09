@@ -62,6 +62,9 @@ var DefaulConfig = Config{
 			"url":          "http://127.0.0.1:12999/data.json",
 			"updateperiod": "5",
 		},
+		"audioplayer": map[string]interface{}{
+			"samplerate": 48000,
+		},
 	},
 	Logging: LoggingConfig{
 		Level:    "INFO",

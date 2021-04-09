@@ -19,7 +19,10 @@ func (a *App) IsEnabled() bool {
 	defer k.Close()
 	s, _, err := k.GetStringValue("ReCoS_Service")
 	if err != nil {
-		clog.Logger.Errorf("Error getting key: %v", err)
+		if err == registry.ErrNotExist {
+			return false
+		}
+		clog.Logger.Debugf("Error getting key: %v", err)
 		return false
 	}
 	fmt.Printf("ReCoS Service is in %q\n", s)

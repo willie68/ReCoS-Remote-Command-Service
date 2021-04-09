@@ -466,6 +466,12 @@ func initConfig() {
 	}
 	syscall.Setenv("ZONEINFO", serviceConfig.TimezoneInfo)
 
+	err = audio.InitAudioplayer(serviceConfig.ExternalConfig)
+	if err != nil {
+		clog.Logger.Alertf("error starting os dependend worker: %s", err.Error())
+		os.Exit(1)
+	}
+
 	err = osdependent.InitOSDependend(serviceConfig)
 	if err != nil {
 		clog.Logger.Alertf("error starting os dependend worker: %s", err.Error())

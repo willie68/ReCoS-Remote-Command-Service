@@ -700,7 +700,7 @@ parameters:
 
 Sending keys to the active application. This command is emulating a keyboard input by sending key strokes of a keyboard to the active application. You can use different keyboard layouts and there are some macros defining special keys.
 
-type: `KEYS`
+`type`: `KEYS`
 
 `keylayout`: defining the layout of the keyboard used to send the data. en for English (us) "qwerty" and de for a German "qwertz" keyboard layout. Default is "de"
 
@@ -749,7 +749,7 @@ taking control over your media player.
 
 With this command, you can take simple control of your media player. The commands are Start, Stop, Next and Provious. 
 
-type: `MEDIAPLAY`
+`type`: `MEDIAPLAY`
 
 Parameter:
 `command`: this is the command you want to fire. `start`, which starts the mediaplayer or pause it, if it's already started. `stop` for stopping the player and `next` and  `previous` for going to the next/previous part.
@@ -766,7 +766,7 @@ parameters:
 
 Switch to another page.
 
-type: `PAGE`
+`type`: `PAGE`
 
 Parameter:
 `page`: the name of the page to switch to
@@ -776,6 +776,26 @@ type: PAGE
 name: page
 parameters:
   page: page2
+```
+
+##### Play audio
+
+![image-20210409114913298](documentation/assets/playaudio.png)
+
+Playing an audio file. Available formats are: wav, mp3, ogg and flac.
+
+`type`: `PLAYAUDIO`
+
+Parameter:
+`file`: the name and path to the audio file, which should be played. 
+
+```yaml
+type: PLAYAUDIO
+name: playaudio_0
+description: new PLAYAUDIO command created by ActionWizard
+parameters:
+  file: "../general/dial-tone.mp3"
+
 ```
 
 ##### Ping

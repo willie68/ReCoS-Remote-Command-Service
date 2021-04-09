@@ -8,187 +8,58 @@ pages:
       rows: 2
       toolbar: ""
       cells:
-        - clock_0
-        - ping_0
-        - words_0
-        - sendmsg_0
-        - dice_6
-        - timer_0
-    - name: clock
-      description: ""
-      icon: ""
-      columns: 5
-      rows: 3
-      toolbar: ""
-      cells:
-        - clock_1
-        - ""
+        - playaudio_0
+        - playaudio_1
+        - playaudio_2
 actions:
     - type: SINGLE
-      name: dice_6
-      title: Rolling the dice
-      icon: games_dice.png
-      description: ""
+      name: playaudio_0
+      title: Dail-tone mp3
+      icon: music_beamed_note.png
+      description: new PLAYAUDIO action created by ActionWizard
       fontsize: 20
-      fontcolor: ffe699
-      outlined: true
-      runone: true
-      commands:
-        - id: DICE_0
-          type: DICE
-          name: dice_0
-          description: ""
-          icon: ""
-          title: ""
-          parameters:
-            sides: 6
-      actions: []
-    - type: DISPLAY
-      name: ping_0
-      title: Ping
-      icon: world_shipping.png
-      description: new PING action created by ActionWizard
-      fontsize: 40
-      fontcolor: '#000000'
-      outlined: true
-      runone: true
-      commands:
-        - id: PING_1
-          type: PING
-          name: ping_0
-          description: new PING command created by ActionWizard
-          icon: ""
-          title: ""
-          parameters:
-            name: wk-music.de
-            period: 10
-      actions: []
-    - type: SINGLE
-      name: timer_0
-      title: Count down
-      icon: timer.png
-      description: new TIMER action created by ActionWizard
-      fontsize: 10
-      fontcolor: '#000000'
-      outlined: false
-      runone: true
-      commands:
-        - id: TIMER_2
-          type: TIMER
-          name: timer_0
-          description: new TIMER command created by ActionWizard
-          icon: ""
-          title: ""
-          parameters:
-            finished: Ready
-            time: 60
-      actions: []
-    - type: SINGLE
-      name: words_0
-      title: Random words
-      icon: games_dice.png
-      description: ""
-      fontsize: 40
-      fontcolor: '#000000'
-      outlined: true
-      runone: true
-      commands:
-        - id: RNDWORDS_3
-          type: RNDWORDS
-          name: words_0
-          description: new TIMER command created by ActionWizard
-          icon: ""
-          title: ""
-          parameters:
-            words:
-                - Harry Belafonte
-                - Willie Klaas
-                - Lukas Lars
-                - Luke Skywalker
-                - Lord Voldemort
-                - Harry Potter
-      actions: []
-    - type: DISPLAY
-      name: clock_0
-      title: ""
-      icon: clock.png
-      description: new CLOCK action created by ActionWizard
-      fontsize: 20
-      fontcolor: fcfcfc
-      outlined: true
-      runone: true
-      commands:
-        - id: CLOCK_4
-          type: CLOCK
-          name: clock_0
-          description: new CLOCK command created by ActionWizard
-          icon: ""
-          title: ""
-          parameters:
-            analog: true
-            args: []
-            color: ""
-            command: notepad.exe
-            dateformat: "02.01"
-            design: berlin
-            format: ""
-            showdate: true
-            showseconds: true
-            timezone: local
-            waitOnClose: true
-      actions: []
-    - type: SINGLE
-      name: sendmsg_0
-      title: ""
-      icon: send.png
-      description: new SENDMESSAGE action created by ActionWizard
-      fontsize: 26
-      fontcolor: '#000000'
-      outlined: false
-      runone: true
-      commands:
-        - id: SENDMESSAGE_5
-          type: SENDMESSAGE
-          name: sendmsg_0
-          description: new SENDMESSAGE command created by ActionWizard
-          icon: ""
-          title: ""
-          parameters:
-            message: Hallo Fremder
-            receiver: client
-        - id: SENDMESSAGE_6
-          type: SENDMESSAGE
-          name: sendmsg_0
-          description: new SENDMESSAGE command created by ActionWizard
-          icon: ""
-          title: ""
-          parameters:
-            message: Hallo Fremder
-            receiver: service
-      actions: []
-    - type: DISPLAY
-      name: clock_1
-      title: New York
-      icon: clock.png
-      description: new CLOCK action created by ActionWizard
-      fontsize: 10
       fontcolor: ffffff
       outlined: true
       runone: true
       commands:
-        - id: CLOCK_7
-          type: CLOCK
-          name: clock_1
-          description: new CLOCK command created by ActionWizard
-          icon: ""
-          title: ""
+        - id: PLAYAUDIO_0
+          type: PLAYAUDIO
+          name: playaudio_0
+          description: new PLAYAUDIO command created by ActionWizard
           parameters:
-            analog: true
-            color: ff0022
-            dateformat: ""
-            design: digital
-            format: ""
-            showdate: false
-            showseconds: true
-            timezone: America/New_York
+            file: "../general/dial-tone.mp3"
+      actions: []
+    - type: SINGLE
+      name: playaudio_1
+      title: Dail-tone wav
+      icon: music_beamed_note.png
+      description: new PLAYAUDIO action created by ActionWizard
+      fontsize: 20
+      fontcolor: ffffff
+      outlined: true
+      runone: true
+      commands:
+        - id: PLAYAUDIO_1
+          type: PLAYAUDIO
+          name: playaudio_1
+          description: new PLAYAUDIO command created by ActionWizard
+          parameters:
+            file: "../general/dial-tone.wav"
+      actions: []
+    - type: SINGLE
+      name: playaudio_2
+      title: Flac demo
+      icon: music_beamed_note.png
+      description: new PLAYAUDIO action created by ActionWizard
+      fontsize: 20
+      fontcolor: ffffff
+      outlined: true
+      runone: true
+      commands:
+        - id: PLAYAUDIO_1
+          type: PLAYAUDIO
+          name: playaudio_1
+          description: new PLAYAUDIO command created by ActionWizard
+          parameters:
+            file: "../general/Sample_BeeMoved_96kHz24bit.flac"
       actions: []

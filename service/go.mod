@@ -8,6 +8,7 @@ require (
 	github.com/aphistic/golf v0.0.0-20180712155816-02c07f170c5a
 	github.com/aphistic/sweet v0.3.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/faiface/beep v1.0.2
 	github.com/fogleman/gg v1.3.0
 	github.com/getlantern/ops v0.0.0-20200403153110-8476b16edcd6 // indirect
 	github.com/getlantern/systray v1.1.0
