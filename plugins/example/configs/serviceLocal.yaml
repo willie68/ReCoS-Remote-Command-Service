@@ -1,0 +1,9 @@
+port: 9281
+sslport: 0
+serviceURL: http://127.0.0.1:9281
+password: ""
+healthcheck:
+    period: 30
+logging:
+    level: info
+    filename: ./devdata/logging.log

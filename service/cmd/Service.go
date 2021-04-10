@@ -98,6 +98,8 @@ func apiRoutes() *chi.Mux {
 	FileServer(router, "/webclient", http.FS(web.WebClientAssets))
 	FileServer(router, "/webadmin", http.FS(web.WebAdminAssets))
 
+	router.HandleFunc("/ws", api.ServeWs)
+
 	return router
 }
 
@@ -151,7 +153,6 @@ func onReady() {
 	}
 
 	exPath := filepath.Dir(ex)
-	fmt.Println(exPath)
 
 	app := &autostart.App{
 		Name:        "ReCoS",
@@ -351,7 +352,6 @@ func onReady() {
 		}()
 	} else {
 		// own http server for the healthchecks
-		router.HandleFunc("/ws", api.ServeWs)
 		srv = &http.Server{
 			Addr:         "0.0.0.0:" + strconv.Itoa(serviceConfig.Port),
 			WriteTimeout: time.Second * 15,
