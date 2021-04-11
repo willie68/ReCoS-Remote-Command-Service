@@ -11,6 +11,7 @@ import (
 
 // RndWordsCommandTypeInfo start an browser with directly with a url or filepath
 var RndWordsCommandTypeInfo = models.CommandTypeInfo{
+	Category:         "Games",
 	Type:             "RNDWORDS",
 	Name:             "RandomWords",
 	Description:      "randomly select word",

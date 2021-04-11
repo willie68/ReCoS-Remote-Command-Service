@@ -21,6 +21,7 @@ import (
 
 // HardwareMonitorCommandTypeInfo showing hardware sensor data
 var HardwareMonitorCommandTypeInfo = models.CommandTypeInfo{
+	Category:         "System",
 	Type:             "HARDWAREMONITOR",
 	Name:             "HardwareMonitor",
 	Description:      "Displaying data from a sensors",

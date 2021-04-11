@@ -15,6 +15,7 @@ import (
 
 // WindowCtrlCommandTypeInfo sending key strokes to the active program
 var WindowCtrlCommandTypeInfo = models.CommandTypeInfo{
+	Category:         "System",
 	Type:             "WINDOWCTRL",
 	Name:             "WindowCtrl",
 	Description:      "controlling windows on the desktop",

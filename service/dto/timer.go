@@ -11,6 +11,7 @@ import (
 
 // TimerCommandTypeInfo is a count down timer, just showing the count down time in the title
 var TimerCommandTypeInfo = models.CommandTypeInfo{
+	Category:         "Time",
 	Type:             "TIMER",
 	Name:             "Timer",
 	Description:      "Starting a count down timer",

@@ -10,6 +10,7 @@ import (
 
 // BrowseCommandTypeInfo start an browser with directly with a url or filepath
 var BrowseCommandTypeInfo = models.CommandTypeInfo{
+	Category:         "System",
 	Type:             "BROWSE",
 	Name:             "Browse",
 	Description:      "Execute the default browser with a url or a filepath",

@@ -15,8 +15,9 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/pkg/session"
 )
 
-// CounterCommandTypeInfo switch to another page
+// CounterCommandTypeInfo counting clicks
 var CounterCommandTypeInfo = models.CommandTypeInfo{
+	Category:         "useful",
 	Type:             "COUNTER",
 	Name:             "Counter",
 	Description:      "Counting button clicks",

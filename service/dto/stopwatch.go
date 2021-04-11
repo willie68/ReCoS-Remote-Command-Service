@@ -11,6 +11,7 @@ import (
 
 // StopwatchCommandTypeInfo is a stopwatch with seconds
 var StopwatchCommandTypeInfo = models.CommandTypeInfo{
+	Category:         "Time",
 	Type:             "STOPWATCH",
 	Name:             "Stopwatch",
 	Description:      "Measure time with a stopwatch",

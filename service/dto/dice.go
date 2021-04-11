@@ -18,6 +18,7 @@ import (
 
 // DiceCommandTypeInfo start an browser with directly with a url or filepath
 var DiceCommandTypeInfo = models.CommandTypeInfo{
+	Category:         "Games",
 	Type:             "DICE",
 	Name:             "Dice",
 	Description:      "rolling a Dice",

@@ -9,6 +9,7 @@ import (
 
 // PageCommandTypeInfo switch to another page
 var PageCommandTypeInfo = models.CommandTypeInfo{
+	Category:         "ReCoS",
 	Type:             "PAGE",
 	Name:             "Page",
 	Description:      "Switching to another page",

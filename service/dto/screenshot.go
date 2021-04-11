@@ -14,6 +14,7 @@ import (
 
 // ScreenshotCommandTypeInfo saving to the file system
 var ScreenshotCommandTypeInfo = models.CommandTypeInfo{
+	Category:         "useful",
 	Type:             "SCREENSHOT",
 	Name:             "Screenshot",
 	Description:      "Taking a Screenshot",

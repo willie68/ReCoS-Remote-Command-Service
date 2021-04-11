@@ -86,6 +86,7 @@ type Action struct {
 type CommandType string
 
 type CommandTypeInfo struct {
+	Category string `json:"category"`
 	// Type is the type of an command
 	Type CommandType `json:"type"`
 	// Name is the command

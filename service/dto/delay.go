@@ -9,6 +9,7 @@ import (
 )
 
 var DelayCommandTypeInfo = models.CommandTypeInfo{
+	Category:         "Time",
 	Type:             "DELAY",
 	Name:             "Delay",
 	Description:      "Setting up a short delay",

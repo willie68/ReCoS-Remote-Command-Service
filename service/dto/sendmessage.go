@@ -11,6 +11,7 @@ import (
 
 // SendMessageCommandTypeInfo saving to the file system
 var SendMessageCommandTypeInfo = models.CommandTypeInfo{
+	Category:         "ReCoS",
 	Type:             "SENDMESSAGE",
 	Name:             "Sendmessage",
 	Description:      "Sending a Message",

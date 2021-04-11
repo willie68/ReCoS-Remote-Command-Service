@@ -11,6 +11,7 @@ import (
 
 // DaysRemainCommandTypeInfo is a count down timer but just for days for a defined end date
 var DaysRemainCommandTypeInfo = models.CommandTypeInfo{
+	Category:         "Time",
 	Type:             "DAYSREMAIN",
 	Name:             "Days remain",
 	Description:      "Displaying the days remain to a date",

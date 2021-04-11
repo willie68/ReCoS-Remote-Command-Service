@@ -3,14 +3,22 @@
     What kind of action do you like to add?<br />
     <Listbox
       v-model="commandType"
-      :options="commandTypes"
+      :options="cmdTypes"
       placeholder="select a type"
       optionLabel="description"
       optionValue="type"
+      optionGroupLabel="label"
+      optionGroupChildren="items"
       :filter="true"
       dataKey="type"
       class="p-mt-2"
-    />
+    >
+      <template #optiongroup="slotProps">
+        <div class="p-d-flex p-ai-center country-item">
+          <div><b>{{ slotProps.option.label }}</b></div>
+        </div>
+      </template>
+    </Listbox>
   </div>
 </template>
 
@@ -31,6 +39,35 @@ export default {
     };
   },
   computed: {
+    cmdTypes: {
+      get: function () {
+        let cmdTypes = Array();
+        for (let i = 0; i < this.commandTypes.length; i++) {
+          let commandType = this.commandTypes[i];
+          let cat = commandType.category;
+          if (!cat || cat == "") {
+            cat = "unknown";
+          }
+
+          let found = false;
+          for (let x = 0; x < cmdTypes.length; x++) {
+            if (cmdTypes[x].label == cat) {
+              cmdTypes[x].items.push(commandType);
+              found = true;
+            }
+          }
+          if (!found) {
+            let myType = {
+              label: cat,
+              items: Array(),
+            };
+            myType.items.push(commandType);
+            cmdTypes.push(myType);
+          }
+        }
+        return cmdTypes;
+      },
+    },
     commandType: {
       get: function () {
         return this.localValue.type;

@@ -152,11 +152,9 @@ func onReady() {
 		panic(err)
 	}
 
-	exPath := filepath.Dir(ex)
-
 	app := &autostart.App{
 		Name:        "ReCoS",
-		DisplayName: "eCoS Service App",
+		DisplayName: "ReCoS Service App",
 		Exec:        []string{ex},
 	}
 

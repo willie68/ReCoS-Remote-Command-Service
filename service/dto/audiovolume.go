@@ -16,6 +16,7 @@ var parameterCommandName = "command"
 
 // AudioVolumeCommandTypeInfo switch to another page
 var AudioVolumeCommandTypeInfo = models.CommandTypeInfo{
+	Category:         "Audio/Video",
 	Type:             "AUDIOVOLUME",
 	Name:             "AudioVolume",
 	Description:      "setting the volume of an audio device",

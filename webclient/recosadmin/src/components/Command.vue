@@ -12,12 +12,23 @@
       <label for="rows">Type</label>
       <Dropdown
         v-model="activeCommand.type"
-        :options="commandtypes"
+        :options="cmdTypes"
         placeholder="select a type"
         optionLabel="name"
         optionValue="type"
+        optionGroupLabel="label"
+        optionGroupChildren="items"
         editable
-      />
+        :filter="true" 
+        filterPlaceholder="Find a command"
+        ><template #optiongroup="slotProps">
+          <div class="p-d-flex p-ai-center country-item">
+            <div>
+              <b>{{ slotProps.option.label }}</b>
+            </div>
+          </div>
+        </template>
+      </Dropdown>
     </div>
     <div class="p-field p-col">
       <label for="icon">Icon</label>
@@ -115,7 +126,7 @@
             v-tooltip="param.description"
             v-model="activeCommand.parameters[param.name]"
           />
-          <Calendar 
+          <Calendar
             v-if="param.type == 'date'"
             :id="param.name"
             :inline="false"
@@ -160,6 +171,37 @@ export default {
     command: {},
   },
   emits: ["change"],
+  computed: {
+    cmdTypes: {
+      get: function () {
+        let cmdTypes = Array();
+        for (let i = 0; i < this.commandtypes.length; i++) {
+          let commandType = this.commandtypes[i];
+          let cat = commandType.category;
+          if (!cat || cat == "") {
+            cat = "unknown";
+          }
+
+          let found = false;
+          for (let x = 0; x < cmdTypes.length; x++) {
+            if (cmdTypes[x].label == cat) {
+              cmdTypes[x].items.push(commandType);
+              found = true;
+            }
+          }
+          if (!found) {
+            let myType = {
+              label: cat,
+              items: Array(),
+            };
+            myType.items.push(commandType);
+            cmdTypes.push(myType);
+          }
+        }
+        return cmdTypes;
+      },
+    },
+  },
   data() {
     return {
       activeCommand: {},

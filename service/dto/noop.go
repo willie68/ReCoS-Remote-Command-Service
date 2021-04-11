@@ -6,6 +6,7 @@ import (
 
 // NoopCommandTypeInfo is a command with no operation, but the possibility to change text and icon
 var NoopCommandTypeInfo = models.CommandTypeInfo{
+	Category:         "useful",
 	Type:             "NOOP",
 	Name:             "Noop",
 	Description:      "do nothing",

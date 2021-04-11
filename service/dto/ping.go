@@ -13,6 +13,7 @@ import (
 
 // PingCommandTypeInfo start an browser with directly with a url or filepath
 var PingCommandTypeInfo = models.CommandTypeInfo{
+	Category:         "Network",
 	Type:             "PING",
 	Name:             "Ping",
 	Description:      "Execute a ping to a url and show the answer in ms",

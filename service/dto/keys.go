@@ -14,6 +14,7 @@ import (
 
 // KeysCommandTypeInfo sending key strokes to the active program
 var KeysCommandTypeInfo = models.CommandTypeInfo{
+	Category:         "System",
 	Type:             "KEYS",
 	Name:             "Keys",
 	Description:      "Typing on a virtual keyboard",

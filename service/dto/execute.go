@@ -10,6 +10,7 @@ import (
 
 // ExecuteCommandTypeInfo start an application or shell script and optionally waits for it's finishing
 var ExecuteCommandTypeInfo = models.CommandTypeInfo{
+	Category:         "System",
 	Type:             "EXECUTE",
 	Name:             "Execute",
 	Description:      "Execute an application",
