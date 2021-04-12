@@ -11,6 +11,24 @@ import (
 )
 
 func TestNew(t *testing.T) {
+
+	myCommand := models.Command{
+		Type: dto.DelayCommandTypeInfo.Type,
+		Name: "delay",
+		Parameters: map[string]interface{}{
+			"time":     10,
+			"timeunit": time.Second,
+		},
+	}
+
+	myAction := models.Action{
+		Name:        "action1",
+		Type:        models.Single,
+		Description: "description for action",
+		Title:       "Action Title",
+		Commands:    []*models.Command{&myCommand},
+	}
+
 	profile := models.Profile{
 		Name:        "Default",
 		Description: "description for default",
@@ -24,23 +42,8 @@ func TestNew(t *testing.T) {
 				},
 			},
 		},
-		Actions: []models.Action{
-			{
-				Name:        "action1",
-				Type:        models.Single,
-				Description: "description for action",
-				Title:       "Action Title",
-				Commands: []models.Command{
-					{
-						Type: dto.DelayCommandTypeInfo.Type,
-						Name: "delay",
-						Parameters: map[string]interface{}{
-							"time":     10,
-							"timeunit": time.Second,
-						},
-					},
-				},
-			},
+		Actions: []*models.Action{
+			&myAction,
 		},
 	}
 
