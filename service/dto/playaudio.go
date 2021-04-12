@@ -9,7 +9,7 @@ import (
 
 // PlayAudioCommandTypeInfo switch to another page
 var PlayAudioCommandTypeInfo = models.CommandTypeInfo{
-	Category:         "Audio/Video",
+	Category:         "Audio-Video",
 	Type:             "PLAYAUDIO",
 	Name:             "Playaudio",
 	Description:      "playing an audio file",

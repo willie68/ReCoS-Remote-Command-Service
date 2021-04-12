@@ -19,10 +19,19 @@
         optionGroupLabel="label"
         optionGroupChildren="items"
         editable
-        :filter="true" 
+        :filter="true"
         filterPlaceholder="Find a command"
         ><template #optiongroup="slotProps">
           <div class="p-d-flex p-ai-center country-item">
+            <img
+              :src="
+                this.$store.state.baseURL +
+                'config/icons/category/' +
+                slotProps.option.label
+              "
+              width="18"
+              class="p-mr-2"
+            />
             <div>
               <b>{{ slotProps.option.label }}</b>
             </div>

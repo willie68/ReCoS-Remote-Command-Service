@@ -1,8 +1,8 @@
 _default: world.png
-System: wrench.png
-Audio/Video: speaker.png
-Time: clock.png
-ReCoS: recos.png
+system: wrench.png
+audio-video: speaker.png
+time: clock.png
+recos: recos.png
 useful: screw.png
-Games: games_control.png
-Network: network.png
+games: games_control.png
+network: network.png

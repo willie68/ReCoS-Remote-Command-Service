@@ -17,7 +17,7 @@ var mediaParameterCommandName = "command"
 
 // MediaPlayCommandTypeInfo switch to another page
 var MediaPlayCommandTypeInfo = models.CommandTypeInfo{
-	Category:         "Audio/Video",
+	Category:         "Audio-Video",
 	Type:             "MEDIAPLAY",
 	Name:             "Mediaplay",
 	Description:      "controlling a media player",
