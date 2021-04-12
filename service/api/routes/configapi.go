@@ -27,6 +27,7 @@ ConfigRoutes getting all routes for the config endpoint
 func ConfigRoutes() *chi.Mux {
 	router := chi.NewRouter()
 	router.Get("/icons", GetIcons)
+	router.Get("/icons/{mapper}/{key}", GetIconMapperKey)
 	router.Get("/commands", GetCommands)
 	router.With(handler.AuthCheck()).Get("/check", GetCheck)
 	return router
@@ -55,6 +56,30 @@ func GetIcons(response http.ResponseWriter, request *http.Request) {
 		sort.Slice(icons, func(i, j int) bool { return strings.ToLower(icons[i]) < strings.ToLower(icons[j]) })
 	})
 	mu.Unlock()
+	render.JSON(response, request, icons)
+}
+
+/*
+GetIconMapperKey get aicon mapped from a source
+*/
+func GetIconMapperKey(response http.ResponseWriter, request *http.Request) {
+	getIconsDo.Do(func() {
+		icons = make([]string, 0)
+		files, err := web.WebClientAssets.ReadDir("webclient/assets")
+		if err != nil {
+			clog.Logger.Debug("Error reading icon files:" + err.Error())
+			api.Err(response, request, err)
+			return
+		}
+
+		for _, file := range files {
+			if strings.HasSuffix(file.Name(), ".png") {
+				icons = append(icons, file.Name())
+			}
+		}
+
+		sort.Slice(icons, func(i, j int) bool { return strings.ToLower(icons[i]) < strings.ToLower(icons[j]) })
+	})
 	render.JSON(response, request, icons)
 }
 

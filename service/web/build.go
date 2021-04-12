@@ -15,3 +15,6 @@ var ZoneinfoAsset []byte
 
 //go:embed profile/default.yaml
 var DefaultProfileAsset string
+
+//go:embed iconmapper/*
+var IconMapperAssets embed.FS
