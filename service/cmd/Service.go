@@ -20,7 +20,6 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/error/serror"
 	"wkla.no-ip.biz/remote-desk-service/health"
 	"wkla.no-ip.biz/remote-desk-service/icon"
-	"wkla.no-ip.biz/remote-desk-service/logging"
 	"wkla.no-ip.biz/remote-desk-service/pkg/audio"
 	"wkla.no-ip.biz/remote-desk-service/pkg/autostart"
 	"wkla.no-ip.biz/remote-desk-service/pkg/osdependent"
@@ -111,7 +110,7 @@ func FileServer(r chi.Router, path string, root http.FileSystem) {
 	}
 
 	if path != "/" && path[len(path)-1] != '/' {
-		r.Get(path, http.RedirectHandler(path+"/", 301).ServeHTTP)
+		r.Get(path, http.RedirectHandler(path+"/", http.StatusMovedPermanently).ServeHTTP)
 		path += "/"
 	}
 	path += "*"
@@ -435,15 +434,15 @@ func initConfig() {
 		os.Exit(1)
 	}
 
-	logging.Logger.SetLevel(serviceConfig.Logging.Level)
+	clog.Logger.SetLevel(serviceConfig.Logging.Level)
 	serviceConfig.Logging.Filename, err = config.ReplaceConfigdir(serviceConfig.Logging.Filename)
 	if err != nil {
 		clog.Logger.Alertf("error wrong logging folder: %s", err.Error())
 		os.Exit(1)
 	}
 
-	logging.Logger.Filename = serviceConfig.Logging.Filename
-	logging.Logger.InitGelf()
+	clog.Logger.Filename = serviceConfig.Logging.Filename
+	clog.Logger.InitGelf()
 
 	checkVersion()
 

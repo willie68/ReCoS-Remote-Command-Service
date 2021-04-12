@@ -26,3 +26,11 @@ https://forum.vb-audio.com/viewtopic.php?f=8&t=346
 Spotify integration
 https://github.com/zmb3/spotify
 https://developer.spotify.com/dashboard/
+
+Philips hue
+https://github.com/amimof/huego
+https://github.com/savaki/go.hue
+https://github.com/collinux/gohue
+
+gVal validation lib
+https://github.com/PaesslerAG/gval
