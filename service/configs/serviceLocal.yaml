@@ -19,6 +19,10 @@ extconfig:
         url: http://127.0.0.1:12999/data.json
     audioplayer:
         samplerate: 48000
+    philipshue:
+        username: IwtURJmST8b44mvZSZ2nl73nZhghVltMvgzlH7UC
+        device: recos#hue_user
+        ipaddress: 192.168.178.81
 logging:
     level: info
     filename: ./devdata/logging.log

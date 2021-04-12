@@ -22,6 +22,7 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/icon"
 	"wkla.no-ip.biz/remote-desk-service/pkg/audio"
 	"wkla.no-ip.biz/remote-desk-service/pkg/autostart"
+	"wkla.no-ip.biz/remote-desk-service/pkg/lighting"
 	"wkla.no-ip.biz/remote-desk-service/pkg/osdependent"
 	"wkla.no-ip.biz/remote-desk-service/pkg/session"
 	"wkla.no-ip.biz/remote-desk-service/web"
@@ -465,7 +466,13 @@ func initConfig() {
 
 	err = audio.InitAudioplayer(serviceConfig.ExternalConfig)
 	if err != nil {
-		clog.Logger.Alertf("error starting os dependend worker: %s", err.Error())
+		clog.Logger.Alertf("error starting audio worker: %s", err.Error())
+		os.Exit(1)
+	}
+
+	err = lighting.InitLighting(serviceConfig.ExternalConfig)
+	if err != nil {
+		clog.Logger.Alertf("error starting lighting worker: %s", err.Error())
 		os.Exit(1)
 	}
 
