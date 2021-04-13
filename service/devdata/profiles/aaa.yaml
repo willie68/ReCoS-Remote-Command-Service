@@ -26,4 +26,6 @@ actions:
           description: new PHUELIGHTS command created by ActionWizard
           parameters:
             light: "Hue color lamp 1"
+            brightness: 0
+            color: ff0000
       actions: []

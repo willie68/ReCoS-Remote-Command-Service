@@ -92,7 +92,11 @@ func (p *PHueLightsCommand) Init(a *Action, commandName string) (bool, error) {
 	if err != nil {
 		return false, fmt.Errorf("the light parameter is in wrong format. Please use string as format")
 	}
-	p.color, err = ConvertParameter2Color(p.Parameters, "color", color.RGBA{R: 0xFF, G: 0x00, B: 0x00, A: 0xFF})
+	p.bright, err = ConvertParameter2Int(p.Parameters, "brightness", 254)
+	if err != nil {
+		return false, fmt.Errorf("the brightness parameter is in wrong format. Please use int as format")
+	}
+	p.color, err = ConvertParameter2Color(p.Parameters, "color", color.RGBA{R: 0x00, G: 0x00, B: 0x00, A: 0xFF})
 	if err != nil {
 		return false, fmt.Errorf("the color parameter is in wrong format. Please use string as format")
 	}
@@ -113,11 +117,12 @@ func (p *PHueLightsCommand) Init(a *Action, commandName string) (bool, error) {
 				on, err := hue.LightIsOn(p.light)
 				if err != nil {
 					text = fmt.Sprintf("error getting light with name: %s", p.light)
-				}
-				if on {
-					text = "light is on"
 				} else {
-					text = "light is off"
+					if on {
+						text = "light is on"
+					} else {
+						text = "light is off"
+					}
 				}
 				message := models.Message{
 					Profile: a.Profile,
@@ -145,6 +150,22 @@ func (p *PHueLightsCommand) Execute(a *Action, requestMessage models.Message) (b
 	if !ok {
 		return true, errors.New("philips hue not configured")
 	}
-	hue.ToggleLight(p.light)
+	light, ok := hue.Light(p.light)
+	if !ok {
+		return true, fmt.Errorf("can't find light with name. %s", p.light)
+	}
+	if light.IsOn() {
+		light.Off()
+	} else {
+		if p.bright > 0 {
+			light.Bri(uint8(p.bright))
+			return true, nil
+		}
+		if p.color != nil {
+			light.Bri(254)
+			light.Col(p.color)
+		}
+		light.On()
+	}
 	return true, nil
-}
+}-

@@ -137,6 +137,24 @@ func (p *PhilipsHue) ToggleLight(lightname string) error {
 	return nil
 }
 
+func (p *PhilipsHue) Light(lightname string) (*huego.Light, bool) {
+	light, ok := p.getLight(lightname)
+	if !ok {
+		p.reload.Lock()
+		defer p.reload.Unlock()
+		lights, err := p.getLights()
+		if err != nil {
+			return nil, false
+		}
+		p.Lights = lights
+		light, ok = p.getLight(lightname)
+		if !ok {
+			return nil, false
+		}
+	}
+	return light, true
+}
+
 func (p *PhilipsHue) LightIsOn(lightname string) (bool, error) {
 	light, ok := p.getLight(lightname)
 	if !ok {
