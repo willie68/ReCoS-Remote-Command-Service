@@ -23,6 +23,7 @@ extconfig:
         username: IwtURJmST8b44mvZSZ2nl73nZhghVltMvgzlH7UC
         device: recos#hue_user
         ipaddress: 192.168.178.81
+        updateperiod: 5
 logging:
     level: debug
     filename: ./devdata/logging.log

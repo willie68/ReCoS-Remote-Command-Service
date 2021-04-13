@@ -6,25 +6,32 @@ import (
 	"image/color"
 	"time"
 
-	"wkla.no-ip.biz/remote-desk-service/api"
 	"wkla.no-ip.biz/remote-desk-service/pkg/lighting"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
-// PHueLightsCommandTypeInfo showing hardware sensor data
-var PHueLightsCommandTypeInfo = models.CommandTypeInfo{
+// PHueGroupsCommandTypeInfo showing hardware sensor data
+var PHueGroupsCommandTypeInfo = models.CommandTypeInfo{
 	Category:         "Lighting",
-	Type:             "PHUELIGHTS",
-	Name:             "PhilipsHueLights",
-	Description:      "control a hue light and get a feedback",
+	Type:             "PHUEGROUPS",
+	Name:             "PhilipsHueGroups",
+	Description:      "control a hue group, like room or zone and get a feedback",
 	Icon:             "light_bulb.png",
 	WizardPossible:   true,
 	WizardActionType: models.Display,
 	Parameters: []models.CommandParameterInfo{
 		{
-			Name:           "light",
+			Name:           "group",
 			Type:           "string",
-			Description:    "the philips hue light to control",
+			Description:    "the philips hue group to control",
+			Unit:           "",
+			WizardPossible: true,
+			List:           make([]string, 0),
+		},
+		{
+			Name:           "scene",
+			Type:           "string",
+			Description:    "the philips hue scene to âpply",
 			Unit:           "",
 			WizardPossible: true,
 			List:           make([]string, 0),
@@ -72,13 +79,14 @@ var PHueLightsCommandTypeInfo = models.CommandTypeInfo{
 	},
 }
 
-type PHueLightsCommand struct {
+type PHueGroupsCommand struct {
 	Parameters  map[string]interface{}
 	action      *Action
 	commandName string
 	ticker      *time.Ticker
 	done        chan bool
-	light       string
+	group       string
+	scene       string
 	bright      int
 	saturation  int
 	hue         int
@@ -87,37 +95,55 @@ type PHueLightsCommand struct {
 }
 
 // EnrichType enrich the type info with the informations from the profile
-func (d *PHueLightsCommand) EnrichType(profile models.Profile) (models.CommandTypeInfo, error) {
+func (d *PHueGroupsCommand) EnrichType(profile models.Profile) (models.CommandTypeInfo, error) {
 	hue, ok := lighting.GetPhilipsHue()
 	if !ok {
-		return PHueLightsCommandTypeInfo, errors.New("philips Hue not configured")
+		return PHueGroupsCommandTypeInfo, errors.New("philips Hue not configured")
 	}
 
 	index := -1
-	for x, parameter := range PHueLightsCommandTypeInfo.Parameters {
-		if parameter.Name == "light" {
+	for x, parameter := range PHueGroupsCommandTypeInfo.Parameters {
+		if parameter.Name == "group" {
 			index = x
 		}
 	}
 	if index >= 0 {
-		lights := hue.Lights
-		PHueLightsCommandTypeInfo.Parameters[index].List = make([]string, 0)
+		lights := hue.Groups
+		PHueGroupsCommandTypeInfo.Parameters[index].List = make([]string, 0)
 		for _, light := range lights {
-			PHueLightsCommandTypeInfo.Parameters[index].List = append(PHueLightsCommandTypeInfo.Parameters[index].List, light.Name)
+			PHueGroupsCommandTypeInfo.Parameters[index].List = append(PHueGroupsCommandTypeInfo.Parameters[index].List, light.Name)
 		}
 	}
 
-	return PHueLightsCommandTypeInfo, nil
+	index = -1
+	for x, parameter := range PHueGroupsCommandTypeInfo.Parameters {
+		if parameter.Name == "scene" {
+			index = x
+		}
+	}
+	if index >= 0 {
+		lights := hue.Scenes
+		PHueGroupsCommandTypeInfo.Parameters[index].List = make([]string, 0)
+		for _, light := range lights {
+			PHueGroupsCommandTypeInfo.Parameters[index].List = append(PHueGroupsCommandTypeInfo.Parameters[index].List, light.Name)
+		}
+	}
+
+	return PHueGroupsCommandTypeInfo, nil
 }
 
 // Init nothing
-func (p *PHueLightsCommand) Init(a *Action, commandName string) (bool, error) {
+func (p *PHueGroupsCommand) Init(a *Action, commandName string) (bool, error) {
 	var err error
 	p.action = a
 	p.commandName = commandName
-	p.light, err = ConvertParameter2String(p.Parameters, "light", "")
+	p.group, err = ConvertParameter2String(p.Parameters, "group", "")
 	if err != nil {
 		return false, fmt.Errorf("the light parameter is in wrong format. Please use string as format")
+	}
+	p.scene, err = ConvertParameter2String(p.Parameters, "scene", "")
+	if err != nil {
+		return false, fmt.Errorf("the scene parameter is in wrong format. Please use string as format")
 	}
 	p.bright, err = ConvertParameter2Int(p.Parameters, "brightness", 254)
 	if err != nil {
@@ -148,29 +174,6 @@ func (p *PHueLightsCommand) Init(a *Action, commandName string) (bool, error) {
 			case <-p.done:
 				return
 			case <-p.ticker.C:
-				text := ""
-				hue, ok := lighting.GetPhilipsHue()
-				if !ok {
-					text = "philips hue not configured"
-				}
-				on, err := hue.LightIsOn(p.light)
-				if err != nil {
-					text = fmt.Sprintf("error getting light with name: %s", p.light)
-				} else {
-					if on {
-						text = "light is on"
-					} else {
-						text = "light is off"
-					}
-				}
-				message := models.Message{
-					Profile: a.Profile,
-					Action:  a.Name,
-					Command: p.commandName,
-					Text:    text,
-					State:   0,
-				}
-				api.SendMessage(message)
 			}
 		}
 	}()
@@ -178,41 +181,44 @@ func (p *PHueLightsCommand) Init(a *Action, commandName string) (bool, error) {
 }
 
 // Stop nothing
-func (p *PHueLightsCommand) Stop(a *Action) (bool, error) {
+func (p *PHueGroupsCommand) Stop(a *Action) (bool, error) {
 	p.done <- true
 	return true, nil
 }
 
 // Execute nothing
-func (p *PHueLightsCommand) Execute(a *Action, requestMessage models.Message) (bool, error) {
+func (p *PHueGroupsCommand) Execute(a *Action, requestMessage models.Message) (bool, error) {
 	hue, ok := lighting.GetPhilipsHue()
 	if !ok {
 		return true, errors.New("philips hue not configured")
 	}
-	light, ok := hue.Light(p.light)
+	group, ok := hue.Group(p.group)
 	if !ok {
-		return true, fmt.Errorf("can't find light with name. %s", p.light)
+		return true, fmt.Errorf("can't find light with name. %s", p.group)
 	}
-	if light.IsOn() {
-		light.Off()
+	if group.IsOn() {
+		group.Off()
 	} else {
+		if p.scene != "" {
+			group.Scene(p.scene)
+		}
 		if p.bright > 0 {
-			light.Bri(uint8(p.bright))
+			group.Bri(uint8(p.bright))
 		}
 		if p.saturation > 0 {
-			light.Sat(uint8(p.saturation))
+			group.Sat(uint8(p.saturation))
 		}
 		if p.hue > 0 {
-			light.Hue(uint16(p.hue))
+			group.Hue(uint16(p.hue))
 		}
 		if p.colortemp > 0 {
 			ct := uint16(1000000 / p.colortemp)
-			light.Ct(ct)
+			group.Ct(ct)
 		}
 		if p.color != nil {
-			light.Col(p.color)
+			group.Col(p.color)
 		}
-		light.On()
+		group.On()
 	}
 	return true, nil
 }

@@ -29,8 +29,6 @@ https://developer.spotify.com/dashboard/
 
 Philips hue
 https://github.com/amimof/huego
-https://github.com/savaki/go.hue
-https://github.com/collinux/gohue
 
 gVal validation lib
 https://github.com/PaesslerAG/gval

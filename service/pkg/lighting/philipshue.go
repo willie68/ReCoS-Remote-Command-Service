@@ -3,6 +3,7 @@ package lighting
 import (
 	"fmt"
 	"sync"
+	"time"
 
 	"github.com/amimof/huego"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
@@ -12,11 +13,14 @@ type PhilipsHue struct {
 	username  string
 	device    string
 	ipaddress string
+	periode   int
 	bridge    huego.Bridge
 	Lights    []huego.Light
 	Groups    []huego.Group
 	Scenes    []huego.Scene
 	reload    sync.Mutex
+	ticker    *time.Ticker
+	done      chan bool
 }
 
 var philipsHue *PhilipsHue
@@ -46,10 +50,17 @@ func InitPhilipsHue(extconfig map[string]interface{}) error {
 			if !ok {
 				return fmt.Errorf("philipshue: no ipaddress given")
 			}
+			updatePeriod, ok := config["updateperiod"].(int)
+			if !ok {
+				updatePeriod = 5
+			}
 			philipsHue = &PhilipsHue{
 				username:  username,
 				device:    device,
 				ipaddress: ipaddress,
+				periode:   updatePeriod,
+				ticker:    time.NewTicker(time.Duration(updatePeriod) * time.Second),
+				done:      make(chan bool),
 			}
 			err := philipsHue.init()
 			if err != nil {
@@ -62,24 +73,44 @@ func InitPhilipsHue(extconfig map[string]interface{}) error {
 
 func (p *PhilipsHue) init() error {
 	p.bridge = *huego.New(p.ipaddress, p.username)
-	return p.reloadAll()
+	go func() {
+		p.reloadAll()
+	}()
+	go func() {
+		for {
+			select {
+			case <-p.done:
+				return
+			case <-p.ticker.C:
+				p.reloadAll()
+			}
+		}
+	}()
+
+	return nil
 }
 
 func (p *PhilipsHue) reloadAll() error {
 	var err error
+	p.reload.Lock()
 	p.Lights, err = p.getLights()
+	p.reload.Unlock()
 	if err != nil {
 		clog.Logger.Errorf("error evaluating lights: %v", err)
 		return err
 	}
 
+	p.reload.Lock()
 	p.Groups, err = p.getGroups()
+	p.reload.Unlock()
 	if err != nil {
 		clog.Logger.Errorf("error evaluating groups: %v", err)
 		return err
 	}
 
+	p.reload.Lock()
 	p.Scenes, err = p.getScenes()
+	p.reload.Unlock()
 	if err != nil {
 		clog.Logger.Errorf("error evaluating scenes: %v", err)
 		return err
@@ -93,10 +124,6 @@ func (p *PhilipsHue) getLights() ([]huego.Light, error) {
 		clog.Logger.Errorf("error evaluating lights: %v", err)
 		return nil, err
 	}
-	clog.Logger.Infof("Found %d lights", len(l))
-	for x, light := range l {
-		clog.Logger.Debugf("light: %d = %s", x, light.Name)
-	}
 	return l, nil
 }
 
@@ -106,9 +133,6 @@ func (p *PhilipsHue) getGroups() ([]huego.Group, error) {
 		clog.Logger.Errorf("error evaluating groups: %v", err)
 		return nil, err
 	}
-	for x, group := range g {
-		clog.Logger.Debugf("group: %d = %s", x, group.Name)
-	}
 	return g, nil
 }
 
@@ -117,9 +141,6 @@ func (p *PhilipsHue) getScenes() ([]huego.Scene, error) {
 	if err != nil {
 		clog.Logger.Errorf("error evaluating scenes: %v", err)
 		return nil, err
-	}
-	for x, scene := range scenes {
-		clog.Logger.Debugf("scene: %d = %s", x, scene.Name)
 	}
 	return scenes, nil
 }
@@ -156,19 +177,9 @@ func (p *PhilipsHue) Light(lightname string) (*huego.Light, bool) {
 }
 
 func (p *PhilipsHue) LightIsOn(lightname string) (bool, error) {
-	light, ok := p.getLight(lightname)
+	light, ok := p.Light(lightname)
 	if !ok {
-		p.reload.Lock()
-		defer p.reload.Unlock()
-		lights, err := p.getLights()
-		if err != nil {
-			return false, err
-		}
-		p.Lights = lights
-		light, ok = p.getLight(lightname)
-		if !ok {
-			return false, fmt.Errorf("light with name %s not found", lightname)
-		}
+		return false, fmt.Errorf("light with name %s not found", lightname)
 	}
 	return light.IsOn(), nil
 }
@@ -177,6 +188,33 @@ func (p *PhilipsHue) getLight(lightname string) (*huego.Light, bool) {
 	for _, light := range p.Lights {
 		if light.Name == lightname {
 			return &light, true
+		}
+	}
+	return nil, false
+}
+
+func (p *PhilipsHue) Group(groupname string) (*huego.Group, bool) {
+	group, ok := p.getGroup(groupname)
+	if !ok {
+		p.reload.Lock()
+		defer p.reload.Unlock()
+		groups, err := p.getGroups()
+		if err != nil {
+			return nil, false
+		}
+		p.Groups = groups
+		group, ok = p.getGroup(groupname)
+		if !ok {
+			return nil, false
+		}
+	}
+	return group, true
+}
+
+func (p *PhilipsHue) getGroup(groupname string) (*huego.Group, bool) {
+	for _, group := range p.Groups {
+		if group.Name == groupname {
+			return &group, true
 		}
 	}
 	return nil, false

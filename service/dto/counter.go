@@ -185,7 +185,7 @@ func (c *CounterCommand) GetGraphics(id string, width int, height int) (models.G
 	}
 	value, err := strconv.Atoi(id)
 	if err != nil {
-		clog.Logger.Debugf("counter: get graphics value not correct: 5s", id)
+		clog.Logger.Debugf("counter: get graphics value not correct: %s", id)
 		return models.GraphicsInfo{}, err
 	}
 	clog.Logger.Debugf("counter: get graphics value: %d", value)
