@@ -21,7 +21,7 @@ var PHueGroupsCommandTypeInfo = models.CommandTypeInfo{
 	WizardActionType: models.Display,
 	Parameters: []models.CommandParameterInfo{
 		{
-			Name:           "group",
+			Name:           "name",
 			Type:           "string",
 			Description:    "the philips hue group to control",
 			Unit:           "",
@@ -103,7 +103,7 @@ func (d *PHueGroupsCommand) EnrichType(profile models.Profile) (models.CommandTy
 
 	index := -1
 	for x, parameter := range PHueGroupsCommandTypeInfo.Parameters {
-		if parameter.Name == "group" {
+		if parameter.Name == "name" {
 			index = x
 		}
 	}
@@ -137,7 +137,7 @@ func (p *PHueGroupsCommand) Init(a *Action, commandName string) (bool, error) {
 	var err error
 	p.action = a
 	p.commandName = commandName
-	p.group, err = ConvertParameter2String(p.Parameters, "group", "")
+	p.group, err = ConvertParameter2String(p.Parameters, "name", "")
 	if err != nil {
 		return false, fmt.Errorf("the light parameter is in wrong format. Please use string as format")
 	}

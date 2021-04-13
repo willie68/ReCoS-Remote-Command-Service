@@ -22,7 +22,7 @@ var PHueLightsCommandTypeInfo = models.CommandTypeInfo{
 	WizardActionType: models.Display,
 	Parameters: []models.CommandParameterInfo{
 		{
-			Name:           "light",
+			Name:           "name",
 			Type:           "string",
 			Description:    "the philips hue light to control",
 			Unit:           "",
@@ -95,7 +95,7 @@ func (d *PHueLightsCommand) EnrichType(profile models.Profile) (models.CommandTy
 
 	index := -1
 	for x, parameter := range PHueLightsCommandTypeInfo.Parameters {
-		if parameter.Name == "light" {
+		if parameter.Name == "name" {
 			index = x
 		}
 	}
@@ -115,7 +115,7 @@ func (p *PHueLightsCommand) Init(a *Action, commandName string) (bool, error) {
 	var err error
 	p.action = a
 	p.commandName = commandName
-	p.light, err = ConvertParameter2String(p.Parameters, "light", "")
+	p.light, err = ConvertParameter2String(p.Parameters, "name", "")
 	if err != nil {
 		return false, fmt.Errorf("the light parameter is in wrong format. Please use string as format")
 	}
