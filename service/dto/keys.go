@@ -97,7 +97,7 @@ func (p *KeysCommand) Execute(a *Action, requestMessage models.Message) (bool, e
 			sendString(keyValue, kb, keyboardLayout)
 		}
 	} else {
-		return false, fmt.Errorf("The command parameter is missing")
+		return false, fmt.Errorf("the command parameter is missing")
 	}
 	return true, nil
 }
@@ -236,5 +236,5 @@ func sendRune(char rune, kb keybd_event.KeyBonding, keyboardLayout []utils.KeyIt
 		err := kb.Launching()
 		return err
 	}
-	return fmt.Errorf("can't translate this key \"%s\" to keystrokes.", string(char))
+	return fmt.Errorf("can't translate this key \"%s\" to keystrokes", string(char))
 }

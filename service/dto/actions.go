@@ -344,12 +344,12 @@ func (a *Action) GetGraphics(commandName string, id string, width int, height in
 			cmdExecutor := a.Commands[command.ID]
 			if cmdExecutor == nil {
 				clog.Logger.Errorf("can't find command with type: %s", command.Type)
-				return empty, errors.New(fmt.Sprintf("can't find command with type: %s", command.Type))
+				return empty, fmt.Errorf("can't find command with type: %s", command.Type)
 			}
 			v, ok := interface{}(cmdExecutor).(GraphicsCommandExecutor)
 			if !ok {
 				clog.Logger.Errorf("command can't create graphics: %s", command.Type)
-				return empty, errors.New(fmt.Sprintf("command can't create graphics: %s", command.Type))
+				return empty, fmt.Errorf("command can't create graphics: %s", command.Type)
 			}
 			graphicsInfo, err := v.GetGraphics(id, width, height)
 			if err != nil {
@@ -360,7 +360,7 @@ func (a *Action) GetGraphics(commandName string, id string, width int, height in
 			return graphicsInfo, nil
 		}
 	}
-	return empty, errors.New(fmt.Sprintf("can't find command with name: %s", commandName))
+	return empty, fmt.Errorf("can't find command with name: %s", commandName)
 }
 
 // UpdateClients updating all clients with the atual state

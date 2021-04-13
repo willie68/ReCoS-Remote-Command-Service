@@ -69,7 +69,7 @@ func (s *StopwatchCommand) Init(a *Action, commandName string) (bool, error) {
 		var ok bool
 		s.format, ok = value.(string)
 		if !ok {
-			return false, fmt.Errorf("Format is in wrong format. Please use string as format")
+			return false, fmt.Errorf("format is in wrong format. Please use string as format")
 		}
 	}
 	return true, nil

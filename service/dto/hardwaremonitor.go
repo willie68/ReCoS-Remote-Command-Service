@@ -142,11 +142,11 @@ func (d *HardwareMonitorCommand) Init(a *Action, commandName string) (bool, erro
 	d.commandName = commandName
 	object, ok := d.Parameters["sensor"]
 	if !ok {
-		return false, fmt.Errorf("The sensor parameter is empty.")
+		return false, fmt.Errorf("the sensor parameter is empty")
 	}
 	sensorname, ok := object.(string)
 	if !ok {
-		return false, fmt.Errorf("The sensor parameter is in wrong format. Please use string as format")
+		return false, fmt.Errorf("the sensor parameter is in wrong format. Please use string as format")
 	}
 	value, ok := d.Parameters["ymin"]
 	if !ok {
@@ -179,7 +179,7 @@ func (d *HardwareMonitorCommand) Init(a *Action, commandName string) (bool, erro
 
 	color, err := ConvertParameter2Color(d.Parameters, "color", color.RGBA{R: 0xFF, G: 0x00, B: 0x00, A: 0xFF})
 	if err != nil {
-		return false, fmt.Errorf("The color parameter is in wrong format. Please use string as format")
+		return false, fmt.Errorf("the color parameter is in wrong format. Please use string as format")
 	}
 	d.color = color
 
@@ -272,6 +272,9 @@ func (d *HardwareMonitorCommand) Execute(a *Action, requestMessage models.Messag
 			clog.Logger.Info(sensor.GetFullSensorName())
 		}
 		json, err := json.Marshal(sensors)
+		if err != nil {
+			return true, err
+		}
 		clog.Logger.Info(string(json))
 	}
 

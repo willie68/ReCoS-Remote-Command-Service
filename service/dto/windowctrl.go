@@ -72,7 +72,7 @@ func (e *WindowCtrlCommand) Execute(a *Action, requestMessage models.Message) (b
 		return false, err
 	}
 	if caption == "" {
-		return false, fmt.Errorf("The caption parameter should not be empty")
+		return false, fmt.Errorf("the caption parameter should not be empty")
 	}
 
 	cmdValue, err := ConvertParameter2String(e.Parameters, "command", "")
@@ -80,7 +80,7 @@ func (e *WindowCtrlCommand) Execute(a *Action, requestMessage models.Message) (b
 		return false, err
 	}
 	if cmdValue == "" {
-		return false, fmt.Errorf("The command parameter should not be empty")
+		return false, fmt.Errorf("the command parameter should not be empty")
 	}
 
 	return internalDoWork(caption, cmdValue)

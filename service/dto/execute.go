@@ -113,10 +113,10 @@ func (e *ExecuteCommand) Execute(a *Action, requestMessage models.Message) (bool
 				}()
 			}
 		} else {
-			return false, fmt.Errorf("The command parameter is in wrong format. Please use string as format")
+			return false, fmt.Errorf("the command parameter is in wrong format. Please use string as format")
 		}
 	} else {
-		return false, fmt.Errorf("The command parameter is missing")
+		return false, fmt.Errorf("the command parameter is missing")
 	}
 	return true, nil
 }

@@ -2,7 +2,6 @@ package dto
 
 import (
 	"fmt"
-	"net/http"
 	"time"
 
 	"github.com/go-ping/ping"
@@ -64,13 +63,13 @@ func (p *PingCommand) Init(a *Action, commandName string) (bool, error) {
 		return false, err
 	}
 	if name == "" {
-		return false, fmt.Errorf("The name parameter is missing")
+		return false, fmt.Errorf("the name parameter is missing")
 	}
 	p.name = name
 
 	valueInt, err := ConvertParameter2Int(p.Parameters, "period", 10)
 	if err != nil {
-		return false, fmt.Errorf("The period parameter is in wrong format. Please use int as format")
+		return false, fmt.Errorf("the period parameter is in wrong format. Please use int as format")
 	}
 	p.period = valueInt
 
@@ -117,21 +116,10 @@ func (p *PingCommand) Execute(a *Action, requestMessage models.Message) (bool, e
 	pingtime, err := p.getPingTime(p.name)
 	if err != nil {
 		clog.Logger.Errorf("error: %v\r\n", err)
-		return false, fmt.Errorf("Error executing the url. %v", err)
+		return false, fmt.Errorf("error executing the url. %v", err)
 	}
 	clog.Logger.Infof("Ping time: %.2fms", pingtime)
 	return true, nil
-}
-
-func (p *PingCommand) getPingTime2(url string) (float64, error) {
-	start := time.Now()
-	resp, err := http.Get(url)
-	stop := time.Now()
-	if err != nil {
-		return 0, err
-	}
-	defer resp.Body.Close()
-	return float64(stop.Sub(start).Nanoseconds()) / 1000000.0, nil
 }
 
 func (p *PingCommand) getPingTime(url string) (float64, error) {

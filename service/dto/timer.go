@@ -76,7 +76,7 @@ func (d *TimerCommand) Execute(a *Action, requestMessage models.Message) (bool, 
 		var ok bool
 		format, ok = value.(string)
 		if !ok {
-			return false, fmt.Errorf("Format is in wrong format. Please use string as format")
+			return false, fmt.Errorf("format is in wrong format. Please use string as format")
 		}
 	}
 	value, found = d.Parameters["finished"]
@@ -85,7 +85,7 @@ func (d *TimerCommand) Execute(a *Action, requestMessage models.Message) (bool, 
 		var ok bool
 		finnished, ok = value.(string)
 		if !ok {
-			return false, fmt.Errorf("Format is in wrong format. Please use string as format")
+			return false, fmt.Errorf("format is in wrong format. Please use string as format")
 		}
 	}
 	value, found = d.Parameters["time"]
@@ -120,10 +120,10 @@ func (d *TimerCommand) Execute(a *Action, requestMessage models.Message) (bool, 
 			api.SendMessage(message)
 			time.Sleep(1 * time.Second)
 		} else {
-			return false, fmt.Errorf("Time is in wrong format. Please use integer as format")
+			return false, fmt.Errorf("time is in wrong format. Please use integer as format")
 		}
 	} else {
-		return false, fmt.Errorf("Time is missing")
+		return false, fmt.Errorf("time is missing")
 	}
 	return true, nil
 }

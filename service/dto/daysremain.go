@@ -79,7 +79,7 @@ func (d *DaysRemainCommand) Init(a *Action, commandName string) (bool, error) {
 		var ok bool
 		dateValue, ok := value.(string)
 		if !ok {
-			return false, fmt.Errorf("Date is in wrong format. Please use string as format")
+			return false, fmt.Errorf("date is in wrong format. Please use string as format")
 		}
 		layout := "2006-01-02"
 		ddate, err := time.Parse(layout, dateValue)
@@ -88,7 +88,7 @@ func (d *DaysRemainCommand) Init(a *Action, commandName string) (bool, error) {
 			ddate, err = time.Parse(layout, dateValue)
 			ddate = time.Date(ddate.Year(), ddate.Month(), ddate.Day(), 0, 0, 0, 0, ddate.Location())
 			if err != nil {
-				return false, fmt.Errorf("Date format is not correct. %v", err)
+				return false, fmt.Errorf("date format is not correct. %v", err)
 			}
 		}
 		d.date = ddate
@@ -128,7 +128,7 @@ func (d *DaysRemainCommand) Init(a *Action, commandName string) (bool, error) {
 }
 
 func (d *DaysRemainCommand) sendMessage(a *Action) {
-	duration := d.date.Sub(time.Now())
+	duration := time.Until(d.date)
 	remainDays := int((duration.Hours() + 24) / 24.0)
 	title := d.formatTitle
 	if strings.Count(d.formatTitle, "%") > 0 {

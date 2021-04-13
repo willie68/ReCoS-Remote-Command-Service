@@ -1,7 +1,6 @@
 package dto
 
 import (
-	"errors"
 	"fmt"
 	"runtime"
 	"strings"
@@ -61,12 +60,12 @@ func (v *MediaPlayCommand) Init(a *Action, commandName string) (bool, error) {
 
 	object, ok := v.Parameters[parameterCommandName]
 	if !ok {
-		return false, fmt.Errorf("The command parameter is empty.")
+		return false, fmt.Errorf("the command parameter is empty")
 	}
 
 	v.command, ok = object.(string)
 	if !ok {
-		return false, fmt.Errorf("The command parameter should be a string.")
+		return false, fmt.Errorf("the command parameter should be a string")
 	}
 	found := false
 	for x, cmd := range mediaCommandArray {
@@ -76,7 +75,7 @@ func (v *MediaPlayCommand) Init(a *Action, commandName string) (bool, error) {
 		}
 	}
 	if !found {
-		return false, errors.New(fmt.Sprintf("can't find command: %s", v.command))
+		return false, fmt.Errorf("can't find command: %s", v.command)
 	}
 	return true, nil
 }

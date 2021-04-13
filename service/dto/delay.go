@@ -57,10 +57,10 @@ func (d *DelayCommand) Execute(a *Action, requestMessage models.Message) (bool, 
 			clog.Logger.Infof("delay with %v seconds", delayValue)
 			time.Sleep(time.Duration(delayValue) * time.Second)
 		} else {
-			return false, fmt.Errorf("Time is in wrong format. Please use integer as format")
+			return false, fmt.Errorf("time is in wrong format. Please use integer as format")
 		}
 	} else {
-		return false, fmt.Errorf("Time is missing")
+		return false, fmt.Errorf("time is missing")
 	}
 	return true, nil
 }

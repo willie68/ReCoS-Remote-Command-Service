@@ -19,7 +19,6 @@ var NoopCommandTypeInfo = models.CommandTypeInfo{
 // NoopCommand is a command to do nothing.
 type NoopCommand struct {
 	Parameters map[string]interface{}
-	action     *Action
 }
 
 // EnrichType enrich the type info with the informations from the profile
@@ -39,7 +38,5 @@ func (d *NoopCommand) Stop(a *Action) (bool, error) {
 
 // Execute nothing
 func (d *NoopCommand) Execute(a *Action, requestMessage models.Message) (bool, error) {
-	if IsSingleClick(requestMessage) {
-	}
 	return true, nil
 }

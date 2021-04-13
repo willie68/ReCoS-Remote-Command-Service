@@ -24,5 +24,5 @@ extconfig:
         device: recos#hue_user
         ipaddress: 192.168.178.81
 logging:
-    level: info
+    level: debug
     filename: ./devdata/logging.log

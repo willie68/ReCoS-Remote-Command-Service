@@ -59,13 +59,13 @@ func (e *BrowseCommand) Execute(a *Action, requestMessage models.Message) (bool,
 			clog.Logger.Debugf("start browser with: %s", url)
 			if err != nil {
 				clog.Logger.Errorf("error: %v\r\n", err)
-				return false, fmt.Errorf("Error executing the url. %v", err)
+				return false, fmt.Errorf("error executing the url. %v", err)
 			}
 		} else {
-			return false, fmt.Errorf("The url parameter is in wrong format. Please use string as format")
+			return false, fmt.Errorf("the url parameter is in wrong format. Please use string as format")
 		}
 	} else {
-		return false, fmt.Errorf("The url parameter is missing")
+		return false, fmt.Errorf("the url parameter is missing")
 	}
 	return true, nil
 }

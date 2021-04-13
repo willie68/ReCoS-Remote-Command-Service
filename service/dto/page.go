@@ -79,10 +79,10 @@ func (p *PageCommand) Execute(a *Action, requestMessage models.Message) (bool, e
 			}
 			api.SendMessage(message)
 		} else {
-			return false, fmt.Errorf("The command parameter is in wrong format. Please use string as format")
+			return false, fmt.Errorf("the command parameter is in wrong format. Please use string as format")
 		}
 	} else {
-		return false, fmt.Errorf("The command parameter is missing")
+		return false, fmt.Errorf("the command parameter is missing")
 	}
 	return true, nil
 }
