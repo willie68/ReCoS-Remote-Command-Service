@@ -8,58 +8,22 @@ pages:
       rows: 2
       toolbar: ""
       cells:
-        - playaudio_0
-        - playaudio_1
-        - playaudio_2
+        - hue_0
 actions:
     - type: SINGLE
-      name: playaudio_0
-      title: Dail-tone mp3
-      icon: music_beamed_note.png
-      description: new PLAYAUDIO action created by ActionWizard
+      name: hue_0
+      title: On/Off
+      icon: light_bulb.png
+      description: new HUE action created by ActionWizard
       fontsize: 20
       fontcolor: ffffff
       outlined: true
       runone: true
       commands:
         - id: PLAYAUDIO_0
-          type: PLAYAUDIO
-          name: playaudio_0
-          description: new PLAYAUDIO command created by ActionWizard
+          type: PHUELIGHTS
+          name: hue_0
+          description: new PHUELIGHTS command created by ActionWizard
           parameters:
-            file: "../general/dial-tone.mp3"
-      actions: []
-    - type: SINGLE
-      name: playaudio_1
-      title: Dail-tone wav
-      icon: music_beamed_note.png
-      description: new PLAYAUDIO action created by ActionWizard
-      fontsize: 20
-      fontcolor: ffffff
-      outlined: true
-      runone: true
-      commands:
-        - id: PLAYAUDIO_1
-          type: PLAYAUDIO
-          name: playaudio_1
-          description: new PLAYAUDIO command created by ActionWizard
-          parameters:
-            file: "../general/dial-tone.wav"
-      actions: []
-    - type: SINGLE
-      name: playaudio_2
-      title: Flac demo
-      icon: music_beamed_note.png
-      description: new PLAYAUDIO action created by ActionWizard
-      fontsize: 20
-      fontcolor: ffffff
-      outlined: true
-      runone: true
-      commands:
-        - id: PLAYAUDIO_1
-          type: PLAYAUDIO
-          name: playaudio_1
-          description: new PLAYAUDIO command created by ActionWizard
-          parameters:
-            file: "../general/Sample_BeeMoved_96kHz24bit.flac"
+            light: "Hue color lamp 1"
       actions: []
