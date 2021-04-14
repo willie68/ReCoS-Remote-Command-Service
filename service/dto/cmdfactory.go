@@ -33,7 +33,7 @@ var CommandTypes = []models.CommandTypeInfo{
 	RndWordsCommandTypeInfo,
 	PlayAudioCommandTypeInfo,
 	PHueLightsCommandTypeInfo,
-	PHueGroupsCommandTypeInfo,
+	PHueScenesCommandTypeInfo,
 }
 
 func InitCommand() {
@@ -180,9 +180,9 @@ func GetCommand(command models.Command) CommandExecutor {
 				Parameters: command.Parameters,
 			}
 		}
-	case PHueGroupsCommandTypeInfo.Type:
+	case PHueScenesCommandTypeInfo.Type:
 		{
-			cmdExecutor = &PHueGroupsCommand{
+			cmdExecutor = &PHueScenesCommand{
 				Parameters: command.Parameters,
 			}
 		}

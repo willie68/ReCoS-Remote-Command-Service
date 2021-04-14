@@ -2,6 +2,7 @@ package lighting
 
 import (
 	"fmt"
+	"strconv"
 	"sync"
 	"time"
 
@@ -52,7 +53,7 @@ func InitPhilipsHue(extconfig map[string]interface{}) error {
 			}
 			updatePeriod, ok := config["updateperiod"].(int)
 			if !ok {
-				updatePeriod = 5
+				updatePeriod = 10
 			}
 			philipsHue = &PhilipsHue{
 				username:  username,
@@ -218,4 +219,65 @@ func (p *PhilipsHue) getGroup(groupname string) (*huego.Group, bool) {
 		}
 	}
 	return nil, false
+}
+
+func (p *PhilipsHue) GroupIsOn(lightname string) (bool, error) {
+	group, ok := p.Group(lightname)
+	if !ok {
+		return false, fmt.Errorf("group with name %s not found", lightname)
+	}
+	return group.IsOn(), nil
+}
+
+func (p *PhilipsHue) Scene(scenename string) ([]*huego.Scene, bool) {
+	scene, ok := p.getNamedScenes(scenename)
+	if !ok {
+		p.reload.Lock()
+		defer p.reload.Unlock()
+		scenes, err := p.getScenes()
+		if err != nil {
+			return nil, false
+		}
+		p.Scenes = scenes
+		scene, ok = p.getNamedScenes(scenename)
+		if !ok {
+			return nil, false
+		}
+	}
+	return scene, true
+}
+
+func (p *PhilipsHue) SceneForGroup(group huego.Group, scenename string) (*huego.Scene, bool) {
+	scenes4Group, ok := p.getNamedScenes(scenename)
+	if !ok {
+		p.reload.Lock()
+		defer p.reload.Unlock()
+		scenes, err := p.getScenes()
+		if err != nil {
+			return nil, false
+		}
+		p.Scenes = scenes
+		scenes4Group, ok = p.getNamedScenes(scenename)
+		if !ok {
+			return nil, false
+		}
+	}
+	for _, scene := range scenes4Group {
+		if scene.Group == strconv.Itoa(group.ID) {
+			return scene, true
+		}
+	}
+	return nil, false
+}
+
+func (p *PhilipsHue) getNamedScenes(scenename string) ([]*huego.Scene, bool) {
+	found := false
+	scenes := make([]*huego.Scene, 0)
+	for x, scene := range p.Scenes {
+		if scene.Name == scenename {
+			scenes = append(scenes, &p.Scenes[x])
+			found = true
+		}
+	}
+	return scenes, found
 }

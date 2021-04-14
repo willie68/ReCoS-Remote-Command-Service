@@ -121,6 +121,8 @@ type CommandParameterInfo struct {
 	WizardPossible bool `json:"wizard"`
 	// List is a enumeration of possible values
 	List []string `json:"list"`
+	// WizardPossible this command can be used in the wizard
+	GroupedList bool `json:"groupedlist"`
 }
 
 // Command type

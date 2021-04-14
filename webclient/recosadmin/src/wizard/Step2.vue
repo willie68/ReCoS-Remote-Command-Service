@@ -53,9 +53,13 @@
           class="fullwidth"
         />
         <DropdownParameter
-          v-if="param.type == 'string' && param.list.length > 0"
+          v-if="
+            param.type == 'string' &&
+            param.list.length > 0 &&
+            !param.groupedlist
+          "
           :id="param.name"
-          :options="param.list"
+          :options="paramList(param)"
           v-tooltip="param.description"
           v-model="localValue.parameters[param.name]"
           :placeholder="param.unit"
@@ -63,6 +67,36 @@
           class="fullwidth"
           @change="update()"
         />
+        <Dropdown
+          v-if="
+            param.type == 'string' && param.list.length > 0 && param.groupedlist
+          "
+          :id="param.name"
+          :options="paramList(param)"
+          optionLabel="label"
+          optionValue="value"
+          optionGroupLabel="label"
+          optionGroupChildren="items"
+          v-tooltip="param.description"
+          v-model="localValue.parameters[param.name]"
+          :placeholder="param.unit"
+          ><template #optiongroup="slotProps">
+            <div class="p-d-flex p-ai-center country-item">
+              <img
+                :src="
+                  this.$store.state.baseURL +
+                  'config/icons/category/' +
+                  slotProps.option.label
+                "
+                width="18"
+                class="p-mr-2"
+              />
+              <div>
+                <b>{{ slotProps.option.label }}</b>
+              </div>
+            </div>
+          </template>
+        </Dropdown>
         <InputNumber
           v-if="param.type == 'int'"
           :id="param.name"
@@ -205,6 +239,47 @@ export default {
     },
   },
   methods: {
+    paramList(param) {
+      if (!param.groupedlist) {
+        let list = param.list;
+        return list;
+      }
+      let list = Array();
+      param.list.forEach((entry) => {
+        var key, value;
+        if (entry.indexOf(":") > 0) {
+          key = entry.substring(0, entry.indexOf(":"));
+          value = entry.substring(entry.indexOf(":") + 1);
+        } else {
+          key = "unknown";
+          value = entry;
+        }
+        let found = false;
+        for (let x = 0; x < list.length; x++) {
+          if (list[x].label == key) {
+            let myValue = {
+              label: value,
+              value: entry,
+            };
+            list[x].items.push(myValue);
+            found = true;
+          }
+        }
+        if (!found) {
+          let myType = {
+            label: key,
+            items: Array(),
+          };
+          let myValue = {
+            label: value,
+            value: entry,
+          };
+          myType.items.push(myValue);
+          list.push(myType);
+        }
+      });
+      return list;
+    },
     onClick() {
       console.log(JSON.stringify(this.localValue));
     },
