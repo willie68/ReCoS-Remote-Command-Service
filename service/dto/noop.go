@@ -14,6 +14,25 @@ var NoopCommandTypeInfo = models.CommandTypeInfo{
 	WizardPossible:   false,
 	WizardActionType: models.Single,
 	Parameters:       []models.CommandParameterInfo{},
+	/*
+		{
+			Name:           "first",
+			Type:           "string",
+			Description:    "name of the page to switch to",
+			Unit:           "",
+			WizardPossible: true,
+			List:           []string{"one", "two", "three"},
+		},
+		{
+			Name:           "second",
+			Type:           "string",
+			Description:    "name of the page to switch to",
+			Unit:           "",
+			WizardPossible: true,
+			List:           []string{"one: 1", "two: 1", "two: 2", "three: 1", "three: 2", "three: 3", "four: 1"},
+			FilteredList:   "first",
+		},
+	},*/
 }
 
 // NoopCommand is a command to do nothing.

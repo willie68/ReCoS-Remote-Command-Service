@@ -103,3 +103,23 @@ actions:
             saturation: 0
             scene: Nordlichter
       actions: []
+    - type: SINGLE
+      name: noop
+      title: ""
+      icon: ""
+      description: ""
+      fontsize: 0
+      fontcolor: ""
+      outlined: false
+      runone: false
+      commands:
+        - id: ""
+          type: NOOP
+          name: noop
+          description: ""
+          icon: ""
+          title: noop
+          parameters:
+            first: one
+            second: ""
+      actions: []

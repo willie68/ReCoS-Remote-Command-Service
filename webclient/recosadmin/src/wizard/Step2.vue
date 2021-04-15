@@ -243,21 +243,35 @@ export default {
   methods: {
     paramList(param) {
       if (!param.groupedlist) {
-        if (!param.filteredlist) {
-          let list = Array();
-          param.list.forEach((entry) => {
-            let myValue = {
-              label: entry,
-              value: entry,
-            };
-            list.push(myValue);
-          });
-          return list;
-        }
+        let list = Array();
+        var fieldName, filterValue, key, label, value;
+        let filtered = false;
         if (param.filteredlist) {
-          let fieldName = param.filteredlist
-          console.log("Step2: filtered list", fieldName)
+          fieldName = param.filteredlist;
+          filterValue = this.localValue.parameters[fieldName];
+          filtered = true;
         }
+        param.list.forEach((entry) => {
+          label = entry;
+          value = entry;
+          if (filtered) {
+            if (entry.indexOf(":") > 0) {
+              key = entry.substring(0, entry.indexOf(":"));
+              label = entry.substring(entry.indexOf(":") + 1);
+              value = entry;
+              console.log("filter", key, label, value);
+              if (key != filterValue) {
+                return;
+              }
+            }
+          }
+          let myValue = {
+            label: label,
+            value: value,
+          };
+          list.push(myValue);
+        });
+        return list;
       }
       if (param.groupedlist) {
         let list = Array();

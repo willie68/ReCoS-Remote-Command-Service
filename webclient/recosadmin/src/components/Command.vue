@@ -326,27 +326,32 @@ export default {
     paramList(param) {
       if (!param.groupedlist) {
         let list = Array();
-        var fieldName; 
-        var label, value;
+        var fieldName, filterValue, key, label, value;
+        let filtered = false;
         if (param.filteredlist) {
           fieldName = param.filteredlist;
+          filterValue = this.activeCommand.parameters[fieldName];
+          filtered = true;
         }
         param.list.forEach((entry) => {
-          if (!param.filteredlist) {
-            label = entry;
-            value = entry;
-          } else {
-            console.log("Command: filtered list", fieldName);
+          label = entry;
+          value = entry;
+          if (filtered) {
             if (entry.indexOf(":") > 0) {
-              label = entry.substring(0, entry.indexOf(":"));
-              value = entry.substring(entry.indexOf(":") + 1);
+              key = entry.substring(0, entry.indexOf(":"));
+              label = entry.substring(entry.indexOf(":") + 1);
+              value = entry;
+              console.log("filter", key, label, value);
+              if (key != filterValue) {
+                return;
+              }
             }
-            let myValue = {
-              label: label,
-              value: value,
-            };
-            list.push(myValue);
           }
+          let myValue = {
+            label: label,
+            value: value,
+          };
+          list.push(myValue);
         });
         return list;
       }
