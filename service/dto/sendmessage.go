@@ -11,6 +11,7 @@ import (
 
 // SendMessageCommandTypeInfo saving to the file system
 var SendMessageCommandTypeInfo = models.CommandTypeInfo{
+	Category:         "ReCoS",
 	Type:             "SENDMESSAGE",
 	Name:             "Sendmessage",
 	Description:      "Sending a Message",
@@ -68,7 +69,7 @@ func (s *SendMessageCommand) Execute(a *Action, requestMessage models.Message) (
 	if err != nil {
 		return false, fmt.Errorf("error getting parameter: %v", err)
 	}
-	clog.Logger.Infof("receiver: %s, message: %d ", receiver, msg)
+	clog.Logger.Infof("receiver: %s, message: %s ", receiver, msg)
 
 	if receiver == "client" {
 		message := models.Message{

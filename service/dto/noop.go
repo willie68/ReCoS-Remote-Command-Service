@@ -6,6 +6,7 @@ import (
 
 // NoopCommandTypeInfo is a command with no operation, but the possibility to change text and icon
 var NoopCommandTypeInfo = models.CommandTypeInfo{
+	Category:         "useful",
 	Type:             "NOOP",
 	Name:             "Noop",
 	Description:      "do nothing",
@@ -13,12 +14,30 @@ var NoopCommandTypeInfo = models.CommandTypeInfo{
 	WizardPossible:   false,
 	WizardActionType: models.Single,
 	Parameters:       []models.CommandParameterInfo{},
+	/*
+		{
+			Name:           "first",
+			Type:           "string",
+			Description:    "name of the page to switch to",
+			Unit:           "",
+			WizardPossible: true,
+			List:           []string{"one", "two", "three"},
+		},
+		{
+			Name:           "second",
+			Type:           "string",
+			Description:    "name of the page to switch to",
+			Unit:           "",
+			WizardPossible: true,
+			List:           []string{"one: 1", "two: 1", "two: 2", "three: 1", "three: 2", "three: 3", "four: 1"},
+			FilteredList:   "first",
+		},
+	},*/
 }
 
 // NoopCommand is a command to do nothing.
 type NoopCommand struct {
 	Parameters map[string]interface{}
-	action     *Action
 }
 
 // EnrichType enrich the type info with the informations from the profile
@@ -38,7 +57,5 @@ func (d *NoopCommand) Stop(a *Action) (bool, error) {
 
 // Execute nothing
 func (d *NoopCommand) Execute(a *Action, requestMessage models.Message) (bool, error) {
-	if IsSingleClick(requestMessage) {
-	}
 	return true, nil
 }

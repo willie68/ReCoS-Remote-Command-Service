@@ -5,7 +5,7 @@ On the other side there are two Web applications, build on top of VUE as the mai
 
 # Installation
 
-Installation is simple. Execute the installer. After installation you have to start the service itself. It's called `recos-service.exe`. Nothing else to do here. After the sevice is up, simply go to the web page http://localhost:9280/webadmin for the admin client. 
+Installation is simple. Execute the installer. After installation you have to start the service itself. It's called `recos-service.exe`. Nothing else to do here. After the service is up, simply go to the web page http://localhost:9280/webadmin for the admin client. 
 
 For the normal execution client please use http://localhost:9280/webclient. On other machines simply change localhost to the ip of the computer where the service is running, like http://192.168.178.34/webclient
 
@@ -46,13 +46,14 @@ To deactivate password check simply add an empty password to the configuration.
 With the Action Wizard you can quickly and easily create new commands. You start the Action Wizard with this button.
 
 ![image-20210331152330271](documentation/assets/aw_0.png)
+
 First you will see this preface page:
 
 ![image-20210331150718589](documentation/assets/aw_1.png)
 
 On the next page you can choose the command that should be generated. You can use the search field to search through the list of commands.
 
-![image-20210331152810341](documentation/assets/aw_2.png)
+![image-20210412110939373](documentation/assets/aw_2.png)
 
 Go on with Next. 
 In the next dialog you can provide some information about the command. You can assign a title for the button, assign an icon (a default is given directly by the command), and you can make various other settings depending on the command. Continue here with Next.
@@ -73,7 +74,7 @@ In the Admin Client you can then see what the wizard has generated for you.
 
 The service is the main component of the ReCoS. This is the unit of work, doing all the nice things. But you will only see a little Icon in the taskbar. And there is a small context menu.
 
-![image-20210404094515689](C:\e-platte\daten\git-sourcen\ReCoS-Remote-Command-Service\documentation\assets\taskbar_1.png)
+![image-20210412112204299](./documentation/assets/taskbar_1.png)
 
 Here you can directly start the web interface or the admin client. And you can register the service to automatically start on windows start. Next option is to edit the service.yaml file, which contains all configuration for the service itself. Normally you don't need to do here anything, but just in case...
 The last Menu entry is for shutting down the Service. 
@@ -447,7 +448,7 @@ taking control over your audio devices.
 
 With this command, you can take control different audio devices for setting volume and mute. 
 
-type: `AUDIOVOLUME`
+`type`: `AUDIOVOLUME`
 
 Parameter:
 `device`: the device that you would like to control. There are different devices in your system. Which one you can select, can be seen in the admin interface or on startup in the console. There are 2 defaults: `master` for the master output. This is on widows the one that you can control directly with the taskbar icon. And `mic` which is for the default input device. 
@@ -470,7 +471,7 @@ parameters:
 
 Just a clock in different designs.
 
-`Type`: `CLOCK`
+`type`: `CLOCK`
 
 `Parameter`: 
 
@@ -514,7 +515,7 @@ just a simple counter.
 
 A simple counter, with persisting value.
 
-`Type`: `COUNTER`
+`type`: `COUNTER`
 
 `Parameter`: 
 `persist`: true or false, if true, the counter will persist between service restarts
@@ -563,7 +564,7 @@ parameters:
 
 ##### Delay
 
-`Type`: DELAY
+`type`: `DELAY`
 
 `Parameter`: 
 
@@ -585,7 +586,7 @@ parameters:
 rolling the dice
 A simple dice implementation with nice ui and different values.
 
-`Type`: `DICE`
+`type`: `DICE`
 
 `Parameter`: 
 `sides`: the number of sides of the dice. For sides <= 9a nice UI is implemented.
@@ -601,7 +602,7 @@ parameters:
 
 ##### Execute
 
-Type: `EXECUTE`
+`type`: `EXECUTE`
 
 Parameter:
 
@@ -623,7 +624,7 @@ parameters:
 
 ##### Hardware monitor
 
-This command connects to the openhardwaremonitor application on windows. With this you can get different sensors of your computer. For using the webserver of the openhardwaremonitor app, you have to add another external configurationinto the main service configuration. The url is the url to the app webserver added with data.json. the `updateperiod` is the update time in seconds. 
+This command connects to the openhardwaremonitor application on windows. With this you can get different sensors of your computer. For using the webserver of the openhardwaremonitor app, you have to add another external configuration into the main service configuration. The url is the url to the app webserver added with data.json. the `updateperiod` is the update time in seconds. 
 
 ```yaml
 extconfig:
@@ -632,49 +633,11 @@ extconfig:
 	updateperiod: 5
 ```
 
-If you have configured this, the service will evaluate on startup the connection and all possible sensor names. This lsit of names you will see in the log. The sensor name starts with the category, like CPU, GPU or Memory, followed by the hardware component. After that there is the sensor type like Clocks, Temperatures or Load, followed by the sensor name. To use a sensor you have to copy the whole name: like `"CPU/Intel Core i7-6820HQ/Load/CPU Total"`
-
-e.g.: 
-
-```
-2021/02/18 08:47:17 found sensor with name: CPU/Intel Core i7-6820HQ/Clocks/Bus Speed
-2021/02/18 08:47:17 found sensor with name: CPU/Intel Core i7-6820HQ/Clocks/CPU Core #1
-2021/02/18 08:47:17 found sensor with name: CPU/Intel Core i7-6820HQ/Clocks/CPU Core #2
-2021/02/18 08:47:17 found sensor with name: CPU/Intel Core i7-6820HQ/Clocks/CPU Core #3
-2021/02/18 08:47:17 found sensor with name: CPU/Intel Core i7-6820HQ/Clocks/CPU Core #4
-2021/02/18 08:47:17 found sensor with name: CPU/Intel Core i7-6820HQ/Temperature/CPU Core #1
-2021/02/18 08:47:17 found sensor with name: CPU/Intel Core i7-6820HQ/Temperature/CPU Core #2 
-2021/02/18 08:47:17 found sensor with name: CPU/Intel Core i7-6820HQ/Temperature/CPU Core #3 
-2021/02/18 08:47:17 found sensor with name: CPU/Intel Core i7-6820HQ/Temperature/CPU Core #4 
-2021/02/18 08:47:17 found sensor with name: CPU/Intel Core i7-6820HQ/Temperature/CPU Package 
-2021/02/18 08:47:17 found sensor with name: CPU/Intel Core i7-6820HQ/Load/CPU Total 
-2021/02/18 08:47:17 found sensor with name: CPU/Intel Core i7-6820HQ/Load/CPU Core #1 
-2021/02/18 08:47:17 found sensor with name: CPU/Intel Core i7-6820HQ/Load/CPU Core #2 
-2021/02/18 08:47:17 found sensor with name: CPU/Intel Core i7-6820HQ/Load/CPU Core #3 
-2021/02/18 08:47:17 found sensor with name: CPU/Intel Core i7-6820HQ/Load/CPU Core #4 
-2021/02/18 08:47:17 found sensor with name: CPU/Intel Core i7-6820HQ/Powers/CPU Package 
-2021/02/18 08:47:17 found sensor with name: CPU/Intel Core i7-6820HQ/Powers/CPU Cores 
-2021/02/18 08:47:17 found sensor with name: CPU/Intel Core i7-6820HQ/Powers/CPU Graphics 
-2021/02/18 08:47:17 found sensor with name: CPU/Intel Core i7-6820HQ/Powers/CPU DRAM 
-2021/02/18 08:47:17 found sensor with name: Memory/Generic Memory/Load/Memory 
-2021/02/18 08:47:17 found sensor with name: Memory/Generic Memory/Data/Used Memory 
-2021/02/18 08:47:17 found sensor with name: Memory/Generic Memory/Data/Available Memory 
-2021/02/18 08:47:17 found sensor with name: GPU/AMD FirePro W5170M/Voltages/GPU Core 
-2021/02/18 08:47:17 found sensor with name: GPU/AMD FirePro W5170M/Clocks/GPU Core 
-2021/02/18 08:47:17 found sensor with name: GPU/AMD FirePro W5170M/Clocks/GPU Memory 
-2021/02/18 08:47:17 found sensor with name: GPU/AMD FirePro W5170M/Temperature/GPU Core 
-2021/02/18 08:47:17 found sensor with name: GPU/AMD FirePro W5170M/Load/GPU Core 
-2021/02/18 08:47:17 found sensor with name: GPU/AMD FirePro W5170M/Fans/GPU Fan 
-2021/02/18 08:47:17 found sensor with name: GPU/AMD FirePro W5170M/Data/GPU Fan 
-2021/02/18 08:47:17 found sensor with name: Storage/HGST HTS721010A9E630/Temperature/Temperature 
-2021/02/18 08:47:17 found sensor with name: Storage/HGST HTS721010A9E630/Load/Used Space 
-2021/02/18 08:47:17 found sensor with name: Storage/PC300 NVMe SK hynix 256GB/Temperature/Temperature 2021/02/18 08:47:17 found sensor with name: Storage/PC300 NVMe SK hynix 256GB/Load/Used Space 
-2021/02/18 08:47:17 found sensor with name: Storage/Generic Hard Disk/Load/Used Space
-```
+If you have configured this, the service will evaluate on startup the connection and all possible sensor names. This list of names you will see in the log and in the configuration there is a file sensorlist.txt with all sensors names. The sensor name starts with the category, like CPU, GPU or Memory, followed by the hardware component. After that there is the sensor type like Clocks, Temperatures or Load, followed by the sensor name. To use a sensor name manually you have to copy the whole name: like `"CPU/Intel Core i7-6820HQ/Load/CPU Total"`
 
 On the action side you have to configure this:
 
-type: `HARDWAREMONITOR`
+`type`: `HARDWAREMONITOR`
 
 Parameter:
 `sensor`: the sensor name like given above.
@@ -778,6 +741,49 @@ parameters:
   page: page2
 ```
 
+##### Philips Hue Lights and Scenes
+
+2 Commandos for controlling philips hue lights and groups.
+
+`type`: `PHUELIGHTS` 
+
+Parameter:
+`name`: the name of the hue light, group, room or zone.  If a light is accessed the keyword "Light:" will be in front of the parameter, otherwise the keyword "Group:"
+`brightness`: the brightness of the light  (1..254, 0 for unused)
+`saturation`: the saturation of the light (1..254, 0 for unused)
+`hue`: the hue of the light, this is a color value ranging from 1..65535, 0 for unused
+`colortemp`: the color temperature of the light, this is a value ranging from 2000..6500, 0 for unused
+`color`: the color of the light
+
+`type`: `PHUESCENES`
+
+Parameter:
+`name`: the name of the hue group, room or zone.  
+`scene`: the scene to apply to
+`brightness`: the brightness of the group  (1..254, 0 for unused)
+
+```yaml
+type: PHUELIGHTS
+name: hue_0
+description: new PHUELIGHTS command created by ActionWizard
+parameters:
+  name: "Light: Hue color lamp 1"
+  brightness: 0
+  color: ff0000
+
+type: PHUESCENES
+name: hue_0
+description: new PHUESCENES command created by ActionWizard
+parameters:
+  name: "office"
+  scene: "winterday"
+  brightness: 0
+  color: ff0000
+
+```
+
+ATTENTION: As names of the lights, groups, scenes ... are used here to identify the object, please be sure that in the definition of those the names are unique. Otherwise ReCoS maybe control the only one of those.
+
 ##### Play audio
 
 ![image-20210409114913298](documentation/assets/playaudio.png)
@@ -805,7 +811,7 @@ parameters:
 Shows ping times to a server.
 Here you can test your connection to a server. Ping will test the connection to a server, You can use an IP Address or a server name (without any http...) If you put this command to an display action you can set a period so that the command will automatically start every #period seconds a test.  The result is the actual ping time in ms.
 
-`Type`: `PING`
+`type`: `PING`
 
 Parameter:
 
@@ -829,7 +835,7 @@ parameters:
 
 Choose a random word/phrase out of a list
 
-`Type`: `RNDWORDS`
+`type`: `RNDWORDS`
 
 `Parameter`: 
 `words`: The list of words/phrases to choose one randomly from
@@ -858,7 +864,7 @@ making a screenshot.
 
 With this command, you can take a screenshot. 
 
-type: `SCREENSHOT`
+`type`: `SCREENSHOT`
 
 Parameter:
 `saveto`: the folder, where the screen shot will be saved. Format is `screen_<#number>_<display>.png`
@@ -874,7 +880,7 @@ parameters:
 
 ##### Send message
 
-`Type`: `SENDMESSAGE`
+`type`: `SENDMESSAGE`
 
 Parameter:
 
@@ -896,7 +902,7 @@ parameters:
 
 ##### Start Browser
 
-`Type`: `BROWSE`
+`type`: `BROWSE`
 
 Parameter:
 
@@ -928,7 +934,7 @@ parameters:
 
 A simple textual stopwatch.
 
-`Type`: `STOPWATCH`
+`type`: `STOPWATCH`
 
 `Parameter`: 
 
@@ -961,7 +967,7 @@ parameters:
 
 Starting a timer with a response every second. You can define the format of the timer message and the message on finish.
 
-`Type`: TIMER
+`type`: TIMER
 
 `Parameter`: 
 
@@ -986,7 +992,7 @@ Controlling Application Main Window.
 
 With this command, you can control the main window of an application.
 
-type: `WINDOWCTRL`
+`type`: `WINDOWCTRL`
 
 Parameter:
 `caption`: the caption of the application window
@@ -1024,14 +1030,13 @@ For hardware sensor reading ReCoS relies on the OpenHardwareMonitor Software. (h
 
 ![ohm_02](.\documentation\assets\ohm_02.png)
 
-
-
-# ![ohm_03](./documentation/assets/ohm_03.png)
+![ohm_03](./documentation/assets/ohm_03.png)
 
 As Portnumber enter 12999 (which is the default for Combination of ReCoS and OHM)
 
 After that simply activate the OHM Webserver via Option/Remote Web Server/Run.
 The OHM should be available after restart of wndows, so please tick the following options on. Now everything of the OHM side is ready. The ReCoS service will now automatically connect to the OHM and get all Sensors. 
+
 ![ohm_04](.\documentation\assets\ohm_04.png)
 
 If you have already installed the OHM (maybe for another App) and you can't reconfigure the port option, you can simply change the port for ReCoS in the service.yaml.   Same for the part where you want to get Sensors from another Computer.

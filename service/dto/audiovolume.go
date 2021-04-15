@@ -1,7 +1,6 @@
 package dto
 
 import (
-	"errors"
 	"fmt"
 	"math"
 	"time"
@@ -16,6 +15,7 @@ var parameterCommandName = "command"
 
 // AudioVolumeCommandTypeInfo switch to another page
 var AudioVolumeCommandTypeInfo = models.CommandTypeInfo{
+	Category:         "Audio-Video",
 	Type:             "AUDIOVOLUME",
 	Name:             "AudioVolume",
 	Description:      "setting the volume of an audio device",
@@ -62,9 +62,7 @@ func (v *AudioVolumeCommand) EnrichType(profile models.Profile) (models.CommandT
 	}
 	if index >= 0 {
 		commandInfo.Parameters[index].List = make([]string, 0)
-		for _, audioCommand := range audioCommandArray {
-			commandInfo.Parameters[index].List = append(commandInfo.Parameters[index].List, audioCommand)
-		}
+		commandInfo.Parameters[index].List = append(commandInfo.Parameters[index].List, audioCommandArray...)
 	}
 
 	index = -1
@@ -75,9 +73,7 @@ func (v *AudioVolumeCommand) EnrichType(profile models.Profile) (models.CommandT
 	}
 	if index >= 0 {
 		commandInfo.Parameters[index].List = make([]string, 0)
-		for _, sessionName := range audio.GetSessionNames() {
-			commandInfo.Parameters[index].List = append(commandInfo.Parameters[index].List, sessionName)
-		}
+		commandInfo.Parameters[index].List = append(commandInfo.Parameters[index].List, audio.GetSessionNames()...)
 	}
 	return commandInfo, nil
 }
@@ -89,22 +85,22 @@ func (v *AudioVolumeCommand) Init(a *Action, commandName string) (bool, error) {
 
 	object, ok := v.Parameters[parameterDeviceName]
 	if !ok {
-		return false, fmt.Errorf("The device parameter is empty.")
+		return false, fmt.Errorf("the device parameter is empty")
 	}
 
 	v.devicename, ok = object.(string)
 	if !ok {
-		return false, fmt.Errorf("The device parameter should be a string.")
+		return false, fmt.Errorf("the device parameter should be a string")
 	}
 
 	object, ok = v.Parameters[parameterCommandName]
 	if !ok {
-		return false, fmt.Errorf("The command parameter is empty.")
+		return false, fmt.Errorf("the command parameter is empty")
 	}
 
 	v.command, ok = object.(string)
 	if !ok {
-		return false, fmt.Errorf("The command parameter should be a string.")
+		return false, fmt.Errorf("the command parameter should be a string")
 	}
 
 	v.ticker = time.NewTicker(1 * time.Second)
@@ -139,7 +135,7 @@ func (v *AudioVolumeCommand) Stop(a *Action) (bool, error) {
 func (v *AudioVolumeCommand) Execute(a *Action, requestMessage models.Message) (bool, error) {
 	session, ok := audio.GetSession(v.devicename)
 	if !ok {
-		return false, errors.New(fmt.Sprintf("Device %s not found", v.devicename))
+		return false, fmt.Errorf("device %s not found", v.devicename)
 	}
 	switch v.command {
 	case audioCommandArray[0]:

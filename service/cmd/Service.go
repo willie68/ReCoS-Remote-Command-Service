@@ -20,9 +20,9 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/error/serror"
 	"wkla.no-ip.biz/remote-desk-service/health"
 	"wkla.no-ip.biz/remote-desk-service/icon"
-	"wkla.no-ip.biz/remote-desk-service/logging"
 	"wkla.no-ip.biz/remote-desk-service/pkg/audio"
 	"wkla.no-ip.biz/remote-desk-service/pkg/autostart"
+	"wkla.no-ip.biz/remote-desk-service/pkg/lighting"
 	"wkla.no-ip.biz/remote-desk-service/pkg/osdependent"
 	"wkla.no-ip.biz/remote-desk-service/pkg/session"
 	"wkla.no-ip.biz/remote-desk-service/web"
@@ -98,6 +98,8 @@ func apiRoutes() *chi.Mux {
 	FileServer(router, "/webclient", http.FS(web.WebClientAssets))
 	FileServer(router, "/webadmin", http.FS(web.WebAdminAssets))
 
+	router.HandleFunc("/ws", api.ServeWs)
+
 	return router
 }
 
@@ -109,7 +111,7 @@ func FileServer(r chi.Router, path string, root http.FileSystem) {
 	}
 
 	if path != "/" && path[len(path)-1] != '/' {
-		r.Get(path, http.RedirectHandler(path+"/", 301).ServeHTTP)
+		r.Get(path, http.RedirectHandler(path+"/", http.StatusMovedPermanently).ServeHTTP)
 		path += "/"
 	}
 	path += "*"
@@ -150,12 +152,9 @@ func onReady() {
 		panic(err)
 	}
 
-	exPath := filepath.Dir(ex)
-	fmt.Println(exPath)
-
 	app := &autostart.App{
 		Name:        "ReCoS",
-		DisplayName: "eCoS Service App",
+		DisplayName: "ReCoS Service App",
 		Exec:        []string{ex},
 	}
 
@@ -351,7 +350,6 @@ func onReady() {
 		}()
 	} else {
 		// own http server for the healthchecks
-		router.HandleFunc("/ws", api.ServeWs)
 		srv = &http.Server{
 			Addr:         "0.0.0.0:" + strconv.Itoa(serviceConfig.Port),
 			WriteTimeout: time.Second * 15,
@@ -437,15 +435,15 @@ func initConfig() {
 		os.Exit(1)
 	}
 
-	logging.Logger.SetLevel(serviceConfig.Logging.Level)
+	clog.Logger.SetLevel(serviceConfig.Logging.Level)
 	serviceConfig.Logging.Filename, err = config.ReplaceConfigdir(serviceConfig.Logging.Filename)
 	if err != nil {
 		clog.Logger.Alertf("error wrong logging folder: %s", err.Error())
 		os.Exit(1)
 	}
 
-	logging.Logger.Filename = serviceConfig.Logging.Filename
-	logging.Logger.InitGelf()
+	clog.Logger.Filename = serviceConfig.Logging.Filename
+	clog.Logger.InitGelf()
 
 	checkVersion()
 
@@ -468,7 +466,13 @@ func initConfig() {
 
 	err = audio.InitAudioplayer(serviceConfig.ExternalConfig)
 	if err != nil {
-		clog.Logger.Alertf("error starting os dependend worker: %s", err.Error())
+		clog.Logger.Alertf("error starting audio worker: %s", err.Error())
+		os.Exit(1)
+	}
+
+	err = lighting.InitLighting(serviceConfig.ExternalConfig)
+	if err != nil {
+		clog.Logger.Alertf("error starting lighting worker: %s", err.Error())
 		os.Exit(1)
 	}
 

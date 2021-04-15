@@ -86,6 +86,7 @@ type Action struct {
 type CommandType string
 
 type CommandTypeInfo struct {
+	Category string `json:"category"`
 	// Type is the type of an command
 	Type CommandType `json:"type"`
 	// Name is the command
@@ -113,13 +114,17 @@ type CommandParameterInfo struct {
 	// Type is the type of an command
 	Type string `json:"type"`
 	// Description of this action for information
-	Description string `json:"description"`
+	Description string `json:"description,omitempty"`
 	// Name is the command
-	Unit string `json:"unit"`
+	Unit string `json:"unit,omitempty"`
 	// WizardPossible this command can be used in the wizard
 	WizardPossible bool `json:"wizard"`
 	// List is a enumeration of possible values
-	List []string `json:"list"`
+	List []string `json:"list,omitempty"`
+	// GroupedList means that this list can be grouped by the prefix (something before:)
+	GroupedList bool `json:"groupedlist,omitempty"`
+	// FilteredList names the parameter that can be used to filter this list. Filter is than a prefix with :
+	FilteredList string `json:"filteredlist,omitempty"`
 }
 
 // Command type

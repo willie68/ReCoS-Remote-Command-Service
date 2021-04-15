@@ -14,6 +14,7 @@ import (
 
 // ScreenshotCommandTypeInfo saving to the file system
 var ScreenshotCommandTypeInfo = models.CommandTypeInfo{
+	Category:         "useful",
 	Type:             "SCREENSHOT",
 	Name:             "Screenshot",
 	Description:      "Taking a Screenshot",
@@ -64,7 +65,7 @@ func (s *ScreenshotCommand) Stop(a *Action) (bool, error) {
 func (s *ScreenshotCommand) Execute(a *Action, requestMessage models.Message) (bool, error) {
 	value, found := s.Parameters["saveto"]
 	if !found {
-		return false, fmt.Errorf("Folder is missing")
+		return false, fmt.Errorf("folder is missing")
 	}
 	folder, ok := value.(string)
 	if !ok {

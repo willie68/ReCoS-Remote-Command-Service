@@ -11,6 +11,7 @@ import (
 
 // RndWordsCommandTypeInfo start an browser with directly with a url or filepath
 var RndWordsCommandTypeInfo = models.CommandTypeInfo{
+	Category:         "Games",
 	Type:             "RNDWORDS",
 	Name:             "RandomWords",
 	Description:      "randomly select word",
@@ -49,7 +50,7 @@ func (r *RndWordsCommand) Init(a *Action, commandName string) (bool, error) {
 
 	values, err := ConvertParameter2StringArray(r.Parameters, "words")
 	if err != nil {
-		return false, fmt.Errorf("The sides parameter is in wrong format. Please use int as format")
+		return false, fmt.Errorf("the sides parameter is in wrong format. Please use int as format")
 	}
 	r.words = values
 

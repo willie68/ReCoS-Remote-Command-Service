@@ -18,6 +18,7 @@ import (
 
 // DiceCommandTypeInfo start an browser with directly with a url or filepath
 var DiceCommandTypeInfo = models.CommandTypeInfo{
+	Category:         "Games",
 	Type:             "DICE",
 	Name:             "Dice",
 	Description:      "rolling a Dice",
@@ -61,7 +62,7 @@ func (d *DiceCommand) Init(a *Action, commandName string) (bool, error) {
 
 	valueInt, err := ConvertParameter2Int(d.Parameters, "sides", 6)
 	if err != nil {
-		return false, fmt.Errorf("The sides parameter is in wrong format. Please use int as format")
+		return false, fmt.Errorf("the sides parameter is in wrong format. Please use int as format")
 	}
 	d.sides = valueInt
 

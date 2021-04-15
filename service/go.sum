@@ -5,6 +5,8 @@ github.com/BurntSushi/xgb v0.0.0-20210121224620-deaf085860bc/go.mod h1:IVnqGOEym
 github.com/TheTitanrain/w32 v0.0.0-20180517000239-4f5cfb03fabf/go.mod h1:peYoMncQljjNS6tZwI9WVyQB3qZS6u79/N3mBOcnd3I=
 github.com/TheTitanrain/w32 v0.0.0-20200114052255-2654d97dbd3d h1:2xp1BQbqcDDaikHnASWpVZRjibOxu7y9LhAv04whugI=
 github.com/TheTitanrain/w32 v0.0.0-20200114052255-2654d97dbd3d/go.mod h1:peYoMncQljjNS6tZwI9WVyQB3qZS6u79/N3mBOcnd3I=
+github.com/amimof/huego v1.2.0 h1:hdJontFo4YKKumKlc/+fXFHQeON0bWqmiHds7JhNfvs=
+github.com/amimof/huego v1.2.0/go.mod h1:z1Sy7Rrdzmb+XsGHVEhODrRJRDq4RCFW7trCI5cKmeA=
 github.com/aphistic/golf v0.0.0-20180712155816-02c07f170c5a h1:2KLQMJ8msqoPHIPDufkxVcoTtcmE5+1sL9950m4R9Pk=
 github.com/aphistic/golf v0.0.0-20180712155816-02c07f170c5a/go.mod h1:3NqKYiepwy8kCu4PNA+aP7WUV72eXWJeP9/r3/K9aLE=
 github.com/aphistic/sweet v0.3.0 h1:xZTMfCoMsjWubPNxOBODluBC4qfGP0CdRJ88jon46XE=
@@ -87,6 +89,7 @@ github.com/hajimehoshi/oto v0.3.1/go.mod h1:e9eTLBB9iZto045HLbzfHJIc+jP3xaKrjZTg
 github.com/hnakamur/w32syscall v0.0.0-20150329104255-b8b99ed86a56 h1:kZ0/GrJre7uciw/jlR6x0CDZ5MQe9ppRuiW8qq+e694=
 github.com/hnakamur/w32syscall v0.0.0-20150329104255-b8b99ed86a56/go.mod h1:PGikIopDgEZKXlRJJSymAXwWiQu1w6+gblg4WkaiFew=
 github.com/hpcloud/tail v1.0.0/go.mod h1:ab1qPbhIpdTxEkNHXyeSf5vhxWSCs/tWer42PpOxQnU=
+github.com/jarcoal/httpmock v1.0.4/go.mod h1:ATjnClrvW/3tijVmpL/va5Z3aAyGvqU3gCT8nX0Txik=
 github.com/jfreymuth/oggvorbis v1.0.0 h1:aOpiihGrFLXpsh2osOlEvTcg5/aluzGQeC7m3uYWOZ0=
 github.com/jfreymuth/oggvorbis v1.0.0/go.mod h1:abe6F9QRjuU9l+2jek3gj46lu40N4qlYxh2grqkLEDM=
 github.com/jfreymuth/pulse v0.1.0 h1:KN38/9hoF9PJvP5DpEVhMRKNuwnJUonc8c9ARorRXUA=

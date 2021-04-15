@@ -15,6 +15,7 @@ var LocalTimezoneName = "local"
 
 // ClockCommandTypeInfo is a clock
 var ClockCommandTypeInfo = models.CommandTypeInfo{
+	Category:         "Time",
 	Type:             "CLOCK",
 	Name:             "Clock",
 	Description:      "Displaying a nice clock",
