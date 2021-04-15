@@ -186,7 +186,7 @@ func GetCommands(response http.ResponseWriter, request *http.Request) {
 	types := dto.CommandTypes
 	types, err := dto.EnrichTypes(types, profile)
 	if err != nil {
-		clog.Logger.Debug("Error reading icon files:" + err.Error())
+		clog.Logger.Errorf("Error reading commands files: %v", err)
 		api.Err(response, request, err)
 		return
 	}

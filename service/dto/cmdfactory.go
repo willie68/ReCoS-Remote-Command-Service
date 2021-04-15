@@ -3,6 +3,7 @@ package dto
 import (
 	"reflect"
 
+	clog "wkla.no-ip.biz/remote-desk-service/logging"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
@@ -49,7 +50,8 @@ func EnrichTypes(types []models.CommandTypeInfo, profile models.Profile) ([]mode
 		commandExecutor := GetCommand(command)
 		newType, err := commandExecutor.EnrichType(profile)
 		if err != nil {
-			return nil, err
+			clog.Logger.Errorf("Error enrich command type: %v", err)
+			continue
 		}
 		localTypes = append(localTypes, newType)
 	}
