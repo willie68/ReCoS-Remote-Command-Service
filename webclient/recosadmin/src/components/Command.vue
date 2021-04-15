@@ -97,6 +97,8 @@
             "
             :id="param.name"
             :options="paramList(param)"
+            optionLabel="label"
+            optionValue="value"
             v-tooltip="param.description"
             v-model="activeCommand.parameters[param.name]"
             :placeholder="param.unit"
@@ -116,22 +118,22 @@
             v-tooltip="param.description"
             v-model="activeCommand.parameters[param.name]"
             :placeholder="param.unit"
-          ><template #optiongroup="slotProps">
-          <div class="p-d-flex p-ai-center country-item">
-            <img
-              :src="
-                this.$store.state.baseURL +
-                'config/icons/category/' +
-                slotProps.option.label
-              "
-              width="18"
-              class="p-mr-2"
-            />
-            <div>
-              <b>{{ slotProps.option.label }}</b>
-            </div>
-          </div>
-        </template>
+            ><template #optiongroup="slotProps">
+              <div class="p-d-flex p-ai-center country-item">
+                <img
+                  :src="
+                    this.$store.state.baseURL +
+                    'config/icons/category/' +
+                    slotProps.option.label
+                  "
+                  width="18"
+                  class="p-mr-2"
+                />
+                <div>
+                  <b>{{ slotProps.option.label }}</b>
+                </div>
+              </div>
+            </template>
           </Dropdown>
           <InputNumber
             v-if="param.type == 'int'"
@@ -323,44 +325,68 @@ export default {
   methods: {
     paramList(param) {
       if (!param.groupedlist) {
-        let list = param.list;
+        let list = Array();
+        var fieldName; 
+        var label, value;
+        if (param.filteredlist) {
+          fieldName = param.filteredlist;
+        }
+        param.list.forEach((entry) => {
+          if (!param.filteredlist) {
+            label = entry;
+            value = entry;
+          } else {
+            console.log("Command: filtered list", fieldName);
+            if (entry.indexOf(":") > 0) {
+              label = entry.substring(0, entry.indexOf(":"));
+              value = entry.substring(entry.indexOf(":") + 1);
+            }
+            let myValue = {
+              label: label,
+              value: value,
+            };
+            list.push(myValue);
+          }
+        });
         return list;
       }
-      let list = Array();
-      param.list.forEach((entry) => {
-        var key, value;
-        if (entry.indexOf(":") > 0) {
-          key = entry.substring(0, entry.indexOf(":"));
-          value = entry.substring(entry.indexOf(":") + 1);
-        } else {
-          key = "unknown";
-          value = entry;
-        }
-        let found = false;
-        for (let x = 0; x < list.length; x++) {
-          if (list[x].label == key) {
+      if (param.groupedlist) {
+        let list = Array();
+        param.list.forEach((entry) => {
+          var key, value;
+          if (entry.indexOf(":") > 0) {
+            key = entry.substring(0, entry.indexOf(":"));
+            value = entry.substring(entry.indexOf(":") + 1);
+          } else {
+            key = "unknown";
+            value = entry;
+          }
+          let found = false;
+          for (let x = 0; x < list.length; x++) {
+            if (list[x].label == key) {
+              let myValue = {
+                label: value,
+                value: entry,
+              };
+              list[x].items.push(myValue);
+              found = true;
+            }
+          }
+          if (!found) {
+            let myType = {
+              label: key,
+              items: Array(),
+            };
             let myValue = {
               label: value,
               value: entry,
-            }
-            list[x].items.push(myValue);
-            found = true;
+            };
+            myType.items.push(myValue);
+            list.push(myType);
           }
-        }
-        if (!found) {
-          let myType = {
-            label: key,
-            items: Array(),
-          };
-          let myValue = {
-            label: value,
-            value: entry,
-          }
-          myType.items.push(myValue);
-          list.push(myType);
-        }
-      });
-      return list;
+        });
+        return list;
+      }
     },
     addArgument(param) {
       this.activeParam = param;

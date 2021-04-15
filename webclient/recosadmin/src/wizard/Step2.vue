@@ -60,6 +60,8 @@
           "
           :id="param.name"
           :options="paramList(param)"
+          optionLabel="label"
+          optionValue="value"
           v-tooltip="param.description"
           v-model="localValue.parameters[param.name]"
           :placeholder="param.unit"
@@ -241,44 +243,59 @@ export default {
   methods: {
     paramList(param) {
       if (!param.groupedlist) {
-        let list = param.list;
-        return list;
-      }
-      let list = Array();
-      param.list.forEach((entry) => {
-        var key, value;
-        if (entry.indexOf(":") > 0) {
-          key = entry.substring(0, entry.indexOf(":"));
-          value = entry.substring(entry.indexOf(":") + 1);
-        } else {
-          key = "unknown";
-          value = entry;
+        if (!param.filteredlist) {
+          let list = Array();
+          param.list.forEach((entry) => {
+            let myValue = {
+              label: entry,
+              value: entry,
+            };
+            list.push(myValue);
+          });
+          return list;
         }
-        let found = false;
-        for (let x = 0; x < list.length; x++) {
-          if (list[x].label == key) {
+        if (param.filteredlist) {
+          let fieldName = param.filteredlist
+          console.log("Step2: filtered list", fieldName)
+        }
+      }
+      if (param.groupedlist) {
+        let list = Array();
+        param.list.forEach((entry) => {
+          var key, value;
+          if (entry.indexOf(":") > 0) {
+            key = entry.substring(0, entry.indexOf(":"));
+            value = entry.substring(entry.indexOf(":") + 1);
+          } else {
+            key = "unknown";
+            value = entry;
+          }
+          let found = false;
+          for (let x = 0; x < list.length; x++) {
+            if (list[x].label == key) {
+              let myValue = {
+                label: value,
+                value: entry,
+              };
+              list[x].items.push(myValue);
+              found = true;
+            }
+          }
+          if (!found) {
+            let myType = {
+              label: key,
+              items: Array(),
+            };
             let myValue = {
               label: value,
               value: entry,
             };
-            list[x].items.push(myValue);
-            found = true;
+            myType.items.push(myValue);
+            list.push(myType);
           }
-        }
-        if (!found) {
-          let myType = {
-            label: key,
-            items: Array(),
-          };
-          let myValue = {
-            label: value,
-            value: entry,
-          };
-          myType.items.push(myValue);
-          list.push(myType);
-        }
-      });
-      return list;
+        });
+        return list;
+      }
     },
     onClick() {
       console.log(JSON.stringify(this.localValue));

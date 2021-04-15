@@ -3,6 +3,7 @@ package dto
 import (
 	"errors"
 	"fmt"
+	"strconv"
 
 	"wkla.no-ip.biz/remote-desk-service/pkg/lighting"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
@@ -33,6 +34,7 @@ var PHueScenesCommandTypeInfo = models.CommandTypeInfo{
 			Unit:           "",
 			WizardPossible: true,
 			List:           make([]string, 0),
+			FilteredList:   "name",
 		},
 		{
 			Name:           "brightness",
@@ -63,6 +65,7 @@ func (d *PHueScenesCommand) EnrichType(profile models.Profile) (models.CommandTy
 		return PHueScenesCommandTypeInfo, errors.New("philips Hue not configured")
 	}
 
+	groupMap := make(map[string]string, 0)
 	index := -1
 	for x, parameter := range PHueScenesCommandTypeInfo.Parameters {
 		if parameter.Name == "name" {
@@ -70,10 +73,11 @@ func (d *PHueScenesCommand) EnrichType(profile models.Profile) (models.CommandTy
 		}
 	}
 	if index >= 0 {
-		lights := hue.Groups
+		groups := hue.Groups
 		PHueScenesCommandTypeInfo.Parameters[index].List = make([]string, 0)
-		for _, light := range lights {
-			PHueScenesCommandTypeInfo.Parameters[index].List = append(PHueScenesCommandTypeInfo.Parameters[index].List, light.Name)
+		for _, group := range groups {
+			PHueScenesCommandTypeInfo.Parameters[index].List = append(PHueScenesCommandTypeInfo.Parameters[index].List, group.Name)
+			groupMap[strconv.Itoa(group.ID)] = group.Name
 		}
 	}
 
@@ -84,10 +88,15 @@ func (d *PHueScenesCommand) EnrichType(profile models.Profile) (models.CommandTy
 		}
 	}
 	if index >= 0 {
-		lights := hue.Scenes
+		scenes := hue.Scenes
 		PHueScenesCommandTypeInfo.Parameters[index].List = make([]string, 0)
-		for _, light := range lights {
-			PHueScenesCommandTypeInfo.Parameters[index].List = append(PHueScenesCommandTypeInfo.Parameters[index].List, light.Name)
+		for _, scene := range scenes {
+			groupName, ok := groupMap[scene.Group]
+			if !ok {
+				continue
+			}
+			name := fmt.Sprintf("%s: %s", groupName, scene.Name)
+			PHueScenesCommandTypeInfo.Parameters[index].List = append(PHueScenesCommandTypeInfo.Parameters[index].List, name)
 		}
 	}
 
