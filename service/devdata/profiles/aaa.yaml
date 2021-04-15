@@ -101,7 +101,7 @@ actions:
             hue: 0
             name: Büro
             saturation: 0
-            scene: Nordlichter
+            scene: 'Büro: Energie tanken'
       actions: []
     - type: SINGLE
       name: noop
@@ -113,7 +113,7 @@ actions:
       outlined: false
       runone: false
       commands:
-        - id: ""
+        - id: NOOP_4
           type: NOOP
           name: noop
           description: ""

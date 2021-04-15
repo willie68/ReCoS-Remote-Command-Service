@@ -347,10 +347,6 @@ func (p *PHueLightsCommand) isGroupName(name string) bool {
 	return strings.HasPrefix(name, hueGroupPrefix)
 }
 
-func (p *PHueLightsCommand) isLightName(name string) bool {
-	return strings.HasPrefix(name, hueLightPrefix)
-}
-
 func (p *PHueLightsCommand) getName(name string) string {
 	return strings.TrimSpace(name[strings.Index(name, ":")+1:])
 }

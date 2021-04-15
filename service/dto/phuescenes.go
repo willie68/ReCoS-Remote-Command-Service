@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
+	"strings"
 
 	"wkla.no-ip.biz/remote-desk-service/pkg/lighting"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
@@ -55,8 +56,6 @@ type PHueScenesCommand struct {
 	scene       string
 	bright      int
 }
-
-var hueColorModeScene string = "scene"
 
 // EnrichType enrich the type info with the informations from the profile
 func (d *PHueScenesCommand) EnrichType(profile models.Profile) (models.CommandTypeInfo, error) {
@@ -143,7 +142,12 @@ func (p *PHueScenesCommand) Execute(a *Action, requestMessage models.Message) (b
 		group.Bri(uint8(p.bright))
 	}
 	if p.scene != "" {
-		scene, ok := hue.SceneForGroup(*group, p.scene)
+		name := p.scene
+		if strings.Contains(name, ":") {
+			name = name[strings.Index(name, ":")+1:]
+			name = strings.TrimSpace(name)
+		}
+		scene, ok := hue.SceneForGroup(*group, name)
 		if !ok {
 			return true, fmt.Errorf("scene \"%s\" not found", p.scene)
 		}
