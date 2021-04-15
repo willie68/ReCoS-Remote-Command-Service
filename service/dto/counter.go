@@ -66,7 +66,6 @@ type CounterCommand struct {
 
 var (
 	colorSegments color.Color = color.RGBA{R: 0xFF, G: 0x00, B: 0x00, A: 0xFF}
-	colorBlack    color.Color = color.RGBA{R: 0x00, G: 0x00, B: 0x00, A: 0xFF}
 )
 
 // EnrichType enrich the type info with the informations from the profile
@@ -84,7 +83,7 @@ func (c *CounterCommand) Init(a *Action, commandName string) (bool, error) {
 		var ok bool
 		c.persist, ok = value.(bool)
 		if !ok {
-			return false, fmt.Errorf("Persist is in wrong format. Please use boolean as format")
+			return false, fmt.Errorf("persist is in wrong format. Please use boolean as format")
 		}
 	}
 
@@ -186,7 +185,7 @@ func (c *CounterCommand) GetGraphics(id string, width int, height int) (models.G
 	}
 	value, err := strconv.Atoi(id)
 	if err != nil {
-		clog.Logger.Debugf("counter: get graphics value not correct: 5s", id)
+		clog.Logger.Debugf("counter: get graphics value not correct: %s", id)
 		return models.GraphicsInfo{}, err
 	}
 	clog.Logger.Debugf("counter: get graphics value: %d", value)

@@ -82,20 +82,63 @@
         >
         <div class="p-col-12 p-md-8">
           <InputText
-            v-if="param.type == 'string' && param.list.length == 0"
+            v-if="param.type == 'string' && 
+            (!param.list ||
+            param.list.length == 0)"
             :id="param.name"
             type="text"
             v-tooltip="param.description"
             v-model="activeCommand.parameters[param.name]"
           />
+
           <Dropdown
-            v-if="param.type == 'string' && param.list.length > 0"
+            v-if="
+              param.type == 'string' &&
+              param.list &&
+              param.list.length > 0 &&
+              !param.groupedlist
+            "
             :id="param.name"
-            :options="param.list"
+            :options="paramList(param)"
+            optionLabel="label"
+            optionValue="value"
             v-tooltip="param.description"
             v-model="activeCommand.parameters[param.name]"
             :placeholder="param.unit"
           />
+          <Dropdown
+            v-if="
+              param.type == 'string' &&
+              param.list &&
+              param.list.length > 0 &&
+              param.groupedlist
+            "
+            :id="param.name"
+            :options="paramList(param)"
+            optionLabel="label"
+            optionValue="value"
+            optionGroupLabel="label"
+            optionGroupChildren="items"
+            v-tooltip="param.description"
+            v-model="activeCommand.parameters[param.name]"
+            :placeholder="param.unit"
+            ><template #optiongroup="slotProps">
+              <div class="p-d-flex p-ai-center country-item">
+                <img
+                  :src="
+                    this.$store.state.baseURL +
+                    'config/icons/category/' +
+                    slotProps.option.label
+                  "
+                  width="18"
+                  class="p-mr-2"
+                />
+                <div>
+                  <b>{{ slotProps.option.label }}</b>
+                </div>
+              </div>
+            </template>
+          </Dropdown>
           <InputNumber
             v-if="param.type == 'int'"
             :id="param.name"
@@ -284,6 +327,76 @@ export default {
     });
   },
   methods: {
+    paramList(param) {
+      if (!param.groupedlist) {
+        let list = Array();
+        var fieldName, filterValue, key, label, value;
+        let filtered = false;
+        if (param.filteredlist) {
+          fieldName = param.filteredlist;
+          filterValue = this.activeCommand.parameters[fieldName];
+          filtered = true;
+        }
+        param.list.forEach((entry) => {
+          label = entry;
+          value = entry;
+          if (filtered) {
+            if (entry.indexOf(":") > 0) {
+              key = entry.substring(0, entry.indexOf(":"));
+              label = entry.substring(entry.indexOf(":") + 1);
+              value = entry;
+              console.log("filter", key, label, value);
+              if (key != filterValue) {
+                return;
+              }
+            }
+          }
+          let myValue = {
+            label: label,
+            value: value,
+          };
+          list.push(myValue);
+        });
+        return list;
+      }
+      if (param.groupedlist) {
+        let list = Array();
+        param.list.forEach((entry) => {
+          var key, value;
+          if (entry.indexOf(":") > 0) {
+            key = entry.substring(0, entry.indexOf(":"));
+            value = entry.substring(entry.indexOf(":") + 1);
+          } else {
+            key = "unknown";
+            value = entry;
+          }
+          let found = false;
+          for (let x = 0; x < list.length; x++) {
+            if (list[x].label == key) {
+              let myValue = {
+                label: value,
+                value: entry,
+              };
+              list[x].items.push(myValue);
+              found = true;
+            }
+          }
+          if (!found) {
+            let myType = {
+              label: key,
+              items: Array(),
+            };
+            let myValue = {
+              label: value,
+              value: entry,
+            };
+            myType.items.push(myValue);
+            list.push(myType);
+          }
+        });
+        return list;
+      }
+    },
     addArgument(param) {
       this.activeParam = param;
       console.log("Command: add argument.");

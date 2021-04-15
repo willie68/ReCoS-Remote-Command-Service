@@ -388,7 +388,7 @@ func (a *Action) Close() error {
 			//cmdExecutor := GetCommand(command)
 			cmdExecutor := a.Commands[command.ID]
 			if cmdExecutor == nil {
-				clog.Logger.Errorf("can't find command: %s, (%s)", command.ID, command.Name, command.Type)
+				clog.Logger.Errorf("can't find command: %s, (%s#%s)", command.ID, command.Type, command.Name)
 				continue
 			}
 			_, err := cmdExecutor.Stop(a)

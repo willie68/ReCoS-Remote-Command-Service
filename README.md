@@ -741,6 +741,49 @@ parameters:
   page: page2
 ```
 
+##### Philips Hue Lights and Scenes
+
+2 Commandos for controlling philips hue lights and groups.
+
+`type`: `PHUELIGHTS` 
+
+Parameter:
+`name`: the name of the hue light, group, room or zone.  If a light is accessed the keyword "Light:" will be in front of the parameter, otherwise the keyword "Group:"
+`brightness`: the brightness of the light  (1..254, 0 for unused)
+`saturation`: the saturation of the light (1..254, 0 for unused)
+`hue`: the hue of the light, this is a color value ranging from 1..65535, 0 for unused
+`colortemp`: the color temperature of the light, this is a value ranging from 2000..6500, 0 for unused
+`color`: the color of the light
+
+`type`: `PHUESCENES`
+
+Parameter:
+`name`: the name of the hue group, room or zone.  
+`scene`: the scene to apply to
+`brightness`: the brightness of the group  (1..254, 0 for unused)
+
+```yaml
+type: PHUELIGHTS
+name: hue_0
+description: new PHUELIGHTS command created by ActionWizard
+parameters:
+  name: "Light: Hue color lamp 1"
+  brightness: 0
+  color: ff0000
+
+type: PHUESCENES
+name: hue_0
+description: new PHUESCENES command created by ActionWizard
+parameters:
+  name: "office"
+  scene: "winterday"
+  brightness: 0
+  color: ff0000
+
+```
+
+ATTENTION: As names of the lights, groups, scenes ... are used here to identify the object, please be sure that in the definition of those the names are unique. Otherwise ReCoS maybe control the only one of those.
+
 ##### Play audio
 
 ![image-20210409114913298](documentation/assets/playaudio.png)
