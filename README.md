@@ -1056,7 +1056,7 @@ First of all, a new user must be created for the ReCoS installation. To do this,
 
 http: // <IP address of the Hue Bridge> /debug/clip.html
 
-![image-20210412161232901](plugins/philips hue/clip_1.png)
+![image-20210412161232901](.\documentation\assets\clip_1.png)
 
 Now please post the following to the bridge.
 URL: /api
@@ -1065,19 +1065,19 @@ Message Body: {"devicetype":"recos#hue_user"}
 
 With the first attempt an error message appears.
 
-![image-20210412161801279](plugins/philips hue/clip_2.png)
+![image-20210412161801279](.\documentation\assets\clip_2.png)
 
 Please press the big button on the Philips Hue Bridge and post the same thing again.
 
-![](plugins/philips hue/clip_3.png)
+![](.\documentation\assets\clip_3.png)
 
 Then copy the username from the answer:
 
-![image-20210412162002314](plugins/philips hue/clip_4.png)
+![image-20210412162002314](.\documentation\assets\clip_4.png)
 
 Now you have to change the ReCoS configuration. To do this, please start the configuration file via the context menu.
 
-![image-20210416104722050](documentation/assets/philips_hue_config.png)
+![image-20210416104722050](.\documentation\assets\philips_hue_config.png)
 
 
 In the `extconfig:` area, the area for `philipshue` must now be changed. Please enter the above key here as the `username` and change the `ipaddress` accordingly.
