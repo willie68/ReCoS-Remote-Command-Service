@@ -65,6 +65,12 @@ var DefaulConfig = Config{
 		"audioplayer": map[string]interface{}{
 			"samplerate": 48000,
 		},
+		"philipshue": map[string]interface{}{
+			"username":     "<the bridge generated username here>",
+			"device":       "recos#hue_user",
+			"ipaddress":    "127.0.0.1",
+			"updateperiod": 5,
+		},
 	},
 	Logging: LoggingConfig{
 		Level:    "INFO",

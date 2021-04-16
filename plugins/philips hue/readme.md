@@ -16,7 +16,7 @@ Beim 1. versuch kommt zunächst eine Fehlermeldung.
 
 ![image-20210412161801279](clip_2.png)
 
-Drücken Sie bitte nun auf den grossen Button auf der Hue Bridge und posten Sie das gleiche noch einmal.
+Drücken Sie bitte nun auf den großen Button auf der Philips Hue Bridge und posten Sie das gleiche noch einmal.
 
 ![](clip_3.png)
 
@@ -27,3 +27,4 @@ Danack kopieren Sie bitte aus der Antwort den Benutzernamen:
 Diesen tragen Sie nun in der externalconfig im Bereich philips_hue diesen String als username ein.
 
 Somit ist die Bridge jetzt für ReCoS eingerichtet. 
+

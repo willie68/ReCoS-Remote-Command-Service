@@ -1050,6 +1050,50 @@ extconfig:
     updateperiod: 5
 ```
 
+## Installation Philips Hue
+
+First of all, a new user must be created for the ReCoS installation. To do this, please start your browser and go to the clip page of your Hue Bridge. 
+
+http: // <IP address of the Hue Bridge> /debug/clip.html
+
+![image-20210412161232901](plugins/philips hue/clip_1.png)
+
+Now please post the following to the bridge.
+URL: /api
+
+Message Body: {"devicetype":"recos#hue_user"}
+
+With the first attempt an error message appears.
+
+![image-20210412161801279](plugins/philips hue/clip_2.png)
+
+Please press the big button on the Philips Hue Bridge and post the same thing again.
+
+![](plugins/philips hue/clip_3.png)
+
+Then copy the username from the answer:
+
+![image-20210412162002314](plugins/philips hue/clip_4.png)
+
+Now you have to change the ReCoS configuration. To do this, please start the configuration file via the context menu.
+
+![image-20210416104722050](documentation/assets/philips_hue_config.png)
+
+
+In the `extconfig:` area, the area for `philipshue` must now be changed. Please enter the above key here as the `username` and change the `ipaddress` accordingly.
+`updateperiod` is the time span in seconds in which ReCoS polls the bridge for changes.
+
+```yaml
+extconfig:
+    philipshue:
+        username: IwtURJmST8b44mvZSZ2nl73nZhghVltMvgzlH7UC
+        device: recos#hue_user
+        ipaddress: 192.168.178.81
+        updateperiod: 5
+```
+
+
+
 # Thanks
 
 Thanks goes to iconshock for the great icons set.
