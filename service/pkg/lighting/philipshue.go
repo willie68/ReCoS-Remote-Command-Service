@@ -39,33 +39,40 @@ func InitPhilipsHue(extconfig map[string]interface{}) error {
 		config := value.(map[string]interface{})
 		if config != nil {
 			clog.Logger.Debug("lighting:philipshue: found config")
-			username, ok := config["username"].(string)
+			active, ok := config["active"].(bool)
 			if !ok {
-				return fmt.Errorf("philipshue: no username given")
+				active = false
 			}
-			device, ok := config["device"].(string)
-			if !ok {
-				return fmt.Errorf("philipshue: no device given")
-			}
-			ipaddress, ok := config["ipaddress"].(string)
-			if !ok {
-				return fmt.Errorf("philipshue: no ipaddress given")
-			}
-			updatePeriod, ok := config["updateperiod"].(int)
-			if !ok {
-				updatePeriod = 10
-			}
-			philipsHue = &PhilipsHue{
-				username:  username,
-				device:    device,
-				ipaddress: ipaddress,
-				periode:   updatePeriod,
-				ticker:    time.NewTicker(time.Duration(updatePeriod) * time.Second),
-				done:      make(chan bool),
-			}
-			err := philipsHue.init()
-			if err != nil {
-				return err
+			if active {
+				clog.Logger.Debug("lighting:philipshue: active")
+				username, ok := config["username"].(string)
+				if !ok {
+					return fmt.Errorf("philipshue: no username given")
+				}
+				device, ok := config["device"].(string)
+				if !ok {
+					return fmt.Errorf("philipshue: no device given")
+				}
+				ipaddress, ok := config["ipaddress"].(string)
+				if !ok {
+					return fmt.Errorf("philipshue: no ipaddress given")
+				}
+				updatePeriod, ok := config["updateperiod"].(int)
+				if !ok {
+					updatePeriod = 10
+				}
+				philipsHue = &PhilipsHue{
+					username:  username,
+					device:    device,
+					ipaddress: ipaddress,
+					periode:   updatePeriod,
+					ticker:    time.NewTicker(time.Duration(updatePeriod) * time.Second),
+					done:      make(chan bool),
+				}
+				err := philipsHue.init()
+				if err != nil {
+					return err
+				}
 			}
 		}
 	}

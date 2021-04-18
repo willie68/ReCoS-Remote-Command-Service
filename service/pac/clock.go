@@ -1,4 +1,4 @@
-package dto
+package pac
 
 import (
 	"image/color"
@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"wkla.no-ip.biz/remote-desk-service/api"
-	"wkla.no-ip.biz/remote-desk-service/dto/clocks"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
+	"wkla.no-ip.biz/remote-desk-service/pac/clocks"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 

@@ -1,4 +1,4 @@
-package dto
+package pac
 
 import (
 	"bytes"
@@ -11,7 +11,7 @@ import (
 
 	"github.com/fogleman/gg"
 	"wkla.no-ip.biz/remote-desk-service/api"
-	"wkla.no-ip.biz/remote-desk-service/dto/clocks"
+	"wkla.no-ip.biz/remote-desk-service/pac/clocks"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )

@@ -16,15 +16,16 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/api"
 	"wkla.no-ip.biz/remote-desk-service/api/handler"
 	"wkla.no-ip.biz/remote-desk-service/api/routes"
-	"wkla.no-ip.biz/remote-desk-service/dto"
 	"wkla.no-ip.biz/remote-desk-service/error/serror"
 	"wkla.no-ip.biz/remote-desk-service/health"
 	"wkla.no-ip.biz/remote-desk-service/icon"
+	"wkla.no-ip.biz/remote-desk-service/pac"
 	"wkla.no-ip.biz/remote-desk-service/pkg/audio"
 	"wkla.no-ip.biz/remote-desk-service/pkg/autostart"
 	"wkla.no-ip.biz/remote-desk-service/pkg/lighting"
 	"wkla.no-ip.biz/remote-desk-service/pkg/osdependent"
 	"wkla.no-ip.biz/remote-desk-service/pkg/session"
+	"wkla.no-ip.biz/remote-desk-service/pkg/smarthome"
 	"wkla.no-ip.biz/remote-desk-service/web"
 
 	"github.com/getlantern/systray"
@@ -274,7 +275,7 @@ func onReady() {
 		os.Exit(1)
 	}
 
-	if err := dto.InitProfiles(config.Profiles); err != nil {
+	if err := pac.InitProfiles(config.Profiles); err != nil {
 		clog.Logger.Alertf("can't create profiles: %s", err.Error())
 		os.Exit(1)
 	}
@@ -475,6 +476,11 @@ func initConfig() {
 		clog.Logger.Alertf("error starting lighting worker: %s", err.Error())
 		os.Exit(1)
 	}
+	err = smarthome.InitSmarthome(serviceConfig.ExternalConfig)
+	if err != nil {
+		clog.Logger.Alertf("error starting smarthome worker: %s", err.Error())
+		os.Exit(1)
+	}
 
 	err = osdependent.InitOSDependend(serviceConfig)
 	if err != nil {
@@ -482,7 +488,7 @@ func initConfig() {
 		os.Exit(1)
 	}
 
-	dto.InitCommand()
+	pac.InitCommand()
 
 	configDir, err := config.ReplaceConfigdir(serviceConfig.Sessions)
 	if err != nil {

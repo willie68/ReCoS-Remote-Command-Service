@@ -1,5 +1,5 @@
 // +build !windows
-package dto
+package pac
 
 import "wkla.no-ip.biz/remote-desk-service/pkg/models"
 

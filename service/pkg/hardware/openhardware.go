@@ -38,20 +38,27 @@ func InitOpenHardwareMonitor(extconfig map[string]interface{}) error {
 		config := value.(map[string]interface{})
 		if config != nil {
 			clog.Logger.Debug("hardware:openhardwaremonitor: found config")
-			url, ok := config["url"].(string)
+			active, ok := config["active"].(bool)
 			if !ok {
-				err = fmt.Errorf("can't find url to connect to. %s", url)
+				active = false
 			}
-			updatePeriod, ok := config["updateperiod"].(int)
-			if !ok {
-				updatePeriod = 5
-			}
-			OpenHardwareMonitorInstance = OpenHardwareMonitor{
-				periode:   updatePeriod,
-				Connected: false,
-				baseURL:   url,
-				ticker:    time.NewTicker(time.Duration(updatePeriod) * time.Second),
-				done:      make(chan bool),
+			if active {
+				clog.Logger.Debug("hardware:openhardwaremonitor: active")
+				url, ok := config["url"].(string)
+				if !ok {
+					err = fmt.Errorf("can't find url to connect to. %s", url)
+				}
+				updatePeriod, ok := config["updateperiod"].(int)
+				if !ok {
+					updatePeriod = 5
+				}
+				OpenHardwareMonitorInstance = OpenHardwareMonitor{
+					periode:   updatePeriod,
+					Connected: false,
+					baseURL:   url,
+					ticker:    time.NewTicker(time.Duration(updatePeriod) * time.Second),
+					done:      make(chan bool),
+				}
 			}
 		}
 	}

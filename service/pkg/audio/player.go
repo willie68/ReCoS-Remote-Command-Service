@@ -28,16 +28,25 @@ func InitAudioplayer(extconfig map[string]interface{}) error {
 		config := value.(map[string]interface{})
 		if config != nil {
 			clog.Logger.Debug("audio:audioplayer: found config")
-			mysampleRate, ok := config["samplerate"].(int)
+			active, ok := config["active"].(bool)
 			if !ok {
-				mysampleRate = 48000
+				active = false
 			}
-			sampleRate = beep.SampleRate(mysampleRate)
+			if active {
+				clog.Logger.Debug("audio:audioplayer: active")
+				mysampleRate, ok := config["samplerate"].(int)
+				if !ok {
+					mysampleRate = 48000
+				}
+				sampleRate = beep.SampleRate(mysampleRate)
+				oneSpeaker.Do(func() {
+					speaker.Init(sampleRate, sampleRate.N(time.Second/10))
+				})
+			} else {
+				return nil
+			}
 		}
 	}
-	oneSpeaker.Do(func() {
-		speaker.Init(sampleRate, sampleRate.N(time.Second/10))
-	})
 	return err
 }
 
