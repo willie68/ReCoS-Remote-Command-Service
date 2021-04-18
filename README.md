@@ -12,7 +12,7 @@ For the normal execution client please use http://localhost:9280/webclient. On o
 # ReCoS Client - Web Client Interface
 
 This is the ReCoS web client. After successful installation you can access it with 
-http://127.0.0.1:9280/webclient on the same computer.
+http://localhost:9280/webclient on the same computer.
 
 <img src="documentation/assets/webclient.png" alt="webclient" style="zoom:50%;" />
 
