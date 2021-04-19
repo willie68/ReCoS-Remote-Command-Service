@@ -94,6 +94,7 @@ var ClockCommandTypeInfo = models.CommandTypeInfo{
 type ClockCommand struct {
 	Parameters  map[string]interface{}
 	action      *Action
+	commandName string
 	stop        bool
 	ticker      *time.Ticker
 	done        chan bool
@@ -102,7 +103,6 @@ type ClockCommand struct {
 	analog      bool
 	showseconds bool
 	showdate    bool
-	commandName string
 	design      string
 	color       color.Color
 	timezone    string

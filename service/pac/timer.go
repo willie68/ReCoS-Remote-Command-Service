@@ -1,11 +1,18 @@
 package pac
 
 import (
+	"bytes"
 	"fmt"
+	"image/color"
+	"image/png"
+	"math"
+	"strconv"
 	"time"
 
+	"github.com/fogleman/gg"
 	"wkla.no-ip.biz/remote-desk-service/api"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
+	"wkla.no-ip.biz/remote-desk-service/pac/clocks"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
@@ -40,7 +47,7 @@ var TimerCommandTypeInfo = models.CommandTypeInfo{
 			Type:           "string",
 			Description:    "the message at the end of the timer, defaults: finished",
 			Unit:           "",
-			WizardPossible: true,
+			WizardPossible: false,
 			List:           make([]string, 0),
 		},
 	},
@@ -50,80 +57,170 @@ var TimerCommandTypeInfo = models.CommandTypeInfo{
 // For formatting the response the parameters fomat and finished are responsible.
 // Use %d for inserting the actual time to wait.
 type TimerCommand struct {
-	Parameters map[string]interface{}
+	action      *Action
+	commandName string
+	format      string
+	finished    string
+	time        int
+	Parameters  map[string]interface{}
 }
 
+var (
+	timerColorTicks  color.Color = color.RGBA{R: 0x80, G: 0x80, B: 0x80, A: 0xFF}
+	timerColorGreen  color.Color = color.RGBA{R: 0x00, G: 0x80, B: 0x00, A: 0xFF}
+	timerColorYellow color.Color = color.RGBA{R: 0xff, G: 0xff, B: 0x00, A: 0xFF}
+	timerColorRed    color.Color = color.RGBA{R: 0xff, G: 0x00, B: 0x00, A: 0xFF}
+	timerTickLength  float64     = 15
+)
+
 // EnrichType enrich the type info with the informations from the profile
-func (d *TimerCommand) EnrichType(profile models.Profile) (models.CommandTypeInfo, error) {
+func (t *TimerCommand) EnrichType(profile models.Profile) (models.CommandTypeInfo, error) {
 	return TimerCommandTypeInfo, nil
 }
 
 // Init a timer in the actual context
-func (d *TimerCommand) Init(a *Action, commandName string) (bool, error) {
+func (t *TimerCommand) Init(a *Action, commandName string) (bool, error) {
+	var err error
+	t.action = a
+	t.commandName = commandName
+	t.format, err = ConvertParameter2String(t.Parameters, "format", "%d seconds")
+	if err != nil {
+		return false, err
+	}
+	t.finished, err = ConvertParameter2String(t.Parameters, "finished", "finished")
+	if err != nil {
+		return false, err
+	}
+	t.time, err = ConvertParameter2Int(t.Parameters, "time", 10)
+	if err != nil {
+		return false, err
+	}
 	return true, nil
 }
 
 // Stop a timer in the actual context
-func (d *TimerCommand) Stop(a *Action) (bool, error) {
+func (t *TimerCommand) Stop(a *Action) (bool, error) {
 	return true, nil
 }
 
 // Execute a timer in the actual context
-func (d *TimerCommand) Execute(a *Action, requestMessage models.Message) (bool, error) {
-	value, found := d.Parameters["format"]
-	format := "%d seconds"
-	if found {
-		var ok bool
-		format, ok = value.(string)
-		if !ok {
-			return false, fmt.Errorf("format is in wrong format. Please use string as format")
-		}
+func (t *TimerCommand) Execute(a *Action, requestMessage models.Message) (bool, error) {
+	delayValue := t.time
+	clog.Logger.Infof("count down with %v seconds", delayValue)
+	for ; delayValue > 0; delayValue-- {
+		// TODO get this from the config
+		title := fmt.Sprintf(t.format, delayValue)
+		t.SendGraphics(delayValue, title)
+		time.Sleep(1 * time.Second)
 	}
-	value, found = d.Parameters["finished"]
-	finnished := "finished"
-	if found {
-		var ok bool
-		finnished, ok = value.(string)
-		if !ok {
-			return false, fmt.Errorf("format is in wrong format. Please use string as format")
-		}
+	message := models.Message{
+		Profile:  a.Profile,
+		Action:   a.Name,
+		State:    0,
+		Title:    t.finished,
+		ImageURL: "check_mark.png",
 	}
-	value, found = d.Parameters["time"]
-	if found {
-		delayValue, ok := value.(int)
-		if ok {
-			clog.Logger.Infof("count down with %v seconds", delayValue)
-			for ; delayValue > 0; delayValue-- {
-				// TODO get this from the config
-				title := fmt.Sprintf(format, delayValue)
-				icon := "point_green.png"
-				if delayValue < 4 {
-					icon = "point_yellow.png"
-				}
-				message := models.Message{
-					Profile:  a.Profile,
-					Action:   a.Name,
-					State:    delayValue,
-					Title:    title,
-					ImageURL: icon,
-				}
-				api.SendMessage(message)
-				time.Sleep(1 * time.Second)
-			}
-			message := models.Message{
-				Profile:  a.Profile,
-				Action:   a.Name,
-				State:    0,
-				ImageURL: "point_red.png",
-				Title:    finnished,
-			}
-			api.SendMessage(message)
-			time.Sleep(1 * time.Second)
-		} else {
-			return false, fmt.Errorf("time is in wrong format. Please use integer as format")
-		}
-	} else {
-		return false, fmt.Errorf("time is missing")
-	}
+	api.SendMessage(message)
+	time.Sleep(3 * time.Second)
 	return true, nil
+}
+
+// SendPNG sending this array to the client
+func (t *TimerCommand) SendGraphics(value int, text string) {
+	image := GetImageURL(t.action, t.commandName, strconv.Itoa(value))
+	message := models.Message{
+		Profile:  t.action.Profile,
+		Action:   t.action.Name,
+		ImageURL: image,
+		State:    value,
+		Title:    text,
+	}
+	api.SendMessage(message)
+}
+
+// GetGraphics creates a clock graphics from the id
+func (t *TimerCommand) GetGraphics(id string, width int, height int) (models.GraphicsInfo, error) {
+	var model models.GraphicsInfo
+	value, err := strconv.Atoi(id)
+	if err != nil {
+		return model, err
+	}
+	if width <= 0 {
+		width = clocks.ClockImageWidth
+	}
+	if height <= 0 {
+		height = clocks.ClockImageHeight
+	}
+	buff := t.generateTimerWatch(value, width, height)
+	model = models.GraphicsInfo{
+		Mimetype: "image/png",
+		Data:     buff,
+	}
+	return model, nil
+}
+
+// generateTimerWatch generates a nice clock bmp
+func (t *TimerCommand) generateTimerWatch(value int, width int, height int) []byte {
+	edgeSize := height
+	if width < height {
+		edgeSize = width
+	}
+	dc := gg.NewContext(edgeSize, edgeSize)
+	halfWidth := float64(edgeSize / 2)
+	halfHeight := float64(edgeSize / 2)
+	floatEdgeSize := float64(edgeSize)
+	myTicklength := timerTickLength * floatEdgeSize / float64(clocks.ClockImageHeight)
+
+	dc.InvertY()
+
+	// Draw the case around the dsísplay
+	dc.SetColor(timerColorTicks)
+	dc.SetLineWidth(1.0)
+	dc.DrawCircle(halfWidth, halfHeight, halfHeight-1)
+	dc.MoveTo(halfWidth-1, floatEdgeSize)
+	dc.LineTo(halfWidth-1, floatEdgeSize-myTicklength)
+	dc.Stroke()
+
+	// draw the cake
+	dc.SetColor(timerColorGreen)
+	if value <= (t.time / 4) {
+		dc.SetColor(timerColorYellow)
+	}
+	if value <= 1 {
+		dc.SetColor(timerColorRed)
+	}
+
+	np := math.Pi / 2.0
+	pos := float64(value) / float64(t.time) * -2.0 * math.Pi
+	if value < t.time {
+
+		clog.Logger.Infof("pos: %f", pos)
+
+		dc.MoveTo(halfWidth, halfHeight)
+		dc.DrawArc(halfWidth, halfHeight, halfWidth-1, np, pos+np)
+		dc.LineTo(halfWidth, halfHeight)
+
+	} else {
+		dc.DrawCircle(halfWidth, halfHeight, halfWidth-1)
+	}
+	dc.Fill()
+	dc.Stroke()
+
+	// Draw some ticks
+	dc.SetColor(timerColorTicks)
+	dc.SetLineWidth(4.0)
+	for i := 0; i < t.time; i++ {
+		deg := 360.0 / float64(t.time) * float64(i)
+		dc.MoveTo(halfWidth+(math.Sin(Deg2Rad(deg))*(halfWidth-myTicklength)), halfHeight+(math.Cos(Deg2Rad(deg))*(halfHeight-myTicklength)))
+		dc.LineTo(halfWidth+(math.Sin(Deg2Rad(deg))*(halfWidth-1)), halfHeight+(math.Cos(Deg2Rad(deg))*(halfHeight-1)))
+	}
+	dc.Stroke()
+
+	myImage := dc.Image()
+	var buff bytes.Buffer
+
+	// The Buffer satisfies the Writer interface so we can use it with Encode
+	// In previous example we encoded to a file, this time to a temp buffer
+	png.Encode(&buff, myImage)
+	return buff.Bytes()
 }

@@ -18,6 +18,7 @@ import (
 
 type OpenHardwareMonitor struct {
 	baseURL    string
+	Active     bool
 	Connected  bool
 	periode    int
 	lastError  error
@@ -42,23 +43,26 @@ func InitOpenHardwareMonitor(extconfig map[string]interface{}) error {
 			if !ok {
 				active = false
 			}
+			var url string
+			updatePeriod := 5
 			if active {
 				clog.Logger.Debug("hardware:openhardwaremonitor: active")
 				url, ok := config["url"].(string)
 				if !ok {
 					err = fmt.Errorf("can't find url to connect to. %s", url)
 				}
-				updatePeriod, ok := config["updateperiod"].(int)
+				updatePeriod, ok = config["updateperiod"].(int)
 				if !ok {
 					updatePeriod = 5
 				}
-				OpenHardwareMonitorInstance = OpenHardwareMonitor{
-					periode:   updatePeriod,
-					Connected: false,
-					baseURL:   url,
-					ticker:    time.NewTicker(time.Duration(updatePeriod) * time.Second),
-					done:      make(chan bool),
-				}
+			}
+			OpenHardwareMonitorInstance = OpenHardwareMonitor{
+				Active:    active,
+				periode:   updatePeriod,
+				Connected: false,
+				baseURL:   url,
+				ticker:    time.NewTicker(time.Duration(updatePeriod) * time.Second),
+				done:      make(chan bool),
 			}
 		}
 	}

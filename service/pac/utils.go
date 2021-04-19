@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"image/color"
 	"log"
+	"math"
 	"sort"
 	"strings"
 	"sync"
@@ -128,4 +129,12 @@ func GetIANANames() []string {
 		sort.Slice(zones, func(i, j int) bool { return strings.ToLower(zones[i]) < strings.ToLower(zones[j]) })
 	})
 	return zones
+}
+
+func Deg2Rad(deg float64) float64 {
+	return deg * (math.Pi / 180.0)
+}
+
+func Rad2Deg(rad float64) float64 {
+	return rad * (180.0 / math.Pi)
 }

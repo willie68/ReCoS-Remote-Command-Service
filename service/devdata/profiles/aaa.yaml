@@ -9,6 +9,7 @@ pages:
       toolbar: ""
       cells:
         - hmprograms_0
+        - timer_0
 actions:
     - type: SINGLE
       name: hmprograms_0
@@ -20,7 +21,7 @@ actions:
       outlined: false
       runone: true
       commands:
-        - id: ""
+        - id: HMPROGRAMS_0
           type: HMPROGRAMS
           name: hmprograms_0
           description: new HMPROGRAMS command created by ActionWizard
@@ -28,4 +29,25 @@ actions:
           title: ""
           parameters:
             name: Gartenlicht ein
+      actions: []
+    - type: SINGLE
+      name: timer_0
+      title: ""
+      icon: timer.png
+      description: new TIMER action created by ActionWizard
+      fontsize: 10
+      fontcolor: f7ff00
+      outlined: false
+      runone: true
+      commands:
+        - id: TIMER_1
+          type: TIMER
+          name: timer_0
+          description: new TIMER command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            finished: "finished"
+            format: '%d seconds'
+            time: 16
       actions: []

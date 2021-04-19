@@ -45,7 +45,7 @@
       >
       <div class="p-col-12 p-md-8">
         <InputText
-          v-if="param.type == 'string' && param.list.length == 0"
+          v-if="param.type == 'string' && param.list && param.list.length == 0"
           :id="param.name"
           type="text"
           v-tooltip="param.description"
@@ -55,6 +55,7 @@
         <DropdownParameter
           v-if="
             param.type == 'string' &&
+            param.list &&
             param.list.length > 0 &&
             !param.groupedlist
           "
@@ -71,7 +72,10 @@
         />
         <Dropdown
           v-if="
-            param.type == 'string' && param.list.length > 0 && param.groupedlist
+            param.type == 'string' &&
+            param.list &&
+            param.list.length > 0 &&
+            param.groupedlist
           "
           :id="param.name"
           :options="paramList(param)"
