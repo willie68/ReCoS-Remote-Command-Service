@@ -58,7 +58,7 @@ type PHueScenesCommand struct {
 }
 
 // EnrichType enrich the type info with the informations from the profile
-func (d *PHueScenesCommand) EnrichType(profile models.Profile) (models.CommandTypeInfo, error) {
+func (p *PHueScenesCommand) EnrichType(profile models.Profile) (models.CommandTypeInfo, error) {
 	hue, ok := lighting.GetPhilipsHue()
 	if !ok {
 		return PHueScenesCommandTypeInfo, errors.New("philips Hue not configured")

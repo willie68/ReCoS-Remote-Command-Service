@@ -35,6 +35,7 @@ var CommandTypes = []models.CommandTypeInfo{
 	PlayAudioCommandTypeInfo,
 	PHueLightsCommandTypeInfo,
 	PHueScenesCommandTypeInfo,
+	HMPrgCommandTypeInfo,
 }
 
 func InitCommand() {
@@ -185,6 +186,12 @@ func GetCommand(command models.Command) CommandExecutor {
 	case PHueScenesCommandTypeInfo.Type:
 		{
 			cmdExecutor = &PHueScenesCommand{
+				Parameters: command.Parameters,
+			}
+		}
+	case HMPrgCommandTypeInfo.Type:
+		{
+			cmdExecutor = &HMPrgCommand{
 				Parameters: command.Parameters,
 			}
 		}

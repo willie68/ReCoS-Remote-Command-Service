@@ -8,118 +8,24 @@ pages:
       rows: 2
       toolbar: ""
       cells:
-        - hue_0
-        - hue_1
-        - hue_2
-        - hue_scene_0
+        - hmprograms_0
 actions:
     - type: SINGLE
-      name: hue_0
-      title: Color Red
-      icon: light_bulb.png
-      description: new HUE action created by ActionWizard
-      fontsize: 20
-      fontcolor: ffffff
-      outlined: true
-      runone: true
-      commands:
-        - id: PHUELIGHTS_0
-          type: PHUELIGHTS
-          name: hue_0
-          description: new PHUELIGHTS command created by ActionWizard
-          icon: ""
-          title: ""
-          parameters:
-            brightness: 0
-            color: ff2020
-            colortemp: 0
-            hue: 0
-            name: 'Group: Büro'
-            saturation: 0
-      actions: []
-    - type: SINGLE
-      name: hue_1
-      title: Hue
-      icon: light_bulb.png
-      description: new HUE action created by ActionWizard
-      fontsize: 20
-      fontcolor: ffffff
-      outlined: true
-      runone: true
-      commands:
-        - id: PHUELIGHTS_1
-          type: PHUELIGHTS
-          name: hue_0
-          description: new PHUELIGHTS command created by ActionWizard
-          icon: ""
-          title: ""
-          parameters:
-            hue: 27000
-            name: 'Light: Hue color lamp 1'
-            saturation: 254
-      actions: []
-    - type: SINGLE
-      name: hue_2
-      title: CT
-      icon: light_bulb.png
-      description: new HUE action created by ActionWizard
-      fontsize: 20
-      fontcolor: ffffff
-      outlined: true
-      runone: true
-      commands:
-        - id: PHUELIGHTS_2
-          type: PHUELIGHTS
-          name: hue_0
-          description: new PHUELIGHTS command created by ActionWizard
-          icon: ""
-          title: ""
-          parameters:
-            colortemp: 2700
-            name: 'Light: Hue color lamp 1'
-      actions: []
-    - type: SINGLE
-      name: hue_scene_0
-      title: ""
-      icon: light_bulb.png
-      description: ""
-      fontsize: 0
-      fontcolor: ""
+      name: hmprograms_0
+      title: Gartenlicht ein
+      icon: history2.png
+      description: new HMPROGRAMS action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
       outlined: false
-      runone: false
+      runone: true
       commands:
-        - id: PHUESCENES_3
-          type: PHUESCENES
-          name: hue_sc_0
-          description: ""
+        - id: ""
+          type: HMPROGRAMS
+          name: hmprograms_0
+          description: new HMPROGRAMS command created by ActionWizard
           icon: ""
-          title: hue_sc_0
+          title: ""
           parameters:
-            brightness: 0
-            color: ""
-            colortemp: 0
-            hue: 0
-            name: Büro
-            saturation: 0
-            scene: 'Büro: Energie tanken'
-      actions: []
-    - type: SINGLE
-      name: noop
-      title: ""
-      icon: ""
-      description: ""
-      fontsize: 0
-      fontcolor: ""
-      outlined: false
-      runone: false
-      commands:
-        - id: NOOP_4
-          type: NOOP
-          name: noop
-          description: ""
-          icon: ""
-          title: noop
-          parameters:
-            first: one
-            second: ""
+            name: Gartenlicht ein
       actions: []

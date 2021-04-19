@@ -59,16 +59,24 @@ var DefaulConfig = Config{
 	TimezoneInfo: "${configdir}/zoneinfo.zip",
 	ExternalConfig: map[string]interface{}{
 		"openhardwaremonitor": map[string]interface{}{
+			"active":       false,
 			"url":          "http://127.0.0.1:12999/data.json",
-			"updateperiod": "5",
+			"updateperiod": 5,
 		},
 		"audioplayer": map[string]interface{}{
+			"active":     false,
 			"samplerate": 48000,
 		},
 		"philipshue": map[string]interface{}{
+			"active":       false,
 			"username":     "<the bridge generated username here>",
 			"device":       "recos#hue_user",
 			"ipaddress":    "127.0.0.1",
+			"updateperiod": 5,
+		},
+		"homematic": map[string]interface{}{
+			"active":       false,
+			"url":          "http://192.168.172.10",
 			"updateperiod": 5,
 		},
 	},
