@@ -36,6 +36,8 @@ var CommandTypes = []models.CommandTypeInfo{
 	PHueLightsCommandTypeInfo,
 	PHueScenesCommandTypeInfo,
 	HMPrgCommandTypeInfo,
+	HMSwitchCommandTypeInfo,
+	HMDimmerCommandTypeInfo,
 }
 
 func InitCommand() {
@@ -192,6 +194,18 @@ func GetCommand(command models.Command) CommandExecutor {
 	case HMPrgCommandTypeInfo.Type:
 		{
 			cmdExecutor = &HMPrgCommand{
+				Parameters: command.Parameters,
+			}
+		}
+	case HMSwitchCommandTypeInfo.Type:
+		{
+			cmdExecutor = &HMSwitchCommand{
+				Parameters: command.Parameters,
+			}
+		}
+	case HMDimmerCommandTypeInfo.Type:
+		{
+			cmdExecutor = &HMDimmerCommand{
 				Parameters: command.Parameters,
 			}
 		}
