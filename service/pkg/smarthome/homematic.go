@@ -31,6 +31,11 @@ type Statelist struct {
 	Devices []Device `xml:"device"`
 }
 
+type State struct {
+	XMLName xml.Name `xml:"state"`
+	Devices []Device `xml:"device"`
+}
+
 type Device struct {
 	XMLName    xml.Name  `xml:"device"`
 	Name       string    `xml:"name,attr"`
@@ -61,15 +66,16 @@ type Channel struct {
 }
 
 type Datapoint struct {
-	XMLName    xml.Name `xml:"datapoint"`
-	Name       string   `xml:"name,attr"`
-	Type       string   `xml:"type,attr"`
-	Ise_id     string   `xml:"ise_id,attr"`
-	Value      string   `xml:"value,attr"`
-	ValueType  int      `xml:"valuetype,attr"`
-	ValueUnit  string   `xml:"valueunit,attr"`
-	TimeStamp  int      `xml:"timestamp,attr"`
-	Operations int      `xml:"operations,attr"`
+	XMLName xml.Name `xml:"datapoint"`
+	Name    string   `xml:"name,attr"`
+	Type    string   `xml:"type,attr"`
+	Ise_id  string   `xml:"ise_id,attr"`
+	Value   string   `xml:"value,attr"`
+	//ValueType 2 is bool, 4 is float32, 8 ?, 16 int, 20 string
+	ValueType  int    `xml:"valuetype,attr"`
+	ValueUnit  string `xml:"valueunit,attr"`
+	TimeStamp  int    `xml:"timestamp,attr"`
+	Operations int    `xml:"operations,attr"`
 }
 
 type ProgramList struct {
@@ -309,5 +315,33 @@ func (h *Homematic) ChangeState(IseID string, value float64) (*StateResult, erro
 			return nil, err
 		}
 		return &result, nil
+	}
+}
+
+func (h *Homematic) State(IseID string) ([]Datapoint, error) {
+	stateUrl := fmt.Sprintf("%s/addons/xmlapi/state.cgi?channel_id=%s", h.url, IseID)
+
+	if xmlBytes, err := getXML(stateUrl); err != nil {
+		clog.Logger.Errorf("error runnong program: %v", err)
+		return nil, err
+	} else {
+		reader := bytes.NewReader(xmlBytes)
+		decoder := xml.NewDecoder(reader)
+		decoder.CharsetReader = charset.NewReaderLabel
+		//		var devicelist devicelist
+		var result State
+		err = decoder.Decode(&result)
+		if err != nil {
+			clog.Logger.Errorf("error evaluating states: %v", err)
+			return nil, err
+		}
+		for _, device := range result.Devices {
+			for _, channel := range device.Channels {
+				if channel.Ise_id == IseID {
+					return channel.Datapoints, nil
+				}
+			}
+		}
+		return nil, fmt.Errorf("channnel with id %s not found", IseID)
 	}
 }

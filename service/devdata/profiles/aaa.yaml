@@ -10,6 +10,7 @@ pages:
       cells:
         - hmprograms_0
         - timer_0
+        - hmswitch_0
 actions:
     - type: SINGLE
       name: hmprograms_0
@@ -47,7 +48,26 @@ actions:
           icon: ""
           title: ""
           parameters:
-            finished: "finished"
+            finished: finished
             format: '%d seconds'
             time: 16
+      actions: []
+    - type: SINGLE
+      name: hmswitch_0
+      title: ""
+      icon: bulb.png
+      description: new HMSWITCH action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: ""
+          type: HMSWITCH
+          name: hmswitch_0
+          description: new HMSWITCH command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            name: 'Gartenhütte: Licht'
       actions: []
