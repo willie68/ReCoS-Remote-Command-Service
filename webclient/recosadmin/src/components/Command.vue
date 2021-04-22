@@ -47,7 +47,13 @@
           v-model="activeCommand.icon"
           placeholder="select a icon"
         />
-        <i class="pi pi-chevron-down" @click="selectIconDialog = true" />
+        <i
+          class="pi pi-chevron-down"
+          @click="
+            iconDestination = '';
+            selectIconDialog = true;
+          "
+        />
       </span>
     </div>
   </div>
@@ -82,9 +88,9 @@
         >
         <div class="p-col-12 p-md-8">
           <InputText
-            v-if="param.type == 'string' && 
-            (!param.list ||
-            param.list.length == 0)"
+            v-if="
+              param.type == 'string' && (!param.list || param.list.length == 0)
+            "
             :id="param.name"
             type="text"
             v-tooltip="param.description"
@@ -186,6 +192,21 @@
             :showIcon="true"
             v-model="activeCommand.parameters[param.name]"
           />
+          <span v-if="param.type == 'icon'" class="p-input-icon-right">
+            <InputText
+              :id="param.name"
+              v-model="activeCommand.parameters[param.name]"
+              v-tooltip="param.description"
+              placeholder="select a icon"
+            />
+            <i
+              class="pi pi-chevron-down"
+              @click="
+                iconDestination = param.name;
+                selectIconDialog = true;
+              "
+            />
+          </span>
         </div>
       </div>
     </div>
@@ -264,6 +285,7 @@ export default {
       newArgName: "",
       activeParam: null,
       selectIconDialog: false,
+      iconDestination: "",
     };
   },
   watch: {
@@ -454,8 +476,12 @@ export default {
         .catch((err) => console.log(err.message));
     },
     saveIcon(icon) {
-      console.log("Action: save icon: " + icon);
-      this.activeCommand.icon = icon;
+      console.log("Action: save icon: ", icon, this.iconDestination);
+      if (this.iconDestination == "") {
+        this.activeCommand.icon = icon;
+      } else {
+        this.activeCommand.parameters[this.iconDestination] = icon;
+      }
       this.selectIconDialog = false;
     },
   },

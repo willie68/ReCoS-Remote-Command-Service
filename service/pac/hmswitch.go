@@ -34,6 +34,22 @@ var HMSwitchCommandTypeInfo = models.CommandTypeInfo{
 			List:           make([]string, 0),
 			GroupedList:    true,
 		},
+		{
+			Name:           "onicon",
+			Type:           "icon",
+			Description:    "the icon used to show the on state",
+			Unit:           "",
+			WizardPossible: true,
+			List:           make([]string, 0),
+		},
+		{
+			Name:           "officon",
+			Type:           "icon",
+			Description:    "the icon used to show the off state",
+			Unit:           "",
+			WizardPossible: true,
+			List:           make([]string, 0),
+		},
 	},
 }
 
@@ -44,8 +60,10 @@ type HMSwitchCommand struct {
 	ticker      *time.Ticker
 	done        chan bool
 
-	name  string
-	iseID string
+	name    string
+	onIcon  string
+	offIcon string
+	iseID   string
 }
 
 // EnrichType enrich the type info with the informations from the profile
@@ -95,6 +113,15 @@ func (h *HMSwitchCommand) Init(a *Action, commandName string) (bool, error) {
 		return false, err
 	}
 
+	h.onIcon, err = ConvertParameter2String(h.Parameters, "onicon", "")
+	if err != nil {
+		return false, err
+	}
+	h.offIcon, err = ConvertParameter2String(h.Parameters, "officon", "")
+	if err != nil {
+		return false, err
+	}
+
 	hm, ok := smarthome.GetHomematic()
 	if !ok {
 		return false, errors.New("homematic not configured")
@@ -116,7 +143,7 @@ func (h *HMSwitchCommand) Init(a *Action, commandName string) (bool, error) {
 	if h.iseID == "" {
 		return true, fmt.Errorf("can't find device/channel with name %s", h.name)
 	}
-	h.ticker = time.NewTicker(1 * time.Second)
+	h.ticker = time.NewTicker(time.Duration(hm.UpdatePeriod()) * time.Second)
 	h.done = make(chan bool)
 	go func() {
 		for {
@@ -128,12 +155,23 @@ func (h *HMSwitchCommand) Init(a *Action, commandName string) (bool, error) {
 				if err != nil {
 					clog.Logger.Errorf("can't get state of device/channel with name %s", h.name)
 				}
-				text := fmt.Sprintf("the value is %+v", value)
+				text := fmt.Sprintf("the %s is %+v", h.action.Config.Title, value)
+				icon := ""
+				if value && h.onIcon != "" {
+					icon = h.onIcon
+				}
+				if !value && h.offIcon != "" {
+					icon = h.offIcon
+				}
+
 				message := models.Message{
 					Profile: h.action.Profile,
 					Action:  h.action.Name,
 					Text:    text,
 					State:   0,
+				}
+				if (h.onIcon != "") || (h.offIcon != "") {
+					message.ImageURL = icon
 				}
 				api.SendMessage(message)
 			}

@@ -172,10 +172,14 @@ func (h *Homematic) init() error {
 	return nil
 }
 
+func (h *Homematic) UpdatePeriod() int {
+	return h.periode
+}
+
 func (h *Homematic) reloadAll() error {
 	h.reload.Lock()
 	defer h.reload.Unlock()
-	clog.Logger.Info("homematic: realod all")
+	//clog.Logger.Info("homematic: realod all")
 
 	/*
 		result, err := h.ChangeState("2134", 0)
