@@ -679,6 +679,60 @@ parameters:
   color: "#ff0000"
 ```
 
+##### Homematic
+
+For integrating a homematic system to the ReCoS there are 3 different commands.
+
+First you have to configure your homematic in the service configuration. (See Installing Homematic)
+
+After that you can use the 3 commands:
+
+Starting a program is very simple: simply using the name as the name for the program.
+
+```yaml
+type: HMPROGRAMS
+name: hmprograms_0
+description: new HMPROGRAMS command created by ActionWizard
+parameters:
+  name: Gartenlicht ein
+```
+
+A Switch is for using the button as a switch. Simply on/off. For both states you can add a different icon. The text field of the button always shows the actual state. (Even if you switch the device via other software/hardware solutions) 
+
+`name` is the name of the "device: channel".
+
+```yaml
+type: HMSWITCH
+name: hmswitch_0
+description: new HMSWITCH command created by ActionWizard
+parameters:
+  name: 'Gartenhütte: Licht'
+  officon: ""
+  onicon: light_bulb.png
+```
+
+For dimmer and shutter you can use the third command. 
+`name` is the device/channel.
+action: can have the different actions:
+   `set value`: setting a value directly (in percent)
+   `up`: incrementing the value in percent steps. The step size is configurable via `value` .
+   `down`: decrementing the value in percent steps. The step size is configurable via `value` .
+`value`: the value or the step size.
+
+```yaml
+type: HMDIMMER
+name: hmdimmer_0
+description: new HMDIMMER command created by ActionWizard
+parameters:
+  name: 'GästeRollade: GästeRollade'
+  action: set value
+  value: 30
+```
+
+
+
+For all commands it is necessary that the names of devices/channels are unique.
+
 ##### Keys
 
 Sending keys to the active application. This command is emulating a keyboard input by sending key strokes of a keyboard to the active application. You can use different keyboard layouts and there are some macros defining special keys.
@@ -1112,7 +1166,18 @@ extconfig:
         updateperiod: 5
 ```
 
+## Homematic
 
+For using the Hometmatic system for commands, you simply have to do 2 Things:
+First add the url of your homematic system in the system config (sceleton is already there) and set the active state to true: 
+ homematic:
+        active: **true**
+        updateperiod: 5
+        url: **http://192.168.178.80**
+Second you have to add the xmlapi addon to your homematic. 
+https://github.com/homematic-community/XML-API
+
+Thats all.
 
 # Thanks
 
