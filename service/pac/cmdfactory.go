@@ -1,18 +1,9 @@
 package pac
 
 import (
-	"reflect"
-
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
-
-var typeRegistry = make(map[string]reflect.Type)
-
-func RegisterType(typedNil interface{}) {
-	t := reflect.TypeOf(typedNil).Elem()
-	typeRegistry[t.PkgPath()+"."+t.Name()] = t
-}
 
 var CommandTypes = []models.CommandTypeInfo{
 	DelayCommandTypeInfo,

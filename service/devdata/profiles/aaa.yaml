@@ -42,7 +42,7 @@ actions:
       runone: true
       commands:
         - id: TIMER_1
-          type: TIMER
+          type: AUDIOVOLUME
           name: timer_0
           description: new TIMER command created by ActionWizard
           icon: ""

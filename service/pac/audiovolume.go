@@ -23,19 +23,23 @@ var AudioVolumeCommandTypeInfo = models.CommandTypeInfo{
 	WizardPossible:   true,
 	WizardActionType: models.Single,
 	Parameters: []models.CommandParameterInfo{
-		{Name: parameterDeviceName,
+		{
+			Name:        parameterDeviceName,
 			Type:        "string",
 			Description: "name of the device to control",
 			Unit:        "", WizardPossible: true,
 			List: make([]string, 0),
 		},
-		{Name: parameterCommandName,
+		{
+			Name:           parameterCommandName,
 			Type:           "string",
 			Description:    "the command to send",
 			Unit:           "",
 			WizardPossible: true,
-			List:           make([]string, 0)},
-	}}
+			List:           make([]string, 0),
+		},
+	},
+}
 
 var audioCommandArray = []string{"mute", "volume up", "volume down"}
 

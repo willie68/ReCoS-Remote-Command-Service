@@ -63,15 +63,15 @@ func (h *HMDimmerCommand) EnrichType(profile models.Profile) (models.CommandType
 	if index >= 0 {
 		deviceList, err := hm.DeviceList()
 		if !ok {
-			return HMSwitchCommandTypeInfo, err
+			return HMDimmerCommandTypeInfo, err
 		}
 		devices := deviceList.Devices
-		HMSwitchCommandTypeInfo.Parameters[index].List = make([]string, 0)
+		HMDimmerCommandTypeInfo.Parameters[index].List = make([]string, 0)
 		for _, device := range devices {
 			channels := device.Channels
 			for _, channel := range channels {
 				if strings.ToLower(channel.Direction) == "receiver" {
-					HMSwitchCommandTypeInfo.Parameters[index].List = append(HMSwitchCommandTypeInfo.Parameters[index].List, h.buildSwitchName(device.Name, channel.Name))
+					HMDimmerCommandTypeInfo.Parameters[index].List = append(HMDimmerCommandTypeInfo.Parameters[index].List, h.buildSwitchName(device.Name, channel.Name))
 				}
 			}
 		}
@@ -169,7 +169,7 @@ func (h *HMDimmerCommand) Execute(a *Action, requestMessage models.Message) (boo
 	return true, nil
 }
 
-func (h *HMSwitchCommand) getState() (bool, error) {
+func (h *HMDimmerCommand) getState() (bool, error) {
 	hm, ok := smarthome.GetHomematic()
 	if !ok {
 		return true, errors.New("homematic not configured")
