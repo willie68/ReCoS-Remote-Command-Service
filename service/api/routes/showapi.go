@@ -10,8 +10,8 @@ import (
 	"github.com/go-chi/render"
 	"wkla.no-ip.biz/remote-desk-service/api"
 	"wkla.no-ip.biz/remote-desk-service/config"
-	"wkla.no-ip.biz/remote-desk-service/dto"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
+	"wkla.no-ip.biz/remote-desk-service/pac"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
@@ -137,7 +137,7 @@ func GetGraphics(response http.ResponseWriter, request *http.Request) {
 		height, _ = strconv.Atoi(heightStr)
 	}
 
-	graphicsInfo, err := dto.Graphics(profileName, actionName, commandName, id, width, height)
+	graphicsInfo, err := pac.Graphics(profileName, actionName, commandName, id, width, height)
 	if err != nil {
 		clog.Logger.Debug("Error reading action name: \n" + err.Error())
 		api.Err(response, request, err)

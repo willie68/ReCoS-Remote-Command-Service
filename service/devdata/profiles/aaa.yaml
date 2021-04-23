@@ -8,118 +8,132 @@ pages:
       rows: 2
       toolbar: ""
       cells:
-        - hue_0
-        - hue_1
-        - hue_2
-        - hue_scene_0
+        - hmprograms_0
+        - hmdimmer_0
+        - hmdimmer_1
+        - dice_0
+        - ""
+        - hmdimmer_2
 actions:
     - type: SINGLE
-      name: hue_0
-      title: Color Red
-      icon: light_bulb.png
-      description: new HUE action created by ActionWizard
-      fontsize: 20
-      fontcolor: ffffff
-      outlined: true
-      runone: true
-      commands:
-        - id: PHUELIGHTS_0
-          type: PHUELIGHTS
-          name: hue_0
-          description: new PHUELIGHTS command created by ActionWizard
-          icon: ""
-          title: ""
-          parameters:
-            brightness: 0
-            color: ff2020
-            colortemp: 0
-            hue: 0
-            name: 'Group: Büro'
-            saturation: 0
-      actions: []
-    - type: SINGLE
-      name: hue_1
-      title: Hue
-      icon: light_bulb.png
-      description: new HUE action created by ActionWizard
-      fontsize: 20
-      fontcolor: ffffff
-      outlined: true
-      runone: true
-      commands:
-        - id: PHUELIGHTS_1
-          type: PHUELIGHTS
-          name: hue_0
-          description: new PHUELIGHTS command created by ActionWizard
-          icon: ""
-          title: ""
-          parameters:
-            hue: 27000
-            name: 'Light: Hue color lamp 1'
-            saturation: 254
-      actions: []
-    - type: SINGLE
-      name: hue_2
-      title: CT
-      icon: light_bulb.png
-      description: new HUE action created by ActionWizard
-      fontsize: 20
-      fontcolor: ffffff
-      outlined: true
-      runone: true
-      commands:
-        - id: PHUELIGHTS_2
-          type: PHUELIGHTS
-          name: hue_0
-          description: new PHUELIGHTS command created by ActionWizard
-          icon: ""
-          title: ""
-          parameters:
-            colortemp: 2700
-            name: 'Light: Hue color lamp 1'
-      actions: []
-    - type: SINGLE
-      name: hue_scene_0
-      title: ""
-      icon: light_bulb.png
-      description: ""
-      fontsize: 0
-      fontcolor: ""
+      name: hmprograms_0
+      title: Gartenlicht ein
+      icon: history2.png
+      description: new HMPROGRAMS action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
       outlined: false
-      runone: false
+      runone: true
       commands:
-        - id: PHUESCENES_3
-          type: PHUESCENES
-          name: hue_sc_0
-          description: ""
+        - id: HMPROGRAMS_0
+          type: HMPROGRAMS
+          name: hmprograms_0
+          description: new HMPROGRAMS command created by ActionWizard
           icon: ""
-          title: hue_sc_0
+          title: ""
           parameters:
-            brightness: 0
-            color: ""
-            colortemp: 0
-            hue: 0
-            name: Büro
-            saturation: 0
-            scene: 'Büro: Energie tanken'
+            name: Gartenlicht ein
       actions: []
     - type: SINGLE
-      name: noop
-      title: ""
-      icon: ""
-      description: ""
-      fontsize: 0
-      fontcolor: ""
+      name: hmswitch_0
+      title: Licht Gartenhütte
+      icon: light_bulb.png
+      description: new HMSWITCH action created by ActionWizard
+      fontsize: 20
+      fontcolor: '#000000'
       outlined: false
-      runone: false
+      runone: true
       commands:
-        - id: NOOP_4
-          type: NOOP
-          name: noop
-          description: ""
+        - id: HMSWITCH_1
+          type: HMSWITCH
+          name: hmswitch_0
+          description: new HMSWITCH command created by ActionWizard
           icon: ""
-          title: noop
+          title: ""
           parameters:
-            first: one
-            second: ""
+            name: 'Gartenhütte: Licht'
+            officon: ""
+            onicon: light_bulb.png
+      actions: []
+    - type: SINGLE
+      name: hmdimmer_0
+      title: "Gäste 30"
+      icon: light_bulb.png
+      description: new HMDIMMER action created by ActionWizard
+      fontsize: 20
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: HMDIMMER_2
+          type: HMDIMMER
+          name: hmdimmer_0
+          description: new HMDIMMER command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            action: set value
+            name: 'GästeRollade: GästeRollade'
+            value: 30
+      actions: []
+    - type: SINGLE
+      name: dice_0
+      title: ""
+      icon: games_dice.png
+      description: new DICE action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: DICE_3
+          type: DICE
+          name: dice_0
+          description: new DICE command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            sides: 6
+      actions: []
+    - type: SINGLE
+      name: hmdimmer_1
+      title: "Gäste up"
+      icon: light_bulb.png
+      description: new HMDIMMER action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: ""
+          type: HMDIMMER
+          name: hmdimmer_1
+          description: new HMDIMMER command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            action: up
+            name: 'GästeRollade: GästeRollade'
+            value: 5
+      actions: []
+    - type: SINGLE
+      name: hmdimmer_2
+      title: "Gäste down"
+      icon: light_bulb.png
+      description: new HMDIMMER action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: ""
+          type: HMDIMMER
+          name: hmdimmer_2
+          description: new HMDIMMER command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            action: down
+            name: 'GästeRollade: GästeRollade'
+            value: 5
       actions: []

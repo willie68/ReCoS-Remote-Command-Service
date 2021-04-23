@@ -3,6 +3,26 @@
 Remote Command Service, for executing scripts remotely but secure. This project consists of different components. One is the service, a small golang based microservice, which delivers all the functionality behind the UI. This service is responsible for the execution of the different actions. 
 On the other side there are two Web applications, build on top of VUE as the main UI Framework. One for the client controlling the actions, one for the administration. 
 
+Features:
+
+- Control Audio Volumes and Mic Gain.
+- Execute Browser, File explorer and other Apps
+- Showing Date and Time with nice faces
+- Counting something, with persistence
+- showing Days up to an end date
+- rolling a dice (virtually)
+- showing and logging pc hardware sensors
+- controlling your smart home: homematic, philips hue
+- using a virtual keyboard
+- controlling your mediaplayer
+- ping time to a server
+- soundboard: playing media files
+- random words: selecting a random word/phrase
+- taking a screenshot and save it to a folder
+- stopwatch: measure time
+- Count down timer
+- controlling your desktop windows. activate/move/minimize
+
 # Installation
 
 Installation is simple. Execute the installer. After installation you have to start the service itself. It's called `recos-service.exe`. Nothing else to do here. After the service is up, simply go to the web page http://localhost:9280/webadmin for the admin client. 

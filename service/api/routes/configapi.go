@@ -17,8 +17,8 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/api"
 	"wkla.no-ip.biz/remote-desk-service/api/handler"
 	"wkla.no-ip.biz/remote-desk-service/config"
-	"wkla.no-ip.biz/remote-desk-service/dto"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
+	"wkla.no-ip.biz/remote-desk-service/pac"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 	"wkla.no-ip.biz/remote-desk-service/web"
 )
@@ -183,8 +183,8 @@ func GetCommands(response http.ResponseWriter, request *http.Request) {
 	if profileName != "" {
 		profile, _ = config.GetProfile(profileName)
 	}
-	types := dto.CommandTypes
-	types, err := dto.EnrichTypes(types, profile)
+	types := pac.CommandTypes
+	types, err := pac.EnrichTypes(types, profile)
 	if err != nil {
 		clog.Logger.Errorf("Error reading commands files: %v", err)
 		api.Err(response, request, err)
