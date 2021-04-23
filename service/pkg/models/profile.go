@@ -103,6 +103,10 @@ type CommandTypeInfo struct {
 	Parameters []CommandParameterInfo `json:"parameter"`
 }
 
+type CommandCreator interface {
+	Create(Parameters map[string]interface{}) Command
+}
+
 type GraphicsInfo struct {
 	Mimetype string
 	Data     []byte

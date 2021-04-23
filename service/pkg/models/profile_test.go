@@ -6,14 +6,14 @@ import (
 	"time"
 
 	"gopkg.in/yaml.v3"
-	"wkla.no-ip.biz/remote-desk-service/dto"
+	"wkla.no-ip.biz/remote-desk-service/pac"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
 func TestNew(t *testing.T) {
 
 	myCommand := models.Command{
-		Type: dto.DelayCommandTypeInfo.Type,
+		Type: pac.DelayCommandTypeInfo.Type,
 		Name: "delay",
 		Parameters: map[string]interface{}{
 			"time":     10,

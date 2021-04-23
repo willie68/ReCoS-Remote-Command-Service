@@ -3,6 +3,26 @@
 Remote Command Service, for executing scripts remotely but secure. This project consists of different components. One is the service, a small golang based microservice, which delivers all the functionality behind the UI. This service is responsible for the execution of the different actions. 
 On the other side there are two Web applications, build on top of VUE as the main UI Framework. One for the client controlling the actions, one for the administration. 
 
+Features:
+
+- Control Audio Volumes and Mic Gain.
+- Execute Browser, File explorer and other Apps
+- Showing Date and Time with nice faces
+- Counting something, with persistence
+- showing Days up to an end date
+- rolling a dice (virtually)
+- showing and logging pc hardware sensors
+- controlling your smart home: homematic, philips hue
+- using a virtual keyboard
+- controlling your mediaplayer
+- ping time to a server
+- soundboard: playing media files
+- random words: selecting a random word/phrase
+- taking a screenshot and save it to a folder
+- stopwatch: measure time
+- Count down timer
+- controlling your desktop windows. activate/move/minimize
+
 # Installation
 
 Installation is simple. Execute the installer. After installation you have to start the service itself. It's called `recos-service.exe`. Nothing else to do here. After the service is up, simply go to the web page http://localhost:9280/webadmin for the admin client. 
@@ -12,7 +32,7 @@ For the normal execution client please use http://localhost:9280/webclient. On o
 # ReCoS Client - Web Client Interface
 
 This is the ReCoS web client. After successful installation you can access it with 
-http://127.0.0.1:9280/webclient on the same computer.
+http://localhost:9280/webclient on the same computer.
 
 <img src="documentation/assets/webclient.png" alt="webclient" style="zoom:50%;" />
 
@@ -1028,16 +1048,16 @@ Parameter:
 
 For hardware sensor reading ReCoS relies on the OpenHardwareMonitor Software. (https://openhardwaremonitor.org/) To get use of it, simply install the software. After installation, go to  Option/Remote Web Server/Port. 
 
-![ohm_02](.\documentation\assets\ohm_02.png)
+![ohm_02](documentation/assets/ohm_02.png)
 
-![ohm_03](./documentation/assets/ohm_03.png)
+![ohm_03](documentation/assets/ohm_03.png)
 
 As Portnumber enter 12999 (which is the default for Combination of ReCoS and OHM)
 
 After that simply activate the OHM Webserver via Option/Remote Web Server/Run.
 The OHM should be available after restart of wndows, so please tick the following options on. Now everything of the OHM side is ready. The ReCoS service will now automatically connect to the OHM and get all Sensors. 
 
-![ohm_04](.\documentation\assets\ohm_04.png)
+![ohm_04](documentation/assets/ohm_04.png)
 
 If you have already installed the OHM (maybe for another App) and you can't reconfigure the port option, you can simply change the port for ReCoS in the service.yaml.   Same for the part where you want to get Sensors from another Computer.
 
@@ -1056,7 +1076,7 @@ First of all, a new user must be created for the ReCoS installation. To do this,
 
 http: // <IP address of the Hue Bridge> /debug/clip.html
 
-![image-20210412161232901](.\documentation\assets\clip_1.png)
+![image-20210412161232901](documentation/assets/clip_1.png)
 
 Now please post the following to the bridge.
 URL: /api
@@ -1065,19 +1085,19 @@ Message Body: {"devicetype":"recos#hue_user"}
 
 With the first attempt an error message appears.
 
-![image-20210412161801279](.\documentation\assets\clip_2.png)
+![image-20210412161801279](documentation/assets/clip_2.png)
 
 Please press the big button on the Philips Hue Bridge and post the same thing again.
 
-![](.\documentation\assets\clip_3.png)
+![](documentation/assets/clip_3.png)
 
 Then copy the username from the answer:
 
-![image-20210412162002314](.\documentation\assets\clip_4.png)
+![image-20210412162002314](documentation/assets/clip_4.png)
 
 Now you have to change the ReCoS configuration. To do this, please start the configuration file via the context menu.
 
-![image-20210416104722050](.\documentation\assets\philips_hue_config.png)
+![image-20210416104722050](documentation/assets/philips_hue_config.png)
 
 
 In the `extconfig:` area, the area for `philipshue` must now be changed. Please enter the above key here as the `username` and change the `ipaddress` accordingly.

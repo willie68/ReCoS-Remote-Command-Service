@@ -29,7 +29,13 @@
             placeholder="select a icon"
             class="fullwidth"
           />
-          <i class="pi pi-chevron-down" @click="selectIconDialog = true" />
+          <i
+            class="pi pi-chevron-down"
+            @click="
+              iconDestination = '';
+              selectIconDialog = true;
+            "
+          />
         </span>
       </div>
     </div>
@@ -45,7 +51,7 @@
       >
       <div class="p-col-12 p-md-8">
         <InputText
-          v-if="param.type == 'string' && param.list.length == 0"
+          v-if="param.type == 'string' && param.list && param.list.length == 0"
           :id="param.name"
           type="text"
           v-tooltip="param.description"
@@ -55,6 +61,7 @@
         <DropdownParameter
           v-if="
             param.type == 'string' &&
+            param.list &&
             param.list.length > 0 &&
             !param.groupedlist
           "
@@ -71,7 +78,10 @@
         />
         <Dropdown
           v-if="
-            param.type == 'string' && param.list.length > 0 && param.groupedlist
+            param.type == 'string' &&
+            param.list &&
+            param.list.length > 0 &&
+            param.groupedlist
           "
           :id="param.name"
           :options="paramList(param)"
@@ -153,6 +163,22 @@
           v-model="localValue.parameters[param.name]"
           @change="update()"
         />
+        <span v-if="param.type == 'icon'" class="p-input-icon-right fullwidth">
+          <InputText
+            :id="param.name"
+            v-model="localValue.parameters[param.name]"
+            v-tooltip="param.description"
+            placeholder="select a icon"
+            class="fullwidth"
+          />
+          <i
+            class="pi pi-chevron-down"
+            @click="
+              iconDestination = param.name;
+              selectIconDialog = true;
+            "
+          />
+        </span>
       </div>
     </div>
   </div>
@@ -202,6 +228,7 @@ export default {
       newArgName: null,
       activeParam: null,
       selectIconDialog: false,
+      iconDestination: "",
     };
   },
   computed: {
@@ -375,8 +402,12 @@ export default {
       }
     },
     saveIcon(icon) {
-      console.log("Step2: save icon: " + icon);
-      this.localValue.icon = icon;
+      console.log("Step2: save icon: ", icon, this.iconDestination);
+      if (this.iconDestination == "") {
+        this.localValue.icon = icon;
+      } else {
+        this.localValue.parameters[this.iconDestination] = icon;
+      }
       this.selectIconDialog = false;
     },
     update() {

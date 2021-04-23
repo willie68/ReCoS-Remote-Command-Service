@@ -15,15 +15,22 @@ sessions: ./devdata/sessions
 timezonezip: ./devdata/zoneinfo.zip
 extconfig:
     openhardwaremonitor:
+        active: false
         updateperiod: 5
         url: http://127.0.0.1:12999/data.json
     audioplayer:
+        active: false
         samplerate: 48000
     philipshue:
+        active: false
         username: IwtURJmST8b44mvZSZ2nl73nZhghVltMvgzlH7UC
         device: recos#hue_user
         ipaddress: 192.168.178.81
         updateperiod: 5
+    homematic:
+        active: true
+        updateperiod: 5
+        url: http://192.168.178.80
 logging:
     level: debug
     filename: ./devdata/logging.log

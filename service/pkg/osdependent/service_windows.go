@@ -19,14 +19,16 @@ func InitOSDependend(config config.Config) error {
 		clog.Logger.Errorf("error initialising open hardware connection.", err)
 		os.Exit(1)
 	}
-	go func() {
-		for !hardware.OpenHardwareMonitorInstance.Connected {
-			err := hardware.OpenHardwareMonitorInstance.Connect()
-			if err != nil {
-				clog.Logger.Errorf("error connectiong to app. trying later again.", err)
-				time.Sleep(10 * time.Second)
+	if hardware.OpenHardwareMonitorInstance.Active {
+		go func() {
+			for !hardware.OpenHardwareMonitorInstance.Connected {
+				err := hardware.OpenHardwareMonitorInstance.Connect()
+				if err != nil {
+					clog.Logger.Errorf("error connectiong to app. trying later again.", err)
+					time.Sleep(10 * time.Second)
+				}
 			}
-		}
-	}()
+		}()
+	}
 	return nil
 }

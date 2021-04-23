@@ -16,9 +16,9 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/api"
 	"wkla.no-ip.biz/remote-desk-service/api/handler"
 	"wkla.no-ip.biz/remote-desk-service/config"
-	"wkla.no-ip.biz/remote-desk-service/dto"
 	"wkla.no-ip.biz/remote-desk-service/error/serror"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
+	"wkla.no-ip.biz/remote-desk-service/pac"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
@@ -90,7 +90,7 @@ func PostProfile(response http.ResponseWriter, request *http.Request) {
 	go func() {
 		config.SaveProfileFile(profile)
 		config.AddProfile(profile)
-		if _, err := dto.InitProfile(profile.Name); err != nil {
+		if _, err := pac.InitProfile(profile.Name); err != nil {
 			clog.Logger.Alertf("can't create profiles: %s", err.Error())
 		}
 	}()
@@ -132,10 +132,10 @@ func PutProfile(response http.ResponseWriter, request *http.Request) {
 	}
 
 	go func() {
-		dto.CloseProfile(profile.Name)
-		dto.RemoveProfile(profile.Name)
+		pac.CloseProfile(profile.Name)
+		pac.RemoveProfile(profile.Name)
 		config.UpdateProfile(profile)
-		if err := dto.ReinitProfile(profile.Name); err != nil {
+		if err := pac.ReinitProfile(profile.Name); err != nil {
 			clog.Logger.Alertf("can't create profiles: %s", err.Error())
 		}
 	}()
@@ -154,7 +154,7 @@ func DeleteProfile(response http.ResponseWriter, request *http.Request) {
 
 	for _, profile := range config.Profiles {
 		if strings.EqualFold(profile.Name, profileName) {
-			dto.CloseProfile(profileName)
+			pac.CloseProfile(profileName)
 			profile, err := config.RemoveProfile(profileName)
 			if err != nil {
 				clog.Logger.Debug("Error deleting profile: \n" + err.Error())
