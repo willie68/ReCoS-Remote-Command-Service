@@ -9,8 +9,11 @@ pages:
       toolbar: ""
       cells:
         - hmprograms_0
-        - timer_0
-        - hmswitch_0
+        - hmdimmer_0
+        - hmdimmer_1
+        - dice_0
+        - ""
+        - hmdimmer_2
 actions:
     - type: SINGLE
       name: hmprograms_0
@@ -32,37 +35,16 @@ actions:
             name: Gartenlicht ein
       actions: []
     - type: SINGLE
-      name: timer_0
-      title: ""
-      icon: timer.png
-      description: new TIMER action created by ActionWizard
-      fontsize: 10
-      fontcolor: f7ff00
-      outlined: false
-      runone: true
-      commands:
-        - id: TIMER_1
-          type: AUDIOVOLUME
-          name: timer_0
-          description: new TIMER command created by ActionWizard
-          icon: ""
-          title: ""
-          parameters:
-            finished: finished
-            format: '%d seconds'
-            time: 16
-      actions: []
-    - type: SINGLE
       name: hmswitch_0
-      title: "Licht Gartenhütte"
-      icon: bulb.png
+      title: Licht Gartenhütte
+      icon: light_bulb.png
       description: new HMSWITCH action created by ActionWizard
       fontsize: 20
       fontcolor: '#000000'
       outlined: false
       runone: true
       commands:
-        - id: HMSWITCH_2
+        - id: HMSWITCH_1
           type: HMSWITCH
           name: hmswitch_0
           description: new HMSWITCH command created by ActionWizard
@@ -72,4 +54,86 @@ actions:
             name: 'Gartenhütte: Licht'
             officon: ""
             onicon: light_bulb.png
+      actions: []
+    - type: SINGLE
+      name: hmdimmer_0
+      title: "Gäste 30"
+      icon: light_bulb.png
+      description: new HMDIMMER action created by ActionWizard
+      fontsize: 20
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: HMDIMMER_2
+          type: HMDIMMER
+          name: hmdimmer_0
+          description: new HMDIMMER command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            action: set value
+            name: 'GästeRollade: GästeRollade'
+            value: 30
+      actions: []
+    - type: SINGLE
+      name: dice_0
+      title: ""
+      icon: games_dice.png
+      description: new DICE action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: DICE_3
+          type: DICE
+          name: dice_0
+          description: new DICE command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            sides: 6
+      actions: []
+    - type: SINGLE
+      name: hmdimmer_1
+      title: "Gäste up"
+      icon: light_bulb.png
+      description: new HMDIMMER action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: ""
+          type: HMDIMMER
+          name: hmdimmer_1
+          description: new HMDIMMER command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            action: up
+            name: 'GästeRollade: GästeRollade'
+            value: 5
+      actions: []
+    - type: SINGLE
+      name: hmdimmer_2
+      title: "Gäste down"
+      icon: light_bulb.png
+      description: new HMDIMMER action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: ""
+          type: HMDIMMER
+          name: hmdimmer_2
+          description: new HMDIMMER command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            action: down
+            name: 'GästeRollade: GästeRollade'
+            value: 5
       actions: []

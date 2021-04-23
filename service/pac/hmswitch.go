@@ -21,7 +21,7 @@ var HMSwitchCommandTypeInfo = models.CommandTypeInfo{
 	Type:             "HMSWITCH",
 	Name:             "HomematicSwitch",
 	Description:      "activating a homematic switch",
-	Icon:             "bulb.png",
+	Icon:             "light_bulb.png",
 	WizardPossible:   true,
 	WizardActionType: models.Single,
 	Parameters: []models.CommandParameterInfo{

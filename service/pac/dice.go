@@ -11,8 +11,8 @@ import (
 
 	"github.com/fogleman/gg"
 	"wkla.no-ip.biz/remote-desk-service/api"
-	"wkla.no-ip.biz/remote-desk-service/pac/clocks"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
+	"wkla.no-ip.biz/remote-desk-service/pac/clocks"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
@@ -22,9 +22,9 @@ var DiceCommandTypeInfo = models.CommandTypeInfo{
 	Type:             "DICE",
 	Name:             "Dice",
 	Description:      "rolling a Dice",
-	Icon:             "games_dice.png.png",
+	Icon:             "games_dice.png",
 	WizardPossible:   true,
-	WizardActionType: models.Display,
+	WizardActionType: models.Single,
 	Parameters: []models.CommandParameterInfo{
 		{
 			Name:           "sides",

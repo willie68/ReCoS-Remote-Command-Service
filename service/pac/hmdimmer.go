@@ -21,7 +21,7 @@ var HMDimmerCommandTypeInfo = models.CommandTypeInfo{
 	Type:             "HMDIMMER",
 	Name:             "HomematicDimmer",
 	Description:      "activating a homematic dimmer",
-	Icon:             "bulb.png",
+	Icon:             "light_bulb.png",
 	WizardPossible:   true,
 	WizardActionType: models.Single,
 	Parameters: []models.CommandParameterInfo{
@@ -30,6 +30,22 @@ var HMDimmerCommandTypeInfo = models.CommandTypeInfo{
 			Type:           "string",
 			Description:    "the homematic dimm value to use",
 			Unit:           "",
+			WizardPossible: true,
+			List:           make([]string, 0),
+		},
+		{
+			Name:           "action",
+			Type:           "string",
+			Description:    "the action to do with this device/channel",
+			Unit:           "",
+			WizardPossible: true,
+			List:           []string{"set value", "up", "down"},
+		},
+		{
+			Name:           "value",
+			Type:           "int",
+			Description:    "the value to set or the step interval (in percent)",
+			Unit:           "%",
 			WizardPossible: true,
 			List:           make([]string, 0),
 		},
@@ -44,6 +60,8 @@ type HMDimmerCommand struct {
 	done        chan bool
 
 	name  string
+	cmd   string
+	value int
 	iseID string
 }
 
@@ -71,7 +89,7 @@ func (h *HMDimmerCommand) EnrichType(profile models.Profile) (models.CommandType
 			channels := device.Channels
 			for _, channel := range channels {
 				if strings.ToLower(channel.Direction) == "receiver" {
-					HMDimmerCommandTypeInfo.Parameters[index].List = append(HMDimmerCommandTypeInfo.Parameters[index].List, h.buildSwitchName(device.Name, channel.Name))
+					HMDimmerCommandTypeInfo.Parameters[index].List = append(HMDimmerCommandTypeInfo.Parameters[index].List, h.buildName(device.Name, channel.Name))
 				}
 			}
 		}
@@ -80,12 +98,24 @@ func (h *HMDimmerCommand) EnrichType(profile models.Profile) (models.CommandType
 	return HMDimmerCommandTypeInfo, nil
 }
 
+func (h *HMDimmerCommand) buildName(device, name string) string {
+	return fmt.Sprintf("%s: %s", device, name)
+}
+
 // Init nothing
 func (h *HMDimmerCommand) Init(a *Action, commandName string) (bool, error) {
 	var err error
 	h.action = a
 	h.commandName = commandName
 	h.name, err = ConvertParameter2String(h.Parameters, "name", "")
+	if err != nil {
+		return false, err
+	}
+	h.cmd, err = ConvertParameter2String(h.Parameters, "action", "")
+	if err != nil {
+		return false, err
+	}
+	h.value, err = ConvertParameter2Int(h.Parameters, "value", 50)
 	if err != nil {
 		return false, err
 	}
@@ -98,20 +128,11 @@ func (h *HMDimmerCommand) Init(a *Action, commandName string) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	programs := programList.Programs
-	for _, program := range programs {
-		if program.Name == h.name {
-			h.prgID = program.ID
-		}
-	}
-	if h.prgID == "" {
-		return true, fmt.Errorf("can't find program with name %s", h.name)
-	}
 	devices := deviceList.Devices
 	for _, device := range devices {
 		channels := device.Channels
 		for _, channel := range channels {
-			deviceChannel := h.buildSwitchName(device.Name, channel.Name)
+			deviceChannel := h.buildName(device.Name, channel.Name)
 			if h.name == deviceChannel {
 				h.iseID = channel.Ise_id
 			}
@@ -132,7 +153,8 @@ func (h *HMDimmerCommand) Init(a *Action, commandName string) (bool, error) {
 				if err != nil {
 					clog.Logger.Errorf("can't get state of device/channel with name %s", h.name)
 				}
-				text := fmt.Sprintf("the %s is %+v", h.action.Config.Title, value)
+				perCent := int(value * 100)
+				text := fmt.Sprintf("the %s is %d", h.action.Config.Title, perCent)
 
 				message := models.Message{
 					Profile: h.action.Profile,
@@ -155,45 +177,92 @@ func (h *HMDimmerCommand) Stop(a *Action) (bool, error) {
 
 // Execute nothing
 func (h *HMDimmerCommand) Execute(a *Action, requestMessage models.Message) (bool, error) {
-	if h.prgID == "" {
-		return true, fmt.Errorf("can't find program with name %s", h.name)
+	if h.iseID == "" {
+		return true, fmt.Errorf("can't find device/channel with name %s", h.name)
 	}
 	hm, ok := smarthome.GetHomematic()
 	if !ok {
 		return true, errors.New("homematic not configured")
 	}
-	_, err := hm.RunProgram(h.prgID)
-	if err != nil {
-		return true, err
+	if h.cmd == "" {
+		return true, nil
+	}
+	if h.cmd == "set value" {
+		value := float64(h.value) / 100
+		hm.ChangeState(h.iseID, value)
+	} else {
+		datas, err := hm.State(h.iseID)
+		if err != nil {
+			return true, err
+		}
+		value := -1.0
+		for _, datapoint := range datas {
+			if strings.ToUpper(datapoint.Type) == "LEVEL" {
+				switch datapoint.ValueType {
+				case 2:
+					v, _ := strconv.ParseBool(datapoint.Value)
+					if v {
+						value = 1.0
+					} else {
+						value = 0.0
+					}
+				case 4:
+					value, _ = strconv.ParseFloat(datapoint.Value, 64)
+				case 16:
+					v, _ := strconv.ParseInt(datapoint.Value, 10, 64)
+					value = float64(v)
+				}
+			}
+		}
+		if value < 0 {
+			return true, errors.New("datapoint not found")
+		}
+		diff := float64(h.value) / 100.0
+		if h.cmd == "up" {
+			value = value + diff
+			if value > 1.0 {
+				value = 1.0
+			}
+		} else {
+			value = value - diff
+			if value < 0 {
+				value = 0.0
+			}
+		}
+		hm.ChangeState(h.iseID, value)
 	}
 	return true, nil
 }
 
-func (h *HMDimmerCommand) getState() (bool, error) {
+func (h *HMDimmerCommand) getState() (float64, error) {
 	hm, ok := smarthome.GetHomematic()
 	if !ok {
-		return true, errors.New("homematic not configured")
+		return 0.0, errors.New("homematic not configured")
 	}
 	datapoints, err := hm.State(h.iseID)
 	if err != nil {
-		return false, err
+		return 0.0, err
 	}
 	for _, datapoint := range datapoints {
-		if strings.ToUpper(datapoint.Type) == "STATE" {
+		if strings.ToUpper(datapoint.Type) == "LEVEL" {
 			switch datapoint.ValueType {
 			case 2:
 				value, _ := strconv.ParseBool(datapoint.Value)
-				return value, nil
+				if value {
+					return 1.0, nil
+				} else {
+					return 0.0, nil
+				}
 			case 4:
 				value, _ := strconv.ParseFloat(datapoint.Value, 64)
-				return value >= 0.5, nil
+				return value, nil
 			case 16:
 				value, _ := strconv.ParseInt(datapoint.Value, 10, 64)
-				return value != 0, nil
+				return float64(value), nil
 			}
 		}
 	}
 	jsonStr, _ := json.Marshal(datapoints)
 	clog.Logger.Infof("found datapoints: %s", jsonStr)
-	return false, fmt.Errorf("can't find device/channel value with name %s", h.name)
+	return 0.0, fmt.Errorf("can't find device/channel value with name %s", h.name)
 }
