@@ -12,7 +12,7 @@ pages:
         - hmdimmer_0
         - hmdimmer_1
         - dice_0
-        - ""
+        - hmswitch_0
         - hmdimmer_2
 actions:
     - type: SINGLE
@@ -57,7 +57,7 @@ actions:
       actions: []
     - type: SINGLE
       name: hmdimmer_0
-      title: "Gäste 30"
+      title: Gäste 30
       icon: light_bulb.png
       description: new HMDIMMER action created by ActionWizard
       fontsize: 20
@@ -65,7 +65,7 @@ actions:
       outlined: false
       runone: true
       commands:
-        - id: HMDIMMER_2
+        - id: HMDIMMER_3
           type: HMDIMMER
           name: hmdimmer_0
           description: new HMDIMMER command created by ActionWizard
@@ -86,7 +86,7 @@ actions:
       outlined: false
       runone: true
       commands:
-        - id: DICE_3
+        - id: DICE_4
           type: DICE
           name: dice_0
           description: new DICE command created by ActionWizard
@@ -94,10 +94,18 @@ actions:
           title: ""
           parameters:
             sides: 6
+        - id: ""
+          type: SHOWTEXT
+          name: showtext
+          description: ""
+          icon: ""
+          title: showtext
+          parameters:
+            text: Test
       actions: []
     - type: SINGLE
       name: hmdimmer_1
-      title: "Gäste up"
+      title: Gäste up
       icon: light_bulb.png
       description: new HMDIMMER action created by ActionWizard
       fontsize: 10
@@ -105,7 +113,7 @@ actions:
       outlined: false
       runone: true
       commands:
-        - id: ""
+        - id: HMDIMMER_5
           type: HMDIMMER
           name: hmdimmer_1
           description: new HMDIMMER command created by ActionWizard
@@ -118,7 +126,7 @@ actions:
       actions: []
     - type: SINGLE
       name: hmdimmer_2
-      title: "Gäste down"
+      title: Gäste down
       icon: light_bulb.png
       description: new HMDIMMER action created by ActionWizard
       fontsize: 10
@@ -126,7 +134,7 @@ actions:
       outlined: false
       runone: true
       commands:
-        - id: ""
+        - id: HMDIMMER_6
           type: HMDIMMER
           name: hmdimmer_2
           description: new HMDIMMER command created by ActionWizard
