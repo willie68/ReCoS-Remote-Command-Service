@@ -15,7 +15,7 @@ var RndWordsCommandTypeInfo = models.CommandTypeInfo{
 	Type:             "RNDWORDS",
 	Name:             "RandomWords",
 	Description:      "randomly select word",
-	Icon:             "games_dice.png.png",
+	Icon:             "games_dice.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Display,
 	Parameters: []models.CommandParameterInfo{

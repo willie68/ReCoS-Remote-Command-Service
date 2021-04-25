@@ -3,7 +3,7 @@ description: This is the default configuration, just to have one starting point
 pages:
     - name: Volume
       description: commands for audio volume
-      icon: tax.png
+      icon: tax.svg
       columns: 2
       rows: 3
       toolbar: ""
@@ -17,7 +17,7 @@ actions:
     - type: SINGLE
       name: audiovolume_0
       title: Mute Mic
-      icon: radio_microphone_color.png
+      icon: radio_microphone_color.svg
       description: new AUDIOVOLUME action created by ActionWizard
       fontsize: 10
       fontcolor: '#000000'
@@ -37,7 +37,7 @@ actions:
     - type: SINGLE
       name: audiovolume_1
       title: Mute Master
-      icon: speaker.png
+      icon: speaker.svg
       description: new AUDIOVOLUME action created by ActionWizard
       fontsize: 10
       fontcolor: '#000000'
@@ -57,7 +57,7 @@ actions:
     - type: SINGLE
       name: audiovolume_2
       title: Master Volume Down
-      icon: audio_volume_low.png
+      icon: audio_volume_low.svg
       description: new AUDIOVOLUME action created by ActionWizard
       fontsize: 10
       fontcolor: '#000000'
@@ -77,7 +77,7 @@ actions:
     - type: SINGLE
       name: audiovolume_3
       title: Master Volume Up
-      icon: audio_volume_high.png
+      icon: audio_volume_high.svg
       description: new AUDIOVOLUME action created by ActionWizard
       fontsize: 10
       fontcolor: '#000000'

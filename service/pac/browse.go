@@ -14,7 +14,7 @@ var BrowseCommandTypeInfo = models.CommandTypeInfo{
 	Type:             "BROWSE",
 	Name:             "Browse",
 	Description:      "Execute the default browser with a url or a filepath",
-	Icon:             "world.png",
+	Icon:             "world.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Single,
 	Parameters: []models.CommandParameterInfo{

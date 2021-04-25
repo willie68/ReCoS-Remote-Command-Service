@@ -18,7 +18,7 @@ actions:
     - type: SINGLE
       name: hmprograms_0
       title: Gartenlicht ein
-      icon: history2.png
+      icon: history2.svg
       description: new HMPROGRAMS action created by ActionWizard
       fontsize: 10
       fontcolor: '#000000'
@@ -37,7 +37,7 @@ actions:
     - type: SINGLE
       name: hmswitch_0
       title: Licht Gartenhütte
-      icon: light_bulb.png
+      icon: light_bulb.svg
       description: new HMSWITCH action created by ActionWizard
       fontsize: 20
       fontcolor: '#000000'
@@ -53,19 +53,19 @@ actions:
           parameters:
             name: 'Gartenhütte: Licht'
             officon: ""
-            onicon: light_bulb.png
+            onicon: light_bulb.svg
       actions: []
     - type: SINGLE
       name: hmdimmer_0
       title: Gäste 30
-      icon: light_bulb.png
+      icon: light_bulb.svg
       description: new HMDIMMER action created by ActionWizard
       fontsize: 20
       fontcolor: '#000000'
       outlined: false
       runone: true
       commands:
-        - id: HMDIMMER_3
+        - id: HMDIMMER_2
           type: HMDIMMER
           name: hmdimmer_0
           description: new HMDIMMER command created by ActionWizard
@@ -79,14 +79,14 @@ actions:
     - type: SINGLE
       name: dice_0
       title: ""
-      icon: games_dice.png
+      icon: games_dice.svg
       description: new DICE action created by ActionWizard
       fontsize: 10
       fontcolor: '#000000'
       outlined: false
       runone: true
       commands:
-        - id: DICE_4
+        - id: DICE_3
           type: DICE
           name: dice_0
           description: new DICE command created by ActionWizard
@@ -94,19 +94,11 @@ actions:
           title: ""
           parameters:
             sides: 6
-        - id: ""
-          type: SHOWTEXT
-          name: showtext
-          description: ""
-          icon: ""
-          title: showtext
-          parameters:
-            text: Test
       actions: []
     - type: SINGLE
       name: hmdimmer_1
       title: Gäste up
-      icon: light_bulb.png
+      icon: light_bulb.svg
       description: new HMDIMMER action created by ActionWizard
       fontsize: 10
       fontcolor: '#000000'
@@ -127,7 +119,7 @@ actions:
     - type: SINGLE
       name: hmdimmer_2
       title: Gäste down
-      icon: light_bulb.png
+      icon: light_bulb.svg
       description: new HMDIMMER action created by ActionWizard
       fontsize: 10
       fontcolor: '#000000'

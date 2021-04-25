@@ -13,7 +13,7 @@ var PageCommandTypeInfo = models.CommandTypeInfo{
 	Type:             "PAGE",
 	Name:             "Page",
 	Description:      "Switching to another page",
-	Icon:             "view_mode_small_icons.png",
+	Icon:             "view_mode_small_icons.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Single,
 	Parameters: []models.CommandParameterInfo{
@@ -74,7 +74,7 @@ func (p *PageCommand) Execute(a *Action, requestMessage models.Message) (bool, e
 			message := models.Message{
 				Profile:  a.Profile,
 				Page:     cmdValue,
-				ImageURL: "check_mark.png",
+				ImageURL: "check_mark.svg",
 				State:    0,
 			}
 			api.SendMessage(message)

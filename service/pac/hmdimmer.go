@@ -21,7 +21,7 @@ var HMDimmerCommandTypeInfo = models.CommandTypeInfo{
 	Type:             "HMDIMMER",
 	Name:             "HomematicDimmer",
 	Description:      "activating a homematic dimmer",
-	Icon:             "light_bulb.png",
+	Icon:             "light_bulb.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Single,
 	Parameters: []models.CommandParameterInfo{

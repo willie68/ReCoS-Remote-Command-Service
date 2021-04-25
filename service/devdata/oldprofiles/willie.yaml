@@ -24,7 +24,7 @@ actions:
     name: action1
     title: short delay
     description: Just a short delay
-    icon: hourglass_begin.png
+    icon: hourglass_begin.svg
     fontsize: 10
     fontcolor: "#FF0000"
     outlined: true
@@ -48,7 +48,7 @@ actions:
     name: action2
     title: Multi Action
     description: description for action
-    icon: hand_share.png
+    icon: hand_share.svg
     actions:
       - action2_1
       - action2_2
@@ -57,7 +57,7 @@ actions:
     name: action2_1
     title: Action 1 Title
     description: description for action
-    icon: hand_thumbsup.png
+    icon: hand_thumbsup.svg
     commands:
       - type: DELAY
         name: delay
@@ -67,7 +67,7 @@ actions:
     name: action2_2
     title: Action 2 Title
     description: description for action
-    icon: hand_thumbsdown.png
+    icon: hand_thumbsdown.svg
     commands:
       - type: DELAY
         name: delay
@@ -77,7 +77,7 @@ actions:
     name: action2_3
     title: Action 3 Title
     description: description for action
-    icon: hand_point.png
+    icon: hand_point.svg
     commands:
       - type: DELAY
         name: delay
@@ -88,7 +88,7 @@ actions:
     title: CPU Temp
     description: cpu temp
     runone: true
-    icon: company.png
+    icon: company.svg
     outlined: true
     commands:
       - type: HARDWAREMONITOR
@@ -105,7 +105,7 @@ actions:
     title: CPU Load
     description: cpu usage
     runone: true
-    icon: company.png
+    icon: company.svg
     outlined: false
     fontcolor: white
     commands:

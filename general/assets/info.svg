@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="266148744_Layer_1_grid" x="0px" y="0px" width="32px" height="32px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve">
+<circle id="266148744_shock_x5F_color_grid" class="stshockcolor" style="fill:#67DDE0;" cx="15.5" cy="15.5" r="12"/>
+<circle style="opacity:0.4;fill:#FFFFFF;" cx="15.5" cy="15.5" r="8"/>
+<path style="fill:#4D5152;" d="M15.5,3.005C8.599,3.005,3.005,8.6,3.005,15.5c0,6.9,5.594,12.495,12.495,12.495  c6.9,0,12.495-5.595,12.495-12.495C27.995,8.6,22.4,3.005,15.5,3.005 M15.5,27C9.149,27,4,21.852,4,15.5C4,9.148,9.149,4,15.5,4  C21.852,4,27,9.148,27,15.5C27,21.852,21.852,27,15.5,27 M15,21h1v-8h-1V21z M15,11h1v-1h-1V11z"/>
+</svg>

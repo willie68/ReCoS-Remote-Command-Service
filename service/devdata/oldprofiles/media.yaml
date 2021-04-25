@@ -3,7 +3,7 @@ description: This is the default configuration, just to have one starting point
 pages:
     - name: Media
       description: commands for media control
-      icon: music_beamed_note.png
+      icon: music_beamed_note.svg
       columns: 2
       rows: 2
       toolbar: ""
@@ -16,7 +16,7 @@ actions:
     - type: SINGLE
       name: mediaplay_0
       title: Play/Pause
-      icon: play_pause.png
+      icon: play_pause.svg
       description: new MEDIAPLAY action created by ActionWizard
       fontsize: 10
       fontcolor: '#000000'
@@ -35,7 +35,7 @@ actions:
     - type: SINGLE
       name: mediastop_0
       title: Stop
-      icon: stop.png
+      icon: stop.svg
       description: new MEDIAPLAY action created by ActionWizard
       fontsize: 10
       fontcolor: '#000000'
@@ -54,7 +54,7 @@ actions:
     - type: SINGLE
       name: medianext_0
       title: Next
-      icon: next.png
+      icon: next.svg
       description: new MEDIAPLAY action created by ActionWizard
       fontsize: 10
       fontcolor: '#000000'
@@ -73,7 +73,7 @@ actions:
     - type: SINGLE
       name: mediaprevious_0
       title: Prev
-      icon: previous.png
+      icon: previous.svg
       description: new MEDIAPLAY action created by ActionWizard
       fontsize: 10
       fontcolor: '#000000'

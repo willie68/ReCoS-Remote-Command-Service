@@ -19,7 +19,7 @@ var ClockCommandTypeInfo = models.CommandTypeInfo{
 	Type:             "CLOCK",
 	Name:             "Clock",
 	Description:      "Displaying a nice clock",
-	Icon:             "clock.png",
+	Icon:             "clock.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Display,
 	Parameters: []models.CommandParameterInfo{

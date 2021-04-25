@@ -18,7 +18,7 @@ var ScreenshotCommandTypeInfo = models.CommandTypeInfo{
 	Type:             "SCREENSHOT",
 	Name:             "Screenshot",
 	Description:      "Taking a Screenshot",
-	Icon:             "camera.png",
+	Icon:             "camera.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Single,
 	Parameters: []models.CommandParameterInfo{
@@ -97,7 +97,7 @@ func (s *ScreenshotCommand) Execute(a *Action, requestMessage models.Message) (b
 			found = true
 			filename := ""
 			for count := 0; found; count++ {
-				filename = fmt.Sprintf("%s/screen_%d_%d.png", folder, count, i)
+				filename = fmt.Sprintf("%s/screen_%d_%d.svg", folder, count, i)
 				_, err := os.Stat(filename)
 				if os.IsNotExist(err) {
 					found = false
@@ -112,7 +112,7 @@ func (s *ScreenshotCommand) Execute(a *Action, requestMessage models.Message) (b
 		message := models.Message{
 			Profile:  a.Profile,
 			Action:   a.Name,
-			ImageURL: "check_mark.png",
+			ImageURL: "check_mark.svg",
 			Title:    "done",
 			Text:     names,
 			State:    0,

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="266247426_icon_grid" x="0px" y="0px" width="32px" height="32px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve">
+<rect id="266247426_shock_x5F_color_grid" class="stshockcolor" x="3.5" y="8.5" style="fill:#75EA9C;" width="25" height="15"/>
+<rect x="3.5" y="8.5" style="opacity:0.4;fill:#FFFFFF;" width="25" height="7.5"/>
+<path style="fill-rule:evenodd;clip-rule:evenodd;fill:#4D5152;" d="M3,8v16h26V8H3z M28,23H4V9h24V23z M22.71,14.71L22,14.01  l1.99-2V12H25v8h-1v-6.57L22.71,14.71z M19,20c1.38,0,2-1.35,2-4s-0.62-4-2-4s-2,1.35-2,4S17.62,20,19,20z M19,13c0.55,0,1,1.01,1,3  s-0.45,3-1,3s-1-1.01-1-3S18.45,13,19,13z M14,20c1.38,0,2-1.35,2-4s-0.62-4-2-4s-2,1.35-2,4S12.62,20,14,20z M14,13  c0.55,0,1,1.01,1,3s-0.45,3-1,3s-1-1.01-1-3S13.45,13,14,13z M9,16.1L7.5,12h1.07l0.93,2.54L10.43,12h1.07L10,16.1V20H9V16.1z"/>
+</svg>
