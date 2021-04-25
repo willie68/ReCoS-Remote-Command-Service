@@ -27,7 +27,7 @@ actions:
     - type: SINGLE
       name: dice_6
       title: Rolling the dice
-      icon: games_dice.png
+      icon: games_dice.svg
       description: ""
       fontsize: 20
       fontcolor: ffe699
@@ -46,7 +46,7 @@ actions:
     - type: DISPLAY
       name: ping_0
       title: Ping
-      icon: world_shipping.png
+      icon: world_shipping.svg
       description: new PING action created by ActionWizard
       fontsize: 40
       fontcolor: '#000000'
@@ -66,7 +66,7 @@ actions:
     - type: SINGLE
       name: timer_0
       title: Count down
-      icon: timer.png
+      icon: timer.svg
       description: new TIMER action created by ActionWizard
       fontsize: 10
       fontcolor: '#000000'
@@ -86,7 +86,7 @@ actions:
     - type: SINGLE
       name: words_0
       title: Random words
-      icon: games_dice.png
+      icon: games_dice.svg
       description: ""
       fontsize: 40
       fontcolor: '#000000'
@@ -111,7 +111,7 @@ actions:
     - type: DISPLAY
       name: clock_0
       title: ""
-      icon: clock.png
+      icon: clock.svg
       description: new CLOCK action created by ActionWizard
       fontsize: 20
       fontcolor: fcfcfc
@@ -140,7 +140,7 @@ actions:
     - type: SINGLE
       name: sendmsg_0
       title: ""
-      icon: send.png
+      icon: send.svg
       description: new SENDMESSAGE action created by ActionWizard
       fontsize: 26
       fontcolor: '#000000'
@@ -169,7 +169,7 @@ actions:
     - type: DISPLAY
       name: clock_1
       title: New York
-      icon: clock.png
+      icon: clock.svg
       description: new CLOCK action created by ActionWizard
       fontsize: 10
       fontcolor: ffffff

@@ -15,7 +15,7 @@ var StopwatchCommandTypeInfo = models.CommandTypeInfo{
 	Type:             "STOPWATCH",
 	Name:             "Stopwatch",
 	Description:      "Measure time with a stopwatch",
-	Icon:             "rate.png",
+	Icon:             "rate.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Single,
 	Parameters: []models.CommandParameterInfo{

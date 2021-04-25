@@ -19,7 +19,7 @@ var WindowCtrlCommandTypeInfo = models.CommandTypeInfo{
 	Type:             "WINDOWCTRL",
 	Name:             "WindowCtrl",
 	Description:      "controlling windows on the desktop",
-	Icon:             "window.png",
+	Icon:             "window.svg",
 	WizardPossible:   false,
 	WizardActionType: models.Single,
 	Parameters: []models.CommandParameterInfo{

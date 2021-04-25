@@ -15,7 +15,7 @@ var SendMessageCommandTypeInfo = models.CommandTypeInfo{
 	Type:             "SENDMESSAGE",
 	Name:             "Sendmessage",
 	Description:      "Sending a Message",
-	Icon:             "send.png",
+	Icon:             "send.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Single,
 	Parameters: []models.CommandParameterInfo{
@@ -75,7 +75,7 @@ func (s *SendMessageCommand) Execute(a *Action, requestMessage models.Message) (
 		message := models.Message{
 			Profile:  a.Profile,
 			Action:   a.Name,
-			ImageURL: "check_mark.png",
+			ImageURL: "check_mark.svg",
 			Command:  "sendmessage",
 			Text:     msg,
 			State:    0,

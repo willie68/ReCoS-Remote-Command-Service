@@ -54,7 +54,7 @@ actions:
     - type: SINGLE
       name: delay1
       title: short delay
-      icon: hourglass_begin.png
+      icon: hourglass_begin.svg
       description: Just a short delay
       fontsize: 10
       fontcolor: '#FF0000'
@@ -84,7 +84,7 @@ actions:
           type: DELAY
           name: delay1
           description: ""
-          icon: address_book.png
+          icon: address_book.svg
           title: step 1
           parameters:
             time: 1
@@ -220,7 +220,7 @@ actions:
     - type: SINGLE
       name: page1
       title: Back
-      icon: arrow_left.png
+      icon: arrow_left.svg
       description: Goto default page
       fontsize: 0
       fontcolor: ""
@@ -356,7 +356,7 @@ actions:
     - type: SINGLE
       name: noop
       title: Do nothing
-      icon: light_bulb.png
+      icon: light_bulb.svg
       description: do nothing
       fontsize: 0
       fontcolor: ""
@@ -374,7 +374,7 @@ actions:
     - type: SINGLE
       name: timer
       title: Timer 10 sec
-      icon: alarm_bell.png
+      icon: alarm_bell.svg
       description: timer counting down 10 sec
       fontsize: 0
       fontcolor: ""
@@ -395,7 +395,7 @@ actions:
     - type: SINGLE
       name: timer2
       title: Timer 20 sec
-      icon: time_frame.png
+      icon: time_frame.svg
       description: timer counting down 20 sec
       fontsize: 0
       fontcolor: ""
@@ -455,7 +455,7 @@ actions:
     - type: SINGLE
       name: screenshot
       title: Screenshot
-      icon: monitor.png
+      icon: monitor.svg
       description: doing a screenshot
       fontsize: 0
       fontcolor: ""
@@ -475,7 +475,7 @@ actions:
     - type: DISPLAY
       name: cputemp
       title: CPU Temp
-      icon: company.png
+      icon: company.svg
       description: cpu temp
       fontsize: 0
       fontcolor: ""
@@ -499,7 +499,7 @@ actions:
     - type: DISPLAY
       name: cpuload
       title: CPU Load
-      icon: company.png
+      icon: company.svg
       description: cpu usage
       fontsize: 0
       fontcolor: white
@@ -521,7 +521,7 @@ actions:
     - type: SINGLE
       name: stopwatch
       title: Stopwatch
-      icon: timer.png
+      icon: timer.svg
       description: simple stop watch
       fontsize: 0
       fontcolor: black
@@ -540,7 +540,7 @@ actions:
     - type: SINGLE
       name: page_0
       title: Goto Default
-      icon: abacus.png
+      icon: abacus.svg
       description: new PAGE action created by ActionWizard
       fontsize: 10
       fontcolor: '#000000'

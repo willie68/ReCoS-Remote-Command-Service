@@ -22,7 +22,7 @@ var DiceCommandTypeInfo = models.CommandTypeInfo{
 	Type:             "DICE",
 	Name:             "Dice",
 	Description:      "rolling a Dice",
-	Icon:             "games_dice.png",
+	Icon:             "games_dice.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Single,
 	Parameters: []models.CommandParameterInfo{

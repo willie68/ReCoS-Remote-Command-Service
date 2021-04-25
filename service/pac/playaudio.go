@@ -13,7 +13,7 @@ var PlayAudioCommandTypeInfo = models.CommandTypeInfo{
 	Type:             "PLAYAUDIO",
 	Name:             "Playaudio",
 	Description:      "playing an audio file",
-	Icon:             "music_beamed_note.png",
+	Icon:             "music_beamed_note.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Single,
 	Parameters: []models.CommandParameterInfo{

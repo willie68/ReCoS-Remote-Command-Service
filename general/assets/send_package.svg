@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="266247425_icon_grid" x="0px" y="0px" width="32px" height="32px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve">
+<path id="266247425_shock_x5F_color_grid" class="stshockcolor" style="fill:#FFD878;" d="M3.5,9.5v13c0,0.553,0.448,1,1,1h23c0.553,0,1-0.447,1-1v-13  c0-0.552-0.447-1-1-1h-23C3.948,8.5,3.5,8.948,3.5,9.5z"/>
+<g id="266247425__x3C_Trazado_compuesto_x3E__grid" style="opacity:0.3;">
+	<path style="fill:#4D5152;" d="M27,9v6H16h-1v7H4v1h24v-1V9H27z M16,22v-6h11v6H16z"/>
+	<polygon style="fill:#4D5152;" points="15,9 14,9 14,14 4,14 4,15 14,15 15,15 15,14  "/>
+</g>
+<circle id="266247425__x3C_Trazado_compuesto_x3E__1__grid" style="fill:#F27C7C;" cx="19.5" cy="11.5" r="2"/>
+<path style="fill-rule:evenodd;clip-rule:evenodd;fill:#4D5152;" d="M27,8H16h-1H5c-2,0-2,2-2,2v5v1v6c0,2,2,2,2,2h11h1h10  c2,0,2-2,2-2v-5v-1v-6C29,8,27,8,27,8z M4,10.012C4.012,9.55,4.195,9,5,9h10v6H4V10.012z M28,21.988C27.988,22.45,27.806,23,27,23  H17v-6h11V21.988z M16,16v7H5.012C4.55,22.988,4,22.806,4,22v-6H16V9h3.5h7.492C27.453,9.013,28,9.197,28,10v6H16z M23,12h4v1h-4V12  z M23,10h4v1h-4V10z M17,11.5c0,1.378,1.121,2.5,2.5,2.5s2.5-1.122,2.5-2.5S20.879,9,19.5,9S17,10.122,17,11.5z M19.5,10  c0.83,0,1.5,0.67,1.5,1.5S20.33,13,19.5,13S18,12.33,18,11.5S18.67,10,19.5,10z"/>
+</svg>

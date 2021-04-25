@@ -18,7 +18,7 @@ actions:
     - type: SINGLE
       name: hmprograms_0
       title: Gartenlicht ein
-      icon: history2.png
+      icon: history2.svg
       description: new HMPROGRAMS action created by ActionWizard
       fontsize: 10
       fontcolor: '#000000'
@@ -37,7 +37,7 @@ actions:
     - type: SINGLE
       name: hmswitch_0
       title: Licht Gartenhütte
-      icon: light_bulb.png
+      icon: light_bulb.svg
       description: new HMSWITCH action created by ActionWizard
       fontsize: 20
       fontcolor: '#000000'
@@ -53,12 +53,12 @@ actions:
           parameters:
             name: 'Gartenhütte: Licht'
             officon: ""
-            onicon: light_bulb.png
+            onicon: light_bulb.svg
       actions: []
     - type: SINGLE
       name: hmdimmer_0
       title: Gäste 30
-      icon: light_bulb.png
+      icon: light_bulb.svg
       description: new HMDIMMER action created by ActionWizard
       fontsize: 20
       fontcolor: '#000000'
@@ -79,7 +79,7 @@ actions:
     - type: SINGLE
       name: dice_0
       title: ""
-      icon: games_dice.png
+      icon: games_dice.svg
       description: new DICE action created by ActionWizard
       fontsize: 10
       fontcolor: '#000000'
@@ -106,7 +106,7 @@ actions:
     - type: SINGLE
       name: hmdimmer_1
       title: Gäste up
-      icon: light_bulb.png
+      icon: light_bulb.svg
       description: new HMDIMMER action created by ActionWizard
       fontsize: 10
       fontcolor: '#000000'
@@ -127,7 +127,7 @@ actions:
     - type: SINGLE
       name: hmdimmer_2
       title: Gäste down
-      icon: light_bulb.png
+      icon: light_bulb.svg
       description: new HMDIMMER action created by ActionWizard
       fontsize: 10
       fontcolor: '#000000'

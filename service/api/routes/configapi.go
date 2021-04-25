@@ -1,10 +1,14 @@
 package routes
 
 import (
+	"bytes"
 	"fmt"
+	"image"
+	"image/png"
 	"io"
 	"mime"
 	"net/http"
+	"os"
 	"path/filepath"
 	"sort"
 	"strconv"
@@ -13,6 +17,8 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
+	"github.com/srwiley/oksvg"
+	"github.com/srwiley/rasterx"
 	"gopkg.in/yaml.v3"
 	"wkla.no-ip.biz/remote-desk-service/api"
 	"wkla.no-ip.biz/remote-desk-service/api/handler"
@@ -28,7 +34,7 @@ var mu sync.Mutex
 var getIconsDo sync.Once
 var initIconsMapper sync.Once
 var iconMapperMap map[string]map[string]string
-var defaultIcon = "help.png"
+var defaultIcon = "help.svg"
 
 /*
 ConfigRoutes getting all routes for the config endpoint
@@ -38,6 +44,7 @@ func ConfigRoutes() *chi.Mux {
 	router.Get("/icons", GetIcons)
 	router.Get("/icons/{mapper}/{key}", GetIconMapperKey)
 	router.Get("/commands", GetCommands)
+	router.Get("/icons/{iconname}", GetIcon)
 	router.With(handler.AuthCheck()).Get("/check", GetCheck)
 	initIconMapper()
 	return router
@@ -90,7 +97,7 @@ func GetIcons(response http.ResponseWriter, request *http.Request) {
 		}
 
 		for _, file := range files {
-			if strings.HasSuffix(file.Name(), ".png") {
+			if strings.HasSuffix(file.Name(), ".png") || strings.HasSuffix(file.Name(), ".svg") {
 				icons = append(icons, file.Name())
 			}
 		}
@@ -99,6 +106,79 @@ func GetIcons(response http.ResponseWriter, request *http.Request) {
 	})
 	mu.Unlock()
 	render.JSON(response, request, icons)
+}
+
+/*
+GetIcon returning a converted icon back to the client
+*/
+func GetIcon(response http.ResponseWriter, request *http.Request) {
+	var err error
+	w := 72
+	h := 72
+	heightStr := request.URL.Query().Get("height")
+	if heightStr != "" {
+		h, err = strconv.Atoi(heightStr)
+		if err != nil {
+			clog.Logger.Debugf("Error reading icon height: %v", err)
+		}
+	}
+	widthStr := request.URL.Query().Get("width")
+	if widthStr != "" {
+		w, err = strconv.Atoi(widthStr)
+		if err != nil {
+			clog.Logger.Debugf("Error reading icon width: %v", err)
+		}
+	}
+	iconName, err := api.Param(request, "iconname")
+	if err != nil {
+		clog.Logger.Debugf("Error reading icon name: %v", err)
+		api.Err(response, request, err)
+		return
+	}
+	index := strings.Index(iconName, ".")
+	if index >= 0 {
+		iconName = iconName[0:index]
+	}
+
+	clog.Logger.Infof("config: icon convert: %s", iconName)
+
+	srcPath := fmt.Sprintf("webclient/assets/%s.svg", iconName)
+	in, err := web.WebClientAssets.Open(srcPath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			value := fmt.Sprintf("%s.png", iconName)
+			handleFile(response, request, value)
+		} else {
+			clog.Logger.Debugf("Error reading icon: %v", err)
+			api.Err(response, request, err)
+			return
+		}
+	}
+	defer in.Close()
+
+	var b bytes.Buffer
+	icon, _ := oksvg.ReadIconStream(in)
+	icon.SetTarget(0, 0, float64(w), float64(h))
+	rgba := image.NewRGBA(image.Rect(0, 0, w, h))
+	icon.Draw(rasterx.NewDasher(w, h, rasterx.NewScannerGV(w, h, rgba, rgba.Bounds())), 1)
+
+	err = png.Encode(&b, rgba)
+	if err != nil {
+		clog.Logger.Debugf("Error encoding icon: %v", err)
+		api.Err(response, request, err)
+	}
+
+	ctype := mime.TypeByExtension(".png")
+	response.Header().Set("Content-Type", ctype)
+	response.Header().Set("Content-Length", strconv.FormatInt(int64(b.Len()), 10))
+	response.WriteHeader(http.StatusOK)
+
+	if request.Method != "HEAD" {
+		r := bytes.NewBuffer(b.Bytes())
+		io.Copy(response, r)
+	}
+
+	//render.JSON(response, request, iconName)
 }
 
 /*
@@ -148,6 +228,11 @@ func GetIconMapperKey(response http.ResponseWriter, request *http.Request) {
 	if strings.Index(value, "#") == 0 {
 		render.JSON(response, request, value)
 	}
+	handleFile(response, request, value)
+	return
+}
+
+func handleFile(response http.ResponseWriter, request *http.Request, value string) {
 	file, err := web.WebClientAssets.Open("webclient/assets/" + value)
 	if err != nil {
 		clog.Logger.Debugf("Error reading file: %v", err)
@@ -171,7 +256,6 @@ func GetIconMapperKey(response http.ResponseWriter, request *http.Request) {
 	if request.Method != "HEAD" {
 		io.Copy(response, file)
 	}
-
 }
 
 /*

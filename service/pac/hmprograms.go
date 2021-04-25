@@ -15,7 +15,7 @@ var HMPrgCommandTypeInfo = models.CommandTypeInfo{
 	Type:             "HMPROGRAMS",
 	Name:             "HomematicPrograms",
 	Description:      "executoing a homematic program",
-	Icon:             "history2.png",
+	Icon:             "history2.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Single,
 	Parameters: []models.CommandParameterInfo{

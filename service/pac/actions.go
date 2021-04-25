@@ -283,7 +283,7 @@ func doWorkSingle(a *Action, sendingAction *Action, requestMessage models.Messag
 	lastTitle := ""
 	sendPostMessage := true
 	for index, command := range a.Config.Commands {
-		imageName := fmt.Sprintf("hourglass%d.png", index%4)
+		imageName := fmt.Sprintf("hourglass%d.svg", index%4)
 		if command.Icon != "" {
 			imageName = command.Icon
 		}
@@ -317,7 +317,7 @@ func doWorkSingle(a *Action, sendingAction *Action, requestMessage models.Messag
 		message := models.Message{
 			Profile:  sendingAction.Profile,
 			Action:   sendingAction.Name,
-			ImageURL: "check_mark.png",
+			ImageURL: "check_mark.svg",
 			Title:    lastTitle,
 			State:    0,
 		}

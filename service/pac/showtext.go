@@ -11,7 +11,7 @@ var ShowTextCommandTypeInfo = models.CommandTypeInfo{
 	Type:             "SHOWTEXT",
 	Name:             "ShowText",
 	Description:      "showing a simple text",
-	Icon:             "send.png",
+	Icon:             "send.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Single,
 	Parameters: []models.CommandParameterInfo{

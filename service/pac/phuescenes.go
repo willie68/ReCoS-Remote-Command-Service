@@ -16,7 +16,7 @@ var PHueScenesCommandTypeInfo = models.CommandTypeInfo{
 	Type:             "PHUESCENES",
 	Name:             "PhilipsHueScenes",
 	Description:      "applying a scene to a hue group",
-	Icon:             "audio_equalizer.png",
+	Icon:             "audio_equalizer.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Display,
 	Parameters: []models.CommandParameterInfo{

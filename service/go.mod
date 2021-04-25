@@ -35,6 +35,8 @@ require (
 	github.com/skratchdot/open-golang v0.0.0-20200116055534-eef842397966
 	github.com/spf13/pflag v1.0.5
 	github.com/sqweek/dialog v0.0.0-20200911184034-8a3d98e8211d
+	github.com/srwiley/oksvg v0.0.0-20210320200257-875f767ac39a // indirect
+	github.com/srwiley/rasterx v0.0.0-20200120212402-85cb7272f5e9 // indirect
 	github.com/stretchr/testify v1.7.0 // indirect
 	github.com/thoas/go-funk v0.8.0
 	golang.org/x/crypto v0.0.0-20210322153248-0c34fe9e7dc2 // indirect
@@ -47,6 +49,5 @@ require (
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 )
-
 
 replace github.com/amimof/huego v1.2.0 => ../../huego

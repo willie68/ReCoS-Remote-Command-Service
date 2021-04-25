@@ -16,7 +16,7 @@ actions:
     - type: SINGLE
       name: hue_0
       title: Color Red
-      icon: light_bulb.png
+      icon: light_bulb.svg
       description: new HUE action created by ActionWizard
       fontsize: 20
       fontcolor: ffffff
@@ -40,7 +40,7 @@ actions:
     - type: SINGLE
       name: hue_1
       title: Hue
-      icon: light_bulb.png
+      icon: light_bulb.svg
       description: new HUE action created by ActionWizard
       fontsize: 20
       fontcolor: ffffff
@@ -61,7 +61,7 @@ actions:
     - type: SINGLE
       name: hue_2
       title: CT
-      icon: light_bulb.png
+      icon: light_bulb.svg
       description: new HUE action created by ActionWizard
       fontsize: 20
       fontcolor: ffffff
@@ -81,7 +81,7 @@ actions:
     - type: SINGLE
       name: hue_scene_0
       title: ""
-      icon: light_bulb.png
+      icon: light_bulb.svg
       description: ""
       fontsize: 0
       fontcolor: ""
