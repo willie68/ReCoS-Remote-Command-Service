@@ -20,7 +20,7 @@ var MediaPlayCommandTypeInfo = models.CommandTypeInfo{
 	Type:             "MEDIAPLAY",
 	Name:             "Mediaplay",
 	Description:      "controlling a media player",
-	Icon:             "music_beamed_note.png",
+	Icon:             "music_beamed_note.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Single,
 	Parameters: []models.CommandParameterInfo{

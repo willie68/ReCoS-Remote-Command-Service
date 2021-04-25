@@ -22,7 +22,7 @@ var TimerCommandTypeInfo = models.CommandTypeInfo{
 	Type:             "TIMER",
 	Name:             "Timer",
 	Description:      "Starting a count down timer",
-	Icon:             "timer.png",
+	Icon:             "timer.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Single,
 	Parameters: []models.CommandParameterInfo{
@@ -118,7 +118,7 @@ func (t *TimerCommand) Execute(a *Action, requestMessage models.Message) (bool, 
 		Action:   a.Name,
 		State:    0,
 		Title:    t.finished,
-		ImageURL: "check_mark.png",
+		ImageURL: "check_mark.svg",
 	}
 	api.SendMessage(message)
 	time.Sleep(3 * time.Second)

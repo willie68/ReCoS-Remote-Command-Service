@@ -18,7 +18,7 @@ var KeysCommandTypeInfo = models.CommandTypeInfo{
 	Type:             "KEYS",
 	Name:             "Keys",
 	Description:      "Typing on a virtual keyboard",
-	Icon:             "keystroke_monitoring.png",
+	Icon:             "keystroke_monitoring.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Single,
 	Parameters: []models.CommandParameterInfo{

@@ -19,7 +19,7 @@ var AudioVolumeCommandTypeInfo = models.CommandTypeInfo{
 	Type:             "AUDIOVOLUME",
 	Name:             "AudioVolume",
 	Description:      "setting the volume of an audio device",
-	Icon:             "speaker.png",
+	Icon:             "speaker.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Single,
 	Parameters: []models.CommandParameterInfo{
@@ -176,24 +176,24 @@ func (v *AudioVolumeCommand) SendSessionMute(muted bool, volume float32, isInput
 	var image string
 	var text string
 	if isInput {
-		image = "radio_microphone.png"
+		image = "radio_microphone.svg"
 		text = " "
 		if muted {
-			image = "radio_microphone_off.png"
+			image = "radio_microphone_off.svg"
 			text = "muted"
 		}
 	} else {
-		image = "audio_volume_high.png"
+		image = "audio_volume_high.svg"
 		percent := int(math.Round(float64(volume) * 100.0))
 		text = fmt.Sprintf("Volume: %d%%", percent)
 		if volume < 0.66 {
-			image = "audio_volume_medium.png"
+			image = "audio_volume_medium.svg"
 		}
 		if volume < 0.33 {
-			image = "audio_volume_low.png"
+			image = "audio_volume_low.svg"
 		}
 		if muted {
-			image = "audio_volume_mute.png"
+			image = "audio_volume_mute.svg"
 			text = "muted"
 		}
 	}

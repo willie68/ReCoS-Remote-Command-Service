@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="266148748_Layer_1_grid" x="0px" y="0px" width="32px" height="32px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve">
+<path style="fill:#AAAAAA;" d="M9.5,15.5v-8c0-3.309,2.691-6,6-6s6,2.691,6,6v5h-2v-5c0-2.206-1.794-4-4-4c-2.206,0-4,1.794-4,4v8  H9.5z"/>
+<rect id="266148748_shock_x5F_color_grid" class="stshockcolor" x="6.499" y="15.504" style="fill:#FFD878;" width="18.002" height="11.99"/>
+<rect x="12" y="15.5" style="opacity:0.4;fill:#FFFFFF;" width="7" height="12"/>
+<path style="fill:#4D5152;" d="M24.5,15H12V7.5C12,5.57,13.57,4,15.5,4S19,5.57,19,7.5V13h3V7.5C22,3.916,19.084,1,15.5,1  S9,3.916,9,7.5V15H6.5C6.224,15,6,15.224,6,15.5v12C6,27.776,6.224,28,6.5,28h18c0.276,0,0.5-0.224,0.5-0.5v-12  C25,15.224,24.776,15,24.5,15z M10,7.5C10,4.463,12.462,2,15.5,2C18.537,2,21,4.463,21,7.5V12h-1V7.5C20,5.015,17.985,3,15.5,3  C13.015,3,11,5.015,11,7.5V15h-1V7.5z M24.001,27H6.999V16h17.002V27z M16,23.997h-1v-4.994h1V23.997z"/>
+</svg>

@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="266247351_Outlined_2__grid" x="0px" y="0px" width="32px" height="32px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve">
+<path id="266247351_shock_x5F_color_grid" class="stshockcolor" style="fill:#AAAAAA;" d="M15.5,28.5c-7.168,0-13-5.832-13-13c0-7.168,5.832-13,13-13  c7.168,0,13,5.832,13,13C28.5,22.668,22.668,28.5,15.5,28.5z"/>
+<g style="opacity:0.4;">
+	<path style="fill:#FFFFFF;" d="M15.5,26C9.71,26,5,21.29,5,15.5C5,9.71,9.71,5,15.5,5C21.29,5,26,9.71,26,15.5   C26,21.29,21.29,26,15.5,26z"/>
+</g>
+<path style="fill:#4D5152;" d="M15.5,3C22.393,3,28,8.607,28,15.5S22.393,28,15.5,28S3,22.393,3,15.5S8.607,3,15.5,3 M15.5,2  C8.044,2,2,8.044,2,15.5S8.044,29,15.5,29S29,22.956,29,15.5S22.956,2,15.5,2L15.5,2z M19.613,8h-1.137l-2.961,5.466L12.555,8  h-1.137L15,14.613V16h-3v1h3v2h-3v1h3v3h1v-3h3v-1h-3v-2h3v-1h-3v-1.329L19.613,8z"/>
+</svg>

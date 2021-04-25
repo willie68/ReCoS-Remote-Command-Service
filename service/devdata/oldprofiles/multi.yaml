@@ -14,7 +14,7 @@ actions:
     - type: MULTI
       name: action2
       title: Multi Action
-      icon: hand_share.png
+      icon: hand_share.svg
       description: description for action
       fontsize: 0
       fontcolor: ""
@@ -28,7 +28,7 @@ actions:
     - type: SINGLE
       name: action2_1
       title: Action Title
-      icon: hand_thumbsup.png
+      icon: hand_thumbsup.svg
       description: description for action
       fontsize: 0
       fontcolor: ""
@@ -47,7 +47,7 @@ actions:
     - type: SINGLE
       name: action2_2
       title: Action Title
-      icon: hand_thumbsdown.png
+      icon: hand_thumbsdown.svg
       description: description for action
       fontsize: 0
       fontcolor: ""

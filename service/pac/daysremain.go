@@ -15,7 +15,7 @@ var DaysRemainCommandTypeInfo = models.CommandTypeInfo{
 	Type:             "DAYSREMAIN",
 	Name:             "Days remain",
 	Description:      "Displaying the days remain to a date",
-	Icon:             "calendar_year.png",
+	Icon:             "calendar_year.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Display,
 	Parameters: []models.CommandParameterInfo{

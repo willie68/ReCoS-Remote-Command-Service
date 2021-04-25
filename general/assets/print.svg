@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="266148766_Layer_1_grid" x="0px" y="0px" width="32px" height="32px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve">
+<path id="266148766_shock_x5F_color_grid" class="stshockcolor" style="fill:#AAAAAA;" d="M28.5,13v10.5h-25V13c0-1.38,1.12-2.5,2.5-2.5h20  C27.38,10.5,28.5,11.62,28.5,13z"/>
+<path style="opacity:0.4;fill:#FFFFFF;" d="M28.5,13v4h-25v-4c0-1.38,1.12-2.5,2.5-2.5h20C27.38,10.5,28.5,11.62,28.5,13z"/>
+<path style="fill:#FFFFFF;" d="M22.5,10.5h-13v-6h13V10.5z M22.5,20.5h-13v8h13V20.5z"/>
+<path style="fill:#67DDE0;" d="M20,25h-8v1h8V25z M20,23.005h-8V24h8V23.005z"/>
+<path style="fill:#4D5152;" d="M12,15h2v-2h-2V15z M26,10h-3V4H9v6H6c-1.657,0-3,1.343-3,3v10c0,0.553,0.448,1,1,1h5v5h14v-5h5  c0.553,0,1-0.447,1-1V13C29,11.343,27.657,10,26,10 M10,5h12v5H10V5z M22,28H10v-7h12V28z M28,23h-5v-2h1v-1H8v1h1v2H4V13  c0-1.104,0.896-2,2-2h20c1.104,0,2,0.896,2,2V23z M6,15h2v-2H6V15z M9,15h2v-2H9V15z"/>
+</svg>

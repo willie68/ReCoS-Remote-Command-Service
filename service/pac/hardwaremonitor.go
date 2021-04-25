@@ -25,7 +25,7 @@ var HardwareMonitorCommandTypeInfo = models.CommandTypeInfo{
 	Type:             "HARDWAREMONITOR",
 	Name:             "HardwareMonitor",
 	Description:      "Displaying data from a sensors",
-	Icon:             "tools.png",
+	Icon:             "tools.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Display,
 	Parameters: []models.CommandParameterInfo{
