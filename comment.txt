@@ -32,3 +32,6 @@ https://github.com/amimof/huego
 
 gVal validation lib
 https://github.com/PaesslerAG/gval
+
+Elgato stream deck hardware
+https://github.com/dh1tw/streamdeck
