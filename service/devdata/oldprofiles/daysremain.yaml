@@ -3,7 +3,7 @@ description: This is the default configuration, just to have one starting point
 pages:
     - name: Media
       description: clock
-      icon: clock.png
+      icon: clock.svg
       columns: 2
       rows: 2
       toolbar: ""
@@ -16,7 +16,7 @@ actions:
     - type: SINGLE
       name: daysremain_0
       title: Days
-      icon: calendar_year.png
+      icon: calendar_year.svg
       description: ""
       fontsize: 30
       fontcolor: '#000000'
@@ -39,7 +39,7 @@ actions:
     - type: DISPLAY
       name: daysremain_1
       title: tzu
-      icon: calendar_year.png
+      icon: calendar_year.svg
       description: new DAYSREMAIN action created by ActionWizard
       fontsize: 10
       fontcolor: '#000000'

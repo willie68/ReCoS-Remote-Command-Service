@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="266247439_icon_grid" x="0px" y="0px" width="32px" height="32px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve">
+<rect id="266247439_shock_x5F_color_grid" class="stshockcolor" x="9.5" y="15.5" style="fill:#BF9171;" width="13" height="10"/>
+<polygon style="fill:#FFE4A9;" points="16,7.351 5.5,12.128 5.5,25.5 9.5,25.5 9.5,15.5 22.5,15.5 22.5,25.5 26.5,25.5 26.5,12.128   "/>
+<path style="fill-rule:evenodd;clip-rule:evenodd;fill:#4D5152;" d="M16,6.8L4,12.26v1.1l1-0.45V26h22V12.91l1,0.45v-1.1L16,6.8z   M22,25H10v-1h12V25z M22,23H10v-1h12V23z M22,21H10v-1h12V21z M22,19H10v-1h12V19z M22,17H10v-1h12V17z M26,25h-3V15H9v10H6V12.45  L16,7.9l10,4.55V25z"/>
+</svg>

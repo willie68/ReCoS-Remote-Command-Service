@@ -19,7 +19,7 @@ var PHueLightsCommandTypeInfo = models.CommandTypeInfo{
 	Type:             "PHUELIGHTS",
 	Name:             "PhilipsHueLights",
 	Description:      "control a hue light and get a feedback",
-	Icon:             "light_bulb.png",
+	Icon:             "light_bulb.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Display,
 	Parameters: []models.CommandParameterInfo{

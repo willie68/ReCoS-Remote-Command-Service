@@ -16,7 +16,7 @@ var PingCommandTypeInfo = models.CommandTypeInfo{
 	Type:             "PING",
 	Name:             "Ping",
 	Description:      "Execute a ping to a url and show the answer in ms",
-	Icon:             "world_shipping.png",
+	Icon:             "world_shipping.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Display,
 	Parameters: []models.CommandParameterInfo{

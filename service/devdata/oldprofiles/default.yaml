@@ -27,7 +27,7 @@ actions:
     - type: SINGLE
       name: Hello_World
       title: Hello World
-      icon: chat.png
+      icon: chat.svg
       description: Execute notepad and wirte Hello ReCoS to it.
       fontsize: 0
       fontcolor: ""
@@ -65,7 +65,7 @@ actions:
     - type: SINGLE
       name: clocks
       title: Clocks
-      icon: clock.png
+      icon: clock.svg
       description: Goto clocks page
       fontsize: 0
       fontcolor: ""
@@ -84,7 +84,7 @@ actions:
     - type: SINGLE
       name: timer
       title: Timer 10 sec
-      icon: alarm_bell.png
+      icon: alarm_bell.svg
       description: timer counting down 10 sec
       fontsize: 0
       fontcolor: ""
@@ -125,7 +125,7 @@ actions:
     - type: SINGLE
       name: screenshot
       title: Screenshot
-      icon: monitor.png
+      icon: monitor.svg
       description: doing a screenshot
       fontsize: 0
       fontcolor: ""
@@ -145,7 +145,7 @@ actions:
     - type: DISPLAY
       name: cpuload
       title: CPU Load
-      icon: company.png
+      icon: company.svg
       description: cpu usage
       fontsize: 0
       fontcolor: white
@@ -167,7 +167,7 @@ actions:
     - type: SINGLE
       name: stopwatch
       title: Stopwatch
-      icon: timer.png
+      icon: timer.svg
       description: simple stop watch
       fontsize: 0
       fontcolor: black
@@ -186,7 +186,7 @@ actions:
     - type: SINGLE
       name: clock
       title: text clock
-      icon: clock.png
+      icon: clock.svg
       description: ""
       fontsize: 0
       fontcolor: ""

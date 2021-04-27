@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="266148740_Outlined_2__grid" x="0px" y="0px" width="32px" height="32px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve">
+<path id="266148740_shock_x5F_color_grid" class="stshockcolor" style="fill:#FFD878;" d="M27.5,13.44V25.5h-8V19c0-1.93-1.57-3.5-3.5-3.5c-1.93,0-3.5,1.57-3.5,3.5v6.5  h-8V13.44L16,6.05L27.5,13.44z"/>
+<polygon style="opacity:0.3;fill:#FFFFFF;" points="27.5,13.44 27.5,23 4.5,23 4.5,13.44 16,6.05 "/>
+<path style="fill:#EF6565;" d="M12.5,25.5V19c0-1.93,1.57-3.5,3.5-3.5s3.5,1.57,3.5,3.5v6.5H12.5z"/>
+<path style="fill:#4D5152;" d="M16,5.46l-14,9v1.5l2-1.29V26h24V14.67l2,1.29v-1.5L16,5.46z M19,25h-6v-6c0-1.66,1.34-3,3-3  s3,1.34,3,3V25z M27,25h-7v-6c0-2.21-1.79-4-4-4s-4,1.79-4,4v6H5V14.03l11-7.07l11,7.07V25z"/>
+</svg>

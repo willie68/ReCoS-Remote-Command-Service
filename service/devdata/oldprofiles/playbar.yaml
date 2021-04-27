@@ -15,7 +15,7 @@ actions:
     - type: SINGLE
       name: playaudio_0
       title: Dail-tone mp3
-      icon: music_beamed_note.png
+      icon: music_beamed_note.svg
       description: new PLAYAUDIO action created by ActionWizard
       fontsize: 20
       fontcolor: ffffff
@@ -32,7 +32,7 @@ actions:
     - type: SINGLE
       name: playaudio_1
       title: Dail-tone wav
-      icon: music_beamed_note.png
+      icon: music_beamed_note.svg
       description: new PLAYAUDIO action created by ActionWizard
       fontsize: 20
       fontcolor: ffffff
@@ -49,7 +49,7 @@ actions:
     - type: SINGLE
       name: playaudio_2
       title: Flac demo
-      icon: music_beamed_note.png
+      icon: music_beamed_note.svg
       description: new PLAYAUDIO action created by ActionWizard
       fontsize: 20
       fontcolor: ffffff

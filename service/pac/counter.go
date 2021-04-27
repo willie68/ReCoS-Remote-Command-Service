@@ -21,7 +21,7 @@ var CounterCommandTypeInfo = models.CommandTypeInfo{
 	Type:             "COUNTER",
 	Name:             "Counter",
 	Description:      "Counting button clicks",
-	Icon:             "slot_machine.png",
+	Icon:             "slot_machine.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Single,
 	Parameters: []models.CommandParameterInfo{

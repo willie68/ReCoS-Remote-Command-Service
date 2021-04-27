@@ -15,6 +15,7 @@ var CommandTypes = []models.CommandTypeInfo{
 	ClockCommandTypeInfo,
 	StopwatchCommandTypeInfo,
 	ScreenshotCommandTypeInfo,
+	SendMessageCommandTypeInfo,
 	AudioVolumeCommandTypeInfo,
 	MediaPlayCommandTypeInfo,
 	DaysRemainCommandTypeInfo,
@@ -29,6 +30,7 @@ var CommandTypes = []models.CommandTypeInfo{
 	HMPrgCommandTypeInfo,
 	HMSwitchCommandTypeInfo,
 	HMDimmerCommandTypeInfo,
+	ShowTextCommandTypeInfo,
 }
 
 func InitCommand() {
@@ -197,6 +199,12 @@ func GetCommand(command models.Command) CommandExecutor {
 	case HMDimmerCommandTypeInfo.Type:
 		{
 			cmdExecutor = &HMDimmerCommand{
+				Parameters: command.Parameters,
+			}
+		}
+	case ShowTextCommandTypeInfo.Type:
+		{
+			cmdExecutor = &ShowTextCommand{
 				Parameters: command.Parameters,
 			}
 		}

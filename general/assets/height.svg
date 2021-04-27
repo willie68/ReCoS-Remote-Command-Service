@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="266247390_Outlined_2__grid" x="0px" y="0px" width="32px" height="32px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve">
+<rect id="266247390_shock_x5F_color_grid" x="4.5" y="6.5" class="stshockcolor" style="fill:#BFBFBF;" width="19" height="19"/>
+<polygon style="opacity:0.3;fill:#4D5152;" points="23.5,25.5 23.5,24 6,24 6,6.5 4.5,6.5 4.5,23.5 4.5,24.5 4.5,25.5 "/>
+<polygon style="opacity:0.3;fill:#FFFFFF;" points="4.5,6.5 4.5,8 22,8 22,25.5 23.5,25.5 23.5,8.5 23.5,7.5 23.5,6.5 "/>
+<path id="266247390__x3C_Trazado_x3E__grid" style="fill:#4D5152;" d="M30,25.5c0,0.276-0.224,0.5-0.5,0.5h-4c-0.276,0-0.5-0.224-0.5-0.5  s0.224-0.5,0.5-0.5H27V7h-1.5C25.224,7,25,6.776,25,6.5S25.224,6,25.5,6h4C29.776,6,30,6.224,30,6.5S29.776,7,29.5,7H28v18h1.5  C29.776,25,30,25.224,30,25.5z M24,7v18c0,0.553-0.447,1-1,1H5c-0.552,0-1-0.447-1-1V7c0-0.553,0.448-1,1-1h18  C23.553,6,24,6.447,24,7z M23,7H5v18h18V7z"/>
+</svg>

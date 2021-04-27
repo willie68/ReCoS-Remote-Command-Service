@@ -972,6 +972,25 @@ parameters:
   receiver: client
 ```
 
+##### Show text
+
+Showtext will show a text on the button, and the icon of this command, if set, will be displayed as the title, too. 
+
+`type`: SHOWTEXT
+
+Parameter:
+`text`: the text to show in the text field of the button. 
+
+Example 1
+
+```yaml
+type: SHOWTEXT
+name: showtext
+title: showtext
+parameters:
+  text: Test
+```
+
 
 
 ##### Start Browser
