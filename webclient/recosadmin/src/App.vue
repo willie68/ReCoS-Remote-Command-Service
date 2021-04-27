@@ -38,7 +38,8 @@
         <i v-if="!showPwd" class="pi pi-eye-slash" @click="togglePwdView()" />
         <i v-if="showPwd" class="pi pi-eye" @click="togglePwdView()" />
       </span>
-      <Button icon="pi pi-bars" class="p-mr-1" />
+      <Button icon="pi pi-bars" class="p-mr-1" @click="toggleHelpMenu"/>
+      <Menu id="overlay_menu" ref="helpmenu" :model="helpMenuItems" :popup="true" />
     </template>
   </Toolbar>
 
@@ -107,6 +108,25 @@ export default {
           class: "p-button-warning",
           command: () => {
             this.exportProfile();
+          },
+        },
+      ],
+      helpMenuItems: [
+        {
+          label: "Help",
+          icon: "pi pi-questionc",
+          command: () => {
+            this.helpHelp();
+          },
+        },
+        {
+          label: "-",
+        },
+        {
+          label: "About",
+          icon: "pi pi-circle",
+          command: () => {
+            this.helpAbout();
           },
         },
       ],
@@ -206,6 +226,15 @@ export default {
       .catch((err) => console.log(err.message));
   },
   methods: {
+    helpHelp() {
+      window.open("https://raw.githubusercontent.com/willie68/ReCoS-Remote-Command-Service/master/documentation/README.pdf", '_blank').focus();
+    },
+    helpAbout() {
+
+    },
+    toggleHelpMenu(event) {
+      this.$refs.helpmenu.toggle(event);
+    },
     needPWd() {
       let that = this;
       fetch(this.$store.state.baseURL + "config/check")
