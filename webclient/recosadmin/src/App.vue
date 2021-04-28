@@ -38,8 +38,13 @@
         <i v-if="!showPwd" class="pi pi-eye-slash" @click="togglePwdView()" />
         <i v-if="showPwd" class="pi pi-eye" @click="togglePwdView()" />
       </span>
-      <Button icon="pi pi-bars" class="p-mr-1" @click="toggleHelpMenu"/>
-      <Menu id="overlay_menu" ref="helpmenu" :model="helpMenuItems" :popup="true" />
+      <Button icon="pi pi-bars" class="p-mr-1" @click="toggleHelpMenu" />
+      <Menu
+        id="overlay_menu"
+        ref="helpmenu"
+        :model="helpMenuItems"
+        :popup="true"
+      />
     </template>
   </Toolbar>
 
@@ -59,6 +64,22 @@
     v-on:cancel="this.actionWizardVisible = false"
     :profile="activeProfile"
   ></ActionWizard>
+  <Settings
+    :visible="settingsVisible"
+    v-on:save="saveSettings($event)"
+    v-on:cancel="this.settingsVisible = false"
+  ></Settings>
+  <Dialog header="About" v-model:visible="helpAboutVisible">
+    This is the about dialog. For more info see:<br />
+    <a
+      href="https://github.com/willie68/ReCoS-Remote-Command-Service"
+      target="_blank"
+      >ReCoS on github</a
+    >
+    <template #footer>
+      <Button label="OK" icon="pi pi-check" @click="closeHelpAbout" autofocus />
+    </template>
+  </Dialog>
 </template>
 
 <script>
@@ -66,6 +87,7 @@ import Profile from "./components/Profile.vue";
 import AppFooter from "./components/AppFooter.vue";
 import AddProfile from "./components/AddProfile.vue";
 import ActionWizard from "./wizard/ActionWizard.vue";
+import Settings from "./settings/Settings.vue";
 
 export default {
   components: {
@@ -73,6 +95,7 @@ export default {
     AppFooter,
     AddProfile,
     ActionWizard,
+    Settings,
   },
   data() {
     return {
@@ -114,17 +137,27 @@ export default {
       helpMenuItems: [
         {
           label: "Help",
-          icon: "pi pi-questionc",
+          icon: "pi pi-question-circle",
           command: () => {
             this.helpHelp();
           },
         },
         {
-          label: "-",
+          separator: true,
+        },
+        {
+          label: "Settings",
+          icon: "pi pi-cog",
+          command: () => {
+            this.helpSettings();
+          },
+        },
+        {
+          separator: true,
         },
         {
           label: "About",
-          icon: "pi pi-circle",
+          icon: "pi pi-info-circle",
           command: () => {
             this.helpAbout();
           },
@@ -132,6 +165,8 @@ export default {
       ],
       dialogProfileVisible: false,
       actionWizardVisible: false,
+      settingsVisible: false,
+      helpAboutVisible: false,
     };
   },
   computed: {
@@ -227,10 +262,21 @@ export default {
   },
   methods: {
     helpHelp() {
-      window.open("https://raw.githubusercontent.com/willie68/ReCoS-Remote-Command-Service/master/documentation/README.pdf", '_blank').focus();
+      window
+        .open(
+          "https://raw.githubusercontent.com/willie68/ReCoS-Remote-Command-Service/master/documentation/README.pdf",
+          "_blank"
+        )
+        .focus();
     },
     helpAbout() {
-
+      this.helpAboutVisible = true;
+    },
+    closeHelpAbout() {
+      this.helpAboutVisible = false;
+    },
+    helpSettings() {
+      this.settingsVisible = true;
     },
     toggleHelpMenu(event) {
       this.$refs.helpmenu.toggle(event);

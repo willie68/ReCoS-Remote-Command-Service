@@ -229,7 +229,6 @@ func GetIconMapperKey(response http.ResponseWriter, request *http.Request) {
 		render.JSON(response, request, value)
 	}
 	handleFile(response, request, value)
-	return
 }
 
 func handleFile(response http.ResponseWriter, request *http.Request, value string) {

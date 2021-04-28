@@ -28,7 +28,7 @@ extconfig:
         ipaddress: 192.168.178.81
         updateperiod: 5
     homematic:
-        active: true
+        active: false
         updateperiod: 5
         url: http://192.168.178.80
 logging:
