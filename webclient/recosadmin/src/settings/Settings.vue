@@ -18,13 +18,42 @@
           <i class="pi pi-desktop"></i>
           <span>Open Hardware Monitor</span>
         </template>
-        <label for="ohmActive">active: </label>
-        <Checkbox id="ohmActive" v-model="ohmActive" :binary="true" />
-
-        <a href="https://openhardwaremonitor.org/" target="_blank"
-          >Open Hardware Monitor</a
-        >
-        updateperiod: 5 url: http://127.0.0.1:12999/data.json
+        <div class="p-field p-grid">
+          <label for="ohmActive" class="p-col-fixed" style="width: 150px"
+            >active:
+          </label>
+          <div class="p-col">
+            <Checkbox id="ohmActive" v-model="ohmActive" :binary="true" />
+          </div>
+        </div>
+        <div class="p-field p-grid">
+          <label for="ohmUpdatePeriod" class="p-col-fixed" style="width: 150px"
+            >update period:
+          </label>
+          <div class="p-col">
+            <InputNumber
+              id="ohmUpdatePeriod"
+              type="text"
+              mode="decimal"
+              showButtons
+              class="fullwidth"
+            />
+          </div>
+        </div>
+        <div class="p-field p-grid">
+          <label for="ohmLocalURL" class="p-col-fixed" style="width: 150px"
+            >url:
+          </label>
+          <div class="p-col">
+              <InputText id="url" type="text" class="fullwidth" />
+          </div>
+        </div>
+        <div class="p-field p-grid">
+          <a href="https://openhardwaremonitor.org/" target="_blank"
+            >Open Hardware Monitor</a
+          >
+          updateperiod: 5 url: http://127.0.0.1:12999/data.json
+        </div>
       </TabPanel>
       <TabPanel>
         <template #header>
