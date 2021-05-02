@@ -47,7 +47,7 @@ func InitOpenHardwareMonitor(extconfig map[string]interface{}) error {
 			updatePeriod := 5
 			if active {
 				clog.Logger.Debug("hardware:openhardwaremonitor: active")
-				url, ok := config["url"].(string)
+				url, ok = config["url"].(string)
 				if !ok {
 					err = fmt.Errorf("can't find url to connect to. %s", url)
 				}
@@ -93,11 +93,11 @@ func (o *OpenHardwareMonitor) Connect() error {
 
 // GetSensorList getting a sensor list from openhardwaremonitor
 func (o *OpenHardwareMonitor) GetSensorList() ([]models.Sensor, error) {
-	o.m.Lock()
-	defer o.m.Unlock()
 	if !o.Connected {
 		return make([]models.Sensor, 0), nil
 	}
+	o.m.Lock()
+	defer o.m.Unlock()
 	return o.Sensorlist, o.lastError
 }
 
