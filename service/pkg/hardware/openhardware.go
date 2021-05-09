@@ -60,7 +60,6 @@ type OpenHardwareMonitor struct {
 }
 
 var OpenHardwareMonitorInstance OpenHardwareMonitor
-var once sync.Once
 
 // InitOpenHardwareMonitor initialise the open hardware monitor connection
 func InitOpenHardwareMonitor(extconfig map[string]interface{}) error {
@@ -232,7 +231,6 @@ func writingSensorList(sensorlist []models.Sensor) {
 	err = f.Close()
 	if err != nil {
 		clog.Logger.Errorf("error closing sensor file: %v", err)
-		return
 	}
 }
 

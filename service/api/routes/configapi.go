@@ -2,6 +2,7 @@ package routes
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"image"
 	"image/png"
@@ -48,6 +49,7 @@ func ConfigRoutes() *chi.Mux {
 	router.Get("/icons/{iconname}", GetIcon)
 	router.With(handler.AuthCheck()).Get("/check", GetCheck)
 	router.Get("/integrations", GetInteg)
+	router.With(handler.AuthCheck()).Post("/integrations/{integname}", PostInteg)
 	initIconMapper()
 	return router
 }
@@ -290,4 +292,25 @@ GetInteg get parameter config of the integrations
 */
 func GetInteg(response http.ResponseWriter, request *http.Request) {
 	render.JSON(response, request, pkg.IntegInfos)
+}
+
+// PostInteg post a new config
+func PostInteg(response http.ResponseWriter, request *http.Request) {
+	integName, err := api.Param(request, "integname")
+	if err != nil {
+		clog.Logger.Debugf("Error reading integ name: %v", err)
+		api.Err(response, request, err)
+		return
+	}
+
+	decoder := json.NewDecoder(request.Body)
+	var params map[string]interface{}
+	err = decoder.Decode(&params)
+	if err != nil {
+		clog.Logger.Debug("Error reading json body:" + err.Error())
+		api.Err(response, request, err)
+		return
+	}
+	jsonstr, _ := json.Marshal(params)
+	clog.Logger.Infof("post integ config %s: %s", integName, jsonstr)
 }
