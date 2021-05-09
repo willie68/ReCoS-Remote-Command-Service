@@ -16,7 +16,7 @@ var DelayCommandTypeInfo = models.CommandTypeInfo{
 	Icon:             "",
 	WizardPossible:   false,
 	WizardActionType: models.Single,
-	Parameters: []models.CommandParameterInfo{
+	Parameters: []models.ParamInfo{
 		{
 			Name:           "time",
 			Type:           "int",

@@ -22,7 +22,7 @@ var AudioVolumeCommandTypeInfo = models.CommandTypeInfo{
 	Icon:             "speaker.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Single,
-	Parameters: []models.CommandParameterInfo{
+	Parameters: []models.ParamInfo{
 		{
 			Name:        parameterDeviceName,
 			Type:        "string",

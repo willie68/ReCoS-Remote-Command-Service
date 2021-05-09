@@ -17,7 +17,7 @@ var BrowseCommandTypeInfo = models.CommandTypeInfo{
 	Icon:             "world.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Single,
-	Parameters: []models.CommandParameterInfo{
+	Parameters: []models.ParamInfo{
 		{
 			Name:           "url",
 			Type:           "string",

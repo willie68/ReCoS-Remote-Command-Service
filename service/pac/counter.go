@@ -24,7 +24,7 @@ var CounterCommandTypeInfo = models.CommandTypeInfo{
 	Icon:             "slot_machine.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Single,
-	Parameters: []models.CommandParameterInfo{
+	Parameters: []models.ParamInfo{
 		{
 			Name:           "persist",
 			Type:           "bool",

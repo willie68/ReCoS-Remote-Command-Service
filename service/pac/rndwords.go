@@ -18,7 +18,7 @@ var RndWordsCommandTypeInfo = models.CommandTypeInfo{
 	Icon:             "games_dice.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Display,
-	Parameters: []models.CommandParameterInfo{
+	Parameters: []models.ParamInfo{
 		{
 			Name:           "words",
 			Type:           "[]string",

@@ -11,7 +11,39 @@ import (
 
 	"golang.org/x/net/html/charset"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
+	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
+
+var HomematicIntegInfo = models.IntegInfo{
+	Category:    "Smarthome",
+	Name:        "homematic",
+	Description: "homematic is a smart home system.",
+	Image:       "homematic_logo.png",
+	Parameters: []models.ParamInfo{
+		{
+			Name:           "active",
+			Type:           "bool",
+			Description:    "activate the homematic integration",
+			WizardPossible: false,
+			List:           make([]string, 0),
+		},
+		{
+			Name:           "url",
+			Type:           "string",
+			Description:    "url to the homematic server",
+			WizardPossible: false,
+			List:           make([]string, 0),
+		},
+		{
+			Name:           "updateperiod",
+			Type:           "int",
+			Unit:           "sec",
+			Description:    "update period in seconds to update the used devices",
+			WizardPossible: false,
+			List:           make([]string, 0),
+		},
+	},
+}
 
 type Homematic struct {
 	url     string

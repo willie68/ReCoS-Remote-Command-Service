@@ -18,7 +18,7 @@ var HMPrgCommandTypeInfo = models.CommandTypeInfo{
 	Icon:             "history2.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Single,
-	Parameters: []models.CommandParameterInfo{
+	Parameters: []models.ParamInfo{
 		{
 			Name:           "name",
 			Type:           "string",

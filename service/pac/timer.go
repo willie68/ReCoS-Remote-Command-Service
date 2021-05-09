@@ -25,7 +25,7 @@ var TimerCommandTypeInfo = models.CommandTypeInfo{
 	Icon:             "timer.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Single,
-	Parameters: []models.CommandParameterInfo{
+	Parameters: []models.ParamInfo{
 		{
 			Name:           "time",
 			Type:           "int",

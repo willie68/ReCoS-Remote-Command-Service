@@ -8,7 +8,53 @@ import (
 
 	"github.com/amimof/huego"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
+	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
+
+var PhilipsHueIntegInfo = models.IntegInfo{
+	Category:    "Smarthome",
+	Name:        "philipshue",
+	Description: "philips hue is a lighting system for your home.",
+	Image:       "philips_hue_logo.png",
+	Parameters: []models.ParamInfo{
+		{
+			Name:           "active",
+			Type:           "bool",
+			Description:    "activate the open hardwaremonitor",
+			WizardPossible: false,
+			List:           make([]string, 0),
+		},
+		{
+			Name:           "username",
+			Type:           "string",
+			Description:    "username of the bridge",
+			WizardPossible: false,
+			List:           make([]string, 0),
+		},
+		{
+			Name:           "device",
+			Type:           "string",
+			Description:    "device of the bridge",
+			WizardPossible: false,
+			List:           make([]string, 0),
+		},
+		{
+			Name:           "ipaddress",
+			Type:           "string",
+			Description:    "ipaddress of the bridge",
+			WizardPossible: false,
+			List:           make([]string, 0),
+		},
+		{
+			Name:           "updateperiod",
+			Type:           "int",
+			Unit:           "sec",
+			Description:    "update period in seconds of the bridge",
+			WizardPossible: false,
+			List:           make([]string, 0),
+		},
+	},
+}
 
 type PhilipsHue struct {
 	username  string

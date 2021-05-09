@@ -21,7 +21,7 @@ var ScreenshotCommandTypeInfo = models.CommandTypeInfo{
 	Icon:             "camera.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Single,
-	Parameters: []models.CommandParameterInfo{
+	Parameters: []models.ParamInfo{
 		{
 			Name:           "saveto",
 			Type:           "string",

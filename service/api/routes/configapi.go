@@ -25,6 +25,7 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/config"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
 	"wkla.no-ip.biz/remote-desk-service/pac"
+	"wkla.no-ip.biz/remote-desk-service/pkg"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 	"wkla.no-ip.biz/remote-desk-service/web"
 )
@@ -46,6 +47,7 @@ func ConfigRoutes() *chi.Mux {
 	router.Get("/commands", GetCommands)
 	router.Get("/icons/{iconname}", GetIcon)
 	router.With(handler.AuthCheck()).Get("/check", GetCheck)
+	router.Get("/integrations", GetInteg)
 	initIconMapper()
 	return router
 }
@@ -281,4 +283,11 @@ GetCheck simply checks the authentication
 */
 func GetCheck(response http.ResponseWriter, request *http.Request) {
 	render.JSON(response, request, "ok")
+}
+
+/*
+GetInteg get parameter config of the integrations
+*/
+func GetInteg(response http.ResponseWriter, request *http.Request) {
+	render.JSON(response, request, pkg.IntegInfos)
 }
