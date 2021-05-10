@@ -291,14 +291,50 @@ func GetCheck(response http.ResponseWriter, request *http.Request) {
 GetInteg get parameter config of the integrations
 */
 func GetInteg(response http.ResponseWriter, request *http.Request) {
-	render.JSON(response, request, pkg.IntegInfos)
+	var localConfig map[string]interface{}
+	result := make(map[string]interface{})
+	settings := make(map[string]interface{})
+	for _, integration := range pkg.IntegInfos {
+		localConfig = nil
+		extconfig := config.Get().ExternalConfig
+		value, ok := extconfig[integration.Name]
+		if ok {
+			localConfig = value.(map[string]interface{})
+		}
+
+		setting := make(map[string]interface{})
+		for _, param := range integration.Parameters {
+			if localConfig != nil {
+				setting[param.Name] = localConfig[param.Name]
+			} else {
+				switch param.Type {
+				case "string":
+					setting[param.Name] = ""
+				case "[]string":
+					setting[param.Name] = []string{}
+				case "int":
+					setting[param.Name] = 0
+				case "bool":
+					setting[param.Name] = false
+				case "color":
+					setting[param.Name] = ""
+				case "date":
+					setting[param.Name] = "2006-01-02"
+				}
+			}
+		}
+		settings[integration.Name] = setting
+	}
+	result["infos"] = pkg.IntegInfos
+	result["settings"] = settings
+	render.JSON(response, request, result)
 }
 
 // PostInteg post a new config
 func PostInteg(response http.ResponseWriter, request *http.Request) {
 	integName, err := api.Param(request, "integname")
 	if err != nil {
-		clog.Logger.Debugf("Error reading integ name: %v", err)
+		clog.Logger.Errorf("Error reading integ name: %v", err)
 		api.Err(response, request, err)
 		return
 	}
@@ -307,10 +343,29 @@ func PostInteg(response http.ResponseWriter, request *http.Request) {
 	var params map[string]interface{}
 	err = decoder.Decode(&params)
 	if err != nil {
-		clog.Logger.Debug("Error reading json body:" + err.Error())
+		clog.Logger.Errorf("Error reading json body: %v", err)
 		api.Err(response, request, err)
 		return
 	}
-	jsonstr, _ := json.Marshal(params)
-	clog.Logger.Infof("post integ config %s: %s", integName, jsonstr)
+	localConfig := config.Get()
+	extConfig := localConfig.ExternalConfig
+	integConfig, ok := extConfig[integName].(map[string]interface{})
+	if !ok {
+		err := fmt.Errorf("error getting integ config for name: %s", integName)
+		clog.Logger.Error(err.Error())
+		api.Err(response, request, err)
+		return
+	}
+	for k, v := range params {
+		_, ok := integConfig[k]
+		if !ok {
+			err := fmt.Errorf("error parameter not found: %s", k)
+			clog.Logger.Error(err.Error())
+			api.Err(response, request, err)
+			return
+		}
+		integConfig[k] = v
+	}
+	config.Save()
+	render.JSON(response, request, integConfig)
 }

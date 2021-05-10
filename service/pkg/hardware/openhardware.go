@@ -20,7 +20,7 @@ var OpenHardwareMonitorIntegInfo = models.IntegInfo{
 	Category:    "System",
 	Name:        "openhardwaremonitor",
 	Description: "OpenHardwareMonitor is a software to display many useful sensors of your pc system.",
-	Image:       "openhardware_logo.png",
+	Image:       "monitor.svg",
 	Parameters: []models.ParamInfo{
 		{
 			Name:           "active",

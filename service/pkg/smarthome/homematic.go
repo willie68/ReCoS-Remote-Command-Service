@@ -18,7 +18,7 @@ var HomematicIntegInfo = models.IntegInfo{
 	Category:    "Smarthome",
 	Name:        "homematic",
 	Description: "homematic is a smart home system.",
-	Image:       "homematic_logo.png",
+	Image:       "home.svg",
 	Parameters: []models.ParamInfo{
 		{
 			Name:           "active",

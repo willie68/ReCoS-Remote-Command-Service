@@ -15,7 +15,7 @@ var PhilipsHueIntegInfo = models.IntegInfo{
 	Category:    "Smarthome",
 	Name:        "philipshue",
 	Description: "philips hue is a lighting system for your home.",
-	Image:       "philips_hue_logo.png",
+	Image:       "light_bulb.svg",
 	Parameters: []models.ParamInfo{
 		{
 			Name:           "active",
