@@ -12,8 +12,8 @@ sessions: ./devdata/sessions
 timezonezip: ./devdata/zoneinfo.zip
 extconfig:
     audioplayer:
-        active: false
-        samplerate: 48000
+        active: true
+        samplerate: 48kHz
     homematic:
         active: false
         updateperiod: 5

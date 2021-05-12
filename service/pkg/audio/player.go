@@ -2,7 +2,6 @@ package audio
 
 import (
 	"os"
-	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -33,9 +32,9 @@ var AudioPlayerIntegInfo = models.IntegInfo{
 		{
 			Name:           "samplerate",
 			Type:           "string",
-			Description:    "the samplerate to use. 44100 or 48000 are ok.",
+			Description:    "the samplerate to use. 44.1kHz or 48kHz are ok.",
 			WizardPossible: false,
-			List:           []string{"48000", "44100"},
+			List:           []string{"48kHz", "44.1kHz"},
 		},
 	},
 }
@@ -59,12 +58,14 @@ func InitAudioplayer(extconfig map[string]interface{}) error {
 			}
 			if active {
 				clog.Logger.Debug("audio:audioplayer: active")
-				mysampleRate := 48000
 				mysampleRate, ok := config["samplerate"].(int)
 				if !ok {
+					mysampleRate = 48000
 					valuestr, ok := config["samplerate"].(string)
 					if ok {
-						mysampleRate, _ = strconv.Atoi(valuestr)
+						if valuestr == "44.1Khz" {
+							mysampleRate = 44100
+						}
 					}
 				}
 				sampleRate = beep.SampleRate(mysampleRate)

@@ -48,7 +48,7 @@ var PhilipsHueIntegInfo = models.IntegInfo{
 		{
 			Name:           "updateperiod",
 			Type:           "int",
-			Unit:           "sec",
+			Unit:           " sec",
 			Description:    "update period in seconds of the bridge",
 			WizardPossible: false,
 			List:           make([]string, 0),

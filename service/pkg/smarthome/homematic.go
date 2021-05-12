@@ -37,7 +37,7 @@ var HomematicIntegInfo = models.IntegInfo{
 		{
 			Name:           "updateperiod",
 			Type:           "int",
-			Unit:           "sec",
+			Unit:           " sec",
 			Description:    "update period in seconds to update the used devices",
 			WizardPossible: false,
 			List:           make([]string, 0),

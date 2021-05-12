@@ -24,7 +24,10 @@
           >
           <div class="p-col-12 p-md-8">
             <InputText
-              v-if="param.type == 'string' && (!param.list || param.list.length == 0)"
+              v-if="
+                param.type == 'string' &&
+                (!param.list || param.list.length == 0)
+              "
               :id="param.name"
               type="text"
               v-tooltip="param.description"
@@ -218,6 +221,10 @@ export default {
       ],
       apSampleRate: 44100,
       settings: {},
+      isSaveOK: false,
+      activeParam: "",
+      selectIconDialog: false,
+      iconDestination: "",
     };
   },
   methods: {
@@ -237,7 +244,7 @@ export default {
         let filtered = false;
         if (param.filteredlist) {
           fieldName = param.filteredlist;
-          filterValue = this.localValue.parameters[fieldName];
+          filterValue = this.settings.settings[fieldName];
           filtered = true;
         }
         param.list.forEach((entry) => {
@@ -300,7 +307,7 @@ export default {
         return list;
       }
     },
-        addArgument(param) {
+    addArgument(param) {
       this.activeParam = param;
       console.log("Step2: add argument for", param);
       this.addArgDialog = true;
@@ -308,10 +315,10 @@ export default {
     saveNewArgument(data) {
       if (this.activeParam) {
         console.log("Step2: sav argument for", this.activeParam, data);
-        if (!this.localValue.parameters[this.activeParam]) {
-          this.localValue.parameters[this.activeParam] = [];
+        if (!this.settings.settings[this.activeParam]) {
+          this.settings.settings[this.activeParam] = [];
         }
-        this.localValue.parameters[this.activeParam].push(data);
+        this.settings.settings[this.activeParam].push(data);
       }
       this.addArgDialog = false;
     },
@@ -340,11 +347,20 @@ export default {
     deleteArgument(param, value) {
       let index = ObjectUtils.findIndexInList(
         value,
-        this.localValue.parameters[param]
+        this.settings.settings[param]
       );
       if (index >= 0) {
-        this.localValue.parameters[param].splice(index, 1);
+        this.settings.settings[param].splice(index, 1);
       }
+    },
+    saveIcon(icon) {
+      console.log("Step2: save icon: ", icon, this.iconDestination);
+      if (this.iconDestination == "") {
+        this.localValue.icon = icon;
+      } else {
+        this.settings.settings[this.iconDestination] = icon;
+      }
+      this.selectIconDialog = false;
     },
   },
   mounted() {

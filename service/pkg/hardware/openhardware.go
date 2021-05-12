@@ -39,7 +39,7 @@ var OpenHardwareMonitorIntegInfo = models.IntegInfo{
 		{
 			Name:           "updateperiod",
 			Type:           "int",
-			Unit:           "sec",
+			Unit:           " sec",
 			Description:    "update period in seconds to update the used sensors",
 			WizardPossible: false,
 			List:           make([]string, 0),

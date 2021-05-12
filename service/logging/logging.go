@@ -57,13 +57,18 @@ func (s *serviceLogger) InitGelf() {
 		l.SetAttr("system_id", s.SystemID)
 		s.gelfActive = true
 	}
-	w := io.MultiWriter(&lumberjack.Logger{
-		Filename:   s.Filename,
-		MaxSize:    100, // megabytes
-		MaxBackups: 3,
-		MaxAge:     28,    //days
-		Compress:   false, // disabled by default
-	}, os.Stdout)
+	var w io.Writer
+	if s.Filename == "" {
+		w = os.Stdout
+	} else {
+		w = io.MultiWriter(&lumberjack.Logger{
+			Filename:   s.Filename,
+			MaxSize:    100, // megabytes
+			MaxBackups: 3,
+			MaxAge:     28,    //days
+			Compress:   false, // disabled by default
+		}, os.Stdout)
+	}
 	log.SetOutput(w)
 }
 
