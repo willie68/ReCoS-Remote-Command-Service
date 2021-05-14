@@ -19,7 +19,7 @@ extconfig:
         updateperiod: 5
         url: http://192.168.178.80
     openhardwaremonitor:
-        active: false
+        active: true
         updateperiod: 5
         url: http://127.0.0.1:12999/data.json
     philipshue:

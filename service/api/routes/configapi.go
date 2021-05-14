@@ -318,6 +318,8 @@ func GetInteg(response http.ResponseWriter, request *http.Request) {
 					setting[param.Name] = false
 				case "color":
 					setting[param.Name] = ""
+				case "icon":
+					setting[param.Name] = ""
 				case "date":
 					setting[param.Name] = "2006-01-02"
 				}

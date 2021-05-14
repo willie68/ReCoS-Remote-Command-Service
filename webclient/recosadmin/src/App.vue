@@ -444,6 +444,9 @@ export default {
       console.log("export profile: " + this.activeProfileName);
       window.open(this.profileURL + "/" + this.activeProfileName + "/export");
     },
+    saveSettings() {
+      this.settingsVisible = false;
+    },
   },
   watch: {
     profile(newProfile) {

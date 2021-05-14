@@ -33,6 +33,7 @@
               v-tooltip="param.description"
               v-model="settings.settings[info.name][param.name]"
               class="fullwidth"
+              @change="saveEnable()"
             />
             <DropdownParameter
               v-if="
@@ -68,6 +69,7 @@
               v-tooltip="param.description"
               v-model="settings.settings[info.name][param.name]"
               :placeholder="param.unit"
+              @change="update()"
               ><template #optiongroup="slotProps">
                 <div class="p-d-flex p-ai-center country-item">
                   <img
@@ -225,17 +227,38 @@ export default {
       activeParam: "",
       selectIconDialog: false,
       iconDestination: "",
+      iconlist: [],
     };
   },
   methods: {
     cancel() {
       this.$emit("cancel");
     },
-    save() {
-      this.$emit("save", this.activeProfile);
+    saveEnable() {
+      this.isSaveOK = true;
     },
-    checkButtons() {
-      this.isFinishOK = true;
+    save() {
+      let url = this.$store.state.baseURL + "config/integrations";
+      this.settings.infos.forEach((info) => {
+        fetch(url + "/" + info.name, {
+          method: "POST",
+          body: JSON.stringify(this.settings.settings[info.name]),
+          headers: new Headers({
+            "Content-Type": "application/json",
+            Authorization: `Basic ${btoa(
+              `admin:${this.$store.state.password}`
+            )}`,
+          }),
+          mode: "cors",
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            this.settings = data;
+            console.log(JSON.stringify(data));
+          })
+          .catch((err) => console.log(err.message));
+      });
+      this.$emit("save");
     },
     paramList(param) {
       if (!param.groupedlist) {
@@ -362,20 +385,20 @@ export default {
       }
       this.selectIconDialog = false;
     },
+    update() {
+      this.$forceUpdate();
+      this.saveEnable();
+    },
   },
   mounted() {
     let url = this.$store.state.baseURL + "config/integrations";
-    const myHeaders = new Headers();
-
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append(
-      "Authorization",
-      `Basic ${btoa(`admin:${this.$store.state.password}`)}`
-    );
     fetch(url, {
       method: "GET",
       mode: "cors",
-      headers: myHeaders,
+      headers: new Headers({
+        "Content-Type": "application/json",
+        Authorization: `Basic ${btoa(`admin:${this.$store.state.password}`)}`,
+      }),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -383,15 +406,23 @@ export default {
         console.log(JSON.stringify(data));
       })
       .catch((err) => console.log(err.message));
+    this.iconlist = this.$store.state.iconlist;
+    let that = this;
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type === "iconlist") {
+        that.iconlist = state.iconlist;
+      }
+    });
   },
-  beforeUnmount() {},
+  beforeUnmount() {
+    this.unsubscribe();
+  },
   watch: {
     visible(visible) {
       this.dialogVisible = visible;
       if (visible == true) {
         this.step = 0;
       }
-      this.checkButtons();
     },
   },
 };
