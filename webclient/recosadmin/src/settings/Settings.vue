@@ -389,23 +389,26 @@ export default {
       this.$forceUpdate();
       this.saveEnable();
     },
+    getSettings() {
+      console.log("settings: activated");
+      let url = this.$store.state.baseURL + "config/integrations";
+      fetch(url, {
+        method: "GET",
+        mode: "cors",
+        headers: new Headers({
+          "Content-Type": "application/json",
+          Authorization: `Basic ${btoa(`admin:${this.$store.state.password}`)}`,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          this.settings = data;
+          console.log(JSON.stringify(data));
+        })
+        .catch((err) => console.log(err.message));
+    },
   },
   mounted() {
-    let url = this.$store.state.baseURL + "config/integrations";
-    fetch(url, {
-      method: "GET",
-      mode: "cors",
-      headers: new Headers({
-        "Content-Type": "application/json",
-        Authorization: `Basic ${btoa(`admin:${this.$store.state.password}`)}`,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        this.settings = data;
-        console.log(JSON.stringify(data));
-      })
-      .catch((err) => console.log(err.message));
     this.iconlist = this.$store.state.iconlist;
     let that = this;
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
@@ -421,7 +424,7 @@ export default {
     visible(visible) {
       this.dialogVisible = visible;
       if (visible == true) {
-        this.step = 0;
+        this.getSettings();
       }
     },
   },
