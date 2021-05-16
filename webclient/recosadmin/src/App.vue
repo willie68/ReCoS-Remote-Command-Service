@@ -80,6 +80,17 @@
       <Button label="OK" icon="pi pi-check" @click="closeHelpAbout" autofocus />
     </template>
   </Dialog>
+  <Dialog header="Credits" v-model:visible="helpCreditsVisible">
+    <div v-html="credits"></div>
+    <template #footer>
+      <Button
+        label="OK"
+        icon="pi pi-check"
+        @click="closeHelpCredits"
+        autofocus
+      />
+    </template>
+  </Dialog>
 </template>
 
 <script>
@@ -156,6 +167,13 @@ export default {
           separator: true,
         },
         {
+          label: "Credits",
+          icon: "pi pi-star",
+          command: () => {
+            this.helpCredits();
+          },
+        },
+        {
           label: "About",
           icon: "pi pi-info-circle",
           command: () => {
@@ -167,6 +185,8 @@ export default {
       actionWizardVisible: false,
       settingsVisible: false,
       helpAboutVisible: false,
+      helpCreditsVisible: false,
+      credits: "",
     };
   },
   computed: {
@@ -259,6 +279,13 @@ export default {
         that.$store.commit("iconlist", data);
       })
       .catch((err) => console.log(err.message));
+    fetch(basepath + "config/credits")
+      .then((response) => {
+        return response.text();
+      })
+      .then((data) => {
+        this.credits = data;
+      });
   },
   methods: {
     helpHelp() {
@@ -274,6 +301,12 @@ export default {
     },
     closeHelpAbout() {
       this.helpAboutVisible = false;
+    },
+    helpCredits() {
+      this.helpCreditsVisible = true;
+    },
+    closeHelpCredits() {
+      this.helpCreditsVisible = false;
     },
     helpSettings() {
       this.settingsVisible = true;
@@ -443,6 +476,9 @@ export default {
     exportProfile() {
       console.log("export profile: " + this.activeProfileName);
       window.open(this.profileURL + "/" + this.activeProfileName + "/export");
+    },
+    saveSettings() {
+      this.settingsVisible = false;
     },
   },
   watch: {

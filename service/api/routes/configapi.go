@@ -2,6 +2,7 @@ package routes
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"image"
 	"image/png"
@@ -25,6 +26,7 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/config"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
 	"wkla.no-ip.biz/remote-desk-service/pac"
+	"wkla.no-ip.biz/remote-desk-service/pkg"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 	"wkla.no-ip.biz/remote-desk-service/web"
 )
@@ -46,6 +48,9 @@ func ConfigRoutes() *chi.Mux {
 	router.Get("/commands", GetCommands)
 	router.Get("/icons/{iconname}", GetIcon)
 	router.With(handler.AuthCheck()).Get("/check", GetCheck)
+	router.Get("/integrations", GetInteg)
+	router.With(handler.AuthCheck()).Post("/integrations/{integname}", PostInteg)
+	router.Get("/credits", GetCredits)
 	initIconMapper()
 	return router
 }
@@ -281,4 +286,106 @@ GetCheck simply checks the authentication
 */
 func GetCheck(response http.ResponseWriter, request *http.Request) {
 	render.JSON(response, request, "ok")
+}
+
+/*
+GetInteg get parameter config of the integrations
+*/
+func GetInteg(response http.ResponseWriter, request *http.Request) {
+	var localConfig map[string]interface{}
+	result := make(map[string]interface{})
+	settings := make(map[string]interface{})
+	for _, integration := range pkg.IntegInfos {
+		localConfig = nil
+		extconfig := config.Get().ExternalConfig
+		value, ok := extconfig[integration.Name]
+		if ok {
+			localConfig = value.(map[string]interface{})
+		}
+
+		setting := make(map[string]interface{})
+		for _, param := range integration.Parameters {
+			if localConfig != nil {
+				setting[param.Name] = localConfig[param.Name]
+			} else {
+				switch param.Type {
+				case "string":
+					setting[param.Name] = ""
+				case "[]string":
+					setting[param.Name] = []string{}
+				case "int":
+					setting[param.Name] = 0
+				case "bool":
+					setting[param.Name] = false
+				case "color":
+					setting[param.Name] = ""
+				case "icon":
+					setting[param.Name] = ""
+				case "date":
+					setting[param.Name] = "2006-01-02"
+				}
+			}
+		}
+		settings[integration.Name] = setting
+	}
+	result["infos"] = pkg.IntegInfos
+	result["settings"] = settings
+	render.JSON(response, request, result)
+}
+
+// PostInteg post a new config
+func PostInteg(response http.ResponseWriter, request *http.Request) {
+	integName, err := api.Param(request, "integname")
+	if err != nil {
+		clog.Logger.Errorf("Error reading integ name: %v", err)
+		api.Err(response, request, err)
+		return
+	}
+
+	decoder := json.NewDecoder(request.Body)
+	var params map[string]interface{}
+	err = decoder.Decode(&params)
+	if err != nil {
+		clog.Logger.Errorf("Error reading json body: %v", err)
+		api.Err(response, request, err)
+		return
+	}
+	localConfig := config.Get()
+	extConfig := localConfig.ExternalConfig
+	integConfig, ok := extConfig[integName].(map[string]interface{})
+	if !ok {
+		err := fmt.Errorf("error getting integ config for name: %s", integName)
+		clog.Logger.Error(err.Error())
+		api.Err(response, request, err)
+		return
+	}
+	for k, v := range params {
+		_, ok := integConfig[k]
+		if !ok {
+			err := fmt.Errorf("error parameter not found: %s", k)
+			clog.Logger.Error(err.Error())
+			api.Err(response, request, err)
+			return
+		}
+		integConfig[k] = v
+	}
+	config.Save()
+	render.JSON(response, request, integConfig)
+}
+
+/*
+GetCredits returning a converted icon back to the client
+*/
+func GetCredits(response http.ResponseWriter, request *http.Request) {
+	credits := web.CreditsAsset
+
+	ctype := mime.TypeByExtension(".html")
+	response.Header().Set("Content-Type", ctype)
+	response.Header().Set("Content-Length", strconv.FormatInt(int64(len(credits)), 10))
+	response.WriteHeader(http.StatusOK)
+
+	if request.Method != "HEAD" {
+		r := bytes.NewBuffer([]byte(credits))
+		io.Copy(response, r)
+	}
 }

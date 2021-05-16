@@ -4,8 +4,10 @@ import (
 	"context"
 	"crypto/md5"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"os"
+	"os/exec"
 	"os/signal"
 	"path/filepath"
 	"strconv"
@@ -50,6 +52,8 @@ const servicename = "remote-desk-service"
 
 var port int
 var sslport int
+var statPort int
+var statFile string
 var serviceURL string
 var apikey string
 var ssl bool
@@ -141,39 +145,143 @@ func healthRoutes() *chi.Mux {
 }
 
 func main() {
+	configFolder, err := config.GetDefaultConfigFolder()
+	if err != nil {
+		panic("can't get config folder")
+	}
+	statPort = 0
+	statFile = configFolder + "/stat.dat"
+	if _, err := os.Stat(statFile); !os.IsNotExist(err) {
+		dat, _ := ioutil.ReadFile(statFile)
+		value := string(dat)
+		statPort, err := strconv.Atoi(value)
+		if err != nil {
+			panic("can't set stat server port")
+		}
+		running := true
+		startTime := time.Now()
+		for running {
+			running = false
+			resp, _ := http.Get(fmt.Sprintf("http://127.0.0.1:%d/health/readyz", statPort))
+			status := ""
+			if resp != nil {
+				status = resp.Status
+				running = true
+			}
+			fmt.Printf("status: %s", status)
+			if time.Since(startTime) >= 100*time.Second {
+				panic("old process is not exiting")
+			}
+			if running {
+				time.Sleep(time.Second)
+			}
+		}
+	}
 	systray.Run(onReady, onExit)
 }
 
-func onReady() {
-	systray.SetIcon(icon.Data)
-	systray.SetTitle("ReCoS Service")
-	systray.SetTooltip("ReCoS Service App")
-	ex, err := os.Executable()
-	if err != nil {
-		panic(err)
-	}
+var (
+	mAdmin, mClient, mConfig, mLog, mQuit, mAutostart, mRestart *systray.MenuItem
+	app                                                         *autostart.App
+	ex                                                          string
+)
 
-	app := &autostart.App{
+func createMenu() {
+	app = &autostart.App{
 		Name:        "ReCoS",
 		DisplayName: "ReCoS Service App",
 		Exec:        []string{ex},
 	}
 
-	mAdmin := systray.AddMenuItem("WebAdmin", "Start the webadmin")
-	mClient := systray.AddMenuItem("WebClient", "Start the client")
+	mAdmin = systray.AddMenuItem("WebAdmin", "Start the webadmin")
+	mClient = systray.AddMenuItem("WebClient", "Start the client")
 	systray.AddSeparator()
 
-	mAutostart := systray.AddMenuItem("Autostart", "Enable the serivce on Windows startup")
+	mAutostart = systray.AddMenuItem("Autostart", "Enable the serivce on Windows startup")
 	if app.IsEnabled() {
 		mAutostart.Check()
 	} else {
 		mAutostart.Uncheck()
 	}
-	mConfig := systray.AddMenuItem("Edit config", "Edit the service config")
-	mLog := systray.AddMenuItem("Show log", "Showing the logfile")
+	mConfig = systray.AddMenuItem("Edit config", "Edit the service config")
+	mLog = systray.AddMenuItem("Show log", "Showing the logfile")
 	systray.AddSeparator()
-	mQuit := systray.AddMenuItem("Quit", "Quit ReCoS")
+	mRestart = systray.AddMenuItem("Restart", "restart the service")
+	mQuit = systray.AddMenuItem("Quit", "Quit ReCoS")
 	mQuit.SetIcon(icon.Data)
+}
+
+func processMenu() {
+	for {
+		select {
+		case <-mLog.ClickedCh:
+			url := serviceConfig.Logging.Filename
+			url, err := filepath.Abs(url)
+			if err != nil {
+				clog.Logger.Errorf("Error getting filepath for logfile:%v", err)
+			}
+			open.Run(url)
+		case <-mConfig.ClickedCh:
+			url := config.File
+			url, err := filepath.Abs(url)
+			if err != nil {
+				clog.Logger.Errorf("Error getting filepath for config file:%v", err)
+			}
+			open.Run(url)
+		case <-mAutostart.ClickedCh:
+			if app.IsEnabled() {
+				clog.Logger.Info("App is aready enabled, removing it...")
+				if err := app.Disable(); err != nil {
+					clog.Logger.Errorf("Error disabling app:%v", err)
+				}
+			} else {
+				clog.Logger.Info("Enabling app...")
+				if err := app.Enable(); err != nil {
+					clog.Logger.Errorf("Error enabling app:%v", err)
+				}
+			}
+			if app.IsEnabled() {
+				mAutostart.Check()
+			} else {
+				mAutostart.Uncheck()
+			}
+		case <-mClient.ClickedCh:
+			open.Run(fmt.Sprintf("http://localhost:%d/webclient", serviceConfig.Port))
+		case <-mAdmin.ClickedCh:
+			open.Run(fmt.Sprintf("http://localhost:%d/webadmin", serviceConfig.Port))
+		case <-mRestart.ClickedCh:
+			restart()
+		case <-mQuit.ClickedCh:
+			systray.Quit()
+		}
+	}
+}
+
+func restart() {
+	args := os.Args
+	cmd := exec.Command(args[0], args[1:]...)
+	fmt.Printf("Comamnd: %v\r\n", cmd)
+	err := cmd.Start()
+	if err != nil {
+		clog.Logger.Errorf("can't restart service: %v", err)
+	}
+	os.Exit(0)
+}
+
+func onReady() {
+	var err error
+	systray.SetIcon(icon.Data)
+	systray.SetTitle("ReCoS Service")
+	systray.SetTooltip("ReCoS Service App")
+	ex, err = os.Executable()
+	if err != nil {
+		panic(err)
+	}
+
+	createMenu()
+	go func() {
+		processMenu()
+	}()
 
 	flag.Parse()
 
@@ -202,6 +310,7 @@ func onReady() {
 
 	config.File = configFile
 
+	// autorestart starts here...
 	if err := config.Load(); err != nil {
 		clog.Logger.Alertf("can't load config file: %s", err.Error())
 		os.Exit(1)
@@ -211,50 +320,6 @@ func onReady() {
 	initConfig()
 
 	clog.Logger.Info("service is starting")
-	go func() {
-		for {
-			select {
-			case <-mLog.ClickedCh:
-				url := serviceConfig.Logging.Filename
-				url, err := filepath.Abs(url)
-				if err != nil {
-					clog.Logger.Errorf("Error getting filepath for logfile:%v", err)
-				}
-				open.Run(url)
-			case <-mConfig.ClickedCh:
-				url := config.File
-				url, err := filepath.Abs(url)
-				if err != nil {
-					clog.Logger.Errorf("Error getting filepath for config file:%v", err)
-				}
-				open.Run(url)
-			case <-mAutostart.ClickedCh:
-				if app.IsEnabled() {
-					clog.Logger.Info("App is aready enabled, removing it...")
-					if err := app.Disable(); err != nil {
-						clog.Logger.Errorf("Error disabling app:%v", err)
-					}
-				} else {
-					clog.Logger.Info("Enabling app...")
-					if err := app.Enable(); err != nil {
-						clog.Logger.Errorf("Error enabling app:%v", err)
-					}
-				}
-				if app.IsEnabled() {
-					mAutostart.Check()
-				} else {
-					mAutostart.Uncheck()
-				}
-			case <-mClient.ClickedCh:
-				open.Run(fmt.Sprintf("http://localhost:%d/webclient", serviceConfig.Port))
-			case <-mAdmin.ClickedCh:
-				open.Run(fmt.Sprintf("http://localhost:%d/webadmin", serviceConfig.Port))
-			case <-mQuit.ClickedCh:
-				systray.Quit()
-			}
-		}
-	}()
-
 	initAudioHardware()
 
 	if err := config.InitProfiles(serviceConfig.Profiles); err != nil {
@@ -421,6 +486,9 @@ func initConfig() {
 	if serviceURL != "" {
 		serviceConfig.ServiceURL = serviceURL
 	}
+
+	portStr := strconv.Itoa(serviceConfig.Port)
+	ioutil.WriteFile(statFile, []byte(portStr), 0644)
 
 	handler.AuthenticationConfig.Password = serviceConfig.Password
 

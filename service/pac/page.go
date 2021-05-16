@@ -16,7 +16,7 @@ var PageCommandTypeInfo = models.CommandTypeInfo{
 	Icon:             "view_mode_small_icons.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Single,
-	Parameters: []models.CommandParameterInfo{
+	Parameters: []models.ParamInfo{
 		{
 			Name:           "page",
 			Type:           "string",

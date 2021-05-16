@@ -22,7 +22,7 @@ var ClockCommandTypeInfo = models.CommandTypeInfo{
 	Icon:             "clock.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Display,
-	Parameters: []models.CommandParameterInfo{
+	Parameters: []models.ParamInfo{
 		{
 			Name:           "format",
 			Type:           "string",

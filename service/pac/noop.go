@@ -13,7 +13,7 @@ var NoopCommandTypeInfo = models.CommandTypeInfo{
 	Icon:             "",
 	WizardPossible:   false,
 	WizardActionType: models.Single,
-	Parameters:       []models.CommandParameterInfo{},
+	Parameters:       []models.ParamInfo{},
 	/*
 		{
 			Name:           "first",

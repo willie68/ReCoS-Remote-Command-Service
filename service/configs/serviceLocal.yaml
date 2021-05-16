@@ -3,34 +3,31 @@ sslport: 0
 serviceURL: http://127.0.0.1:9280
 secretfile: ""
 password: ""
-appid: 0
+appid: 73
 appuuid: dev_system
-webclient: ../webclient/RecosUI/dist
-adminclient: ../webclient/recosadmin/dist
-icons: ../general/assets
 healthcheck:
     period: 30
 profiles: ./devdata/profiles
 sessions: ./devdata/sessions
 timezonezip: ./devdata/zoneinfo.zip
 extconfig:
-    openhardwaremonitor:
-        active: true
-        updateperiod: 5
-        url: http://127.0.0.1:12999/data.json
     audioplayer:
         active: false
-        samplerate: 48000
-    philipshue:
-        active: false
-        username: IwtURJmST8b44mvZSZ2nl73nZhghVltMvgzlH7UC
-        device: recos#hue_user
-        ipaddress: 192.168.178.81
-        updateperiod: 5
+        samplerate: 48kHz
     homematic:
         active: false
         updateperiod: 5
         url: http://192.168.178.80
+    openhardwaremonitor:
+        active: true
+        updateperiod: 5
+        url: http://127.0.0.1:12999/data.json
+    philipshue:
+        active: false
+        device: recos#hue_user
+        ipaddress: 192.168.178.81
+        updateperiod: 5
+        username: IwtURJmST8b44mvZSZ2nl73nZhghVltMvgzlH7UC
 logging:
     level: debug
     filename: ./devdata/logging.log

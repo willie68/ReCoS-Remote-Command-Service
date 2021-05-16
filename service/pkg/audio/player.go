@@ -13,7 +13,31 @@ import (
 	"github.com/faiface/beep/vorbis"
 	"github.com/faiface/beep/wav"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
+	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
+
+var AudioPlayerIntegInfo = models.IntegInfo{
+	Category:    "Audio-Video",
+	Name:        "audioplayer",
+	Description: "AudioPlayer is a integration for playing audio files. For the audioplayer i need simply the sample rate to work with. <br />For convinience you can only switch between 44,1kHz and 48kHz. <br />",
+	Image:       "speaker.svg",
+	Parameters: []models.ParamInfo{
+		{
+			Name:           "active",
+			Type:           "bool",
+			Description:    "activate the open hardwaremonitor",
+			WizardPossible: false,
+			List:           make([]string, 0),
+		},
+		{
+			Name:           "samplerate",
+			Type:           "string",
+			Description:    "the samplerate to use. 44.1kHz or 48kHz are ok.",
+			WizardPossible: false,
+			List:           []string{"48kHz", "44.1kHz"},
+		},
+	},
+}
 
 var (
 	sampleRate beep.SampleRate
@@ -37,6 +61,12 @@ func InitAudioplayer(extconfig map[string]interface{}) error {
 				mysampleRate, ok := config["samplerate"].(int)
 				if !ok {
 					mysampleRate = 48000
+					valuestr, ok := config["samplerate"].(string)
+					if ok {
+						if valuestr == "44.1Khz" {
+							mysampleRate = 44100
+						}
+					}
 				}
 				sampleRate = beep.SampleRate(mysampleRate)
 				oneSpeaker.Do(func() {

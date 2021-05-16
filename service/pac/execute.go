@@ -17,7 +17,7 @@ var ExecuteCommandTypeInfo = models.CommandTypeInfo{
 	Icon:             "flash.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Single,
-	Parameters: []models.CommandParameterInfo{
+	Parameters: []models.ParamInfo{
 		{
 			Name:           "command",
 			Type:           "string",

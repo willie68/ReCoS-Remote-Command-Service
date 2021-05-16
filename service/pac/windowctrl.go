@@ -22,7 +22,7 @@ var WindowCtrlCommandTypeInfo = models.CommandTypeInfo{
 	Icon:             "window.svg",
 	WizardPossible:   false,
 	WizardActionType: models.Single,
-	Parameters: []models.CommandParameterInfo{
+	Parameters: []models.ParamInfo{
 		{
 			Name:           "caption",
 			Type:           "string",

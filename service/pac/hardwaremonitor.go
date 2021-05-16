@@ -29,7 +29,7 @@ var HardwareMonitorCommandTypeInfo = models.CommandTypeInfo{
 	Icon:             "tools.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Display,
-	Parameters: []models.CommandParameterInfo{
+	Parameters: []models.ParamInfo{
 		{
 			Name:           "sensor",
 			Type:           "string",

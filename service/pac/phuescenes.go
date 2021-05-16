@@ -19,7 +19,7 @@ var PHueScenesCommandTypeInfo = models.CommandTypeInfo{
 	Icon:             "audio_equalizer.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Display,
-	Parameters: []models.CommandParameterInfo{
+	Parameters: []models.ParamInfo{
 		{
 			Name:           "name",
 			Type:           "string",
