@@ -50,6 +50,7 @@ func ConfigRoutes() *chi.Mux {
 	router.With(handler.AuthCheck()).Get("/check", GetCheck)
 	router.Get("/integrations", GetInteg)
 	router.With(handler.AuthCheck()).Post("/integrations/{integname}", PostInteg)
+	router.Get("/credits", GetCredits)
 	initIconMapper()
 	return router
 }
@@ -370,4 +371,21 @@ func PostInteg(response http.ResponseWriter, request *http.Request) {
 	}
 	config.Save()
 	render.JSON(response, request, integConfig)
+}
+
+/*
+GetCredits returning a converted icon back to the client
+*/
+func GetCredits(response http.ResponseWriter, request *http.Request) {
+	credits := web.CreditsAsset
+
+	ctype := mime.TypeByExtension(".html")
+	response.Header().Set("Content-Type", ctype)
+	response.Header().Set("Content-Length", strconv.FormatInt(int64(len(credits)), 10))
+	response.WriteHeader(http.StatusOK)
+
+	if request.Method != "HEAD" {
+		r := bytes.NewBuffer([]byte(credits))
+		io.Copy(response, r)
+	}
 }

@@ -18,3 +18,6 @@ var DefaultProfileAsset string
 
 //go:embed iconmapper/*
 var IconMapperAssets embed.FS
+
+//go:embed data/credits.html
+var CreditsAsset string
