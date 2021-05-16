@@ -38,7 +38,13 @@
         <i v-if="!showPwd" class="pi pi-eye-slash" @click="togglePwdView()" />
         <i v-if="showPwd" class="pi pi-eye" @click="togglePwdView()" />
       </span>
-      <Button icon="pi pi-bars" class="p-mr-1" />
+      <Button icon="pi pi-bars" class="p-mr-1" @click="toggleHelpMenu" />
+      <Menu
+        id="overlay_menu"
+        ref="helpmenu"
+        :model="helpMenuItems"
+        :popup="true"
+      />
     </template>
   </Toolbar>
 
@@ -58,6 +64,33 @@
     v-on:cancel="this.actionWizardVisible = false"
     :profile="activeProfile"
   ></ActionWizard>
+  <Settings
+    :visible="settingsVisible"
+    v-on:save="saveSettings($event)"
+    v-on:cancel="this.settingsVisible = false"
+  ></Settings>
+  <Dialog header="About" v-model:visible="helpAboutVisible">
+    This is the about dialog. For more info see:<br />
+    <a
+      href="https://github.com/willie68/ReCoS-Remote-Command-Service"
+      target="_blank"
+      >ReCoS on github</a
+    >
+    <template #footer>
+      <Button label="OK" icon="pi pi-check" @click="closeHelpAbout" autofocus />
+    </template>
+  </Dialog>
+  <Dialog header="Credits" v-model:visible="helpCreditsVisible">
+    <div v-html="credits"></div>
+    <template #footer>
+      <Button
+        label="OK"
+        icon="pi pi-check"
+        @click="closeHelpCredits"
+        autofocus
+      />
+    </template>
+  </Dialog>
 </template>
 
 <script>
@@ -65,6 +98,7 @@ import Profile from "./components/Profile.vue";
 import AppFooter from "./components/AppFooter.vue";
 import AddProfile from "./components/AddProfile.vue";
 import ActionWizard from "./wizard/ActionWizard.vue";
+import Settings from "./settings/Settings.vue";
 
 export default {
   components: {
@@ -72,6 +106,7 @@ export default {
     AppFooter,
     AddProfile,
     ActionWizard,
+    Settings,
   },
   data() {
     return {
@@ -110,8 +145,48 @@ export default {
           },
         },
       ],
+      helpMenuItems: [
+        {
+          label: "Help",
+          icon: "pi pi-question-circle",
+          command: () => {
+            this.helpHelp();
+          },
+        },
+        {
+          separator: true,
+        },
+        {
+          label: "Settings",
+          icon: "pi pi-cog",
+          command: () => {
+            this.helpSettings();
+          },
+        },
+        {
+          separator: true,
+        },
+        {
+          label: "Credits",
+          icon: "pi pi-star",
+          command: () => {
+            this.helpCredits();
+          },
+        },
+        {
+          label: "About",
+          icon: "pi pi-info-circle",
+          command: () => {
+            this.helpAbout();
+          },
+        },
+      ],
       dialogProfileVisible: false,
       actionWizardVisible: false,
+      settingsVisible: false,
+      helpAboutVisible: false,
+      helpCreditsVisible: false,
+      credits: "",
     };
   },
   computed: {
@@ -204,8 +279,41 @@ export default {
         that.$store.commit("iconlist", data);
       })
       .catch((err) => console.log(err.message));
+    fetch(basepath + "config/credits")
+      .then((response) => {
+        return response.text();
+      })
+      .then((data) => {
+        this.credits = data;
+      });
   },
   methods: {
+    helpHelp() {
+      window
+        .open(
+          "https://raw.githubusercontent.com/willie68/ReCoS-Remote-Command-Service/master/documentation/README.pdf",
+          "_blank"
+        )
+        .focus();
+    },
+    helpAbout() {
+      this.helpAboutVisible = true;
+    },
+    closeHelpAbout() {
+      this.helpAboutVisible = false;
+    },
+    helpCredits() {
+      this.helpCreditsVisible = true;
+    },
+    closeHelpCredits() {
+      this.helpCreditsVisible = false;
+    },
+    helpSettings() {
+      this.settingsVisible = true;
+    },
+    toggleHelpMenu(event) {
+      this.$refs.helpmenu.toggle(event);
+    },
     needPWd() {
       let that = this;
       fetch(this.$store.state.baseURL + "config/check")
@@ -368,6 +476,9 @@ export default {
     exportProfile() {
       console.log("export profile: " + this.activeProfileName);
       window.open(this.profileURL + "/" + this.activeProfileName + "/export");
+    },
+    saveSettings() {
+      this.settingsVisible = false;
     },
   },
   watch: {

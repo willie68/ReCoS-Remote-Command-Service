@@ -21,7 +21,7 @@ var KeysCommandTypeInfo = models.CommandTypeInfo{
 	Icon:             "keystroke_monitoring.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Single,
-	Parameters: []models.CommandParameterInfo{
+	Parameters: []models.ParamInfo{
 		{
 			Name:           "keylayout",
 			Type:           "string",

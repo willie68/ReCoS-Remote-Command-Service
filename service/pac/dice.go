@@ -25,7 +25,7 @@ var DiceCommandTypeInfo = models.CommandTypeInfo{
 	Icon:             "games_dice.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Single,
-	Parameters: []models.CommandParameterInfo{
+	Parameters: []models.ParamInfo{
 		{
 			Name:           "sides",
 			Type:           "int",

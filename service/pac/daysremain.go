@@ -18,7 +18,7 @@ var DaysRemainCommandTypeInfo = models.CommandTypeInfo{
 	Icon:             "calendar_year.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Display,
-	Parameters: []models.CommandParameterInfo{
+	Parameters: []models.ParamInfo{
 		{
 			Name:           "date",
 			Type:           "date",

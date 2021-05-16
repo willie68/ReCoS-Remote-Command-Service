@@ -16,6 +16,37 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
+var OpenHardwareMonitorIntegInfo = models.IntegInfo{
+	Category:    "System",
+	Name:        "openhardwaremonitor",
+	Description: "OpenHardwareMonitor is a software to display many useful sensors of your pc system.",
+	Image:       "monitor.svg",
+	Parameters: []models.ParamInfo{
+		{
+			Name:           "active",
+			Type:           "bool",
+			Description:    "activate the open hardwaremonitor",
+			WizardPossible: false,
+			List:           make([]string, 0),
+		},
+		{
+			Name:           "url",
+			Type:           "string",
+			Description:    "url to the open hardware monitor app",
+			WizardPossible: false,
+			List:           make([]string, 0),
+		},
+		{
+			Name:           "updateperiod",
+			Type:           "int",
+			Unit:           " sec",
+			Description:    "update period in seconds to update the used sensors",
+			WizardPossible: false,
+			List:           make([]string, 0),
+		},
+	},
+}
+
 type OpenHardwareMonitor struct {
 	baseURL    string
 	Active     bool
@@ -29,7 +60,6 @@ type OpenHardwareMonitor struct {
 }
 
 var OpenHardwareMonitorInstance OpenHardwareMonitor
-var once sync.Once
 
 // InitOpenHardwareMonitor initialise the open hardware monitor connection
 func InitOpenHardwareMonitor(extconfig map[string]interface{}) error {
@@ -47,7 +77,7 @@ func InitOpenHardwareMonitor(extconfig map[string]interface{}) error {
 			updatePeriod := 5
 			if active {
 				clog.Logger.Debug("hardware:openhardwaremonitor: active")
-				url, ok := config["url"].(string)
+				url, ok = config["url"].(string)
 				if !ok {
 					err = fmt.Errorf("can't find url to connect to. %s", url)
 				}
@@ -93,11 +123,11 @@ func (o *OpenHardwareMonitor) Connect() error {
 
 // GetSensorList getting a sensor list from openhardwaremonitor
 func (o *OpenHardwareMonitor) GetSensorList() ([]models.Sensor, error) {
-	o.m.Lock()
-	defer o.m.Unlock()
 	if !o.Connected {
 		return make([]models.Sensor, 0), nil
 	}
+	o.m.Lock()
+	defer o.m.Unlock()
 	return o.Sensorlist, o.lastError
 }
 
@@ -129,7 +159,7 @@ func (o *OpenHardwareMonitor) updateSensorList() error {
 
 	values = computer["Children"]
 	if values == nil {
-		return fmt.Errorf("no sensors availble.")
+		return fmt.Errorf("no sensors availble")
 	}
 
 	sensors := make([]models.Sensor, 0)
@@ -174,14 +204,18 @@ func (o *OpenHardwareMonitor) updateSensorList() error {
 
 func writingSensorList(sensorlist []models.Sensor) {
 	configFolder, err := config.GetDefaultConfigFolder()
+	if err != nil {
+		clog.Logger.Errorf("error getting config folder: %v", err)
+		return
+	}
 	f, err := os.Create(configFolder + "/sensorlist.txt")
 	if err != nil {
-		fmt.Println(err)
+		clog.Logger.Errorf("error creating sensorlist file: %v", err)
 		return
 	}
 	_, err = f.WriteString("Sensor full name;Category;Hardware;Type;Sensor name;Value (e.g.)\r\n")
 	if err != nil {
-		fmt.Println(err)
+		clog.Logger.Errorf("error writing sensorlist file: %v", err)
 		f.Close()
 		return
 	}
@@ -189,15 +223,14 @@ func writingSensorList(sensorlist []models.Sensor) {
 	for _, sensor := range sensorlist {
 		_, err := f.WriteString(fmt.Sprintf("%s;%s;%s;%s;%s;%s\r\n", sensor.GetFullSensorName(), sensor.Categorie, sensor.Hardwarename, sensor.Type, sensor.Name, sensor.ValueStr))
 		if err != nil {
-			fmt.Println(err)
+			clog.Logger.Errorf("error writing sensor: %v", err)
 			f.Close()
 			return
 		}
 	}
 	err = f.Close()
 	if err != nil {
-		fmt.Println(err)
-		return
+		clog.Logger.Errorf("error closing sensor file: %v", err)
 	}
 }
 

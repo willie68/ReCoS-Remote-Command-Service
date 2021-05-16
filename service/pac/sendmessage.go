@@ -18,7 +18,7 @@ var SendMessageCommandTypeInfo = models.CommandTypeInfo{
 	Icon:             "send.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Single,
-	Parameters: []models.CommandParameterInfo{
+	Parameters: []models.ParamInfo{
 		{
 			Name:           "receiver",
 			Type:           "string",

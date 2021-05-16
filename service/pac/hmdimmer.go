@@ -24,7 +24,7 @@ var HMDimmerCommandTypeInfo = models.CommandTypeInfo{
 	Icon:             "light_bulb.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Single,
-	Parameters: []models.CommandParameterInfo{
+	Parameters: []models.ParamInfo{
 		{
 			Name:           "name",
 			Type:           "string",

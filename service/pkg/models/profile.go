@@ -100,7 +100,7 @@ type CommandTypeInfo struct {
 	// WizardActionType is the action type for the wizard, mainly single or display
 	WizardActionType ActionType `json:"wizardactiontype"`
 	// Parameters describes the needed parameters
-	Parameters []CommandParameterInfo `json:"parameter"`
+	Parameters []ParamInfo `json:"parameter"`
 }
 
 type CommandCreator interface {
@@ -112,7 +112,7 @@ type GraphicsInfo struct {
 	Data     []byte
 }
 
-type CommandParameterInfo struct {
+type ParamInfo struct {
 	// Name is the command
 	Name string `json:"name"`
 	// Type is the type of an command

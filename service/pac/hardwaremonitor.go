@@ -4,6 +4,7 @@ package pac
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"image/color"
 	"math/rand"
@@ -28,7 +29,7 @@ var HardwareMonitorCommandTypeInfo = models.CommandTypeInfo{
 	Icon:             "tools.svg",
 	WizardPossible:   true,
 	WizardActionType: models.Display,
-	Parameters: []models.CommandParameterInfo{
+	Parameters: []models.ParamInfo{
 		{
 			Name:           "sensor",
 			Type:           "string",
@@ -101,7 +102,7 @@ type HardwareMonitorCommand struct {
 	stop        bool
 	ticker      *time.Ticker
 	done        chan bool
-	temps       []float64
+	datas       []float64
 	sensors     []models.Sensor
 	yMinValue   float64
 	yMaxValue   float64
@@ -138,7 +139,7 @@ func (d *HardwareMonitorCommand) EnrichType(profile models.Profile) (models.Comm
 // Init nothing
 func (d *HardwareMonitorCommand) Init(a *Action, commandName string) (bool, error) {
 	rand.Seed(42)
-	d.temps = make([]float64, measurepoints)
+	d.datas = make([]float64, measurepoints)
 	d.commandName = commandName
 	object, ok := d.Parameters["sensor"]
 	if !ok {
@@ -225,28 +226,40 @@ func (d *HardwareMonitorCommand) Init(a *Action, commandName string) (bool, erro
 				}
 				var temp float64
 				var value string
+				found := false
 				for _, sensor := range sensors {
 					if strings.EqualFold(sensor.GetFullSensorName(), sensorname) {
 						temp = sensor.Value
 						value = sensor.ValueStr
+						found = true
 					}
 				}
-				d.temps = append(d.temps, temp)
-				if len(d.temps) > measurepoints {
-					d.temps = d.temps[1:]
-				}
-				if api.HasConnectionWithProfile(a.Profile) {
-					if d.textonly {
-						message := models.Message{
-							Profile: d.action.Profile,
-							Action:  d.action.Name,
-							Text:    value,
-							State:   0,
+				if found {
+					d.datas = append(d.datas, temp)
+					if len(d.datas) > measurepoints {
+						d.datas = d.datas[1:]
+					}
+					if api.HasConnectionWithProfile(a.Profile) {
+						if d.textonly {
+							message := models.Message{
+								Profile: d.action.Profile,
+								Action:  d.action.Name,
+								Text:    value,
+								State:   0,
+							}
+							api.SendMessage(message)
+							continue
 						}
-						api.SendMessage(message)
-						continue
+						d.SendGraphics(value)
 					}
-					d.SendGraphics(value)
+				} else {
+					message := models.Message{
+						Profile: d.action.Profile,
+						Action:  d.action.Name,
+						Text:    fmt.Sprintf("Sensor %s not found", sensorname),
+						State:   0,
+					}
+					api.SendMessage(message)
 				}
 			}
 		}
@@ -283,6 +296,9 @@ func (d *HardwareMonitorCommand) Execute(a *Action, requestMessage models.Messag
 
 // GetGraphics creates a clock graphics from the id
 func (d *HardwareMonitorCommand) GetGraphics(id string, width int, height int) (models.GraphicsInfo, error) {
+	if !hardware.OpenHardwareMonitorInstance.Active {
+		return models.GraphicsInfo{}, errors.New("OpenHardwareMonitor is not active")
+	}
 	if width <= 0 {
 		width = imageWidth
 	}
@@ -324,7 +340,7 @@ func (d *HardwareMonitorCommand) generateBMP(width int, height int) []byte {
 	xLast := 0.0
 	for x := 0; x < width; x++ {
 		index := measurepoints - width + x
-		temp := d.temps[index]
+		temp := d.datas[index]
 
 		newX, y := d.projectPoint(float64(x), temp, fHeight)
 		dc.LineTo(newX, y)
@@ -346,7 +362,7 @@ func (d *HardwareMonitorCommand) generateBMP(width int, height int) []byte {
 	xLast = 0.0
 	for x := 0; x < width; x++ {
 		index := measurepoints - width + x
-		temp := d.temps[index]
+		temp := d.datas[index]
 		newX, y := d.projectPoint(float64(x), temp, fHeight)
 		dc.LineTo(newX, y-1.0)
 		xLast = newX
