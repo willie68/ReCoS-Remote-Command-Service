@@ -1,0 +1,33 @@
+openapi: 3.0.0
+info:
+  title: ReCoS API
+  description: This is the ReCoS Client API, indendet for every client to connect. 
+  contact:
+    email: w.klaas@gmx.de
+    name: Wilfried Klaas
+    url: wk-music.de
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: http://127.0.0.1:9280/api/v1
+    description: This is the local endpoint to the client api
+paths:
+  /config/icons:
+    get:
+      summary: returns a list of all possilbe icon names
+      responses:
+        200:
+          description: a json array with all names of all possible client icons
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+
+  /profiles:
+  /show:
+  /action:
+  

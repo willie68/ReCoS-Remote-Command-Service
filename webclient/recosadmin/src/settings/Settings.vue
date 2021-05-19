@@ -262,7 +262,6 @@ export default {
           severity: "warn",
           summary: "Settings changed, please restart the service.",
           detail: "To use the new settings you have to restart the service. Please use the context menu on the service icon.",
-          life: 0,
         });
       this.$emit("save");
     },
