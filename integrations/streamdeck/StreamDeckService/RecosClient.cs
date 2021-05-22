@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Drawing;
 using System.Net.Http;
+using System.Net.WebSockets;
+using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ReCoS
@@ -11,12 +14,14 @@ namespace ReCoS
     {
         private const string DefaultURL = "http://127.0.0.1:9280";
 
-        readonly HttpClient client = new HttpClient();
+        readonly HttpClient client = new();
+         readonly ClientWebSocket ws = new();
 
         private string url;
         private string baseUrl;
         private bool isConnected;
         private Profile[] Profiles;
+        private CancellationTokenSource Token;
 
 
         public RecosClient()
@@ -62,12 +67,28 @@ namespace ReCoS
             try
             {
                 GetProfileInfo().Wait();
+                Uri uri = new(url);
+                Uri wsUri = new($"ws://{uri.Host}:{uri.Port}/ws");
+                Task wsConnect = ws.ConnectAsync(wsUri, CancellationToken.None);
+                wsConnect.Wait();
+
+                Token = new CancellationTokenSource();
+                var Ct = Token.Token;
+
+                Task receiverTask = Receive(Ct);
+                //receiverTask.Run(); // Pass same token to Task.Run.
+
                 isConnected = true;
             }
             catch (Exception e)
             {
                 Console.Error.WriteLine($"can't connect to ReCoS {e.Message}");
             }
+        }
+
+        public void Dispose()
+        {
+            Token.Cancel();
         }
 
         private async Task GetProfileInfo()
@@ -143,6 +164,33 @@ namespace ReCoS
             var stringTask = client.PostAsync(actionUrl, httpContent);
             var result = stringTask.Result;
             Console.WriteLine($"button press result: {result}");
+        }
+
+        static UTF8Encoding encoder = new UTF8Encoding();
+
+        public async Task SendMessage(Message msg)
+        {
+            string jsonStr = JsonSerializer.Serialize(msg);
+            byte[] buffer = encoder.GetBytes(jsonStr);
+            await ws.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
+        }
+
+        private async Task Receive(CancellationToken token)
+        {
+            byte[] buffer = new byte[2048];
+            while ((ws.State == WebSocketState.Open) && !token.IsCancellationRequested)
+            {
+                var result = await ws.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                if (result.MessageType == WebSocketMessageType.Close)
+                {
+                    await ws.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
+                }
+                else
+                {
+                    var str = encoder.GetString(buffer);
+                    Console.WriteLine(str);
+                }
+            }
         }
     }
 }

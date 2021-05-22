@@ -54,6 +54,10 @@ namespace TestStreamDeck
             {
                 Connect2StreamDeck();
                 Connect2ReCoS();
+                if (IsReCoSConnected && IsDeckConnected)
+                {
+                    break;
+                }
                 Thread.Yield();
                 Thread.Sleep(1000);
             }
@@ -62,6 +66,7 @@ namespace TestStreamDeck
 
             Console.ReadKey();
             deck.Dispose();
+            client.Dispose();
             /*            else
                         {
                             Console.WriteLine("no streamdecks found");
@@ -152,7 +157,10 @@ namespace TestStreamDeck
                 kID++;
             }
             deck.KeyStateChanged += Deck_KeyPressed;
-
+            Message msg = new();
+            msg.Profile = activeProfile.Name;
+            msg.Command = "change";
+            client.SendMessage(msg).Wait();
         }
         static KeyBitmap GenerateKeyBitmap(ReCoS.Action action)
         {
