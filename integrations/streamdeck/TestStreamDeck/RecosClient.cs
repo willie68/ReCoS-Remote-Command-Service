@@ -59,7 +59,15 @@ namespace ReCoS
 
         public void Connect()
         {
-            GetProfileInfo().Wait();
+            try
+            {
+                GetProfileInfo().Wait();
+                isConnected = true;
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine($"can't connect to ReCoS {e.Message}");
+            }
         }
 
         private async Task GetProfileInfo()
@@ -124,7 +132,7 @@ namespace ReCoS
             var message = new Message();
             message.Profile = profileName;
             message.Action = actionName;
-            message.Page= pageName;
+            message.Page = pageName;
             message.Command = "click";
 
             var json = JsonSerializer.Serialize(message);

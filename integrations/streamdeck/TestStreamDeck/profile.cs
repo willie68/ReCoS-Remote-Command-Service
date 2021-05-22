@@ -81,7 +81,7 @@ namespace ReCoS
         public bool Outlined { get; set; }
     }
 
-    public class Message 
+    public class Message
     {
         [JsonPropertyName("profile")]
         public string Profile { get; set; }
@@ -106,5 +106,5 @@ namespace ReCoS
 
         [JsonPropertyName("command")]
         public string Command { get; set; }
-}
+    }
 }

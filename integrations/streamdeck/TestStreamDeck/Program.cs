@@ -5,6 +5,7 @@ using StreamDeckSharp;
 using System;
 using System.Drawing;
 using System.Text.Json;
+using System.Threading;
 
 namespace TestStreamDeck
 {
@@ -30,83 +31,129 @@ namespace TestStreamDeck
         private const string DEFAULT_PROFILE_NAME = "default";
 
         private static GridKeyPositionCollection keyGrid;
+        private static IStreamDeckBoard deck;
         private static RecosClient client;
         private static Profile activeProfile;
         private static Button[] buttons;
         private static Page activePage;
-        static void Connect(Options flags)
+        private static Options flags;
+
+        private static bool IsDeckConnected;
+        private static bool IsReCoSConnected;
+
+
+        static void Connect(Options options)
         {
+            IsDeckConnected = false;
+            IsReCoSConnected = false;
+
+            flags = options;
             Console.WriteLine($"URL to the ReCoS Service: -u {flags.ReCoSURL}");
 
-            //Create some color we use later to draw the flag of austria
-            var red = KeyBitmap.Create.FromRgb(237, 41, 57);
-            var white = KeyBitmap.Create.FromRgb(255, 255, 255);
-            var rowColors = new KeyBitmap[] { red, white, red };
-            var f = new Font("Arial", 8);
-
-            //Open the Stream Deck device
-            Console.WriteLine("enumerating streamdecks");
-            var Devices = StreamDeck.EnumerateDevices();
-
-            if (Devices.GetEnumerator().MoveNext() != null)
+            while (!(IsReCoSConnected && IsDeckConnected))
             {
-                foreach (IStreamDeckRefHandle Device in Devices)
-                {
-                    Console.WriteLine($"found device: {Device.DeviceName}");
-                }
-                var defaultProfile = "default";
-                var deck = StreamDeck.OpenDevice();
-                keyGrid = (deck.Keys as GridKeyPositionCollection) ?? throw new InvalidOperationException("Deck not supported");
-                switch (keyGrid.Count)
-                {
-                    case 6:
-                        defaultProfile = "streamdeck_mini";
-                        break;
-                    case 15:
-                        defaultProfile = "streamdeck";
-                        break;
-                    case 32:
-                        defaultProfile = "streamdeck_xl";
-                        break;
-                }
-
-                Console.WriteLine($"profile: {flags.Profile}");
-                Console.WriteLine($"default: {defaultProfile}");
-                client = new RecosClient(flags.ReCoSURL);
-                client.Connect();
-
-                activeProfile = ReadProfile(flags.Profile, defaultProfile);
-
-                Console.WriteLine(JsonSerializer.Serialize(activeProfile));
-                deck.SetBrightness(100);
-
-                activePage = activeProfile.Pages[0];
-                var kID = 0;
-                buttons = new Button[activePage.Columns * activePage.Rows];
-                foreach (string cellActionName in activePage.Cells)
-                {
-                    ReCoS.Action action = GetAction(cellActionName);
-                    if (action != null)
-                    {
-                        buttons[kID] = new Button(action);
-                        var bmp = GenerateKeyBitmap(action);
-                        deck.SetKeyBitmap(kID, bmp);
-                    }
-                    kID++;
-                }
-                deck.KeyStateChanged += Deck_KeyPressed;
-
-                Console.ReadKey();
-                deck.Dispose();
-            }
-            else
-            {
-                Console.WriteLine("no streamdecks found");
-                Environment.Exit(1);
+                Connect2StreamDeck();
+                Connect2ReCoS();
+                Thread.Yield();
+                Thread.Sleep(1000);
             }
 
+            InitApplication();
+
+            Console.ReadKey();
+            deck.Dispose();
+            /*            else
+                        {
+                            Console.WriteLine("no streamdecks found");
+                            Environment.Exit(1);
+                        }
+            */
         }
 
+        static bool Connect2StreamDeck()
+        {
+            if (!IsDeckConnected)
+            {
+                var Devices = StreamDeck.EnumerateDevices();
+                if (Devices.GetEnumerator().MoveNext())
+                {
+                    foreach (IStreamDeckRefHandle Device in Devices)
+                    {
+                        Console.WriteLine($"found device: {Device.DeviceName}");
+                    }
+                    deck = StreamDeck.OpenDevice();
+
+                    if (deck != null)
+                    {
+                        IsDeckConnected = true;
+                        return true;
+                    }
+                }
+                else
+                {
+                    Console.Error.WriteLine("No streamdeck found.");
+                }
+            }
+            return false;
+        }
+
+
+        static bool Connect2ReCoS()
+        {
+            if (client == null)
+            {
+                client = new RecosClient(flags.ReCoSURL);
+            }
+            if (!client.IsConnected())
+            {
+                client.Connect();
+                IsReCoSConnected = client.IsConnected();
+            }
+            return IsReCoSConnected;
+        }
+
+        static void InitApplication()
+        {
+            var defaultProfile = "default";
+            keyGrid = (deck.Keys as GridKeyPositionCollection) ?? throw new InvalidOperationException("Deck not supported");
+            switch (keyGrid.Count)
+            {
+                case 6:
+                    defaultProfile = "streamdeck_mini";
+                    break;
+                case 15:
+                    defaultProfile = "streamdeck";
+                    break;
+                case 32:
+                    defaultProfile = "streamdeck_xl";
+                    break;
+            }
+
+            Console.WriteLine($"profile: {flags.Profile}");
+            Console.WriteLine($"default: {defaultProfile}");
+
+            activeProfile = ReadProfile(flags.Profile, defaultProfile);
+
+            Console.WriteLine(JsonSerializer.Serialize(activeProfile));
+            deck.SetBrightness(100);
+
+            activePage = activeProfile.Pages[0];
+            var kID = 0;
+            buttons = new Button[activePage.Columns * activePage.Rows];
+            foreach (string cellActionName in activePage.Cells)
+            {
+                ReCoS.Action action = GetAction(cellActionName);
+                if (action != null)
+                {
+                    buttons[kID] = new Button(action);
+                    var bmp = GenerateKeyBitmap(action);
+                    deck.SetKeyBitmap(kID, bmp);
+                }
+                kID++;
+            }
+            deck.KeyStateChanged += Deck_KeyPressed;
+
+        }
         static KeyBitmap GenerateKeyBitmap(ReCoS.Action action)
         {
             return KeyBitmap.Create.FromGraphics(72, 72, (g) =>
