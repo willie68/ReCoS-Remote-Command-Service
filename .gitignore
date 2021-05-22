@@ -40,3 +40,10 @@ service/web/webadmin/
 service/web/webclient/
 
 service/recos-service.zip
+
+integrations/streamdeck/StreamDeckService/
+**/.vs/
+**/bin/
+**/obj/
+
+swagger/swagger-editor/

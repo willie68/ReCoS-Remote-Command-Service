@@ -26,8 +26,115 @@ paths:
                 type: array
                 items: 
                   type: string
-
-  /profiles:
   /show:
-  /action:
-  
+    get:
+      summary: returns a list of all active profiles with name and description
+      responses:
+        200:
+          description: a json array with all names and desscription of all active profiles
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProfileInfo"
+  /show/{profileid}:
+    get:
+      summary: returns the definition of the profile
+      parameters:
+        - name: profileid
+          in: path
+          required: true
+          description: The id of the profile to retrieve
+          schema:
+            type: string
+      responses:
+        200:
+          description: a json object with the definition of the profiles
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Profile"
+                  
+components:
+  schemas: 
+    ProfileInfo:
+      type: object
+      required: 
+        - name
+      properties:
+        name:
+          type: string
+          example: default
+        description: 
+          type: string
+    Profile:
+      type: object
+      required: 
+        - name
+        - pages
+      properties:
+        name:
+          type: string
+          example: default
+        description: 
+          type: string
+        pages:
+          type: array
+          items: 
+            $ref: "#/components/schemas/Page"
+        actions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Action"
+    Page:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        icon: 
+          type: string
+        columns:
+          type: integer
+        rows: 
+          type: integer
+        toolbar:
+          type: string
+          enum:
+            - show
+            - hide
+        cells:
+          type: array
+          items:
+            type: string
+    Action:
+      type: object
+      required:
+        - type
+        - name
+      properties:
+        type: 
+          type: string
+          enum:
+            - SINGLE
+            - DISPLAY
+            - TOGGLE
+            - MULTI
+        name:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        icon: 
+          type: string
+        fontsize:
+          type: integer
+        fontcolor:
+          type: string
+        outlined:
+          type: boolean
