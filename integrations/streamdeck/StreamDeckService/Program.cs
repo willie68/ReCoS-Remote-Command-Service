@@ -4,7 +4,6 @@ using ReCoS;
 using StreamDeckSharp;
 using System;
 using System.Drawing;
-using System.Text.Json;
 using System.Threading;
 
 namespace TestStreamDeck
@@ -139,7 +138,7 @@ namespace TestStreamDeck
 
             activeProfile = ReadProfile(flags.Profile, defaultProfile);
 
-            Console.WriteLine(JsonSerializer.Serialize(activeProfile));
+            //            Console.WriteLine(JsonSerializer.Serialize(activeProfile));
             deck.SetBrightness(100);
 
             activePage = activeProfile.Pages[0];
@@ -151,7 +150,7 @@ namespace TestStreamDeck
                 if (action != null)
                 {
                     buttons[kID] = new Button(action);
-                    var bmp = GenerateKeyBitmap(action);
+                    var bmp = GenerateKeyBitmap(action, null, null, null);
                     deck.SetKeyBitmap(kID, bmp);
                 }
                 kID++;
@@ -164,26 +163,63 @@ namespace TestStreamDeck
 
         private static void MessageReceived(object sender, MessageReceived e)
         {
-
             if (activeProfile.Name.Equals(e.Message.Profile))
             {
+                // the message is for the actual profile
                 if (Array.IndexOf(activePage.Cells, e.Message.Action) >= 0)
                 {
-                    var jsonStr = JsonSerializer.Serialize(e.Message);
-                    Console.WriteLine($"Message received: \r\n{jsonStr}");
+                    // this message is for the actual page
+                    //                    var jsonStr = JsonSerializer.Serialize(e.Message);
+                    //                    Console.WriteLine($"Message received: \r\n{jsonStr}");
+
+                    // getting the button to display
+                    int kID = 0;
+                    var found = false;
+                    foreach (ReCoS.Button Button in buttons)
+                    {
+                        if (Button != null)
+                        {
+                            if (Button.Action.Name.Equals(e.Message.Action))
+                            {
+                                found = true;
+                                break;
+                            }
+                        }
+                        kID++;
+                    }
+
+                    if (found)
+                    {
+
+                        // generating the bitmap
+                        var bmp = GenerateKeyBitmap(buttons[kID].Action, e.Message.Title, e.Message.Text, e.Message.ImageURL);
+                        // sending the bitmap to the streamdeck
+                        deck.SetKeyBitmap(kID, bmp);
+                    }
                 }
             }
         }
-        static KeyBitmap GenerateKeyBitmap(ReCoS.Action action)
+        static KeyBitmap GenerateKeyBitmap(ReCoS.Action action, string title, string text, string image)
         {
             return KeyBitmap.Create.FromGraphics(72, 72, (g) =>
             {
-
-                if (!String.IsNullOrEmpty(action.Icon))
+                Image img = null;
+                if (String.IsNullOrEmpty(image))
                 {
-                    Image img = client.GetImage(action.Icon);
+                    if (!String.IsNullOrEmpty(action.Icon))
+                    {
+                        img = client.GetImage(action.Icon);
+                    }
+                }
+                else
+                {
+                    img = client.GetImage(image);
+                }
+                if (img != null)
+                {
                     g.DrawImage(img, new Point(0, 0));
                 }
+
 
                 var b = Brushes.White;
                 if (!String.IsNullOrEmpty(action.Fontcolor))
@@ -196,16 +232,33 @@ namespace TestStreamDeck
                 {
                     fontsize = action.Fontsize;
                 }
+                var myTitle = action.Title;
+                if (!String.IsNullOrEmpty(title))
+                {
+                    myTitle = title;
+                }
                 var fb = new Font("Arial", fontsize, FontStyle.Bold);
-                var size = g.MeasureString(action.Title, fb);
+                var size = g.MeasureString(myTitle, fb);
                 var xPos = 0;
                 if (size.Width < 72)
                 {
                     xPos = (72 - Convert.ToInt32(size.Width)) / 2;
                 }
                 var origin = new PointF(xPos, 0);
-                g.DrawString(action.Title, fb, b, origin);
+                g.DrawString(myTitle, fb, b, origin);
 
+                if (!String.IsNullOrEmpty(text))
+                {
+                    fb = new Font("Arial", fontsize);
+                    size = g.MeasureString(text, fb);
+                    xPos = 0;
+                    if (size.Width < 72)
+                    {
+                        xPos = (72 - Convert.ToInt32(size.Width)) / 2;
+                    }
+                    origin = new PointF(xPos, 36 - fontsize);
+                    g.DrawString(text, fb, b, origin);
+                }
             });
         }
 
@@ -283,7 +336,7 @@ namespace TestStreamDeck
                 return;
             }
 
-            Console.WriteLine($"key {e.Key} pressed. IsDown: {e.IsDown}");
+            //            Console.WriteLine($"key {e.Key} pressed. IsDown: {e.IsDown}");
             if (e.IsDown)
             {
                 var button = buttons[e.Key];

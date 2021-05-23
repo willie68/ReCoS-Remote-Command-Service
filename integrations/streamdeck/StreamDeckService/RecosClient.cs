@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
@@ -135,21 +138,38 @@ namespace ReCoS
         public Image GetImage(string data)
         {
             string src = buildImageSource(data);
-            var streamTask = client.GetStreamAsync(src);
-            var stream = streamTask.Result;
 
-            Svg.SvgDocument svgImg = Svg.SvgDocument.Open<Svg.SvgDocument>(stream);
-            svgImg.Width = 72;
-            svgImg.Height = 72;
+            var task = client.GetAsync(src, HttpCompletionOption.ResponseHeadersRead);
+            using (var response = task.Result)
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var stream = response.Content.ReadAsStreamAsync().Result;
+                    var trailingHeaders = response.TrailingHeaders;
+                    IEnumerable<string> headerValues;
+                    string contentType = GetHeaderString(response.Content.Headers, "Content-Type");
+                    if ("image/svg+xml".Equals(contentType))
+                    {
+                        Svg.SvgDocument svgImg = Svg.SvgDocument.Open<Svg.SvgDocument>(stream);
+                        svgImg.Width = 72;
+                        svgImg.Height = 72;
 
-            return svgImg.Draw();
+                        return svgImg.Draw();
+                    }
+                    else if ("image/bmp".Equals(contentType) || "image/png".Equals(contentType))
+                    {
+                        return Image.FromStream(stream);
+                    }
+                }
+            }
+            return null;
         }
 
         private string buildImageSource(string data)
         {
             if (data.StartsWith("/"))
             {
-                return baseUrl + data + "?width=72&height=72";
+                return url + data + "?width=72&height=72";
             }
             if (data.StartsWith("data:"))
             {
@@ -180,7 +200,7 @@ namespace ReCoS
             var actionUrl = baseUrl + "action/" + profileName + "/" + actionName;
             var stringTask = client.PostAsync(actionUrl, httpContent);
             var result = stringTask.Result;
-            Console.WriteLine($"button press result: {result}");
+            //Console.WriteLine($"button press result: {result}");
         }
 
         static UTF8Encoding encoder = new UTF8Encoding();
@@ -217,6 +237,17 @@ namespace ReCoS
                     }
                 }
             }
+        }
+        private static string GetHeaderString(HttpHeaders headers, string name)
+        {
+            IEnumerable<string> values;
+
+            if (headers.TryGetValues(name, out values))
+            {
+                return values.FirstOrDefault();
+            }
+
+            return null;
         }
     }
 }
