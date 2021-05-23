@@ -10,12 +10,22 @@ using System.Threading.Tasks;
 namespace ReCoS
 {
 
+    public class MessageReceived : EventArgs
+    {
+        public Message Message { get; }
+        public MessageReceived(Message message)
+        {
+            this.Message = message;
+        }
+    }
     public class RecosClient
     {
+        public event EventHandler<MessageReceived> MessageReceived;
+
         private const string DefaultURL = "http://127.0.0.1:9280";
 
         readonly HttpClient client = new();
-         readonly ClientWebSocket ws = new();
+        readonly ClientWebSocket ws = new();
 
         private string url;
         private string baseUrl;
@@ -148,6 +158,13 @@ namespace ReCoS
             return url + "/webclient/assets/" + data;
         }
 
+        public void SetProfile(string profileName)
+        {
+            Message msg = new();
+            msg.Profile = profileName;
+            msg.Command = "change";
+            SendMessage(msg).Wait();
+        }
         internal void SendClick(string profileName, string pageName, string actionName)
         {
             var message = new Message();
@@ -187,8 +204,17 @@ namespace ReCoS
                 }
                 else
                 {
-                    var str = encoder.GetString(buffer);
-                    Console.WriteLine(str);
+
+                    var str = encoder.GetString(buffer, 0, result.Count).Replace("\0", string.Empty);
+                    try
+                    {
+                        var message = JsonSerializer.Deserialize<Message>(str);
+                        MessageReceived(this, new MessageReceived(message));
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"{str} \r\n {e.Message}");
+                    }
                 }
             }
         }

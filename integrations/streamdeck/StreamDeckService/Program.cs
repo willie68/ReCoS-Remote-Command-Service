@@ -157,10 +157,22 @@ namespace TestStreamDeck
                 kID++;
             }
             deck.KeyStateChanged += Deck_KeyPressed;
-            Message msg = new();
-            msg.Profile = activeProfile.Name;
-            msg.Command = "change";
-            client.SendMessage(msg).Wait();
+
+            client.SetProfile(activeProfile.Name);
+            client.MessageReceived += MessageReceived;
+        }
+
+        private static void MessageReceived(object sender, MessageReceived e)
+        {
+
+            if (activeProfile.Name.Equals(e.Message.Profile))
+            {
+                if (Array.IndexOf(activePage.Cells, e.Message.Action) >= 0)
+                {
+                    var jsonStr = JsonSerializer.Serialize(e.Message);
+                    Console.WriteLine($"Message received: \r\n{jsonStr}");
+                }
+            }
         }
         static KeyBitmap GenerateKeyBitmap(ReCoS.Action action)
         {
