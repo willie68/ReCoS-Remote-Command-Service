@@ -1,16 +1,17 @@
-﻿using CommandLine;
+﻿using System;
+using System.Drawing;
+using System.Linq;
+using System.Threading;
+using System.Windows.Forms;
+using CommandLine;
 using OpenMacroBoard.SDK;
 using ReCoS;
 using StreamDeckSharp;
-using System;
-using System.Drawing;
 using System.Text.Json;
-using System.Threading;
 
-
-namespace TestStreamDeck
+namespace StreamDeckService
 {
-    class Program
+    static class Program
     {
         public class Options
         {
@@ -21,12 +22,14 @@ namespace TestStreamDeck
             public string Profile { get; set; }
         }
 
-
+        /// <summary>
+        /// Der Haupteinstiegspunkt für die Anwendung.
+        /// </summary>
+        [STAThread]
         static void Main(string[] args)
         {
             Parser.Default.ParseArguments<Options>(args)
-                   .WithParsed<Options>(o => Connect(o));
-            //This example is designed for the 5x3 (original) Stream Deck.
+                 .WithParsed<Options>(o => Connect(o));
         }
 
         private const string DEFAULT_PROFILE_NAME = "default";
@@ -35,8 +38,8 @@ namespace TestStreamDeck
         private static IStreamDeckBoard deck;
         private static RecosClient client;
         private static Profile activeProfile;
-        private static Button[] buttons;
-        private static readonly Mutex Btnmut = new();
+        private static ReCoS.Button[] buttons;
+        private static readonly Mutex Btnmut = new Mutex();
         private static Page activePage;
         private static Options flags;
 
@@ -66,7 +69,10 @@ namespace TestStreamDeck
 
             InitApplication();
 
-            Console.ReadKey();
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new Form1());
+
             deck.Dispose();
             client.Dispose();
             /*            else
@@ -154,7 +160,6 @@ namespace TestStreamDeck
             activePage = activeProfile.Pages[0];
             SwitchPage(activePage.Name);
         }
-
         private static void SwitchPage(string pagename)
         {
             activePage = GetPage(pagename);
@@ -167,13 +172,13 @@ namespace TestStreamDeck
             var kID = 0;
             if (Btnmut.WaitOne(1000))
             {
-                buttons = new Button[activePage.Columns * activePage.Rows];
+                buttons = new ReCoS.Button[activePage.Columns * activePage.Rows];
                 foreach (string cellActionName in activePage.Cells)
                 {
                     ReCoS.Action action = GetAction(cellActionName);
                     if (action != null)
                     {
-                        buttons[kID] = new Button(action);
+                        buttons[kID] = new ReCoS.Button(action);
                         var bmp = GenerateKeyBitmap(action, null, null, null);
                         deck.SetKeyBitmap(kID, bmp);
                     }
@@ -194,7 +199,7 @@ namespace TestStreamDeck
                     // this message is for the actual page
                     // getting the button to display
                     int kID = 0;
-                    Button button = null;
+                    ReCoS.Button button = null;
                     if (Btnmut.WaitOne(1000))
                     {
                         foreach (ReCoS.Button Button in buttons)
@@ -380,7 +385,7 @@ namespace TestStreamDeck
             return null;
         }
 
-        private static void Deck_KeyPressed(object sender, KeyEventArgs e)
+        private static void Deck_KeyPressed(object sender, OpenMacroBoard.SDK.KeyEventArgs e)
         {
             if (!(sender is IMacroBoard d))
             {
@@ -390,7 +395,7 @@ namespace TestStreamDeck
             //            Console.WriteLine($"key {e.Key} pressed. IsDown: {e.IsDown}");
             if (e.IsDown)
             {
-                Button button = null;
+                ReCoS.Button button = null;
                 if (Btnmut.WaitOne(1000))
                 {
                     button = buttons[e.Key];
@@ -406,5 +411,6 @@ namespace TestStreamDeck
             }
 
         }
+
     }
 }

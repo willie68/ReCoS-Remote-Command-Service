@@ -35,10 +35,11 @@ service/web/webclient/
 
 service/recos-service.zip
 
-**/.vs/
-**/bin/
-**/obj/
-
+integrations/**/.vs/
+integrations/**/bin/
+integrations/**/obj/
+integrations/**/packages/
+integrations/**/publish/
 swagger/swagger-editor/
 
 3rd party/PSTools/

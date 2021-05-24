@@ -27,8 +27,8 @@ namespace ReCoS
 
         private const string DefaultURL = "http://127.0.0.1:9280";
 
-        readonly HttpClient client = new();
-        readonly ClientWebSocket ws = new();
+        readonly HttpClient client = new HttpClient();
+        readonly ClientWebSocket ws = new ClientWebSocket();
 
         public int ImageWidth { get; set; }
         public int ImageHeight { get; set; }
@@ -85,8 +85,8 @@ namespace ReCoS
             try
             {
                 GetProfileInfo().Wait();
-                Uri uri = new(url);
-                Uri wsUri = new($"ws://{uri.Host}:{uri.Port}/ws");
+                Uri uri = new Uri(url);
+                Uri wsUri = new Uri($"ws://{uri.Host}:{uri.Port}/ws");
                 Task wsConnect = ws.ConnectAsync(wsUri, CancellationToken.None);
                 wsConnect.Wait();
 
@@ -150,7 +150,7 @@ namespace ReCoS
                 if (response.IsSuccessStatusCode)
                 {
                     var stream = response.Content.ReadAsStreamAsync().Result;
-                    var trailingHeaders = response.TrailingHeaders;
+                    var trailingHeaders = response.Headers;
                     IEnumerable<string> headerValues;
                     string contentType = GetHeaderString(response.Content.Headers, "Content-Type");
                     if ("image/svg+xml".Equals(contentType))
@@ -185,7 +185,7 @@ namespace ReCoS
 
         public void SetProfile(string profileName)
         {
-            Message msg = new();
+            Message msg = new Message();
             msg.Profile = profileName;
             msg.Command = "change";
             SendMessage(msg).Wait();
