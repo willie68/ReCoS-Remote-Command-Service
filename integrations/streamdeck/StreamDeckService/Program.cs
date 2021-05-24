@@ -1,13 +1,12 @@
-﻿using System;
-using System.Drawing;
-using System.Linq;
-using System.Threading;
-using System.Windows.Forms;
-using CommandLine;
+﻿using CommandLine;
 using OpenMacroBoard.SDK;
 using ReCoS;
 using StreamDeckSharp;
+using System;
+using System.Drawing;
 using System.Text.Json;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace StreamDeckService
 {

@@ -4,7 +4,7 @@
     <StartArguments>-u http://127.0.0.1:9280 -p streamdeck</StartArguments>
   </PropertyGroup>
   <PropertyGroup>
-    <PublishUrlHistory />
+    <PublishUrlHistory>C:\e-platte\daten\git-sourcen\ReCoS-Remote-Command-Service\integrations\streamdeck\StreamDeckService\publish\</PublishUrlHistory>
     <InstallUrlHistory />
     <SupportUrlHistory />
     <UpdateUrlHistory />
@@ -13,4 +13,13 @@
     <FallbackCulture>de-DE</FallbackCulture>
     <VerifyUploadedFiles>false</VerifyUploadedFiles>
   </PropertyGroup>
+  <PropertyGroup>
+    <EnableSecurityDebugging>false</EnableSecurityDebugging>
+    <_LastSelectedProfileId>C:\e-platte\daten\git-sourcen\ReCoS-Remote-Command-Service\integrations\streamdeck\StreamDeckService\Properties\PublishProfiles\ClickOnceProfile.pubxml</_LastSelectedProfileId>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Update="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
 </Project>
