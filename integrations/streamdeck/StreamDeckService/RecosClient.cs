@@ -30,6 +30,9 @@ namespace ReCoS
         readonly HttpClient client = new();
         readonly ClientWebSocket ws = new();
 
+        public int ImageWidth { get; set; }
+        public int ImageHeight { get; set; }
+
         private string url;
         private string baseUrl;
         private bool isConnected;
@@ -58,6 +61,8 @@ namespace ReCoS
         private void Init()
         {
             this.baseUrl = $"{url}/api/v1/";
+            this.ImageHeight = 100;
+            this.ImageWidth = 100;
             isConnected = false;
         }
 
@@ -151,8 +156,8 @@ namespace ReCoS
                     if ("image/svg+xml".Equals(contentType))
                     {
                         Svg.SvgDocument svgImg = Svg.SvgDocument.Open<Svg.SvgDocument>(stream);
-                        svgImg.Width = 72;
-                        svgImg.Height = 72;
+                        svgImg.Width = ImageWidth;
+                        svgImg.Height = ImageHeight;
 
                         return svgImg.Draw();
                     }
@@ -169,7 +174,7 @@ namespace ReCoS
         {
             if (data.StartsWith("/"))
             {
-                return url + data + "?width=72&height=72";
+                return url + data + $"?width={ImageWidth}&height={ImageHeight}";
             }
             if (data.StartsWith("data:"))
             {

@@ -4,7 +4,9 @@ using ReCoS;
 using StreamDeckSharp;
 using System;
 using System.Drawing;
+using System.Text.Json;
 using System.Threading;
+
 
 namespace TestStreamDeck
 {
@@ -34,6 +36,7 @@ namespace TestStreamDeck
         private static RecosClient client;
         private static Profile activeProfile;
         private static Button[] buttons;
+        private static readonly Mutex Btnmut = new();
         private static Page activePage;
         private static Options flags;
 
@@ -107,6 +110,8 @@ namespace TestStreamDeck
             if (client == null)
             {
                 client = new RecosClient(flags.ReCoSURL);
+                client.ImageWidth = 70;
+                client.ImageHeight = 70;
             }
             if (!client.IsConnected())
             {
@@ -141,24 +146,42 @@ namespace TestStreamDeck
             //            Console.WriteLine(JsonSerializer.Serialize(activeProfile));
             deck.SetBrightness(100);
 
-            activePage = activeProfile.Pages[0];
-            var kID = 0;
-            buttons = new Button[activePage.Columns * activePage.Rows];
-            foreach (string cellActionName in activePage.Cells)
-            {
-                ReCoS.Action action = GetAction(cellActionName);
-                if (action != null)
-                {
-                    buttons[kID] = new Button(action);
-                    var bmp = GenerateKeyBitmap(action, null, null, null);
-                    deck.SetKeyBitmap(kID, bmp);
-                }
-                kID++;
-            }
             deck.KeyStateChanged += Deck_KeyPressed;
 
             client.SetProfile(activeProfile.Name);
             client.MessageReceived += MessageReceived;
+
+            activePage = activeProfile.Pages[0];
+            SwitchPage(activePage.Name);
+        }
+
+        private static void SwitchPage(string pagename)
+        {
+            activePage = GetPage(pagename);
+            if (activePage == null)
+            {
+                activePage = activeProfile.Pages[0];
+            }
+            deck.ClearKeys();
+
+            var kID = 0;
+            if (Btnmut.WaitOne(1000))
+            {
+                buttons = new Button[activePage.Columns * activePage.Rows];
+                foreach (string cellActionName in activePage.Cells)
+                {
+                    ReCoS.Action action = GetAction(cellActionName);
+                    if (action != null)
+                    {
+                        buttons[kID] = new Button(action);
+                        var bmp = GenerateKeyBitmap(action, null, null, null);
+                        deck.SetKeyBitmap(kID, bmp);
+                    }
+                    kID++;
+                }
+                Btnmut.ReleaseMutex();
+            }
+
         }
 
         private static void MessageReceived(object sender, MessageReceived e)
@@ -169,35 +192,63 @@ namespace TestStreamDeck
                 if (Array.IndexOf(activePage.Cells, e.Message.Action) >= 0)
                 {
                     // this message is for the actual page
-                    //                    var jsonStr = JsonSerializer.Serialize(e.Message);
-                    //                    Console.WriteLine($"Message received: \r\n{jsonStr}");
-
                     // getting the button to display
                     int kID = 0;
-                    var found = false;
-                    foreach (ReCoS.Button Button in buttons)
+                    Button button = null;
+                    if (Btnmut.WaitOne(1000))
                     {
-                        if (Button != null)
+                        foreach (ReCoS.Button Button in buttons)
                         {
-                            if (Button.Action.Name.Equals(e.Message.Action))
+                            if (Button != null)
                             {
-                                found = true;
-                                break;
+                                if (Button.Action.Name.Equals(e.Message.Action))
+                                {
+                                    button = Button;
+                                    break;
+                                }
                             }
+                            kID++;
                         }
-                        kID++;
+                        Btnmut.ReleaseMutex();
                     }
-
-                    if (found)
+                    if (button != null)
                     {
-
                         // generating the bitmap
-                        var bmp = GenerateKeyBitmap(buttons[kID].Action, e.Message.Title, e.Message.Text, e.Message.ImageURL);
+                        var bmp = GenerateKeyBitmap(button.Action, e.Message.Title, e.Message.Text, e.Message.ImageURL);
                         // sending the bitmap to the streamdeck
                         deck.SetKeyBitmap(kID, bmp);
                     }
                 }
+                else
+                {
+                    if (!String.IsNullOrEmpty(e.Message.Page))
+                    {
+                        var jsonStr = JsonSerializer.Serialize(e.Message);
+                        Console.WriteLine($"Message received: \r\n{jsonStr}");
+                        // { "profile":"streamdeck","action":"","page":"clocks","imageurl":"check_mark.svg","title":"","text":"","state":0,"command":""}
+                        var page = GetPage(e.Message.Page);
+                        if (page != null)
+                        {
+                            SwitchPage(page.Name);
+                        }
+                    }
+                }
             }
+        }
+
+        private static Page GetPage(string pageName)
+        {
+            if (!String.IsNullOrEmpty(pageName))
+            {
+                foreach (Page page in activeProfile.Pages)
+                {
+                    if (pageName.Equals(page.Name))
+                    {
+                        return page;
+                    }
+                }
+            }
+            return null;
         }
         static KeyBitmap GenerateKeyBitmap(ReCoS.Action action, string title, string text, string image)
         {
@@ -339,7 +390,12 @@ namespace TestStreamDeck
             //            Console.WriteLine($"key {e.Key} pressed. IsDown: {e.IsDown}");
             if (e.IsDown)
             {
-                var button = buttons[e.Key];
+                Button button = null;
+                if (Btnmut.WaitOne(1000))
+                {
+                    button = buttons[e.Key];
+                    Btnmut.ReleaseMutex();
+                }
                 if (button != null)
                 {
                     if (button.Action != null && (String.Equals(button.Action.Type, "SINGLE") || String.Equals(button.Action.Type, "TOGGLE") || String.Equals(button.Action.Type, "MULTI")))

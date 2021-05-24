@@ -17,8 +17,8 @@ pages:
     - name: clocks
       description: clocks only
       icon: ""
-      columns: 2
-      rows: 2
+      columns: 5
+      rows: 3
       toolbar: hide
       cells:
         - Back
