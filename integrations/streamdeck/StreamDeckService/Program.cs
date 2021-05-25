@@ -1,4 +1,4 @@
-﻿using CommandLine;
+using CommandLine;
 using OpenMacroBoard.SDK;
 using ReCoS;
 using StreamDeckSharp;
@@ -22,7 +22,7 @@ namespace StreamDeckService
         }
 
         /// <summary>
-        /// Der Haupteinstiegspunkt für die Anwendung.
+        ///  The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main(string[] args)
@@ -38,7 +38,7 @@ namespace StreamDeckService
         private static RecosClient client;
         private static Profile activeProfile;
         private static ReCoS.Button[] buttons;
-        private static readonly Mutex Btnmut = new Mutex();
+        private static readonly Mutex Btnmut = new();
         private static Page activePage;
         private static Options flags;
 
@@ -48,6 +48,10 @@ namespace StreamDeckService
 
         static void Connect(Options options)
         {
+            Application.SetHighDpiMode(HighDpiMode.SystemAware);
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+
             IsDeckConnected = false;
             IsReCoSConnected = false;
 
@@ -68,8 +72,6 @@ namespace StreamDeckService
 
             InitApplication();
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
 
             deck.Dispose();
@@ -114,7 +116,7 @@ namespace StreamDeckService
         {
             if (client == null)
             {
-                client = new RecosClient(flags.ReCoSURL);
+                client = new(flags.ReCoSURL);
                 client.ImageWidth = 70;
                 client.ImageHeight = 70;
             }
@@ -377,7 +379,7 @@ namespace StreamDeckService
                 var deck = StreamDeck.OpenDevice();
                 return deck;
             }
-            catch (StreamDeckSharp.Exceptions.StreamDeckNotFoundException e)
+            catch (StreamDeckSharp.Exceptions.StreamDeckNotFoundException)
             {
                 Console.WriteLine("no streamdeck found.");
             }

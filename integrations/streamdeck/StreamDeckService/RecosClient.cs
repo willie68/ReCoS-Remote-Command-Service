@@ -27,13 +27,13 @@ namespace ReCoS
 
         private const string DefaultURL = "http://127.0.0.1:9280";
 
-        readonly HttpClient client = new HttpClient();
-        readonly ClientWebSocket ws = new ClientWebSocket();
+        readonly HttpClient client = new();
+        readonly ClientWebSocket ws = new();
 
         public int ImageWidth { get; set; }
         public int ImageHeight { get; set; }
 
-        private string url;
+        private readonly string url;
         private string baseUrl;
         private bool isConnected;
         private Profile[] Profiles;
@@ -85,8 +85,8 @@ namespace ReCoS
             try
             {
                 GetProfileInfo().Wait();
-                Uri uri = new Uri(url);
-                Uri wsUri = new Uri($"ws://{uri.Host}:{uri.Port}/ws");
+                Uri uri = new(url);
+                Uri wsUri = new($"ws://{uri.Host}:{uri.Port}/ws");
                 Task wsConnect = ws.ConnectAsync(wsUri, CancellationToken.None);
                 wsConnect.Wait();
 
@@ -120,12 +120,12 @@ namespace ReCoS
         public Profile GetProfile(string profileName)
         {
             var streamTask = client.GetStreamAsync($"{baseUrl}show/{profileName}");
-            var profile = JsonSerializer.DeserializeAsync<Profile>(streamTask.Result).Result;
+            Profile profile = JsonSerializer.DeserializeAsync<Profile>(streamTask.Result).Result;
 
             return profile;
         }
 
-        public String[] ProfileNames()
+        public string[] ProfileNames()
         {
             if (!isConnected)
             {
@@ -142,7 +142,7 @@ namespace ReCoS
 
         public Image GetImage(string data)
         {
-            string src = buildImageSource(data);
+            string src = BuildImageSource(data);
 
             var task = client.GetAsync(src, HttpCompletionOption.ResponseHeadersRead);
             using (var response = task.Result)
@@ -150,8 +150,6 @@ namespace ReCoS
                 if (response.IsSuccessStatusCode)
                 {
                     var stream = response.Content.ReadAsStreamAsync().Result;
-                    var trailingHeaders = response.Headers;
-                    IEnumerable<string> headerValues;
                     string contentType = GetHeaderString(response.Content.Headers, "Content-Type");
                     if ("image/svg+xml".Equals(contentType))
                     {
@@ -170,7 +168,7 @@ namespace ReCoS
             return null;
         }
 
-        private string buildImageSource(string data)
+        private string BuildImageSource(string data)
         {
             if (data.StartsWith("/"))
             {
@@ -185,35 +183,36 @@ namespace ReCoS
 
         public void SetProfile(string profileName)
         {
-            Message msg = new Message();
+            Message msg = new();
             msg.Profile = profileName;
             msg.Command = "change";
             SendMessage(msg).Wait();
         }
         internal void SendClick(string profileName, string pageName, string actionName)
         {
-            var message = new Message();
+            Message message = new();
             message.Profile = profileName;
             message.Action = actionName;
             message.Page = pageName;
             message.Command = "click";
 
             var json = JsonSerializer.Serialize(message);
-            StringContent httpContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+            StringContent httpContent = new(json, System.Text.Encoding.UTF8, "application/json");
 
 
             var actionUrl = baseUrl + "action/" + profileName + "/" + actionName;
             var stringTask = client.PostAsync(actionUrl, httpContent);
-            var result = stringTask.Result;
+            stringTask.Wait();
+            //var result = stringTask.Result;
             //Console.WriteLine($"button press result: {result}");
         }
 
-        static UTF8Encoding encoder = new UTF8Encoding();
+        static readonly UTF8Encoding Encoder = new();
 
         public async Task SendMessage(Message msg)
         {
             string jsonStr = JsonSerializer.Serialize(msg);
-            byte[] buffer = encoder.GetBytes(jsonStr);
+            byte[] buffer = Encoder.GetBytes(jsonStr);
             await ws.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
         }
 
@@ -230,7 +229,7 @@ namespace ReCoS
                 else
                 {
 
-                    var str = encoder.GetString(buffer, 0, result.Count).Replace("\0", string.Empty);
+                    var str = Encoder.GetString(buffer, 0, result.Count).Replace("\0", string.Empty);
                     try
                     {
                         var message = JsonSerializer.Deserialize<Message>(str);
@@ -245,13 +244,10 @@ namespace ReCoS
         }
         private static string GetHeaderString(HttpHeaders headers, string name)
         {
-            IEnumerable<string> values;
-
-            if (headers.TryGetValues(name, out values))
+            if (headers.TryGetValues(name, out IEnumerable<string> values))
             {
                 return values.FirstOrDefault();
             }
-
             return null;
         }
     }

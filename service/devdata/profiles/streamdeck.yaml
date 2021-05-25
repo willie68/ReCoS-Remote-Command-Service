@@ -32,7 +32,7 @@ actions:
       icon: chat.svg
       description: Execute notepad and wirte Hello ReCoS to it.
       fontsize: 0
-      fontcolor: "#00ff00"
+      fontcolor: '#00ff00'
       outlined: false
       runone: true
       commands:
@@ -208,7 +208,7 @@ actions:
     - type: SINGLE
       name: Back
       title: ""
-      icon: ""
+      icon: arrow_left.svg
       description: ""
       fontsize: 0
       fontcolor: ""

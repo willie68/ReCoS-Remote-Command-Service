@@ -22,10 +22,7 @@ namespace StreamDeckService
 
         private void Form1_Activated(object sender, EventArgs e)
         {
-            //            this.WindowState = FormWindowState.Minimized;
-            //if the form is minimized  
-            //hide it from the task bar  
-            //and show the system tray icon (represented by the NotifyIcon control)  
+            // this.WindowState = FormWindowState.Minimized;
             if (this.WindowState == FormWindowState.Minimized)
             {
                 Hide();
