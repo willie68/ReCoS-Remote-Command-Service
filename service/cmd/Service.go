@@ -453,6 +453,8 @@ func onExit() {
 		sslsrv.Shutdown(ctx)
 	}
 
+	osdependent.DisposeOSDependend()
+
 	session.SessionCache.Destroy()
 	clog.Logger.Info("finished")
 
