@@ -13,4 +13,5 @@ var IntegInfos = []models.IntegInfo{
 	hardware.OpenHardwareMonitorIntegInfo,
 	lighting.PhilipsHueIntegInfo,
 	smarthome.HomematicIntegInfo,
+	hardware.StreamdeckIntegInfo,
 }

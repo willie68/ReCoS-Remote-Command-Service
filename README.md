@@ -31,12 +31,12 @@ For the normal execution client please use http://localhost:9280/webclient. On o
 
 # ReCoS Client - Web Client Interface
 
-This is the ReCoS web client. After successful installation you can access it with 
+This is the main ReCoS web client for executing the configured commands. After successful installation you can access it with 
 http://localhost:9280/webclient on the same computer.
 
 <img src="documentation/assets/webclient.png" alt="webclient" style="zoom:50%;" />
 
-The client has a small toolbar and a big area, presenting the different actions. But let us start at the very beginning. First, everything is organized in a **profile**. You can have different profiles for different clients, or different scenarios. One client can only present one profile at a time, but you can have different profiles in different browser open. As an example, you can have a special profile for your Phone and another for the Pad and a really big one for the PC. And all can be active at the same time. But to emphasize again, you can of course also operate the same profile on 2 different devices at the same time. When starting the client, the first profile is selected. You can select profiles using the Profile Combobox.
+The client has a small toolbar and a big button area, presenting the different actions. But let us start at the very beginning. First, everything is organized in a **profile**. You can have different profiles for different clients, or different scenarios. One client can only present one profile at a time, but you can have different profiles in different browser open. As an example, you can have a special profile for your Phone and another for the Pad and a really big one for the PC. And all can be active at the same time. But to emphasize again, you can of course also operate the same profile on 2 different devices at the same time. When starting the client, the first profile is selected. You can select profiles using the Profile Combobox.
 
 Each profile has different **pages** for further structuring. When the client starts, the first page is automatically selected. A page then consists of rows and columns. You can set the size in the Admin Client. The more rows and columns you have, the smaller the individual actions become. The page adapts its actions to the possible space. Pages can be changed directly via the toolbar (shown as buttons) or via special actions. Whether a page appears at the top of the bar can be set in the page configuration. If the page has no icon, only the name is displayed.
 
@@ -1117,6 +1117,16 @@ Parameter:
 
 # Installing 3'rd Party products
 
+For other 3'rd party products there is an so called integration for accessing the different parts. Here you can find some remarks on these integration.  
+
+## Elagto Streamdeck (c)
+
+The stream deck integration instrumented an Elgato streamdeck for the ReCoS system. Since only one application can access the hardware, it is necessary that you deactivate and close the original streamdeck application. You can then simply activate the streamdeck integration in the section settings in the admin client.
+
+<img src="documentation/assets/sd_1.png" alt="sd_1" style="zoom: 50%;" /> 
+
+The second parameter is optional. You can add here the profile, the streamdeck will present. But there are defaults for it. For a normal streamdeck (15 Button version, no matter whether revision 1 or 2) the default profile is called `streamdeck`. A profile with the name `streamdeck_mini` is expected for the Streamdeck mini. The `streamdeck_xl` profile is expected for the XL. The following applies to all three, if the profile is not found and no profile is specified, the `default` profile is used. So that the profiles in the surface correspond to the display in the stream deck, you should create the rows and columns accordingly. For the normal stream deck the configuration is 3x5 (rows / cols) for the Mini 2x3 and for the XL 4x8. Other profile configurations also work, but it is possible that not all buttons are displayed on the stream deck or that they remain empty.
+
 ## Installation of OpenHardwareMonitor
 
 For hardware sensor reading ReCoS relies on the OpenHardwareMonitor Software. (https://openhardwaremonitor.org/) To get use of it, simply install the software. After installation, go to  Option/Remote Web Server/Port. 
@@ -1178,25 +1188,28 @@ In the `extconfig:` area, the area for `philipshue` must now be changed. Please 
 
 ```yaml
 extconfig:
-    philipshue:
-        username: IwtURJmST8b44mvZSZ2nl73nZhghVltMvgzlH7UC
-        device: recos#hue_user
-        ipaddress: 192.168.178.81
-        updateperiod: 5
+  philipshue:
+    username: IwtURJmST8b44mvZSZ2nl73nZhghVltMvgzlH7UC
+    device: recos#hue_user
+    ipaddress: 192.168.178.81
+    updateperiod: 5
 ```
 
 ## Homematic
 
 For using the Hometmatic system for commands, you simply have to do 2 Things:
 First add the url of your homematic system in the system config (sceleton is already there) and set the active state to true: 
- homematic:
-        active: **true**
-        updateperiod: 5
-        url: **http://192.168.178.80**
+
+```yaml
+extconfig:
+  homematic:
+    active: true
+    updateperiod: 5
+    url: http://192.168.178.80
+```
+
 Second you have to add the xmlapi addon to your homematic. 
 https://github.com/homematic-community/XML-API
-
-Thats all.
 
 # Thanks
 

@@ -43,3 +43,9 @@ integrations/**/publish/
 swagger/swagger-editor/
 
 3rd party/PSTools/
+
+integrations/streamdeck/StreamDeckService.2.zip
+
+integrations/streamdeck/StreamDeckService.zip
+
+3rd party/PSTools.zip

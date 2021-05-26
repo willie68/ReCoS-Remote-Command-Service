@@ -181,9 +181,9 @@ func main() {
 }
 
 var (
-	mAdmin, mClient, mConfig, mLog, mQuit, mAutostart, mRestart *systray.MenuItem
-	app                                                         *autostart.App
-	ex                                                          string
+	mAdmin, mClient, mConfig, mLog, mQuit, mAutostart, mRestart, mHelp *systray.MenuItem
+	app                                                                *autostart.App
+	ex                                                                 string
 )
 
 func createMenu() {
@@ -206,6 +206,8 @@ func createMenu() {
 	mConfig = systray.AddMenuItem("Edit config", "Edit the service config")
 	mLog = systray.AddMenuItem("Show log", "Showing the logfile")
 	systray.AddSeparator()
+	mHelp = systray.AddMenuItem("Help", "show the help manual")
+	systray.AddSeparator()
 	mRestart = systray.AddMenuItem("Restart", "restart the service")
 	mQuit = systray.AddMenuItem("Quit", "Quit ReCoS")
 	mQuit.SetIcon(icon.Data)
@@ -215,45 +217,77 @@ func processMenu() {
 	for {
 		select {
 		case <-mLog.ClickedCh:
-			url := serviceConfig.Logging.Filename
-			url, err := filepath.Abs(url)
-			if err != nil {
-				clog.Logger.Errorf("Error getting filepath for logfile:%v", err)
-			}
-			open.Run(url)
+			showlog()
 		case <-mConfig.ClickedCh:
-			url := config.File
-			url, err := filepath.Abs(url)
-			if err != nil {
-				clog.Logger.Errorf("Error getting filepath for config file:%v", err)
-			}
-			open.Run(url)
+			showconfig()
 		case <-mAutostart.ClickedCh:
-			if app.IsEnabled() {
-				clog.Logger.Info("App is aready enabled, removing it...")
-				if err := app.Disable(); err != nil {
-					clog.Logger.Errorf("Error disabling app:%v", err)
-				}
-			} else {
-				clog.Logger.Info("Enabling app...")
-				if err := app.Enable(); err != nil {
-					clog.Logger.Errorf("Error enabling app:%v", err)
-				}
-			}
-			if app.IsEnabled() {
-				mAutostart.Check()
-			} else {
-				mAutostart.Uncheck()
-			}
+			setautostart()
 		case <-mClient.ClickedCh:
 			open.Run(fmt.Sprintf("http://localhost:%d/webclient", serviceConfig.Port))
 		case <-mAdmin.ClickedCh:
 			open.Run(fmt.Sprintf("http://localhost:%d/webadmin", serviceConfig.Port))
+		case <-mHelp.ClickedCh:
+			showhelp()
 		case <-mRestart.ClickedCh:
 			restart()
 		case <-mQuit.ClickedCh:
 			systray.Quit()
 		}
+	}
+}
+
+func setautostart() {
+	if app.IsEnabled() {
+		clog.Logger.Info("App is aready enabled, removing it...")
+		if err := app.Disable(); err != nil {
+			clog.Logger.Errorf("Error disabling app:%v", err)
+		}
+	} else {
+		clog.Logger.Info("Enabling app...")
+		if err := app.Enable(); err != nil {
+			clog.Logger.Errorf("Error enabling app:%v", err)
+		}
+	}
+	if app.IsEnabled() {
+		mAutostart.Check()
+	} else {
+		mAutostart.Uncheck()
+	}
+}
+
+func showlog() {
+	url := serviceConfig.Logging.Filename
+	url, err := filepath.Abs(url)
+	if err != nil {
+		clog.Logger.Errorf("Error getting filepath for logfile:%v", err)
+	}
+	err = open.Run(url)
+	if err != nil {
+		clog.Logger.Errorf("error: %v\r\n", err)
+	}
+}
+
+func showconfig() {
+	url := config.File
+	url, err := filepath.Abs(url)
+	if err != nil {
+		clog.Logger.Errorf("Error getting filepath for config file:%v", err)
+	}
+	err = open.Run(url)
+	if err != nil {
+		clog.Logger.Errorf("error: %v\r\n", err)
+	}
+}
+
+func showhelp() {
+	url := "README.pdf"
+	url, err := filepath.Abs(url)
+	if err != nil {
+		clog.Logger.Errorf("Error getting filepath for manual:%v", err)
+	}
+	err = open.Run(url)
+	if err != nil {
+		clog.Logger.Errorf("error: %v\r\n", err)
 	}
 }
 
@@ -304,7 +338,7 @@ func onReady() {
 		configFile = configFolder + "/service.yaml"
 
 		if _, err := os.Stat(configFile); os.IsNotExist(err) {
-			config.SaveConfig(configFile, config.DefaulConfig, false)
+			config.SaveConfig(configFile, config.DefaultConfig, false)
 		}
 	}
 
@@ -520,7 +554,7 @@ func initConfig() {
 
 	// init timezone informations
 	if serviceConfig.TimezoneInfo == "" {
-		serviceConfig.TimezoneInfo = config.DefaulConfig.TimezoneInfo
+		serviceConfig.TimezoneInfo = config.DefaultConfig.TimezoneInfo
 	}
 	serviceConfig.TimezoneInfo, err = config.ReplaceConfigdir(serviceConfig.TimezoneInfo)
 	if err != nil {

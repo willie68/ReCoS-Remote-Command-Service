@@ -25,13 +25,14 @@ var StreamdeckIntegInfo = models.IntegInfo{
 			WizardPossible: false,
 			List:           make([]string, 0),
 		},
-		{
-			Name:           "program",
-			Type:           "string",
-			Description:    "path to the StreamDeckService [Optional]",
-			WizardPossible: false,
-			List:           make([]string, 0),
-		},
+		/*		{
+					Name:           "program",
+					Type:           "string",
+					Description:    "path to the StreamDeckService [Optional]",
+					WizardPossible: false,
+					List:           make([]string, 0),
+				},
+		*/
 		{
 			Name:           "profile",
 			Type:           "string",
@@ -106,13 +107,15 @@ func DisposeStreamDeck() {
 }
 
 func (s *StreamDeckInteg) Connect() error {
-	s.cmd = exec.Command(s.Program, s.Parameters...)
+	if s.Active {
+		s.cmd = exec.Command(s.Program, s.Parameters...)
 
-	clog.Logger.Debugf("execute command line: %v", s.cmd.String())
+		clog.Logger.Debugf("hardware:streamdeck:execute command line: %v", s.cmd.String())
 
-	err := s.cmd.Start()
-	if err != nil {
-		clog.Logger.Errorf("error: %v\r\n", err)
+		err := s.cmd.Start()
+		if err != nil {
+			clog.Logger.Errorf("error: %v\r\n", err)
+		}
 	}
 	return nil
 }

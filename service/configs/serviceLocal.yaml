@@ -29,9 +29,9 @@ extconfig:
         updateperiod: 5
         username: IwtURJmST8b44mvZSZ2nl73nZhghVltMvgzlH7UC
     streamdeck:
-        active: true
-        program: ./../integrations/streamdeck/StreamDeckService/bin/Release/net5.0-windows/publish
+        active: false
         profile: streamdeck
+        program: ""
 logging:
     level: debug
     filename: ./devdata/logging.log
