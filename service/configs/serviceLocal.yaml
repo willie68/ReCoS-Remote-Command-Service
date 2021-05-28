@@ -12,14 +12,14 @@ sessions: ./devdata/sessions
 timezonezip: ./devdata/zoneinfo.zip
 extconfig:
     audioplayer:
-        active: true
+        active: false
         samplerate: 48kHz
     homematic:
         active: false
         updateperiod: 5
         url: http://192.168.178.80
     openhardwaremonitor:
-        active: true
+        active: false
         updateperiod: 5
         url: http://127.0.0.1:12999/data.json
     philipshue:

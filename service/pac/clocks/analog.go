@@ -32,6 +32,7 @@ func GenerateAnalog(timeToRender time.Time, width int, height int, showseconds b
 	halfHeight := float64(edgeSize / 2)
 	floatEdgeSize := float64(edgeSize)
 	myTicklength := tickLength * floatEdgeSize / float64(ClockImageHeight)
+	smallClock := edgeSize < 100
 
 	if showDate {
 		font, err := truetype.Parse(goregular.TTF)
@@ -52,8 +53,11 @@ func GenerateAnalog(timeToRender time.Time, width int, height int, showseconds b
 	dc.SetColor(colorTicks)
 	dc.InvertY()
 
-	dc.SetLineWidth(1.0)
-	dc.DrawCircle(halfWidth, halfHeight, halfHeight-1)
+	// Stundenticks
+	dc.SetLineWidth(1)
+	if !smallClock {
+		dc.DrawCircle(halfWidth, halfHeight, halfHeight-1)
+	}
 	dc.MoveTo(halfWidth-1, floatEdgeSize)
 	dc.LineTo(halfWidth-1, floatEdgeSize-myTicklength)
 
@@ -64,9 +68,14 @@ func GenerateAnalog(timeToRender time.Time, width int, height int, showseconds b
 	}
 	dc.Stroke()
 
-	dc.SetLineWidth(4.0)
+	// Viertelstunden ticks
+	if smallClock {
+		dc.SetLineWidth(2.0)
+	} else {
+		dc.SetLineWidth(4.0)
+	}
 
-	dc.MoveTo(halfWidth-1, floatEdgeSize)
+	//	dc.MoveTo(halfWidth-1, floatEdgeSize)
 	dc.LineTo(halfWidth-1, floatEdgeSize-myTicklength)
 	dc.MoveTo(halfWidth-1, 0)
 	dc.LineTo(halfWidth-1, myTicklength)
@@ -77,9 +86,14 @@ func GenerateAnalog(timeToRender time.Time, width int, height int, showseconds b
 	dc.LineTo(floatEdgeSize, halfHeight-1)
 	dc.Stroke()
 
+	// Sekundezeiger
 	if showseconds {
 		dc.SetColor(colorArSecond)
-		dc.SetLineWidth(1.0)
+		if smallClock {
+			dc.SetLineWidth(0.2)
+		} else {
+			dc.SetLineWidth(1.0)
+		}
 		seconds := timeToRender.Second()
 
 		deg := float64(6.0 * seconds)
@@ -89,8 +103,13 @@ func GenerateAnalog(timeToRender time.Time, width int, height int, showseconds b
 		dc.Stroke()
 	}
 
+	// Minutenzeiger
 	dc.SetColor(colorArMinute)
-	dc.SetLineWidth(3.0)
+	if smallClock {
+		dc.SetLineWidth(0.8)
+	} else {
+		dc.SetLineWidth(3.0)
+	}
 	minute := timeToRender.Minute()
 
 	deg := float64(6.0 * minute)
@@ -99,8 +118,13 @@ func GenerateAnalog(timeToRender time.Time, width int, height int, showseconds b
 
 	dc.Stroke()
 
+	// StundenZeiger
 	dc.SetColor(colorArHour)
-	dc.SetLineWidth(6.0)
+	if smallClock {
+		dc.SetLineWidth(3.0)
+	} else {
+		dc.SetLineWidth(6.0)
+	}
 	hour := timeToRender.Hour()
 
 	deg = float64(30.0*hour + (minute / 2))
@@ -114,6 +138,7 @@ func GenerateAnalog(timeToRender time.Time, width int, height int, showseconds b
 
 	// The Buffer satisfies the Writer interface so we can use it with Encode
 	// In previous example we encoded to a file, this time to a temp buffer
+	//png.Encode(&buff, myImage)
 	bmp.Encode(&buff, myImage)
 	return buff.Bytes()
 }
