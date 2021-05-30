@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "TestStreamDeck": {
-      "commandName": "Project",
-      "commandLineArgs": "--url \"http://127.0.0.1:9280\" -p muck"
-    }
-  }
-}

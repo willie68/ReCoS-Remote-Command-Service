@@ -1,4 +1,4 @@
-﻿using CommandLine;
+using CommandLine;
 using OpenMacroBoard.SDK;
 using ReCoS;
 using StreamDeckSharp;
@@ -6,10 +6,11 @@ using System;
 using System.Drawing;
 using System.Text.Json;
 using System.Threading;
+using System.Windows.Forms;
 
-namespace TestStreamDeck
+namespace StreamDeckService
 {
-    class Program
+    static class Program
     {
         public class Options
         {
@@ -20,12 +21,14 @@ namespace TestStreamDeck
             public string Profile { get; set; }
         }
 
-
+        /// <summary>
+        ///  The main entry point for the application.
+        /// </summary>
+        [STAThread]
         static void Main(string[] args)
         {
             Parser.Default.ParseArguments<Options>(args)
-                   .WithParsed<Options>(o => Connect(o));
-            //This example is designed for the 5x3 (original) Stream Deck.
+                 .WithParsed<Options>(o => Connect(o));
         }
 
         private const string DEFAULT_PROFILE_NAME = "default";
@@ -34,7 +37,8 @@ namespace TestStreamDeck
         private static IStreamDeckBoard deck;
         private static RecosClient client;
         private static Profile activeProfile;
-        private static Button[] buttons;
+        private static ReCoS.Button[] buttons;
+        private static readonly Mutex Btnmut = new();
         private static Page activePage;
         private static Options flags;
 
@@ -44,6 +48,10 @@ namespace TestStreamDeck
 
         static void Connect(Options options)
         {
+            Application.SetHighDpiMode(HighDpiMode.SystemAware);
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+
             IsDeckConnected = false;
             IsReCoSConnected = false;
 
@@ -54,14 +62,20 @@ namespace TestStreamDeck
             {
                 Connect2StreamDeck();
                 Connect2ReCoS();
+                if (IsReCoSConnected && IsDeckConnected)
+                {
+                    break;
+                }
                 Thread.Yield();
                 Thread.Sleep(1000);
             }
 
             InitApplication();
 
-            Console.ReadKey();
+            Application.Run(new Form1());
+
             deck.Dispose();
+            client.Dispose();
             /*            else
                         {
                             Console.WriteLine("no streamdecks found");
@@ -102,7 +116,9 @@ namespace TestStreamDeck
         {
             if (client == null)
             {
-                client = new RecosClient(flags.ReCoSURL);
+                client = new(flags.ReCoSURL);
+                client.ImageWidth = 70;
+                client.ImageHeight = 70;
             }
             if (!client.IsConnected())
             {
@@ -134,36 +150,133 @@ namespace TestStreamDeck
 
             activeProfile = ReadProfile(flags.Profile, defaultProfile);
 
-            Console.WriteLine(JsonSerializer.Serialize(activeProfile));
+            //            Console.WriteLine(JsonSerializer.Serialize(activeProfile));
             deck.SetBrightness(100);
 
-            activePage = activeProfile.Pages[0];
-            var kID = 0;
-            buttons = new Button[activePage.Columns * activePage.Rows];
-            foreach (string cellActionName in activePage.Cells)
-            {
-                ReCoS.Action action = GetAction(cellActionName);
-                if (action != null)
-                {
-                    buttons[kID] = new Button(action);
-                    var bmp = GenerateKeyBitmap(action);
-                    deck.SetKeyBitmap(kID, bmp);
-                }
-                kID++;
-            }
             deck.KeyStateChanged += Deck_KeyPressed;
 
+            client.SetProfile(activeProfile.Name);
+            client.MessageReceived += MessageReceived;
+
+            activePage = activeProfile.Pages[0];
+            SwitchPage(activePage.Name);
         }
-        static KeyBitmap GenerateKeyBitmap(ReCoS.Action action)
+        private static void SwitchPage(string pagename)
+        {
+            activePage = GetPage(pagename);
+            if (activePage == null)
+            {
+                activePage = activeProfile.Pages[0];
+            }
+            deck.ClearKeys();
+
+            var kID = 0;
+            if (Btnmut.WaitOne(1000))
+            {
+                buttons = new ReCoS.Button[activePage.Columns * activePage.Rows];
+                foreach (string cellActionName in activePage.Cells)
+                {
+                    ReCoS.Action action = GetAction(cellActionName);
+                    if (action != null)
+                    {
+                        buttons[kID] = new ReCoS.Button(action);
+                        var bmp = GenerateKeyBitmap(action, null, null, null);
+                        deck.SetKeyBitmap(kID, bmp);
+                    }
+                    kID++;
+                }
+                Btnmut.ReleaseMutex();
+            }
+
+        }
+
+        private static void MessageReceived(object sender, MessageReceived e)
+        {
+            if (activeProfile.Name.Equals(e.Message.Profile))
+            {
+                // the message is for the actual profile
+                if (Array.IndexOf(activePage.Cells, e.Message.Action) >= 0)
+                {
+                    // this message is for the actual page
+                    // getting the button to display
+                    int kID = 0;
+                    ReCoS.Button button = null;
+                    if (Btnmut.WaitOne(1000))
+                    {
+                        foreach (ReCoS.Button Button in buttons)
+                        {
+                            if (Button != null)
+                            {
+                                if (Button.Action.Name.Equals(e.Message.Action))
+                                {
+                                    button = Button;
+                                    break;
+                                }
+                            }
+                            kID++;
+                        }
+                        Btnmut.ReleaseMutex();
+                    }
+                    if (button != null)
+                    {
+                        // generating the bitmap
+                        var bmp = GenerateKeyBitmap(button.Action, e.Message.Title, e.Message.Text, e.Message.ImageURL);
+                        // sending the bitmap to the streamdeck
+                        deck.SetKeyBitmap(kID, bmp);
+                    }
+                }
+                else
+                {
+                    if (!String.IsNullOrEmpty(e.Message.Page))
+                    {
+                        var jsonStr = JsonSerializer.Serialize(e.Message);
+                        Console.WriteLine($"Message received: \r\n{jsonStr}");
+                        // { "profile":"streamdeck","action":"","page":"clocks","imageurl":"check_mark.svg","title":"","text":"","state":0,"command":""}
+                        var page = GetPage(e.Message.Page);
+                        if (page != null)
+                        {
+                            SwitchPage(page.Name);
+                        }
+                    }
+                }
+            }
+        }
+
+        private static Page GetPage(string pageName)
+        {
+            if (!String.IsNullOrEmpty(pageName))
+            {
+                foreach (Page page in activeProfile.Pages)
+                {
+                    if (pageName.Equals(page.Name))
+                    {
+                        return page;
+                    }
+                }
+            }
+            return null;
+        }
+        static KeyBitmap GenerateKeyBitmap(ReCoS.Action action, string title, string text, string image)
         {
             return KeyBitmap.Create.FromGraphics(72, 72, (g) =>
             {
-
-                if (!String.IsNullOrEmpty(action.Icon))
+                Image img = null;
+                if (String.IsNullOrEmpty(image))
                 {
-                    Image img = client.GetImage(action.Icon);
+                    if (!String.IsNullOrEmpty(action.Icon))
+                    {
+                        img = client.GetImage(action.Icon);
+                    }
+                }
+                else
+                {
+                    img = client.GetImage(image);
+                }
+                if (img != null)
+                {
                     g.DrawImage(img, new Point(0, 0));
                 }
+
 
                 var b = Brushes.White;
                 if (!String.IsNullOrEmpty(action.Fontcolor))
@@ -176,16 +289,33 @@ namespace TestStreamDeck
                 {
                     fontsize = action.Fontsize;
                 }
+                var myTitle = action.Title;
+                if (!String.IsNullOrEmpty(title))
+                {
+                    myTitle = title;
+                }
                 var fb = new Font("Arial", fontsize, FontStyle.Bold);
-                var size = g.MeasureString(action.Title, fb);
+                var size = g.MeasureString(myTitle, fb);
                 var xPos = 0;
                 if (size.Width < 72)
                 {
                     xPos = (72 - Convert.ToInt32(size.Width)) / 2;
                 }
                 var origin = new PointF(xPos, 0);
-                g.DrawString(action.Title, fb, b, origin);
+                g.DrawString(myTitle, fb, b, origin);
 
+                if (!String.IsNullOrEmpty(text))
+                {
+                    fb = new Font("Arial", fontsize);
+                    size = g.MeasureString(text, fb);
+                    xPos = 0;
+                    if (size.Width < 72)
+                    {
+                        xPos = (72 - Convert.ToInt32(size.Width)) / 2;
+                    }
+                    origin = new PointF(xPos, 36 - fontsize);
+                    g.DrawString(text, fb, b, origin);
+                }
             });
         }
 
@@ -249,24 +379,29 @@ namespace TestStreamDeck
                 var deck = StreamDeck.OpenDevice();
                 return deck;
             }
-            catch (StreamDeckSharp.Exceptions.StreamDeckNotFoundException e)
+            catch (StreamDeckSharp.Exceptions.StreamDeckNotFoundException)
             {
                 Console.WriteLine("no streamdeck found.");
             }
             return null;
         }
 
-        private static void Deck_KeyPressed(object sender, KeyEventArgs e)
+        private static void Deck_KeyPressed(object sender, OpenMacroBoard.SDK.KeyEventArgs e)
         {
             if (!(sender is IMacroBoard d))
             {
                 return;
             }
 
-            Console.WriteLine($"key {e.Key} pressed. IsDown: {e.IsDown}");
+            //            Console.WriteLine($"key {e.Key} pressed. IsDown: {e.IsDown}");
             if (e.IsDown)
             {
-                var button = buttons[e.Key];
+                ReCoS.Button button = null;
+                if (Btnmut.WaitOne(1000))
+                {
+                    button = buttons[e.Key];
+                    Btnmut.ReleaseMutex();
+                }
                 if (button != null)
                 {
                     if (button.Action != null && (String.Equals(button.Action.Type, "SINGLE") || String.Equals(button.Action.Type, "TOGGLE") || String.Equals(button.Action.Type, "MULTI")))
@@ -277,5 +412,6 @@ namespace TestStreamDeck
             }
 
         }
+
     }
 }

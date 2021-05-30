@@ -43,7 +43,7 @@ type LoggingConfig struct {
 	Filename string `yaml:"filename"`
 }
 
-var DefaulConfig = Config{
+var DefaultConfig = Config{
 	Port:       9280,
 	Sslport:    0,
 	ServiceURL: "http://127.0.0.1:9280",
@@ -78,6 +78,11 @@ var DefaulConfig = Config{
 			"active":       false,
 			"url":          "http://192.168.172.10",
 			"updateperiod": 5,
+		},
+		"streamdeck": map[string]interface{}{
+			"active":  false,
+			"program": "",
+			"profile": "",
 		},
 	},
 	Logging: LoggingConfig{

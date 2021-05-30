@@ -13,6 +13,13 @@ call build.cmd
 cd ..
 cd ..
 
+echo build streamdeck integration
+cd integrations\streamdeck\StreamDeckService
+call build.cmd
+cd ..
+cd ..
+cd ..
+
 echo build service binaries
 cd service
 call deployments\build.cmd

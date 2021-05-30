@@ -15,23 +15,17 @@
 **/vendor/*
 
 service/sensorlist.txt
-
 service/cmd/__debug_bin
 
 **/node_modules/**
 
 3rd party/openhardwaremonitor-v0.9.6/OpenHardwareMonitor/
-
 3rd party/open-cue-service/
-
 webclient/RecosUI/public/assets/
-
 webclient/recosadmin/public/assets/
 
 *.syso
-
 *.bak
-
 service/devdata/sessions/sessions/
 
 *.log
@@ -41,9 +35,17 @@ service/web/webclient/
 
 service/recos-service.zip
 
-integrations/streamdeck/StreamDeckService/
-**/.vs/
-**/bin/
-**/obj/
-
+integrations/**/.vs/
+integrations/**/bin/
+integrations/**/obj/
+integrations/**/packages/
+integrations/**/publish/
 swagger/swagger-editor/
+
+3rd party/PSTools/
+
+integrations/streamdeck/StreamDeckService.2.zip
+
+integrations/streamdeck/StreamDeckService.zip
+
+3rd party/PSTools.zip

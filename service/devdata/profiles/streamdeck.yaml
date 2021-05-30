@@ -17,14 +17,15 @@ pages:
     - name: clocks
       description: clocks only
       icon: ""
-      columns: 2
-      rows: 2
+      columns: 5
+      rows: 3
       toolbar: hide
       cells:
         - Back
         - none
         - clock
         - analogclock
+        - clockBerlin
 actions:
     - type: SINGLE
       name: Hello_World
@@ -32,7 +33,7 @@ actions:
       icon: chat.svg
       description: Execute notepad and wirte Hello ReCoS to it.
       fontsize: 0
-      fontcolor: "#00ff00"
+      fontcolor: '#00ff00'
       outlined: false
       runone: true
       commands:
@@ -106,7 +107,7 @@ actions:
       actions: []
     - type: DISPLAY
       name: analogclock
-      title: Analogclock
+      title:
       icon: ""
       description: ""
       fontsize: 0
@@ -123,6 +124,7 @@ actions:
           parameters:
             analog: true
             format: "15:04:05\r\n02 Jan 06"
+            showseconds: true
       actions: []
     - type: SINGLE
       name: screenshot
@@ -187,13 +189,13 @@ actions:
           parameters:
             format: 'Mom: %0m:%0s'
       actions: []
-    - type: SINGLE
+    - type: DISPLAY
       name: clock
       title: text clock
-      icon: clock.svg
+      icon: 
       description: ""
       fontsize: 0
-      fontcolor: ""
+      fontcolor: "#ffffff"
       outlined: false
       runone: false
       commands:
@@ -205,10 +207,30 @@ actions:
           title: clock
           parameters: {}
       actions: []
+    - type: DISPLAY
+      name: clockBerlin
+      title:
+      icon: 
+      description: ""
+      fontsize: 0
+      fontcolor: "#ffffff"
+      outlined: false
+      runone: false
+      commands:
+        - id: CLOCK_9
+          type: CLOCK
+          name: clockBerlin
+          description: ""
+          icon: ""
+          title: clock
+          parameters: 
+            analog: true
+            design: berlin2
+      actions: []
     - type: SINGLE
       name: Back
       title: ""
-      icon: ""
+      icon: arrow_left.svg
       description: ""
       fontsize: 0
       fontcolor: ""

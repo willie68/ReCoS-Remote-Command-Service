@@ -277,6 +277,12 @@ export default {
               if (action) {
                 // console.log("adding action (" + x + "," + y + ") " + index + ":" + action.name );
                 this.cellactions[x][y] = action;
+              } else if (actionName == "none") {
+                this.cellactions[x][y] = {
+                  type: "DISPLAY",
+                  title: "",
+                  name: "none",
+                };
               } else {
                 // console.log("missing action (" + x + "," + y + ") " + index);
                 this.cellactions[x][y] = {

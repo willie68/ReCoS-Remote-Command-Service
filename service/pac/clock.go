@@ -267,6 +267,12 @@ func (c *ClockCommand) GetGraphics(id string, width int, height int) (models.Gra
 			Mimetype: "image/png",
 			Data:     buff,
 		}
+	case "berlin2":
+		buff := clocks.GenerateBerlin2(timeToRender, width, height)
+		model = models.GraphicsInfo{
+			Mimetype: "image/svg+xml",
+			Data:     buff,
+		}
 	case "digital":
 		buff := clocks.GenerateDigital(timeToRender, width, height, c.color, c.showseconds)
 		model = models.GraphicsInfo{

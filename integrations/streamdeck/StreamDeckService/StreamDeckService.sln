@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.30621.155
+VisualStudioVersion = 16.0.31313.79
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestStreamDeck", "TestStreamDeck.csproj", "{C0377045-8246-4A63-B927-1179C6C69E38}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamDeckService", "StreamDeckService.csproj", "{D58D0679-02E6-4F3B-97DC-4E71AD6E8FBA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C0377045-8246-4A63-B927-1179C6C69E38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C0377045-8246-4A63-B927-1179C6C69E38}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C0377045-8246-4A63-B927-1179C6C69E38}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C0377045-8246-4A63-B927-1179C6C69E38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D58D0679-02E6-4F3B-97DC-4E71AD6E8FBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D58D0679-02E6-4F3B-97DC-4E71AD6E8FBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D58D0679-02E6-4F3B-97DC-4E71AD6E8FBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D58D0679-02E6-4F3B-97DC-4E71AD6E8FBA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {7AFD9E38-5C4E-4C54-9257-A60165281CF6}
+		SolutionGuid = {D494CA09-3939-48AA-B09D-4F8A13F9C535}
 	EndGlobalSection
 EndGlobal
