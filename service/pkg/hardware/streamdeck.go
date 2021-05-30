@@ -76,7 +76,7 @@ func InitStreamDeckInteg(extconfig map[string]interface{}, serviceConfig config.
 					profile = ""
 				}
 				program, ok = config["program"].(string)
-				if !ok {
+				if !ok || (program == "") {
 					program = "./streamdeck"
 				}
 				if !strings.HasSuffix(program, "/") {
