@@ -6,3 +6,6 @@ import "wkla.no-ip.biz/remote-desk-service/config"
 func InitOSDependend(config config.Config) error {
 	return nil
 }
+
+func DisposeOSDependend() {
+}

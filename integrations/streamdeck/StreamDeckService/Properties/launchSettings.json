@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "StreamDeckService": {
+      "commandName": "Project",
+      "commandLineArgs": "-u http://127.0.0.1:9280 -p streamdeck"
+    }
+  }
+}
