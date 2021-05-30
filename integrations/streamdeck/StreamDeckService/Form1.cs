@@ -22,7 +22,7 @@ namespace StreamDeckService
 
         private void Form1_Activated(object sender, EventArgs e)
         {
-            // this.WindowState = FormWindowState.Minimized;
+            this.WindowState = FormWindowState.Minimized;
             if (this.WindowState == FormWindowState.Minimized)
             {
                 Hide();

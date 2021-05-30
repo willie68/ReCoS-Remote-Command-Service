@@ -499,7 +499,9 @@ Just a clock in different designs.
 `dateformat`: the format of the date in Golang format syntax, used by different designs, defaults: 02.01
 `analog`: true or false, shows an analog clock
 `timezone`: string with the name of the timezone of the IANA Timezone database (https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
-`design`: the desing of the clock. `analog` is for a analog clock, `digital` showing a nice digital clock, `berlin` is showing the berlin clock (https://en.wikipedia.org/wiki/Mengenlehreuhr). 
+`design`: the design of the clock. `analog` is for a analog clock, `digital` showing a nice digital clock, `berlin` is showing the berlin clock (https://en.wikipedia.org/wiki/Mengenlehreuhr).
+There is another Berlin clock, called `berlin2`, which is created in svg format. It's usually better for smaller resolutions. 
+
 `showseconds`: showing the seconds in the design. 
 `showdate`: showing the date in the design formatted with dateformat. 
 `color`: the color of the segments of the digital clock

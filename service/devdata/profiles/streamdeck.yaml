@@ -225,7 +225,7 @@ actions:
           title: clock
           parameters: 
             analog: true
-            design: berlin
+            design: berlin2
       actions: []
     - type: SINGLE
       name: Back
