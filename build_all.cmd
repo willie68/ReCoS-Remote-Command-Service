@@ -15,7 +15,7 @@ cd ..
 
 echo build streamdeck integration
 cd integrations\streamdeck\StreamDeckService
-call build.cmd
+call build.cmd "1.0.1"
 cd ..
 cd ..
 cd ..
@@ -31,3 +31,5 @@ echo build setup
 cd install
 iscc setup.iss
 cd ..
+
+pause
