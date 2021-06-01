@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Text.Json;
 using System.Threading;
 using System.Windows.Forms;
+using System.Reflection;
 
 namespace StreamDeckService
 {
