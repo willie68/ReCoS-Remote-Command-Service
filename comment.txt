@@ -36,5 +36,14 @@ https://github.com/PaesslerAG/gval
 Homematic
 XML-API
 
-Streamdeck core
-https://github.com/VVEIRD/StreamDeckCore/
+StreamdeckSharp
+https://github.com/OpenMacroBoard/StreamDeckSharp
+
+OBS WebSocket
+https://github.com/Palakis/obs-websocket/releases
+Port 4444; Password: akteon00
+
+OBS WebSocket Client
+https://github.com/christopher-dG/go-obs-websocket (V 4.4)
+https://github.com/muesli/go-obs-websocket (V 4.7) 
+
