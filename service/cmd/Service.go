@@ -28,9 +28,11 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/pkg/osdependent"
 	"wkla.no-ip.biz/remote-desk-service/pkg/session"
 	"wkla.no-ip.biz/remote-desk-service/pkg/smarthome"
+	"wkla.no-ip.biz/remote-desk-service/pkg/video"
 	"wkla.no-ip.biz/remote-desk-service/web"
 
 	"github.com/getlantern/systray"
+	"github.com/go-toast/toast"
 	config "wkla.no-ip.biz/remote-desk-service/config"
 
 	"github.com/go-chi/chi"
@@ -487,6 +489,7 @@ func onExit() {
 		sslsrv.Shutdown(ctx)
 	}
 
+	dispose()
 	osdependent.DisposeOSDependend()
 
 	session.SessionCache.Destroy()
@@ -580,10 +583,17 @@ func initConfig() {
 		clog.Logger.Alertf("error starting lighting worker: %s", err.Error())
 		os.Exit(1)
 	}
+
 	err = smarthome.InitSmarthome(serviceConfig.ExternalConfig)
 	if err != nil {
 		clog.Logger.Alertf("error starting smarthome worker: %s", err.Error())
 		os.Exit(1)
+	}
+
+	err = video.InitOBS(serviceConfig.ExternalConfig)
+	if err != nil {
+		clog.Logger.Alertf("error starting obs worker: %s", err.Error())
+		notifyToast("Error in OBS Integration", fmt.Sprintf("there is an error in the obs integration. Details in the log file.\r\n%s", err.Error()))
 	}
 
 	err = osdependent.InitOSDependend(serviceConfig)
@@ -600,6 +610,22 @@ func initConfig() {
 		os.Exit(1)
 	}
 	session.Init(configDir)
+}
+
+func dispose() {
+	video.DisposeOBS()
+}
+
+func notifyToast(title, message string) {
+	notification := toast.Notification{
+		AppID:   "ReCoS Service",
+		Title:   title,
+		Message: message,
+	}
+	err := notification.Push()
+	if err != nil {
+		clog.Logger.Errorf("error in notification. %v", err)
+	}
 }
 
 func getApikey() string {

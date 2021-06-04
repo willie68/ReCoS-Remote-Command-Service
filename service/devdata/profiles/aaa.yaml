@@ -14,6 +14,15 @@ pages:
         - dice_0
         - hmswitch_0
         - hmdimmer_2
+    - name: Page1
+      description: ""
+      icon: ""
+      columns: 5
+      rows: 3
+      toolbar: ""
+      cells:
+        - obsstartstop_1
+        - obsstartstop_0
 actions:
     - type: SINGLE
       name: hmprograms_0
@@ -105,7 +114,7 @@ actions:
       outlined: false
       runone: true
       commands:
-        - id: HMDIMMER_5
+        - id: HMDIMMER_4
           type: HMDIMMER
           name: hmdimmer_1
           description: new HMDIMMER command created by ActionWizard
@@ -126,7 +135,7 @@ actions:
       outlined: false
       runone: true
       commands:
-        - id: HMDIMMER_6
+        - id: HMDIMMER_5
           type: HMDIMMER
           name: hmdimmer_2
           description: new HMDIMMER command created by ActionWizard
@@ -136,4 +145,23 @@ actions:
             action: down
             name: 'GästeRollade: GästeRollade'
             value: 5
+      actions: []
+    - type: SINGLE
+      name: obsstartstop_0
+      title: OBS Start
+      icon: play_pause.svg
+      description: new OBSSTARTSTOP action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: ""
+          type: OBSSTARTSTOP
+          name: obsstartstop_0
+          description: new OBSSTARTSTOP command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            mode: recording
       actions: []

@@ -20,6 +20,7 @@ require (
 	github.com/go-ole/go-ole v1.2.5
 	github.com/go-ping/ping v0.0.0-20210402232549-1726e5ede5b6
 	github.com/go-playground/validator/v10 v10.4.2
+	github.com/go-toast/toast v0.0.0-20190211030409-01e6764cf0a4 // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
 	github.com/google/uuid v1.2.0
 	github.com/gorilla/websocket v1.4.2
@@ -31,6 +32,8 @@ require (
 	github.com/micmonay/keybd_event v1.1.1
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/moutend/go-wca v0.1.2-0.20190422112502-0fa027b3d89a
+	github.com/muesli/go-obs-websocket v0.0.0-20200216195805-501318ebaadb // indirect
+	github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d // indirect
 	github.com/onsi/gomega v1.10.1 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/skratchdot/open-golang v0.0.0-20200116055534-eef842397966
@@ -52,3 +55,4 @@ require (
 )
 
 replace github.com/amimof/huego v1.2.0 => ../../huego
+replace github.com/muesli/go-obs-websocket v0.0.0-20200216195805-501318ebaadb => ../../../ext-git-sources/go-obs-websocket2

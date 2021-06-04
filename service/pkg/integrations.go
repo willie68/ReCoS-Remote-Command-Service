@@ -6,6 +6,7 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/pkg/lighting"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 	"wkla.no-ip.biz/remote-desk-service/pkg/smarthome"
+	"wkla.no-ip.biz/remote-desk-service/pkg/video"
 )
 
 var IntegInfos = []models.IntegInfo{
@@ -14,4 +15,5 @@ var IntegInfos = []models.IntegInfo{
 	lighting.PhilipsHueIntegInfo,
 	smarthome.HomematicIntegInfo,
 	hardware.StreamdeckIntegInfo,
+	video.OBSIntegInfo,
 }
