@@ -23,6 +23,8 @@ pages:
       cells:
         - obsstartstop_1
         - obsstartstop_0
+        - obsprofile_0
+        - obsscenecollection_0
 actions:
     - type: SINGLE
       name: hmprograms_0
@@ -156,7 +158,7 @@ actions:
       outlined: false
       runone: true
       commands:
-        - id: ""
+        - id: OBSSTARTSTOP_6
           type: OBSSTARTSTOP
           name: obsstartstop_0
           description: new OBSSTARTSTOP command created by ActionWizard
@@ -164,4 +166,42 @@ actions:
           title: ""
           parameters:
             mode: recording
+      actions: []
+    - type: SINGLE
+      name: obsprofile_0
+      title: ""
+      icon: folder.svg
+      description: new OBSPROFILE action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: OBSPROFILE_7
+          type: OBSPROFILE
+          name: obsprofile_0
+          description: new OBSPROFILE command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            profile: GTA
+      actions: []
+    - type: SINGLE
+      name: obsscenecollection_0
+      title: ""
+      icon: backgrounds.svg
+      description: new OBSSCENECOLLECTION action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: ""
+          type: OBSSCENECOLLECTION
+          name: obsscenecollection_0
+          description: new OBSSCENECOLLECTION command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            scenecollection: GTA
       actions: []

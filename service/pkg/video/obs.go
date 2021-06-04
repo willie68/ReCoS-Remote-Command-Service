@@ -50,13 +50,14 @@ var OBSIntegInfo = models.IntegInfo{
 }
 
 type OBS struct {
-	host      string
-	port      int
-	password  string
-	Active    bool
-	Connected bool
-	lastError error
-	c         obsws.Client
+	host          string
+	port          int
+	password      string
+	Active        bool
+	Connected     bool
+	lastError     error
+	c             obsws.Client
+	sessionActive bool
 }
 
 var OBSInstance *OBS
@@ -92,11 +93,12 @@ func InitOBS(extconfig map[string]interface{}) error {
 				}
 			}
 			OBSInstance = &OBS{
-				Active:    active,
-				Connected: false,
-				host:      host,
-				port:      port,
-				password:  password,
+				Active:        active,
+				Connected:     false,
+				host:          host,
+				port:          port,
+				password:      password,
+				sessionActive: false,
 			}
 			err = OBSInstance.Connect()
 		}
@@ -105,27 +107,30 @@ func InitOBS(extconfig map[string]interface{}) error {
 }
 
 func (o *OBS) Connect() error {
-	o.c = obsws.Client{Host: o.host, Port: o.port, Password: o.password}
-	if err := o.c.Connect(); err != nil {
-		clog.Logger.Errorf("error connecting to obs. %v", err)
-		return err
-	}
-
 	obsws.SetReceiveTimeout(time.Second * 2)
-	go func() {
-		profiles := o.GetSceneCollections()
-
-		for _, profile := range profiles {
-			clog.Logger.Info(profile)
-		}
-
-		o.SetProfile("GTA")
-	}()
+	o.c = obsws.Client{Host: o.host, Port: o.port, Password: o.password}
+	o.sessionActive = true
+	go o.doConnect()
 	return nil
 }
 
+func (o *OBS) doConnect() {
+	for o.sessionActive {
+		if !o.c.Connected() {
+			if err := o.c.Connect(); err != nil {
+				clog.Logger.Errorf("error connecting to obs. %v", err)
+				o.lastError = err
+			}
+		}
+		time.Sleep(1 * time.Second)
+	}
+}
+
 func (o *OBS) Dispose() {
-	o.c.Disconnect()
+	o.sessionActive = false
+	if o.c.Connected() {
+		o.c.Disconnect()
+	}
 }
 
 func DisposeOBS() {
@@ -199,40 +204,55 @@ func (o *OBS) SwitchStreaming() bool {
 }
 
 // GetScenes getting a list of scene names
-func (o *OBS) GetSceneCollections() []string {
+func (o *OBS) GetSceneCollections() ([]string, error) {
+	scenes := make([]string, 0)
 	srReq := obsws.NewListSceneCollectionsRequest()
 	srResp, err := srReq.SendReceive(o.c)
 	if err != nil {
 		clog.Logger.Errorf("error in obs. %v", err)
+		return scenes, err
 	}
-	scenes := make([]string, 0)
 	for _, profile := range srResp.SceneCollections {
 		scenes = append(scenes, profile["sc-name"].(string))
 	}
 	clog.Logger.Debugf("get scenes: %v", srResp.Status())
-	return scenes
+	return scenes, nil
+}
+
+func (o *OBS) SetSceneCollection(name string) error {
+	srReq := obsws.NewSetCurrentSceneCollectionRequest(name)
+	srResp, err := srReq.SendReceive(o.c)
+	if err != nil {
+		clog.Logger.Errorf("error in obs. %v", err)
+		return err
+	}
+	clog.Logger.Debugf("set scene collection: %v", srResp.Status())
+	return nil
 }
 
 // GetProfiles getting a list of profiles
-func (o *OBS) GetProfiles() []string {
+func (o *OBS) GetProfiles() ([]string, error) {
+	profiles := make([]string, 0)
 	srReq := obsws.NewListProfilesRequest()
 	srResp, err := srReq.SendReceive(o.c)
 	if err != nil {
 		clog.Logger.Errorf("error in obs. %v", err)
+		return profiles, err
 	}
 	clog.Logger.Debugf("get profiles: %v", srResp.Status())
-	profiles := make([]string, 0)
 	for _, profile := range srResp.Profiles {
 		profiles = append(profiles, profile["profile-name"].(string))
 	}
-	return profiles
+	return profiles, nil
 }
 
-func (o *OBS) SetProfile(name string) {
+func (o *OBS) SetProfile(name string) error {
 	srReq := obsws.NewSetCurrentProfileRequest(name)
 	srResp, err := srReq.SendReceive(o.c)
 	if err != nil {
 		clog.Logger.Errorf("error in obs. %v", err)
+		return err
 	}
 	clog.Logger.Debugf("set profiles: %v", srResp.Status())
+	return nil
 }
