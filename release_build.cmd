@@ -39,4 +39,5 @@ cd install
 iscc setup.iss
 cd ..
 
+echo release ready. please test it.
 pause

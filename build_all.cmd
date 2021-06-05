@@ -38,5 +38,3 @@ echo build setup
 cd install
 iscc setup.iss
 cd ..
-
-pause
