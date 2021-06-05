@@ -21,10 +21,20 @@ pages:
       rows: 3
       toolbar: ""
       cells:
-        - obsstartstop_1
         - obsstartstop_0
         - obsprofile_0
         - obsscenecollection_0
+        - ""
+        - ""
+        - obsscene_0
+        - ""
+        - ""
+        - ""
+        - ""
+        - obsscene_1
+        - obsscene_2
+        - obsscene_3
+        - obsscene_4
 actions:
     - type: SINGLE
       name: hmprograms_0
@@ -196,7 +206,7 @@ actions:
       outlined: false
       runone: true
       commands:
-        - id: ""
+        - id: OBSSCENECOLLECTION_8
           type: OBSSCENECOLLECTION
           name: obsscenecollection_0
           description: new OBSSCENECOLLECTION command created by ActionWizard
@@ -204,4 +214,101 @@ actions:
           title: ""
           parameters:
             scenecollection: GTA
+      actions: []
+    - type: SINGLE
+      name: obsscene_0
+      title: ""
+      icon: scene2.svg
+      description: new OBSSCENE action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: OBSSCENE_9
+          type: OBSSCENE
+          name: obsscene_0
+          description: new OBSSCENE command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            scenecommand: switch
+            scenename: Szene 2
+      actions: []
+    - type: SINGLE
+      name: obsscene_1
+      title: First
+      icon: scene2.svg
+      description: new OBSSCENE action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: ""
+          type: OBSSCENE
+          name: obsscene_1
+          description: new OBSSCENE command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            scenecommand: first
+            scenename: ""
+      actions: []
+    - type: SINGLE
+      name: obsscene_2
+      title: Next
+      icon: scene2.svg
+      description: new OBSSCENE action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: ""
+          type: OBSSCENE
+          name: obsscene_2
+          description: new OBSSCENE command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            scenecommand: next
+      actions: []
+    - type: SINGLE
+      name: obsscene_3
+      title: PRev
+      icon: scene2.svg
+      description: new OBSSCENE action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: ""
+          type: OBSSCENE
+          name: obsscene_3
+          description: new OBSSCENE command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            scenecommand: previous
+      actions: []
+    - type: SINGLE
+      name: obsscene_4
+      title: Last
+      icon: scene2.svg
+      description: new OBSSCENE action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: ""
+          type: OBSSCENE
+          name: obsscene_4
+          description: new OBSSCENE command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            scenecommand: previous
       actions: []

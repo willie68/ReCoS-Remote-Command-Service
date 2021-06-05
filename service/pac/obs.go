@@ -3,6 +3,7 @@ package pac
 
 import (
 	"wkla.no-ip.biz/remote-desk-service/api"
+	"wkla.no-ip.biz/remote-desk-service/internal/utils"
 	"wkla.no-ip.biz/remote-desk-service/pkg/video"
 
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
@@ -70,6 +71,43 @@ var OBSSceneCollectionCommandTypeInfo = models.CommandTypeInfo{
 			Name:           "scenecollection",
 			Type:           "string",
 			Description:    "the scenecollection to switch to",
+			Unit:           "",
+			WizardPossible: true,
+			List:           make([]string, 0),
+		},
+	},
+}
+
+const (
+	SCENECMD_NEXT   = "next"
+	SCENECMD_PREV   = "previous"
+	SCENECMD_FIRST  = "first"
+	SCENECMD_LAST   = "last"
+	SCENECMD_SWITCH = "switch"
+)
+
+// OBSSceneCommandTypeInfo showing hardware sensor data
+var OBSSceneCommandTypeInfo = models.CommandTypeInfo{
+	Category:         "Audio-Video",
+	Type:             "OBSSCENE",
+	Name:             "OBSScene",
+	Description:      "up/down and switch scenes on obs",
+	Icon:             "scene2.svg",
+	WizardPossible:   true,
+	WizardActionType: models.Single,
+	Parameters: []models.ParamInfo{
+		{
+			Name:           "scenecommand",
+			Type:           "string",
+			Description:    "the scene command",
+			Unit:           "",
+			WizardPossible: true,
+			List:           []string{SCENECMD_SWITCH, SCENECMD_FIRST, SCENECMD_NEXT, SCENECMD_PREV, SCENECMD_LAST},
+		},
+		{
+			Name:           "scenename",
+			Type:           "string",
+			Description:    "the scene name to switch to, only used in switch command ",
 			Unit:           "",
 			WizardPossible: true,
 			List:           make([]string, 0),
@@ -249,6 +287,115 @@ func (o *OBSSceneCollectionCommand) Execute(a *Action, requestMessage models.Mes
 	if IsSingleClick(requestMessage) {
 		if video.OBSInstance != nil {
 			err := video.OBSInstance.SetSceneCollection(o.scenecollection)
+			if err != nil {
+				message := models.Message{
+					Profile:  o.action.Profile,
+					Action:   o.action.Name,
+					Text:     err.Error(),
+					State:    0,
+					ImageURL: "close.svg",
+				}
+				api.SendMessage(message)
+			}
+			return true, err
+		}
+	}
+	return true, nil
+}
+
+// OBSSceneCommand
+// This command has the following parameters:
+// profile: the to use
+type OBSSceneCommand struct {
+	Parameters   map[string]interface{}
+	action       *Action
+	commandName  string
+	scenecommand string
+	scenename    string
+}
+
+// EnrichType enrich the type info with the informations from the profile
+func (o *OBSSceneCommand) EnrichType(profile models.Profile) (models.CommandTypeInfo, error) {
+	scenes, err := video.OBSInstance.GetScenes()
+	if err != nil {
+		clog.Logger.Errorf("error in getting scenes: %v", err)
+		return OBSSceneCommandTypeInfo, nil
+	}
+	index := GetIndexOfParameter(OBSSceneCommandTypeInfo.Parameters, "scenename")
+	if index >= 0 {
+		OBSSceneCommandTypeInfo.Parameters[index].List = make([]string, 0)
+		OBSSceneCommandTypeInfo.Parameters[index].List = append(OBSSceneCommandTypeInfo.Parameters[index].List, scenes...)
+	}
+	return OBSSceneCommandTypeInfo, nil
+}
+
+// Init nothing
+func (o *OBSSceneCommand) Init(a *Action, commandName string) (bool, error) {
+	var err error
+	o.action = a
+	o.commandName = commandName
+	o.scenecommand, err = ConvertParameter2String(o.Parameters, "scenecommand", SCENECMD_SWITCH)
+	if err != nil {
+		clog.Logger.Errorf("error in getting scene command: %v", err)
+		return false, err
+	}
+	o.scenename, err = ConvertParameter2String(o.Parameters, "scenename", "")
+	if err != nil {
+		clog.Logger.Errorf("error in getting scene name: %v", err)
+		return false, err
+	}
+	return true, nil
+}
+
+// Stop nothing
+func (o *OBSSceneCommand) Stop(a *Action) (bool, error) {
+	return true, nil
+}
+
+// Execute nothing
+func (o *OBSSceneCommand) Execute(a *Action, requestMessage models.Message) (bool, error) {
+	if IsSingleClick(requestMessage) {
+		if video.OBSInstance != nil {
+			var err error
+			var scenes []string
+			var scene string
+			switch o.scenecommand {
+			case SCENECMD_SWITCH:
+				err = video.OBSInstance.SetScene(o.scenename)
+			case SCENECMD_FIRST:
+				scenes, err = video.OBSInstance.GetScenes()
+				if err == nil {
+					err = video.OBSInstance.SetScene(scenes[0])
+				}
+			case SCENECMD_LAST:
+				scenes, err = video.OBSInstance.GetScenes()
+				if err == nil {
+					err = video.OBSInstance.SetScene(scenes[len(scenes)-1])
+				}
+			case SCENECMD_NEXT:
+				scenes, err = video.OBSInstance.GetScenes()
+				if err == nil {
+					scene, err = video.OBSInstance.GetCurrentScene()
+					if err == nil {
+						index := utils.SliceIndex(len(scenes), func(i int) bool { return scenes[i] == scene })
+						index = (index + 1) % len(scenes)
+						err = video.OBSInstance.SetScene(scenes[index])
+					}
+				}
+			case SCENECMD_PREV:
+				scenes, err = video.OBSInstance.GetScenes()
+				if err == nil {
+					scene, err = video.OBSInstance.GetCurrentScene()
+					if err == nil {
+						index := utils.SliceIndex(len(scenes), func(i int) bool { return scenes[i] == scene })
+						index = (index - 1)
+						if index < 0 {
+							index = len(scenes) - 1
+						}
+						err = video.OBSInstance.SetScene(scenes[index])
+					}
+				}
+			}
 			if err != nil {
 				message := models.Message{
 					Profile:  o.action.Profile,

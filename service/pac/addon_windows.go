@@ -9,6 +9,7 @@ func InitOSCommand() {
 	CommandTypes = append(CommandTypes, OBSStartStopCommandTypeInfo)
 	CommandTypes = append(CommandTypes, OBSProfileCommandTypeInfo)
 	CommandTypes = append(CommandTypes, OBSSceneCollectionCommandTypeInfo)
+	CommandTypes = append(CommandTypes, OBSSceneCommandTypeInfo)
 }
 
 // GetOSCommand return the command worker class responsible for executing the command definition
@@ -43,6 +44,12 @@ func GetOSCommand(command models.Command) CommandExecutor {
 	case OBSSceneCollectionCommandTypeInfo.Type:
 		{
 			cmdExecutor = &OBSSceneCollectionCommand{
+				Parameters: command.Parameters,
+			}
+		}
+	case OBSSceneCommandTypeInfo.Type:
+		{
+			cmdExecutor = &OBSSceneCommand{
 				Parameters: command.Parameters,
 			}
 		}

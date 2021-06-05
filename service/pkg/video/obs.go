@@ -256,3 +256,42 @@ func (o *OBS) SetProfile(name string) error {
 	clog.Logger.Debugf("set profiles: %v", srResp.Status())
 	return nil
 }
+
+// GetScenes getting a list of profiles
+func (o *OBS) GetScenes() ([]string, error) {
+	scenes := make([]string, 0)
+	srReq := obsws.NewGetSceneListRequest()
+	srResp, err := srReq.SendReceive(o.c)
+	if err != nil {
+		clog.Logger.Errorf("error in obs. %v", err)
+		return scenes, err
+	}
+	clog.Logger.Debugf("get scenes: %v", srResp.Status())
+	for _, scene := range srResp.Scenes {
+		scenes = append(scenes, scene["name"].(string))
+	}
+	return scenes, nil
+}
+
+func (o *OBS) SetScene(name string) error {
+	srReq := obsws.NewSetCurrentSceneRequest(name)
+	srResp, err := srReq.SendReceive(o.c)
+	if err != nil {
+		clog.Logger.Errorf("error in obs. %v", err)
+		return err
+	}
+	clog.Logger.Debugf("set scene: %v", srResp.Status())
+	return nil
+}
+
+// GetCurrentScene getting a list of profiles
+func (o *OBS) GetCurrentScene() (string, error) {
+	srReq := obsws.NewGetCurrentSceneRequest()
+	srResp, err := srReq.SendReceive(o.c)
+	if err != nil {
+		clog.Logger.Errorf("error in obs. %v", err)
+		return "", err
+	}
+	clog.Logger.Debugf("get scenes: %v", srResp.Status())
+	return srResp.Name, nil
+}
