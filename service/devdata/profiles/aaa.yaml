@@ -14,6 +14,27 @@ pages:
         - dice_0
         - hmswitch_0
         - hmdimmer_2
+    - name: Page1
+      description: ""
+      icon: ""
+      columns: 5
+      rows: 3
+      toolbar: ""
+      cells:
+        - obsstartstop_0
+        - obsprofile_0
+        - obsscenecollection_0
+        - ""
+        - ""
+        - obsscene_0
+        - ""
+        - ""
+        - ""
+        - ""
+        - obsscene_1
+        - obsscene_2
+        - obsscene_3
+        - obsscene_4
 actions:
     - type: SINGLE
       name: hmprograms_0
@@ -105,7 +126,7 @@ actions:
       outlined: false
       runone: true
       commands:
-        - id: HMDIMMER_5
+        - id: HMDIMMER_4
           type: HMDIMMER
           name: hmdimmer_1
           description: new HMDIMMER command created by ActionWizard
@@ -126,7 +147,7 @@ actions:
       outlined: false
       runone: true
       commands:
-        - id: HMDIMMER_6
+        - id: HMDIMMER_5
           type: HMDIMMER
           name: hmdimmer_2
           description: new HMDIMMER command created by ActionWizard
@@ -136,4 +157,158 @@ actions:
             action: down
             name: 'GästeRollade: GästeRollade'
             value: 5
+      actions: []
+    - type: SINGLE
+      name: obsstartstop_0
+      title: OBS Start
+      icon: play_pause.svg
+      description: new OBSSTARTSTOP action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: OBSSTARTSTOP_6
+          type: OBSSTARTSTOP
+          name: obsstartstop_0
+          description: new OBSSTARTSTOP command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            mode: recording
+      actions: []
+    - type: SINGLE
+      name: obsprofile_0
+      title: ""
+      icon: folder.svg
+      description: new OBSPROFILE action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: OBSPROFILE_7
+          type: OBSPROFILE
+          name: obsprofile_0
+          description: new OBSPROFILE command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            profile: GTA
+      actions: []
+    - type: SINGLE
+      name: obsscenecollection_0
+      title: ""
+      icon: backgrounds.svg
+      description: new OBSSCENECOLLECTION action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: OBSSCENECOLLECTION_8
+          type: OBSSCENECOLLECTION
+          name: obsscenecollection_0
+          description: new OBSSCENECOLLECTION command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            scenecollection: GTA
+      actions: []
+    - type: SINGLE
+      name: obsscene_0
+      title: ""
+      icon: scene2.svg
+      description: new OBSSCENE action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: OBSSCENE_9
+          type: OBSSCENE
+          name: obsscene_0
+          description: new OBSSCENE command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            scenecommand: switch
+            scenename: Szene 2
+      actions: []
+    - type: SINGLE
+      name: obsscene_1
+      title: First
+      icon: scene2.svg
+      description: new OBSSCENE action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: ""
+          type: OBSSCENE
+          name: obsscene_1
+          description: new OBSSCENE command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            scenecommand: first
+            scenename: ""
+      actions: []
+    - type: SINGLE
+      name: obsscene_2
+      title: Next
+      icon: scene2.svg
+      description: new OBSSCENE action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: ""
+          type: OBSSCENE
+          name: obsscene_2
+          description: new OBSSCENE command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            scenecommand: next
+      actions: []
+    - type: SINGLE
+      name: obsscene_3
+      title: PRev
+      icon: scene2.svg
+      description: new OBSSCENE action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: ""
+          type: OBSSCENE
+          name: obsscene_3
+          description: new OBSSCENE command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            scenecommand: previous
+      actions: []
+    - type: SINGLE
+      name: obsscene_4
+      title: Last
+      icon: scene2.svg
+      description: new OBSSCENE action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: ""
+          type: OBSSCENE
+          name: obsscene_4
+          description: new OBSSCENE command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            scenecommand: previous
       actions: []

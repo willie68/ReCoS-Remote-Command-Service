@@ -2,6 +2,12 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"path": "..\\..\\GoVersionSetter"
+		},
+		{
+			"path": "..\\..\\..\\ext-git-sources\\go-obs-websocket2"
 		}
 	]
 }

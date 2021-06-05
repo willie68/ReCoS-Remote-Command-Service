@@ -153,7 +153,7 @@ actions:
       description: cpu usage
       fontsize: 0
       fontcolor: white
-      outlined: false
+      outlined: true
       runone: true
       commands:
         - id: HARDWAREMONITOR_7
@@ -176,7 +176,7 @@ actions:
       icon: timer.svg
       description: simple stop watch
       fontsize: 0
-      fontcolor: black
+      fontcolor: white
       outlined: true
       runone: true
       commands:

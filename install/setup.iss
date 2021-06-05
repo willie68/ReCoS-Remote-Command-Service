@@ -2,7 +2,8 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "ReCoS"
-#define MyAppVersion "0.68.0"
+;version number set by GoVersionSetter.
+#define MyAppVersion "0.0.79"
 #define MyAppPublisher "MCS Media Computer Software"
 #define MyAppURL "https://www.wk-music.de"
 #define MyAppExeName "recos-service.exe"

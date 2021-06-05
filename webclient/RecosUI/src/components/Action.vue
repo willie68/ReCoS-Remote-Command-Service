@@ -125,7 +125,7 @@ export default {
             "Content-Type": "application/json",
           },
         };
-        this.saveImg = "hourglass.png";
+        this.saveImg = "hourglass.svg";
         if (this.actionType != "MULTI") {
           console.log("set timeout");
           if (this.timerID) {
@@ -163,7 +163,7 @@ export default {
           },
         };
         if (this.actionType != "MULTI") {
-          this.saveImg = "hourglass.png";
+          this.saveImg = "hourglass.svg";
           if (this.timerID) {
             clearTimeout(this.timerID);
             this.timerID = null;

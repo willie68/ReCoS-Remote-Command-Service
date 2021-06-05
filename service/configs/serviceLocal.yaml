@@ -18,6 +18,11 @@ extconfig:
         active: false
         updateperiod: 5
         url: http://192.168.178.80
+    obs:
+        active: true
+        host: 127.0.0.1
+        password: "akteon00"
+        port: 4444
     openhardwaremonitor:
         active: false
         updateperiod: 5
@@ -31,7 +36,8 @@ extconfig:
     streamdeck:
         active: false
         profile: streamdeck
-        program: "C:/e-platte/daten/git-sourcen/ReCoS-Remote-Command-Service/integrations/streamdeck/StreamDeckService/bin/Release/net5.0-windows/publish"
+        program: C:/e-platte/daten/git-sourcen/ReCoS-Remote-Command-Service/integrations/streamdeck/StreamDeckService/bin/Release/net5.0-windows/publish
 logging:
     level: debug
     filename: ./devdata/logging.log
+

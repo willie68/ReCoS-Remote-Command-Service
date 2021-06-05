@@ -44,7 +44,7 @@ namespace StreamDeckService
             // 
             this.notifyIcon1.ContextMenuStrip = this.contextMenuStrip1;
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
-            this.notifyIcon1.Text = "notifyIcon1";
+            this.notifyIcon1.Text = "ReCoS Streamdeck Integration";
             this.notifyIcon1.Visible = true;
             // 
             // contextMenuStrip1
@@ -55,25 +55,25 @@ namespace StreamDeckService
             this.cmSeparator1,
             this.cmQuit});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(209, 58);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(182, 54);
             // 
             // cmLabel1
             // 
             this.cmLabel1.Enabled = false;
             this.cmLabel1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.cmLabel1.Name = "cmLabel1";
-            this.cmLabel1.Size = new System.Drawing.Size(208, 24);
+            this.cmLabel1.Size = new System.Drawing.Size(181, 22);
             this.cmLabel1.Text = "ReCoS Streamdeck";
             // 
             // cmSeparator1
             // 
             this.cmSeparator1.Name = "cmSeparator1";
-            this.cmSeparator1.Size = new System.Drawing.Size(205, 6);
+            this.cmSeparator1.Size = new System.Drawing.Size(178, 6);
             // 
             // cmQuit
             // 
             this.cmQuit.Name = "cmQuit";
-            this.cmQuit.Size = new System.Drawing.Size(208, 24);
+            this.cmQuit.Size = new System.Drawing.Size(181, 22);
             this.cmQuit.Text = "Quit";
             this.cmQuit.Click += new System.EventHandler(this.cmQuit_Click);
             // 
@@ -81,19 +81,21 @@ namespace StreamDeckService
             // 
             this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBox1.Location = new System.Drawing.Point(0, 0);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(485, 313);
+            this.textBox1.Size = new System.Drawing.Size(424, 235);
             this.textBox1.TabIndex = 1;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(485, 313);
+            this.ClientSize = new System.Drawing.Size(424, 235);
             this.Controls.Add(this.textBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Activated += new System.EventHandler(this.Form1_Activated);

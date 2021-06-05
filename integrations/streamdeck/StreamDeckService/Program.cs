@@ -4,6 +4,7 @@ using ReCoS;
 using StreamDeckSharp;
 using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Text.Json;
 using System.Threading;
 using System.Windows.Forms;
@@ -278,12 +279,15 @@ namespace StreamDeckService
                 }
 
 
-                var b = Brushes.White;
+                // writing the text parts to the image
+                Bitmap tmpBitmap = new Bitmap(72, 72);
+                Graphics gtext = Graphics.FromImage(tmpBitmap);
+                Color textColor = Color.White;
                 if (!String.IsNullOrEmpty(action.Fontcolor))
                 {
-                    Color p = ColorTranslator.FromHtml(action.Fontcolor);
-                    b = new SolidBrush(p);
+                    textColor = ColorTranslator.FromHtml(action.Fontcolor);
                 }
+                Brush b = new SolidBrush(textColor);
                 var fontsize = 10;
                 if (action.Fontsize > 0)
                 {
@@ -295,27 +299,81 @@ namespace StreamDeckService
                     myTitle = title;
                 }
                 var fb = new Font("Arial", fontsize, FontStyle.Bold);
-                var size = g.MeasureString(myTitle, fb);
+                var size = gtext.MeasureString(myTitle, fb);
                 var xPos = 0;
                 if (size.Width < 72)
                 {
                     xPos = (72 - Convert.ToInt32(size.Width)) / 2;
                 }
                 var origin = new PointF(xPos, 0);
-                g.DrawString(myTitle, fb, b, origin);
+
+                gtext.DrawString(myTitle, fb, b, origin);
+
 
                 if (!String.IsNullOrEmpty(text))
                 {
                     fb = new Font("Arial", fontsize);
-                    size = g.MeasureString(text, fb);
+                    size = gtext.MeasureString(text, fb);
                     xPos = 0;
                     if (size.Width < 72)
                     {
                         xPos = (72 - Convert.ToInt32(size.Width)) / 2;
                     }
                     origin = new PointF(xPos, 36 - fontsize);
-                    g.DrawString(text, fb, b, origin);
+                    gtext.DrawString(text, fb, b, origin);
                 }
+
+                if (action.Outlined)
+                {
+                    Bitmap outlineBitmap = new Bitmap(72, 72);
+                    Color outlinedColor;
+                    if (textColor.GetBrightness() > 0.5)
+                    {
+                        outlinedColor = Color.Black;
+                    }
+                    else
+                    {
+                        outlinedColor = Color.White;
+                    }
+                    //= ColorExtensions.GetContrast(textColor, true);
+                    for (int i = 0; i < tmpBitmap.Width; i++)
+                    {
+                        for (int j = 0; j < tmpBitmap.Height; j++)
+                        {
+                            Color pixel = tmpBitmap.GetPixel(i, j);
+                            if (pixel.A == 0)
+                            {
+                                Color pixel1 = pixel;
+                                if (i < (tmpBitmap.Width - 1))
+                                {
+                                    pixel1 = tmpBitmap.GetPixel(i + 1, j);
+                                }
+                                if (i > 1)
+                                {
+                                    pixel1 = tmpBitmap.GetPixel(i - 1, j);
+                                }
+                                if (j < (tmpBitmap.Height - 1))
+                                {
+                                    pixel1 = tmpBitmap.GetPixel(i, j + 1);
+                                }
+                                if (j > 1)
+                                {
+                                    pixel1 = tmpBitmap.GetPixel(i, j - 1);
+                                }
+                                if (pixel1.A > 0)
+                                {
+                                    outlineBitmap.SetPixel(i, j, outlinedColor);
+                                }
+                            }
+                        }
+                    }
+                    Graphics outlinedText = Graphics.FromImage(outlineBitmap);
+                    outlinedText.DrawImage(tmpBitmap, new Point(0, 0));
+
+                    tmpBitmap = outlineBitmap;
+
+                }
+                g.DrawImage(tmpBitmap, new Point(0, 0));
             });
         }
 
@@ -412,6 +470,29 @@ namespace StreamDeckService
             }
 
         }
-
+        private static bool ColorEqualWOA(Color color1, Color color2, bool transp)
+        {
+            if (transp && (color1.A > 0))
+            {
+                return false;
+            }
+            if (!transp && (color1.A == 0))
+            {
+                return false;
+            }
+            if (color1.R != color2.R)
+            {
+                return false;
+            }
+            if (color1.G != color2.G)
+            {
+                return false;
+            }
+            if (color1.B != color2.B)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }

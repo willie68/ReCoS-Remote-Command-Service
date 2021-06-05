@@ -10,6 +10,8 @@ import (
 	"strings"
 	"sync"
 	"syscall"
+
+	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 
 func parseHexColor(s string) (c color.RGBA, err error) {
@@ -137,4 +139,13 @@ func Deg2Rad(deg float64) float64 {
 
 func Rad2Deg(rad float64) float64 {
 	return rad * (180.0 / math.Pi)
+}
+
+func GetIndexOfParameter(parameters []models.ParamInfo, name string) int {
+	for x, parameter := range parameters {
+		if parameter.Name == name {
+			return x
+		}
+	}
+	return -1
 }

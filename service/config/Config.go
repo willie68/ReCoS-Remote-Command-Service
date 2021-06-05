@@ -84,6 +84,12 @@ var DefaultConfig = Config{
 			"program": "",
 			"profile": "",
 		},
+		"obs": map[string]interface{}{
+			"active":   false,
+			"host":     "127.0.0.1",
+			"port":     4444,
+			"password": "",
+		},
 	},
 	Logging: LoggingConfig{
 		Level:    "INFO",
