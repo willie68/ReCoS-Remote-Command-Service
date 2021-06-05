@@ -6,6 +6,7 @@ On the other side there are two Web applications, build on top of VUE as the mai
 Features:
 
 - Control Audio Volumes and Mic Gain.
+- controlling your obs, profiles, scene collections, scenes and streaming/recording functions
 - Execute Browser, File explorer and other Apps
 - Showing Date and Time with nice faces
 - Counting something, with persistence
@@ -801,6 +802,80 @@ parameters:
   command: start
 ```
 
+##### OBS - Open Broadcaster Software
+
+This is a set of commands to control your obs installation.
+
+###### OBS Start/Stop
+
+Start/Stop recording or streaming
+
+`type`: `OBSSTARTSTOP`
+
+Parameter:
+`mode`: the mode to start/stop, recording or streaming
+
+```yaml
+type: OBSSTARTSTOP
+name: OBSStartStop
+parameters:
+  mode: recording
+```
+
+###### OBS Profile
+
+switching the profile of obs
+
+`type`: `OBSPROFILE`
+
+Parameter:
+`profile`: the name of the profile to switch to
+
+```yaml
+type: OBSPROFILE
+name: OBSProfile
+parameters:
+  profile: GTA
+```
+
+###### OBS Scene Collection
+
+switching the scene collection of obs
+
+`type`: `OBSSCENECOLLECTION`
+
+Parameter:
+`scenecollection`: the name of the scene collection to switch to
+
+```yaml
+type: OBSSCENECOLLECTION
+name: OBSSceneCollection
+parameters:
+  scenecollection: CrewVideo
+```
+
+###### OBS Scene 
+
+switching the scene of obs with different commands.
+
+`type`: `OBSSCENE`
+
+Parameter:
+`scenecommand`: the command to execute, possible commands are:
+
+- `next`: switching to the next scene in the scene list, at the end it will roll over to the first scene
+- `previous`: switching to the previous scene in the scene list, at the end it will roll over to the last scene
+- `first, last`: switching to the first/last scene in the scene list
+- `switch`: switching to a named scene in the scene list
+
+```yaml
+type: OBSSCENE
+name: OBSScene
+parameters:
+  scenecommand: switch
+  scenename: blurredVideo
+```
+
 ##### Page
 
 Switch to another page.
@@ -1212,6 +1287,16 @@ extconfig:
 
 Second you have to add the xmlapi addon to your homematic. 
 https://github.com/homematic-community/XML-API
+
+### OBS - Open Broadcaster Software
+
+With ReCoS you can control some parts of your OBS Software.  This integration supports the OBS Studio. First you have to install the obs-websocket plugin.  At the moment only the version 4.9.0 is supported. (https://github.com/Palakis/obs-websocket/releases/tag/4.9.0) 
+
+To activate the integration simply go to the settings page.
+
+![image-20210605120558644](C:\e-platte\daten\git-sourcen\ReCoS-Remote-Command-Service\documentation\assets\obs_01.png)The host is the pc where the obs is installed. Normally this is the same pc, so 127.0.0.1 should work. The default port is 4444. (If you don't change it in the settings of the plugin) On the password field use the password you setup in the plugin settings (or leave it empty, if no password was been set.)
+
+Thats all for setting up the integration.
 
 # Thanks
 
