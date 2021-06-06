@@ -38,6 +38,7 @@
         <i v-if="!showPwd" class="pi pi-eye-slash" @click="togglePwdView()" />
         <i v-if="showPwd" class="pi pi-eye" @click="togglePwdView()" />
       </span>
+      <Button icon="pi pi-eye" class="p-mr-1" @click="startWebClient" v-tooltip="'Show web client'"/>
       <Button icon="pi pi-bars" class="p-mr-1" @click="toggleHelpMenu" />
       <Menu
         id="overlay_menu"
@@ -288,6 +289,18 @@ export default {
       });
   },
   methods: {
+    startWebClient() {
+      let servicePort = this.$store.state.servicePort;
+      let url =
+        window.location.protocol +
+        "//" +
+        window.location.hostname +
+        ":" +
+        servicePort +
+      "/webclient";
+
+      window.open( url, "_blank").focus();
+    },
     helpHelp() {
       window
         .open(
