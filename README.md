@@ -68,6 +68,10 @@ With the Action Wizard you can quickly and easily create new commands. You start
 
 ![image-20210331152330271](documentation/assets/aw_0.png)
 
+Or on the button assignments dialog:
+
+![image-20210606151436720](C:\e-platte\daten\git-sourcen\ReCoS-Remote-Command-Service\documentation\assets\wz_02.png)
+
 First you will see this preface page:
 
 ![image-20210331150718589](documentation/assets/aw_1.png)

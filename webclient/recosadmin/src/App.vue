@@ -19,7 +19,7 @@
       <Button
         icon="pi pi-flag"
         class="p-mr-1 p-button-warning"
-        @click="actionWizard()"
+        @click='this.emitter.emit("show-wizard", true);'
       />
       <div v-if="profileDirty">*</div>
     </template>
@@ -287,6 +287,11 @@ export default {
       .then((data) => {
         this.credits = data;
       });
+    this.emitter.on("show-wizard", execute => {
+      if (execute)  {
+        this.actionWizard();
+      }
+    });
   },
   methods: {
     startWebClient() {

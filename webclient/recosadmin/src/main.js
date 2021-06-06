@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import { createStore } from 'vuex'
 import App from './App.vue'
+import mitt from 'mitt';
 
 import PrimeVue from 'primevue/config'
 
@@ -73,7 +74,11 @@ const store = createStore({
     }
   })
 
+const emitter = mitt()
+
 const app = createApp(App)
+
+app.config.globalProperties.emitter = emitter;
 
 app.directive('badge', BadgeDirective)
 app.directive('tooltip', Tooltip)

@@ -38,6 +38,7 @@
     v-on:save="assignAction($event)"
     v-on:cancel="this.dialogActionVisible = false"
     v-on:remove="removeAction()"
+    v-on:wizard="wizard()"
     :sourceValue="profile.actions"
     :selectByName="buttonActionSelected"
   ></SelectAction>
@@ -62,6 +63,7 @@ export default {
       cellActions: [{ name: "name" }],
       dialogActionVisible: false,
       buttonActionSelected: "",
+      actionWizardVisible: false,
     };
   },
   methods: {
@@ -91,6 +93,12 @@ export default {
       this.activePage.cells[this.saveIndex] = null;
       this.updateCellActions();
       this.dialogActionVisible = false;
+    },
+    wizard() {
+      //this.activePage.cells[this.saveIndex] = null;
+      this.emitter.emit("show-wizard", true);
+      this.dialogActionVisible = false;
+      this.updateCellActions();
     },
     getAction(index) {
       if (index < this.activePage.cells.length) {

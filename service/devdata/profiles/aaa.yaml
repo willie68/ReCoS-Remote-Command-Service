@@ -27,10 +27,10 @@ pages:
         - ""
         - ""
         - obsscene_0
+        - dice_1
         - ""
         - ""
-        - ""
-        - ""
+        - dice_1
         - obsscene_1
         - obsscene_2
         - obsscene_3
@@ -198,7 +198,7 @@ actions:
       actions: []
     - type: SINGLE
       name: obsscenecollection_0
-      title: ""
+      title: ' '
       icon: backgrounds.svg
       description: new OBSSCENECOLLECTION action created by ActionWizard
       fontsize: 10
@@ -245,7 +245,7 @@ actions:
       outlined: false
       runone: true
       commands:
-        - id: ""
+        - id: OBSSCENE_10
           type: OBSSCENE
           name: obsscene_1
           description: new OBSSCENE command created by ActionWizard
@@ -265,7 +265,7 @@ actions:
       outlined: false
       runone: true
       commands:
-        - id: ""
+        - id: OBSSCENE_11
           type: OBSSCENE
           name: obsscene_2
           description: new OBSSCENE command created by ActionWizard
@@ -284,7 +284,7 @@ actions:
       outlined: false
       runone: true
       commands:
-        - id: ""
+        - id: OBSSCENE_12
           type: OBSSCENE
           name: obsscene_3
           description: new OBSSCENE command created by ActionWizard
@@ -303,7 +303,7 @@ actions:
       outlined: false
       runone: true
       commands:
-        - id: ""
+        - id: OBSSCENE_13
           type: OBSSCENE
           name: obsscene_4
           description: new OBSSCENE command created by ActionWizard
@@ -311,4 +311,24 @@ actions:
           title: ""
           parameters:
             scenecommand: previous
+      actions: []
+    - type: SINGLE
+      name: dice_1
+      title: ' '
+      icon: games_dice.svg
+      description: new DICE action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: ""
+          type: DICE
+          name: dice_1
+          description: new DICE command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            scenecommand: first
+            sides: 6
       actions: []

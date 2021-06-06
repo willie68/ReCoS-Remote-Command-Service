@@ -12,8 +12,14 @@
     />
     <template #footer>
       <Button
+        label="Wizard"
+        icon="pi pi-flag"
+        class="p-button-text"
+        @click="wizard"
+      />
+      <Button
         label="Remove"
-        icon="pi pi-times"
+        icon="pi pi-trash"
         class="p-button-text"
         @click="remove"
       />
@@ -55,6 +61,9 @@ export default {
     };
   },
   methods: {
+    wizard() {
+      this.$emit("wizard");
+    },
     cancel() {
       this.$emit("cancel");
     },
