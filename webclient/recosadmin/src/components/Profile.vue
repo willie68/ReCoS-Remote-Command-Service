@@ -16,11 +16,11 @@
     </div>
     <hr />
     <TabView class="tabview-custom">
-      <TabPanel header="Actions">
-        <Actions :profile="activeProfile"></Actions>
-      </TabPanel>
       <TabPanel header="Pages">
         <Pages :profile="activeProfile"></Pages>
+      </TabPanel>
+      <TabPanel header="Actions">
+        <Actions :profile="activeProfile"></Actions>
       </TabPanel>
     </TabView>
   </div>
