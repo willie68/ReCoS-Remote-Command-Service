@@ -15,11 +15,11 @@ Features:
 - showing and logging pc hardware sensors
 - controlling your smart home: homematic, philips hue
 - using a virtual keyboard
-- controlling your mediaplayer
+- controlling your media player
 - ping time to a server
 - soundboard: playing media files
 - random words: selecting a random word/phrase
-- taking a screenshot and save it to a folder
+- taking a screen shot and save it to a folder
 - stopwatch: measure time
 - Count down timer
 - controlling your desktop windows. activate/move/minimize
@@ -70,7 +70,7 @@ With the Action Wizard you can quickly and easily create new commands. You start
 
 Or on the button assignments dialog:
 
-![image-20210606151436720](C:\e-platte\daten\git-sourcen\ReCoS-Remote-Command-Service\documentation\assets\wz_02.png)
+![image-20210606151436720](./documentation/assets/wz_02.png)
 
 First you will see this preface page:
 
@@ -104,7 +104,7 @@ The service is the main component of the ReCoS. This is the unit of work, doing 
 Here you can directly start the web interface or the admin client. And you can register the service to automatically start on windows start. Next option is to edit the service.yaml file, which contains all configuration for the service itself. Normally you don't need to do here anything, but just in case...
 The last Menu entry is for shutting down the Service. 
 
-## Profileconfiguration
+## Profile configuration
 
 Every profile has it's own configuration file. This file is written in yaml and has the following sections:
 
@@ -382,9 +382,9 @@ An action is the part which defines, what to do if a cell is triggered.
 
 The following parameters are used:
 
-`type`: **SINGLE** is a single shot action. The action is always starting the command list. 
-**DISPLAY** is a display only cell. It will only show Text, Icons, or images, but you can't interact with it.
-**MULTI** is the third option. Here you can define 3 or more stages, and you every stage you can define the status and a command list, which is fired on activating this stage. As you can see, a simple on/off switch is a Multi with 2 Stages.
+`type`: **`SINGLE`** is a single shot action. The action is always starting the command list. 
+**`DISPLAY`** is a display only cell. It will only show Text, Icons, or images, but you can't interact with it.
+**`MULTI`** is the third option. Here you can define 3 or more stages, and you every stage you can define the status and a command list, which is fired on activating this stage. As you can see, a simple on/off switch is a Multi with 2 Stages.
 `name`: s the name of the action
 title: the title of the action used by the UI
 `description`: user defined description of this action
@@ -791,7 +791,7 @@ parameters:
 
 taking control over your media player.
 
-With this command, you can take simple control of your media player. The commands are Start, Stop, Next and Provious. 
+With this command, you can take simple control of your media player. The commands are Start, Stop, Next and Previous. 
 
 `type`: `MEDIAPLAY`
 
@@ -898,7 +898,7 @@ parameters:
 
 ##### Philips Hue Lights and Scenes
 
-2 Commandos for controlling philips hue lights and groups.
+2 Commandos for controlling Philips hue lights and groups.
 
 `type`: `PHUELIGHTS` 
 
@@ -1013,11 +1013,11 @@ parameters:
 
 
 
-##### Screenshot
+##### Screen shot
 
-making a screenshot.
+making a screen shot.
 
-With this command, you can take a screenshot. 
+With this command, you can take a screen shot. 
 
 `type`: `SCREENSHOT`
 
@@ -1080,7 +1080,7 @@ parameters:
 
 Parameter:
 
-`url`: the URL to show in the system browser. On Windows if you choose a normal filesystem folder, it will automatically start the explorer on this path.
+`url`: the URL to show in the system browser. On Windows if you choose a normal file system folder, it will automatically start the explorer on this path.
 
 Example 1
 
@@ -1200,39 +1200,32 @@ Parameter:
 
 For other 3'rd party products there is an so called integration for accessing the different parts. Here you can find some remarks on these integration.  
 
-## Elagto Streamdeck (c)
+## Elagto Stream Deck (c)
 
-The stream deck integration instrumented an Elgato streamdeck for the ReCoS system. Since only one application can access the hardware, it is necessary that you deactivate and close the original streamdeck application. You can then simply activate the streamdeck integration in the section settings in the admin client.
+The stream deck integration instrumented an Elgato stream deck for the ReCoS system. Since only one application can access the hardware, it is necessary that you deactivate and close the original stream deck application. You can then simply activate the stream deck integration in the section settings in the admin client.
 
 <img src="documentation/assets/sd_1.png" alt="sd_1" style="zoom: 50%;" /> 
 
-The second parameter is optional. You can add here the profile, the streamdeck will present. But there are defaults for it. For a normal streamdeck (15 Button version, no matter whether revision 1 or 2) the default profile is called `streamdeck`. A profile with the name `streamdeck_mini` is expected for the Streamdeck mini. The `streamdeck_xl` profile is expected for the XL. The following applies to all three, if the profile is not found and no profile is specified, the `default` profile is used. So that the profiles in the surface correspond to the display in the stream deck, you should create the rows and columns accordingly. For the normal stream deck the configuration is 3x5 (rows / cols) for the Mini 2x3 and for the XL 4x8. Other profile configurations also work, but it is possible that not all buttons are displayed on the stream deck or that they remain empty.
+The second parameter is optional. You can add here the profile, the stream deck will present. But there are defaults for it. For a normal stream deck (15 Button version, no matter whether revision 1 or 2) the default profile is called `streamdeck`. A profile with the name `streamdeck_mini` is expected for the Stream deck mini. The `streamdeck_xl` profile is expected for the XL. The following applies to all three, if the profile is not found and no profile is specified, the `default` profile is used. So that the profiles in the surface correspond to the display in the stream deck, you should create the rows and columns accordingly. For the normal stream deck the configuration is 3x5 (rows / cols) for the Mini 2x3 and for the XL 4x8. Other profile configurations also work, but it is possible that not all buttons are displayed on the stream deck or that they remain empty.
 
 ## Installation of OpenHardwareMonitor
 
-For hardware sensor reading ReCoS relies on the OpenHardwareMonitor Software. (https://openhardwaremonitor.org/) To get use of it, simply install the software. After installation, go to  Option/Remote Web Server/Port. 
+For hardware sensor reading ReCoS uses the OpenHardwareMonitor Software. (https://openhardwaremonitor.org/) To use this, simply install the software. After installation, go to Option/Remote Web Server/Port. 
 
 ![ohm_02](documentation/assets/ohm_02.png)
 
 ![ohm_03](documentation/assets/ohm_03.png)
 
-As Portnumber enter 12999 (which is the default for Combination of ReCoS and OHM)
+As Port number enter 12999 (which is the default for Combination of ReCoS and OHM)
 
-After that simply activate the OHM Webserver via Option/Remote Web Server/Run.
-The OHM should be available after restart of wndows, so please tick the following options on. Now everything of the OHM side is ready. The ReCoS service will now automatically connect to the OHM and get all Sensors. 
+After that simply activate the OHM Web server via Option/Remote Web Server/Run.
+The OHM should be available after restart of windows, so please tick the following options on. Now everything of the OHM side is ready. The ReCoS service will now automatically connect to the OHM and get all Sensors. 
 
 ![ohm_04](documentation/assets/ohm_04.png)
 
-If you have already installed the OHM (maybe for another App) and you can't reconfigure the port option, you can simply change the port for ReCoS in the service.yaml.   Same for the part where you want to get Sensors from another Computer.
+If you have already installed the OHM (maybe for another App) and you can't reconfigure the port option, you can simply change the port for ReCoS in the admin client. Same for the url, when you want to get sensors from another Computer.
 
-Here is the snippet:
-
-```yaml
-extconfig:
-  openhardwaremonitor:
-    url: http://127.0.0.1:12999/data.json
-    updateperiod: 5
-```
+![image-20210607172406040](documentation/assets/ohm_05.png)
 
 ## Installation Philips Hue
 
@@ -1259,38 +1252,22 @@ Then copy the username from the answer:
 
 ![image-20210412162002314](documentation/assets/clip_4.png)
 
-Now you have to change the ReCoS configuration. To do this, please start the configuration file via the context menu.
+Now you have to change the ReCoS configuration. To do this, please start the admin client via the context menu.
 
 ![image-20210416104722050](documentation/assets/philips_hue_config.png)
 
-
-In the `extconfig:` area, the area for `philipshue` must now be changed. Please enter the above key here as the `username` and change the `ipaddress` accordingly.
+![image-20210607171938223](documentation/assets/philips_hue_config_02.png)Please enter the generated user name here as the `username` and change the `ipaddress` accordingly.
 `updateperiod` is the time span in seconds in which ReCoS polls the bridge for changes.
-
-```yaml
-extconfig:
-  philipshue:
-    username: IwtURJmST8b44mvZSZ2nl73nZhghVltMvgzlH7UC
-    device: recos#hue_user
-    ipaddress: 192.168.178.81
-    updateperiod: 5
-```
 
 ## Homematic
 
 For using the Hometmatic system for commands, you simply have to do 2 Things:
-First add the url of your homematic system in the system config (sceleton is already there) and set the active state to true: 
-
-```yaml
-extconfig:
-  homematic:
-    active: true
-    updateperiod: 5
-    url: http://192.168.178.80
-```
-
-Second you have to add the xmlapi addon to your homematic. 
+First you have to add the xmlapi addon to your homematic. 
 https://github.com/homematic-community/XML-API
+
+Second: add the url of your homematic system in the system config (via admin client/settings) and set the active state to true: 
+
+![image-20210607172549951](documentation/assets/hm_01.png)
 
 ### OBS - Open Broadcaster Software
 
@@ -1298,7 +1275,7 @@ With ReCoS you can control some parts of your OBS Software.  This integration su
 
 To activate the integration simply go to the settings page.
 
-![image-20210605120558644](C:\e-platte\daten\git-sourcen\ReCoS-Remote-Command-Service\documentation\assets\obs_01.png)The host is the pc where the obs is installed. Normally this is the same pc, so 127.0.0.1 should work. The default port is 4444. (If you don't change it in the settings of the plugin) On the password field use the password you setup in the plugin settings (or leave it empty, if no password was been set.)
+![image-20210605120558644](\documentation\assets\obs_01.png)The host is the pc where the obs is installed. Normally this is the same pc, so 127.0.0.1 should work. The default port is 4444. (If you don't change it in the settings of the plugin) On the password field use the password you setup in the plugin settings (or leave it empty, if no password was been set.)
 
 Thats all for setting up the integration.
 
