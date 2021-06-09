@@ -315,6 +315,7 @@ func onReady() {
 	}
 
 	createMenu()
+
 	go func() {
 		processMenu()
 	}()
@@ -466,7 +467,6 @@ func onReady() {
 			}
 		}()
 	}
-
 	clog.Logger.Infof("start web client: http://localhost:%d/webclient", serviceConfig.Port)
 	clog.Logger.Infof("start admin client: http://localhost:%d/webadmin", serviceConfig.Port)
 

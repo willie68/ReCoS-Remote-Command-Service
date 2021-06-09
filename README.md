@@ -1,7 +1,8 @@
 # Remote Command Service, ReCoS
 
-Remote Command Service, for executing scripts remotely but secure. This project consists of different components. One is the service, a small golang based microservice, which delivers all the functionality behind the UI. This service is responsible for the execution of the different actions. 
-On the other side there are two Web applications, build on top of VUE as the main UI Framework. One for the client controlling the actions, one for the administration. 
+Remote Command Service is used to run apps, programs and scripts remotely from another device. Just like a macro keyboard, but with visual feedback and more interaction. This project consists of 3 different components. 
+One is the service, a small golang based micro service, which delivers all the functionality behind the UI. This service is responsible for the execution of the different actions. 
+On the other side there are two Web applications, build on top of VUE as the main UI Framework. One is the client controlling the actions, which can be started on the remote control device, one client is for the administration, normally started on the same device as the ReCoS service itself.. 
 
 Features:
 
@@ -13,7 +14,7 @@ Features:
 - showing Days up to an end date
 - rolling a dice (virtually)
 - showing and logging pc hardware sensors
-- controlling your smart home: homematic, philips hue
+- controlling your smart home with product integrations like homematic or philips hue
 - using a virtual keyboard
 - controlling your media player
 - ping time to a server
@@ -31,6 +32,24 @@ Installation is simple. Execute the installer. After installation you have to st
 For the normal execution client please use http://localhost:9280/webclient. On other machines simply change localhost to the ip of the computer where the service is running, like http://192.168.178.34/webclient
 
 # ReCoS Client - Web Client Interface
+
+## Connecting a client
+
+Conneting a client is simple. For strting the client directly on the same maschine as the ReCoS Service you can simply click on the taskicon menu for the WebClient.
+
+![taskbar_1](documentation/assets/taskbar_1.png)
+
+If you want to connect another device,  like your smartphone, you have to connect to the device where the ReCoS Service is running. To simplify this process, start the Webadmin from the menu above.
+
+Then click on the help menu and than on the Menu Client QR Codes.
+
+![image-20210609175927254](documentation/assets/wc_02.png)
+
+Than this dialog will be visible, you can select one of your network interfaces and scan the QR Code for it. After executing this code, you will be redirected to the right web client. If there is a problem, simply use another entry. (Because not every interface is connected to your home network. Some are for internal use only, so you can't see them outside your PC. )
+
+![image-20210609180246724](documentation/assets/wc_03.png)
+
+## The client interface
 
 This is the main ReCoS web client for executing the configured commands. After successful installation you can access it with 
 http://localhost:9280/webclient on the same computer.
