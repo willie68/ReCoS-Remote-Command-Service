@@ -2,12 +2,14 @@ package routes
 
 import (
 	"bytes"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"image"
 	"image/png"
 	"io"
 	"mime"
+	"net"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -18,6 +20,7 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
+	"github.com/skip2/go-qrcode"
 	"github.com/srwiley/oksvg"
 	"github.com/srwiley/rasterx"
 	"gopkg.in/yaml.v3"
@@ -51,6 +54,7 @@ func ConfigRoutes() *chi.Mux {
 	router.Get("/integrations", GetInteg)
 	router.With(handler.AuthCheck()).Post("/integrations/{integname}", PostInteg)
 	router.Get("/credits", GetCredits)
+	router.Get("/networks", GetNetworks)
 	initIconMapper()
 	return router
 }
@@ -388,4 +392,59 @@ func GetCredits(response http.ResponseWriter, request *http.Request) {
 		r := bytes.NewBuffer([]byte(credits))
 		io.Copy(response, r)
 	}
+}
+
+type IpName struct {
+	Name   string
+	IP     string
+	Local  bool
+	URL    string
+	QRCode string
+}
+
+func GetNetworks(response http.ResponseWriter, request *http.Request) {
+	ips := getNetworkList()
+	render.JSON(response, request, ips)
+}
+
+func startQRCode(url string) (string, error) {
+	bytes, err := qrcode.Encode(url, qrcode.Medium, 256)
+	if err != nil {
+		return "", err
+	}
+
+	return fmt.Sprintf("data:image/png;base64,%s", base64.StdEncoding.EncodeToString(bytes)), nil
+}
+
+func getNetworkList() []IpName {
+	ips := make([]IpName, 0)
+	ifaces, _ := net.Interfaces()
+	// handle err
+	for _, i := range ifaces {
+		addrs, _ := i.Addrs()
+		// handle err
+		for _, addr := range addrs {
+			var ip net.IP
+			switch v := addr.(type) {
+			case *net.IPNet:
+				ip = v.IP
+			case *net.IPAddr:
+				ip = v.IP
+			}
+			if strings.Contains(i.Flags.String(), "up") && ip.IsGlobalUnicast() && !ip.IsLoopback() {
+				url := fmt.Sprintf("http://%s:%d/webclient", ip, config.Get().Port)
+				qrcode, _ := startQRCode(url)
+				ipName := IpName{
+					Name:   i.Name,
+					IP:     ip.String(),
+					Local:  ip.IsLoopback(),
+					URL:    url,
+					QRCode: qrcode,
+				}
+				ips = append(ips, ipName)
+			}
+		}
+	}
+
+	return ips
 }

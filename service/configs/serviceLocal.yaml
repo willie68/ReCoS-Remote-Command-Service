@@ -19,9 +19,9 @@ extconfig:
         updateperiod: 5
         url: http://192.168.178.80
     obs:
-        active: true
+        active: false
         host: 127.0.0.1
-        password: "akteon00"
+        password: akteon00
         port: 4444
     openhardwaremonitor:
         active: false
@@ -40,4 +40,3 @@ extconfig:
 logging:
     level: debug
     filename: ./devdata/logging.log
-

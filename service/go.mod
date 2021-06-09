@@ -36,6 +36,7 @@ require (
 	github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d // indirect
 	github.com/onsi/gomega v1.10.1 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible
+	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e // indirect
 	github.com/skratchdot/open-golang v0.0.0-20200116055534-eef842397966
 	github.com/spf13/pflag v1.0.5
 	github.com/sqweek/dialog v0.0.0-20200911184034-8a3d98e8211d
@@ -55,4 +56,5 @@ require (
 )
 
 replace github.com/amimof/huego v1.2.0 => ../../huego
+
 replace github.com/muesli/go-obs-websocket v0.0.0-20200216195805-501318ebaadb => ../../../ext-git-sources/go-obs-websocket2
