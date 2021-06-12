@@ -125,7 +125,7 @@ The last Menu entry is for shutting down the Service.
 
 ## Profile configuration
 
-Every profile has it's own configuration file. This file is written in yaml and has the following sections:
+Every profile has it's own configuration file. The file is usually located in the Profiles folder. This file is written in yaml and has the following sections:
 
 In the root you will find the following parameters
 
@@ -1288,7 +1288,7 @@ Second: add the url of your homematic system in the system config (via admin cli
 
 ![image-20210607172549951](documentation/assets/hm_01.png)
 
-### OBS - Open Broadcaster Software
+## OBS Studio - Open Broadcaster Software
 
 With ReCoS you can control some parts of your OBS Software.  This integration supports the OBS Studio. First you have to install the obs-websocket plugin.  At the moment only the version 4.9.0 is supported. (https://github.com/Palakis/obs-websocket/releases/tag/4.9.0) 
 
@@ -1297,7 +1297,3 @@ To activate the integration simply go to the settings page.
 ![image-20210605120558644](\documentation\assets\obs_01.png)The host is the pc where the obs is installed. Normally this is the same pc, so 127.0.0.1 should work. The default port is 4444. (If you don't change it in the settings of the plugin) On the password field use the password you setup in the plugin settings (or leave it empty, if no password was been set.)
 
 Thats all for setting up the integration.
-
-# Thanks
-
-Thanks goes to iconshock for the great icons set.
