@@ -591,7 +591,7 @@ Parameter:
 
 #### Hardware monitor
 
-![image-20210612180133744](documentation\assets\cpu_load.png)
+![](documentation\assets\cpu_load.png)
 
 This command connects to the openhardware monitor application on windows. With this you can get different sensors of your computer. For using the webserver of the openhardwaremonitor app, you have to activate the open hardware monitor integration in the settings. The url is the url to the app webserver added with data.json. the `updateperiod` is the update time in seconds. 
 
