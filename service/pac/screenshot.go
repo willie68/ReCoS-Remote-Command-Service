@@ -63,23 +63,21 @@ func (s *ScreenshotCommand) Stop(a *Action) (bool, error) {
 
 // Execute a delay in the actual context
 func (s *ScreenshotCommand) Execute(a *Action, requestMessage models.Message) (bool, error) {
-	value, found := s.Parameters["saveto"]
-	if !found {
-		return false, fmt.Errorf("folder is missing")
-	}
-	folder, ok := value.(string)
-	if !ok {
-		return false, fmt.Errorf("saveto is in wrong format. Please use string as format")
+
+	folder, err := ConvertParameter2String(s.Parameters, "saveto", "")
+	if err != nil {
+		clog.Logger.Errorf("screenshot: error in getting saveto folder: %v", err)
+		return false, err
 	}
 
-	display := -1
-	value, found = s.Parameters["display"]
-	if found {
-		valueInt, ok := value.(int)
-		if !ok {
-			return false, fmt.Errorf("saveto is in wrong format. Please use int as format")
-		}
-		display = valueInt
+	if folder == "" {
+		return false, fmt.Errorf("saveto folder should not be empty")
+	}
+
+	display, err := ConvertParameter2Int(s.Parameters, "display", -1)
+	if err != nil {
+		clog.Logger.Errorf("screenshot: error in getting display: %v", err)
+		return false, err
 	}
 	clog.Logger.Infof("folder: %s, display: %d ", folder, display)
 
@@ -94,7 +92,7 @@ func (s *ScreenshotCommand) Execute(a *Action, requestMessage models.Message) (b
 			if err != nil {
 				return false, fmt.Errorf("capturing sceenshot missed.%v", err)
 			}
-			found = true
+			found := true
 			filename := ""
 			for count := 0; found; count++ {
 				filename = fmt.Sprintf("%s/screen_%d_%d.svg", folder, count, i)

@@ -1,8 +1,7 @@
 # Remote Command Service, ReCoS
 
-Remote Command Service is used to run apps, programs and scripts remotely from another device. Just like a macro keyboard, but with visual feedback and more interaction. This project consists of 3 different components. 
-One is the service, a small golang based micro service, which delivers all the functionality behind the UI. This service is responsible for the execution of the different actions. 
-On the other side there are two Web applications, build on top of VUE as the main UI Framework. One is the client controlling the actions, which can be started on the remote control device, one client is for the administration, normally started on the same device as the ReCoS service itself.. 
+Remote Command Service, for executing scripts remotely but secure. This project consists of different components. One is the service, a small golang based microservice, which delivers all the functionality behind the UI. This service is responsible for the execution of the different actions. 
+On the other side there are two Web applications, build on top of VUE as the main UI Framework. One for the client controlling the actions, one for the administration. 
 
 Features:
 
@@ -14,13 +13,13 @@ Features:
 - showing Days up to an end date
 - rolling a dice (virtually)
 - showing and logging pc hardware sensors
-- controlling your smart home with product integrations like homematic or philips hue
+- controlling your smart home: homematic, philips hue
 - using a virtual keyboard
-- controlling your media player
+- controlling your mediaplayer
 - ping time to a server
 - soundboard: playing media files
 - random words: selecting a random word/phrase
-- taking a screen shot and save it to a folder
+- taking a screenshot and save it to a folder
 - stopwatch: measure time
 - Count down timer
 - controlling your desktop windows. activate/move/minimize
@@ -32,24 +31,6 @@ Installation is simple. Execute the installer. After installation you have to st
 For the normal execution client please use http://localhost:9280/webclient. On other machines simply change localhost to the ip of the computer where the service is running, like http://192.168.178.34/webclient
 
 # ReCoS Client - Web Client Interface
-
-## Connecting a client
-
-Conneting a client is simple. For strting the client directly on the same maschine as the ReCoS Service you can simply click on the taskicon menu for the WebClient.
-
-![taskbar_1](documentation/assets/taskbar_1.png)
-
-If you want to connect another device,  like your smartphone, you have to connect to the device where the ReCoS Service is running. To simplify this process, start the Webadmin from the menu above.
-
-Then click on the help menu and than on the Menu Client QR Codes.
-
-![image-20210609175927254](documentation/assets/wc_02.png)
-
-Than this dialog will be visible, you can select one of your network interfaces and scan the QR Code for it. After executing this code, you will be redirected to the right web client. If there is a problem, simply use another entry. (Because not every interface is connected to your home network. Some are for internal use only, so you can't see them outside your PC. )
-
-![image-20210609180246724](documentation/assets/wc_03.png)
-
-## The client interface
 
 This is the main ReCoS web client for executing the configured commands. After successful installation you can access it with 
 http://localhost:9280/webclient on the same computer.
@@ -89,7 +70,7 @@ With the Action Wizard you can quickly and easily create new commands. You start
 
 Or on the button assignments dialog:
 
-![image-20210606151436720](./documentation/assets/wz_02.png)
+![image-20210606151436720](C:\e-platte\daten\git-sourcen\ReCoS-Remote-Command-Service\documentation\assets\wz_02.png)
 
 First you will see this preface page:
 
@@ -123,7 +104,7 @@ The service is the main component of the ReCoS. This is the unit of work, doing 
 Here you can directly start the web interface or the admin client. And you can register the service to automatically start on windows start. Next option is to edit the service.yaml file, which contains all configuration for the service itself. Normally you don't need to do here anything, but just in case...
 The last Menu entry is for shutting down the Service. 
 
-## Profile configuration
+## Profileconfiguration
 
 Every profile has it's own configuration file. The file is usually located in the Profiles folder. This file is written in yaml and has the following sections:
 
@@ -401,9 +382,9 @@ An action is the part which defines, what to do if a cell is triggered.
 
 The following parameters are used:
 
-`type`: **`SINGLE`** is a single shot action. The action is always starting the command list. 
-**`DISPLAY`** is a display only cell. It will only show Text, Icons, or images, but you can't interact with it.
-**`MULTI`** is the third option. Here you can define 3 or more stages, and you every stage you can define the status and a command list, which is fired on activating this stage. As you can see, a simple on/off switch is a Multi with 2 Stages.
+`type`: **SINGLE** is a single shot action. The action is always starting the command list. 
+**DISPLAY** is a display only cell. It will only show Text, Icons, or images, but you can't interact with it.
+**MULTI** is the third option. Here you can define 3 or more stages, and you every stage you can define the status and a command list, which is fired on activating this stage. As you can see, a simple on/off switch is a Multi with 2 Stages.
 `name`: s the name of the action
 title: the title of the action used by the UI
 `description`: user defined description of this action
@@ -458,26 +439,35 @@ commands:
 
 
 
-### Commands
+#### Command
 
-This is the unit of work, which is executed. This are the settings every command will use.
+This is the unit of work, which should be executed
 
 `type`: the type of the command
 `name`: names the command
 `description`: a user readable description
-`icon`: an icon, that is displayed when running this command
-`title`: a text that is displayed when running this command
-The other parameters defers from command to command.
+`icon`: should be the icon that should be displayed when running this command
+`title`: should be the text that should be displayed when running this command
+`parameters`: parameters defers from command to command
 
-#### No Operation
+##### No Operation
 
-Do nothing. (But you can change the text and the icon ;-) )
+Do nothing.
 
 `Type`: `NOOP`
 
 `Parameter`:  none
 
-#### Audiocontrol
+Example
+
+```yaml
+type: DELAY
+name: delay
+icon: accesibility.png 
+title: Do Nothing
+```
+
+##### Audiocontrol
 
 taking control over your audio devices.
 
@@ -489,7 +479,18 @@ Parameter:
 `device`: the device that you would like to control. There are different devices in your system. Which one you can select, can be seen in the admin interface or on startup in the console. There are 2 defaults: `master` for the master output. This is on widows the one that you can control directly with the taskbar icon. And `mic` which is for the default input device. 
 `command`: this is the command you want to fire. `mute`, which toggles the mute state. `volume up` for increase and `volume down` for decreasing the volume of that device.
 
-#### Clock
+```yaml
+type: AUDIOVOLUME
+name: audiovolume_3
+description: new AUDIOVOLUME command created by ActionWizard
+icon: ""
+title: ""
+parameters:
+  command: volume up
+  device: master
+```
+
+##### Clock
 
 <img src="documentation\assets\clock_analog.png" alt="image-20210405121355233" style="zoom:50%;" /><img src="documentation\assets\clock_digital_2.png" alt="image-20210405121453465" style="zoom:50%;" /><img src="documentation\assets\clock_digital_1.png" alt="image-20210405121419437" style="zoom:50%;" /><img src="documentation\assets\clock_berlin.png" alt="image-20210405121311659" style="zoom:50%;" />
 
@@ -512,24 +513,30 @@ There is another Berlin clock, called `berlin2`, which is created in svg format.
 
 Example 1: simple textual clock
 
-Parameter:
-
 ```yaml
-format: "15:04:05 02 Jan 06"
+type: CLOCK
+name: clock
+parameters:
+  format: "15:04:05 02 Jan 06"
 ```
 
 Example 2: showing a nice digital clock with red 7-segment digits 
 
 ```yaml
-format: "02-01"
-design: digital
-showseconds: true
-color: "#ff0000"
+type: CLOCK
+name: clock_1
+description: new CLOCK command created by ActionWizard
+parameters:
+  format: "02-01"
+  analog: true
+  design: digital
+  showseconds: true
+  color: "#ff0000"
 ```
 
-#### Counter
 
-![image-20210612171426789](documentation\assets\counter.png)
+
+##### Counter
 
 just a simple counter.
 
@@ -540,17 +547,25 @@ A simple counter, with persisting value.
 `Parameter`: 
 `persist`: true or false, if true, the counter will persist between service restarts
 `oldschool`: rendering an old school counter with 7-segment digits
-`color`: the color of the segments 
+`color`: the color of the segments
 
-#### Days remain
+Example
 
-![image-20210612173814698](documentation\assets\daysremain.png)
+```yaml
+type: COUNTER
+name: counter_0
+description: count the clicks
+parameters:
+  persist: true 
+```
+
+##### Days remain
 
 show the days remains to a end date.
 
 This will show the days remain until a end date.
 
-`type`: `DAYSREMAIN`
+`Type`: DAYSREMAIN
 
 `Parameter`: 
 
@@ -559,7 +574,22 @@ This will show the days remain until a end date.
 `formatText`: the text message for the response, defaults %d
 `finished`: the message at the end of the days remain, defaults: finished
 
-#### Delay
+Example
+
+```yaml
+type: DAYSREMAIN
+name: daysremain_0
+description: new Days remain command created by ActionWizard
+parameters:
+  date: "2021-11-26"
+  formattitle: "%d"
+  formattext: "bis 53"
+  finnished: "53"
+```
+
+
+
+##### Delay
 
 `type`: `DELAY`
 
@@ -567,9 +597,18 @@ This will show the days remain until a end date.
 
 `time`: time to delay in Seconds
 
-#### Dice
+Example
 
-![](documentation\assets\dice.png)
+```yaml
+type: DELAY
+name: delay
+parameters:
+  time: 2
+```
+
+##### Dice
+
+![image-20210331150258831](documentation/assets/dice.png)
 
 rolling the dice
 A simple dice implementation with nice ui and different values.
@@ -579,7 +618,16 @@ A simple dice implementation with nice ui and different values.
 `Parameter`: 
 `sides`: the number of sides of the dice. For sides <= 9a nice UI is implemented.
 
-#### Execute
+Example
+
+```yaml
+type: DICE
+name: dice_0
+parameters:
+  sides: 6 
+```
+
+##### Execute
 
 `type`: `EXECUTE`
 
@@ -589,25 +637,56 @@ Parameter:
 `args`: list of string arguments to this executable
 `waitOnClose`: waits until the executable is closed or script is finnished.
 
-#### Hardware monitor
+Example
 
-![image-20210612180133744](documentation\assets\cpu_load.png)
+```yaml
+type: EXECUTE
+name: execute
+parameters:
+  command: go.exe 
+  args:
+    - "version"
+  waitOnClose: true
+```
 
-This command connects to the openhardware monitor application on windows. With this you can get different sensors of your computer. For using the webserver of the openhardwaremonitor app, you have to activate the open hardware monitor integration in the settings. The url is the url to the app webserver added with data.json. the `updateperiod` is the update time in seconds. 
+##### Hardware monitor
 
-If you have configured this, the service will evaluate on startup the connection and all possible sensor names. This list of names you will see in the log and in the configuration there is a file sensorlist.txt with all sensors names. The sensor name starts with the category, like CPU, GPU or Memory, followed by the hardware component. After that there is the sensor type like Clocks, Temperatures or Load, followed by the sensor name. 
+This command connects to the openhardwaremonitor application on windows. With this you can get different sensors of your computer. For using the webserver of the openhardwaremonitor app, you have to add another external configuration into the main service configuration. The url is the url to the app webserver added with data.json. the `updateperiod` is the update time in seconds. 
+
+```yaml
+extconfig:
+  openhardwaremonitor:
+	url: http://127.0.0.1:12999/data.json
+	updateperiod: 5
+```
+
+If you have configured this, the service will evaluate on startup the connection and all possible sensor names. This list of names you will see in the log and in the configuration there is a file sensorlist.txt with all sensors names. The sensor name starts with the category, like CPU, GPU or Memory, followed by the hardware component. After that there is the sensor type like Clocks, Temperatures or Load, followed by the sensor name. To use a sensor name manually you have to copy the whole name: like `"CPU/Intel Core i7-6820HQ/Load/CPU Total"`
+
+On the action side you have to configure this:
 
 `type`: `HARDWAREMONITOR`
 
 Parameter:
-`sensor`: the sensor name.
+`sensor`: the sensor name like given above.
 `format`: the format string for the textual representation
 `display`: text, graph,  text shows only the textual representation, graph shows both
 `ymin`: the value for the floor of the graph
 `ymax`: the value for the bottom of the graph
 `color`: color of the graph
 
-#### Homematic
+```yaml
+type: HARDWAREMONITOR
+name: cpu
+parameters:
+  sensor: "CPU/Intel Core i7-6820HQ/Temperature/CPU Package"
+  format: "%0.1f °C"
+  display: text
+  ymin: 30
+  ymax: 80
+  color: "#ff0000"
+```
+
+##### Homematic
 
 For integrating a homematic system to the ReCoS there are 3 different commands.
 
@@ -661,7 +740,7 @@ parameters:
 
 For all commands it is necessary that the names of devices/channels are unique.
 
-#### Keys
+##### Keys
 
 Sending keys to the active application. This command is emulating a keyboard input by sending key strokes of a keyboard to the active application. You can use different keyboard layouts and there are some macros defining special keys.
 
@@ -708,11 +787,11 @@ parameters:
   keystrokes: "akteon00{enter}"
 ```
 
-#### Mediacontrol
+##### Mediacontrol
 
 taking control over your media player.
 
-With this command, you can take simple control of your media player. The commands are Start, Stop, Next and Previous. 
+With this command, you can take simple control of your media player. The commands are Start, Stop, Next and Provious. 
 
 `type`: `MEDIAPLAY`
 
@@ -727,11 +806,11 @@ parameters:
   command: start
 ```
 
-#### OBS - Open Broadcaster Software
+##### OBS - Open Broadcaster Software
 
 This is a set of commands to control your obs installation.
 
-##### OBS Start/Stop
+###### OBS Start/Stop
 
 Start/Stop recording or streaming
 
@@ -747,7 +826,7 @@ parameters:
   mode: recording
 ```
 
-##### OBS Profile
+###### OBS Profile
 
 switching the profile of obs
 
@@ -763,7 +842,7 @@ parameters:
   profile: GTA
 ```
 
-##### OBS Scene Collection
+###### OBS Scene Collection
 
 switching the scene collection of obs
 
@@ -779,7 +858,7 @@ parameters:
   scenecollection: CrewVideo
 ```
 
-##### OBS Scene 
+###### OBS Scene 
 
 switching the scene of obs with different commands.
 
@@ -801,7 +880,7 @@ parameters:
   scenename: blurredVideo
 ```
 
-#### Page
+##### Page
 
 Switch to another page.
 
@@ -817,11 +896,9 @@ parameters:
   page: page2
 ```
 
-#### Philips Hue 
+##### Philips Hue Lights and Scenes
 
-2 Commandos for controlling Philips hue lights and groups.
-
-##### Philips Hue Lights
+2 Commandos for controlling philips hue lights and groups.
 
 `type`: `PHUELIGHTS` 
 
@@ -832,8 +909,6 @@ Parameter:
 `hue`: the hue of the light, this is a color value ranging from 1..65535, 0 for unused
 `colortemp`: the color temperature of the light, this is a value ranging from 2000..6500, 0 for unused
 `color`: the color of the light
-
-##### Philips Hue Scenes
 
 `type`: `PHUESCENES`
 
@@ -864,7 +939,7 @@ parameters:
 
 ATTENTION: As names of the lights, groups, scenes ... are used here to identify the object, please be sure that in the definition of those the names are unique. Otherwise ReCoS maybe control the only one of those.
 
-#### Play audio
+##### Play audio
 
 ![image-20210409114913298](documentation/assets/playaudio.png)
 
@@ -884,7 +959,7 @@ parameters:
 
 ```
 
-#### Ping
+##### Ping
 
 ![image-20210331150154168](documentation/assets/ping.png)
 
@@ -909,7 +984,7 @@ parameters:
   period: 10
 ```
 
-#### Random words
+##### Random words
 
 ![image-20210331164704159](documentation/assets/rndwords.png)
 
@@ -938,11 +1013,11 @@ parameters:
 
 
 
-#### Screen shot
+##### Screenshot
 
-making a screen shot.
+making a screenshot.
 
-With this command, you can take a screen shot. 
+With this command, you can take a screenshot. 
 
 `type`: `SCREENSHOT`
 
@@ -958,7 +1033,7 @@ parameters:
   display: 1
 ```
 
-#### Send message
+##### Send message
 
 `type`: `SENDMESSAGE`
 
@@ -978,7 +1053,7 @@ parameters:
   receiver: client
 ```
 
-#### Show text
+##### Show text
 
 Showtext will show a text on the button, and the icon of this command, if set, will be displayed as the title, too. 
 
@@ -999,13 +1074,13 @@ parameters:
 
 
 
-#### Start Browser
+##### Start Browser
 
 `type`: `BROWSE`
 
 Parameter:
 
-`url`: the URL to show in the system browser. On Windows if you choose a normal file system folder, it will automatically start the explorer on this path.
+`url`: the URL to show in the system browser. On Windows if you choose a normal filesystem folder, it will automatically start the explorer on this path.
 
 Example 1
 
@@ -1029,7 +1104,7 @@ parameters:
 
 
 
-#### Stopwatch
+##### Stopwatch
 
 A simple textual stopwatch.
 
@@ -1062,7 +1137,7 @@ parameters:
 
 
 
-#### Timer
+##### Timer
 
 Starting a timer with a response every second. You can define the format of the timer message and the message on finish.
 
@@ -1085,7 +1160,7 @@ parameters:
   finished: Fertig
 ```
 
-#### WindowCtrl
+##### WindowCtrl
 
 Controlling Application Main Window.
 
@@ -1125,32 +1200,39 @@ Parameter:
 
 For other 3'rd party products there is an so called integration for accessing the different parts. Here you can find some remarks on these integration.  
 
-## Elagto Stream Deck (c)
+## Elagto Streamdeck (c)
 
-The stream deck integration instrumented an Elgato stream deck for the ReCoS system. Since only one application can access the hardware, it is necessary that you deactivate and close the original stream deck application. You can then simply activate the stream deck integration in the section settings in the admin client.
+The stream deck integration instrumented an Elgato streamdeck for the ReCoS system. Since only one application can access the hardware, it is necessary that you deactivate and close the original streamdeck application. You can then simply activate the streamdeck integration in the section settings in the admin client.
 
 <img src="documentation/assets/sd_1.png" alt="sd_1" style="zoom: 50%;" /> 
 
-The second parameter is optional. You can add here the profile, the stream deck will present. But there are defaults for it. For a normal stream deck (15 Button version, no matter whether revision 1 or 2) the default profile is called `streamdeck`. A profile with the name `streamdeck_mini` is expected for the Stream deck mini. The `streamdeck_xl` profile is expected for the XL. The following applies to all three, if the profile is not found and no profile is specified, the `default` profile is used. So that the profiles in the surface correspond to the display in the stream deck, you should create the rows and columns accordingly. For the normal stream deck the configuration is 3x5 (rows / cols) for the Mini 2x3 and for the XL 4x8. Other profile configurations also work, but it is possible that not all buttons are displayed on the stream deck or that they remain empty.
+The second parameter is optional. You can add here the profile, the streamdeck will present. But there are defaults for it. For a normal streamdeck (15 Button version, no matter whether revision 1 or 2) the default profile is called `streamdeck`. A profile with the name `streamdeck_mini` is expected for the Streamdeck mini. The `streamdeck_xl` profile is expected for the XL. The following applies to all three, if the profile is not found and no profile is specified, the `default` profile is used. So that the profiles in the surface correspond to the display in the stream deck, you should create the rows and columns accordingly. For the normal stream deck the configuration is 3x5 (rows / cols) for the Mini 2x3 and for the XL 4x8. Other profile configurations also work, but it is possible that not all buttons are displayed on the stream deck or that they remain empty.
 
 ## Installation of OpenHardwareMonitor
 
-For hardware sensor reading ReCoS uses the OpenHardwareMonitor Software. (https://openhardwaremonitor.org/) To use this, simply install the software. After installation, go to Option/Remote Web Server/Port. 
+For hardware sensor reading ReCoS relies on the OpenHardwareMonitor Software. (https://openhardwaremonitor.org/) To get use of it, simply install the software. After installation, go to  Option/Remote Web Server/Port. 
 
 ![ohm_02](documentation/assets/ohm_02.png)
 
 ![ohm_03](documentation/assets/ohm_03.png)
 
-As Port number enter 12999 (which is the default for Combination of ReCoS and OHM)
+As Portnumber enter 12999 (which is the default for Combination of ReCoS and OHM)
 
-After that simply activate the OHM Web server via Option/Remote Web Server/Run.
-The OHM should be available after restart of windows, so please tick the following options on. Now everything of the OHM side is ready. The ReCoS service will now automatically connect to the OHM and get all Sensors. 
+After that simply activate the OHM Webserver via Option/Remote Web Server/Run.
+The OHM should be available after restart of wndows, so please tick the following options on. Now everything of the OHM side is ready. The ReCoS service will now automatically connect to the OHM and get all Sensors. 
 
 ![ohm_04](documentation/assets/ohm_04.png)
 
-If you have already installed the OHM (maybe for another App) and you can't reconfigure the port option, you can simply change the port for ReCoS in the admin client. Same for the url, when you want to get sensors from another Computer.
+If you have already installed the OHM (maybe for another App) and you can't reconfigure the port option, you can simply change the port for ReCoS in the service.yaml.   Same for the part where you want to get Sensors from another Computer.
 
-![image-20210607172406040](documentation/assets/ohm_05.png)
+Here is the snippet:
+
+```yaml
+extconfig:
+  openhardwaremonitor:
+    url: http://127.0.0.1:12999/data.json
+    updateperiod: 5
+```
 
 ## Installation Philips Hue
 
@@ -1177,22 +1259,38 @@ Then copy the username from the answer:
 
 ![image-20210412162002314](documentation/assets/clip_4.png)
 
-Now you have to change the ReCoS configuration. To do this, please start the admin client via the context menu.
+Now you have to change the ReCoS configuration. To do this, please start the configuration file via the context menu.
 
 ![image-20210416104722050](documentation/assets/philips_hue_config.png)
 
-![image-20210607171938223](documentation/assets/philips_hue_config_02.png)Please enter the generated user name here as the `username` and change the `ipaddress` accordingly.
+
+In the `extconfig:` area, the area for `philipshue` must now be changed. Please enter the above key here as the `username` and change the `ipaddress` accordingly.
 `updateperiod` is the time span in seconds in which ReCoS polls the bridge for changes.
+
+```yaml
+extconfig:
+  philipshue:
+    username: IwtURJmST8b44mvZSZ2nl73nZhghVltMvgzlH7UC
+    device: recos#hue_user
+    ipaddress: 192.168.178.81
+    updateperiod: 5
+```
 
 ## Homematic
 
 For using the Hometmatic system for commands, you simply have to do 2 Things:
-First you have to add the xmlapi addon to your homematic. 
+First add the url of your homematic system in the system config (sceleton is already there) and set the active state to true: 
+
+```yaml
+extconfig:
+  homematic:
+    active: true
+    updateperiod: 5
+    url: http://192.168.178.80
+```
+
+Second you have to add the xmlapi addon to your homematic. 
 https://github.com/homematic-community/XML-API
-
-Second: add the url of your homematic system in the system config (via admin client/settings) and set the active state to true. After a redstart of the ReCoS you can use the homematic commands. 
-
-![image-20210607172549951](documentation/assets/hm_01.png)
 
 ## OBS Studio - Open Broadcaster Software
 
@@ -1200,6 +1298,6 @@ With ReCoS you can control some parts of your OBS Software.  This integration su
 
 To activate the integration simply go to the settings page.
 
-![image-20210605120558644](\documentation\assets\obs_01.png)The host is the pc where the obs is installed. Normally this is the same pc, so 127.0.0.1 should work. The default port is 4444. (If you don't change it in the settings of the plugin) On the password field use the password you setup in the plugin settings (or leave it empty, if no password was been set.)
+![image-20210605120558644](C:\e-platte\daten\git-sourcen\ReCoS-Remote-Command-Service\documentation\assets\obs_01.png)The host is the pc where the obs is installed. Normally this is the same pc, so 127.0.0.1 should work. The default port is 4444. (If you don't change it in the settings of the plugin) On the password field use the password you setup in the plugin settings (or leave it empty, if no password was been set.)
 
 Thats all for setting up the integration.
