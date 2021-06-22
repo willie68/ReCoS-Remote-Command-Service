@@ -78,13 +78,13 @@ func (c *CounterCommand) Init(a *Action, commandName string) (bool, error) {
 	c.a = a
 	c.commandName = commandName
 	c.persist = false
-	value, found := c.Parameters["persist"]
-	if found {
-		var ok bool
-		c.persist, ok = value.(bool)
-		if !ok {
-			return false, fmt.Errorf("persist is in wrong format. Please use boolean as format")
-		}
+
+	var err error
+
+	c.persist, err = ConvertParameter2Bool(c.Parameters, "persist", false)
+	if err != nil {
+		clog.Logger.Errorf("counter: error in getting persistence: %v", err)
+		return false, err
 	}
 
 	if c.persist {
@@ -94,25 +94,16 @@ func (c *CounterCommand) Init(a *Action, commandName string) (bool, error) {
 		}
 	}
 
-	value, found = c.Parameters["oldschool"]
-	if found {
-		var ok bool
-		c.oldschool, ok = value.(bool)
-		if !ok {
-			return false, fmt.Errorf("oldschool is in wrong format. Please use boolean as format")
-		}
+	c.oldschool, err = ConvertParameter2Bool(c.Parameters, "oldschool", false)
+	if err != nil {
+		clog.Logger.Errorf("counter: error in getting oldschool: %v", err)
+		return false, err
 	}
 
-	value, found = c.Parameters["color"]
-	if !found {
-		c.color = colorSegments
-	} else {
-		myColor, err := parseHexColor(value.(string))
-		if err != nil {
-			clog.Logger.Errorf("error in getting sensors: %v", err)
-			return false, err
-		}
-		c.color = myColor
+	c.color, err = ConvertParameter2Color(c.Parameters, "color", colorSegments)
+	if err != nil {
+		clog.Logger.Errorf("counter: error in getting color: %v", err)
+		return false, err
 	}
 
 	return true, nil

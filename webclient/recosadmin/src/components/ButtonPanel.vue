@@ -68,6 +68,13 @@ export default {
   },
   methods: {
     clickButton(index) {
+      console.log("buttonPanel: index:", index)
+      if (!this.activePage.cells) {
+        this.activePage.cells = new Array(0)
+      }
+      if (!this.activePage.cells[index]) {
+        this.activePage.cells[index] = ""
+      }
       console.log("button clicked: ", index, this.activePage.cells[index]);
       this.buttonActionSelected = this.activePage.cells[index];
       this.saveIndex = index;
