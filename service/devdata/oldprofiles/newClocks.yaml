@@ -32,7 +32,7 @@ actions:
           title: ""
           parameters:
             format: "02-01"
-            analog: true
+            graphical: true
             design: digital
             showseconds: false
             color: "#00ff00"
@@ -55,7 +55,7 @@ actions:
           title: ""
           parameters:
             format: "02-01"
-            analog: true
+            graphical: true
             design: digital
             showseconds: true
             color: "#ff0000"
@@ -78,7 +78,7 @@ actions:
           title: ""
           parameters:
             format: "02-01"
-            analog: true
+            graphical: true
             design: analog
             showseconds: true
             showdate: true
@@ -102,7 +102,7 @@ actions:
           title: ""
           parameters:
             format: "02-01"
-            analog: true
+            graphical: true
             design: berlin
             showseconds: true
             showdate: true
@@ -126,7 +126,7 @@ actions:
           title: ""
           parameters:
             format: "02-01"
-            analog: true
+            graphical: true
             design: roman
             showseconds: true
             showdate: true

@@ -125,7 +125,7 @@ actions:
           icon: ""
           title: ""
           parameters:
-            analog: true
+            graphical: true
             args: []
             color: ""
             command: notepad.exe
@@ -183,7 +183,7 @@ actions:
           icon: ""
           title: ""
           parameters:
-            analog: true
+            graphical: true
             color: ff0022
             dateformat: ""
             design: digital

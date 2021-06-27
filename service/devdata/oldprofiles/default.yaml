@@ -119,7 +119,7 @@ actions:
           icon: ""
           title: ""
           parameters:
-            analog: true
+            graphical: true
             format: "15:04:05\r\n02 Jan 06"
       actions: []
     - type: SINGLE
