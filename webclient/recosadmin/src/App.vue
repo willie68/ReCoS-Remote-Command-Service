@@ -4,6 +4,7 @@
       <b>ReCoS Admin</b>
       <p class="p-ml-6">Profiles:</p>
       <Dropdown
+        v-tooltip="'select the profile to edit'"
         class="p-ml-1 dropdownwidth"
         v-model="activeProfileName"
         :options="profiles"
@@ -17,6 +18,7 @@
         @click="saveProfile()"
       ></SplitButton>
       <Button
+        v-tooltip="'start Action Wizard'"
         icon="pi pi-flag"
         class="p-mr-1 p-button-warning"
         @click="this.emitter.emit('show-wizard', true)"
@@ -76,7 +78,7 @@
     v-on:cancel="this.settingsVisible = false"
   ></Settings>
   <Dialog header="About" v-model:visible="helpAboutVisible">
-    This is the about dialog. For more info see:<br />
+    This is ReCoS V{{ this.$store.state.packageVersion }} <br/>For more info see:<br />
     <a
       href="https://github.com/willie68/ReCoS-Remote-Command-Service"
       target="_blank"

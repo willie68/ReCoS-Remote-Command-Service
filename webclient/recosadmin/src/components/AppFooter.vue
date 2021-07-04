@@ -1,6 +1,6 @@
 <template>
   <div class="footer">
-    ReCoS Admin - Remote Command Service - (C) 2021 Wilfried Klaas
+    ReCoS Admin V{{ this.$store.state.packageVersion }} - Remote Command Service - (C) 2021 Wilfried Klaas
   </div>
 </template>
 

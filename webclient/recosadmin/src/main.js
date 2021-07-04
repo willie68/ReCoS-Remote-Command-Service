@@ -52,6 +52,7 @@ const store = createStore({
         password: "",
         authheader: {},
         inconlist: [],
+        packageVersion: process.env.VUE_APP_VERSION || '0',
       }
     },
     mutations: {
