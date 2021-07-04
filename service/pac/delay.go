@@ -50,17 +50,11 @@ func (d *DelayCommand) Stop(a *Action) (bool, error) {
 
 // Execute a delay in the actual context
 func (d *DelayCommand) Execute(a *Action, requestMessage models.Message) (bool, error) {
-	value, found := d.Parameters["time"]
-	if found {
-		delayValue, ok := value.(int)
-		if ok {
-			clog.Logger.Infof("delay with %v seconds", delayValue)
-			time.Sleep(time.Duration(delayValue) * time.Second)
-		} else {
-			return false, fmt.Errorf("time is in wrong format. Please use integer as format")
-		}
-	} else {
-		return false, fmt.Errorf("time is missing")
+	delayValue, err := ConvertParameter2Int(d.Parameters, "time", 1)
+	if err != nil {
+		return false, fmt.Errorf("time is in wrong format. Please use int as format")
 	}
+	clog.Logger.Infof("delay with %v seconds", delayValue)
+	time.Sleep(time.Duration(delayValue) * time.Second)
 	return true, nil
 }

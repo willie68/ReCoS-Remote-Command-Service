@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="p-pb-1 p-pt-1 p-pl-2">
     <div class="p-fluid p-mt-2">
       <div class="p-field p-grid">
         <label for="description" class="p-col-2 p-mb-2 p-md-2 p-mb-0 p-ml-2"
@@ -58,7 +58,7 @@ export default {
 
 <style>
 .tabview-custom .p-tabview-panels {
-  margin: 0;
-  padding: 0 !important;
+  margin: 0 0 0 0;
+  padding: 0 1em 0 0 !important;
 }
 </style>

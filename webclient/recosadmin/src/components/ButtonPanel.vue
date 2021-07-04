@@ -1,5 +1,5 @@
 <template>
-  <ScrollPanel style="width: 98%; height: 400px" class="custom">
+  <ScrollPanel style="width: 100%; height: 400px" class="custom">
     <transition-group
       v-for="row of activePage.rows"
       :key="row"
@@ -19,7 +19,7 @@
             "
             v-tooltip="cellActions[(row - 1) * activePage.columns + (col - 1)].name"
           >
-            <img v-if="cellActions[(row - 1) * activePage.columns + (col - 1)].icon" :src="'assets/' + cellActions[(row - 1) * activePage.columns + (col - 1)].icon"/>
+            <img v-if="cellActions[(row - 1) * activePage.columns + (col - 1)].icon" :src="'assets/' + cellActions[(row - 1) * activePage.columns + (col - 1)].icon" width="80"/>
             <div v-if="!cellActions[(row - 1) * activePage.columns + (col - 1)].icon">{{ cellActions[(row - 1) * activePage.columns + (col - 1)].name }}</div>
           </Button>
           <Button
@@ -133,7 +133,7 @@ export default {
 
 <style>
 .custom .p-scrollpanel-wrapper {
-  border-right: 9px solid #f4f4f4;
+  
 }
 
 .custom .p-scrollpanel-bar {

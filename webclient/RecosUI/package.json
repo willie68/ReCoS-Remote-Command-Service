@@ -1,1 +1,1 @@
-{"dependencies":{"core-js":"^3.6.5","vue":"^3.0.0"},"devDependencies":{"@vue/cli-plugin-babel":"~4.5.0","@vue/cli-service":"~4.5.0","@vue/compiler-sfc":"^3.0.0"},"name":"recos","private":true,"scripts":{"build":"vue-cli-service build","serve":"vue-cli-service serve"},"version":"0.2.88"}
+{"dependencies":{"core-js":"^3.6.5","vue":"^3.0.0"},"devDependencies":{"@vue/cli-plugin-babel":"~4.5.0","@vue/cli-service":"~4.5.0","@vue/compiler-sfc":"^3.0.0"},"name":"recos","private":true,"scripts":{"build":"vue-cli-service build","serve":"vue-cli-service serve"},"version":"0.3.90"}
