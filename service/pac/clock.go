@@ -48,9 +48,9 @@ var ClockCommandTypeInfo = models.CommandTypeInfo{
 			List:           make([]string, 0),
 		},
 		{
-			Name:           "analog",
+			Name:           "graphical",
 			Type:           "bool",
-			Description:    "Showing a nice analog clock",
+			Description:    "Showing a nice graphical clock",
 			Unit:           "",
 			WizardPossible: true,
 			List:           make([]string, 0),
@@ -58,7 +58,7 @@ var ClockCommandTypeInfo = models.CommandTypeInfo{
 		{
 			Name:           "showseconds",
 			Type:           "bool",
-			Description:    "Showing seconds on a analog clock",
+			Description:    "Showing seconds on a graphical clock",
 			Unit:           "",
 			WizardPossible: true,
 			List:           make([]string, 0),
@@ -66,7 +66,7 @@ var ClockCommandTypeInfo = models.CommandTypeInfo{
 		{
 			Name:           "showdate",
 			Type:           "bool",
-			Description:    "Showing the date on a analog clock",
+			Description:    "Showing the date on a graphical clock",
 			Unit:           "",
 			WizardPossible: true,
 			List:           make([]string, 0),
@@ -77,7 +77,7 @@ var ClockCommandTypeInfo = models.CommandTypeInfo{
 			Description:    "design pattern for the clock",
 			Unit:           "",
 			WizardPossible: true,
-			List:           []string{"analog", "digital", "berlin", "roman"},
+			List:           []string{"analog", "digital", "berlin", "berlin2", "roman"},
 		},
 		{
 			Name:           "color",
@@ -100,7 +100,7 @@ type ClockCommand struct {
 	done        chan bool
 	format      string
 	dateformat  string
-	analog      bool
+	graphical   bool
 	showseconds bool
 	showdate    bool
 	design      string
@@ -129,18 +129,18 @@ func (c *ClockCommand) Init(a *Action, commandName string) (bool, error) {
 	c.stop = false
 	c.ticker = time.NewTicker(1 * time.Second)
 	c.format = "15:04:05"
-	c.analog = false
+	c.graphical = false
 	c.commandName = commandName
 	c.done = make(chan bool)
 
 	//	GetIANANames()
 
-	value, err := ConvertParameter2Bool(c.Parameters, "analog", false)
+	value, err := ConvertParameter2Bool(c.Parameters, "graphical", false)
 	if err != nil {
-		clog.Logger.Errorf("error in getting analog: %v", err)
+		clog.Logger.Errorf("error in getting graphical: %v", err)
 		return false, err
 	}
-	c.analog = value
+	c.graphical = value
 
 	value, err = ConvertParameter2Bool(c.Parameters, "showseconds", false)
 	if err != nil {
@@ -204,7 +204,7 @@ func (c *ClockCommand) Init(a *Action, commandName string) (bool, error) {
 					if c.timezone != "" && c.timezone != LocalTimezoneName {
 						text = c.timezone
 					}
-					if c.analog {
+					if c.graphical {
 						c.SendGraphics(title, text)
 					} else {
 						message := models.Message{

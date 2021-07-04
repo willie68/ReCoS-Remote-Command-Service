@@ -167,7 +167,7 @@ func (d *DiceCommand) generateDice(number int, width int, height int) []byte {
 	padding := floatEdgeSize / 10.0
 
 	floatEdgeSize = floatEdgeSize - (2 * padding)
-	dotRadius := floatEdgeSize / 12.0
+	dotRadius := floatEdgeSize / 10.0
 
 	dc.InvertY()
 	dc.SetColor(color.Black)

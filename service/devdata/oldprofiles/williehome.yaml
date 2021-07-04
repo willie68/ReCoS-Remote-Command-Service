@@ -128,4 +128,4 @@ actions:
         name: clock
         parameters:
           format: "15:04:05\r\n02 Jan 06"
-          analog: true
+          graphical: true

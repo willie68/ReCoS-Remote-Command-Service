@@ -19,7 +19,7 @@
       <Button
         icon="pi pi-flag"
         class="p-mr-1 p-button-warning"
-        @click="actionWizard()"
+        @click="this.emitter.emit('show-wizard', true)"
       />
       <div v-if="profileDirty">*</div>
     </template>
@@ -38,6 +38,12 @@
         <i v-if="!showPwd" class="pi pi-eye-slash" @click="togglePwdView()" />
         <i v-if="showPwd" class="pi pi-eye" @click="togglePwdView()" />
       </span>
+      <Button
+        icon="pi pi-eye"
+        class="p-mr-1"
+        @click="startWebClient"
+        v-tooltip="'Show web client'"
+      />
       <Button icon="pi pi-bars" class="p-mr-1" @click="toggleHelpMenu" />
       <Menu
         id="overlay_menu"
@@ -91,6 +97,8 @@
       />
     </template>
   </Dialog>
+  <QRCodes :visible="qrCodesVisible" v-on:close="this.qrCodesVisible = false">
+  </QRCodes>
 </template>
 
 <script>
@@ -99,6 +107,7 @@ import AppFooter from "./components/AppFooter.vue";
 import AddProfile from "./components/AddProfile.vue";
 import ActionWizard from "./wizard/ActionWizard.vue";
 import Settings from "./settings/Settings.vue";
+import QRCodes from "./components/QRCodes.vue";
 
 export default {
   components: {
@@ -107,6 +116,7 @@ export default {
     AddProfile,
     ActionWizard,
     Settings,
+    QRCodes,
   },
   data() {
     return {
@@ -157,6 +167,16 @@ export default {
           separator: true,
         },
         {
+          label: "Client QR Codes",
+          icon: "pi pi-globe",
+          command: () => {
+            this.qrSettings();
+          },
+        },
+        {
+          separator: true,
+        },
+        {
           label: "Settings",
           icon: "pi pi-cog",
           command: () => {
@@ -186,6 +206,7 @@ export default {
       settingsVisible: false,
       helpAboutVisible: false,
       helpCreditsVisible: false,
+      qrCodesVisible: false,
       credits: "",
     };
   },
@@ -286,8 +307,28 @@ export default {
       .then((data) => {
         this.credits = data;
       });
+    this.emitter.on("show-wizard", (execute) => {
+      if (execute) {
+        this.actionWizard();
+      }
+    });
   },
   methods: {
+    qrSettings() {
+      this.qrCodesVisible = true;
+    },
+    startWebClient() {
+      let servicePort = this.$store.state.servicePort;
+      let url =
+        window.location.protocol +
+        "//" +
+        window.location.hostname +
+        ":" +
+        servicePort +
+        "/webclient";
+
+      window.open(url, "_blank").focus();
+    },
     helpHelp() {
       window
         .open(

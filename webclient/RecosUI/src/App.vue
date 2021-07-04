@@ -26,6 +26,10 @@
       <img v-if="page.icon" :src="buildImageSrc(page.icon)" height="20"/>
       <span v-if="!page.icon">{{ page.name }}</span>
     </button>
+    <button @click="helpHelp()" class="pagebuttons">
+      <img src="assets/help.svg" height="20"/>
+    </button>
+
   </div>
   <div class="display" ref="display">
     <div
@@ -181,6 +185,14 @@ export default {
     this.connectWS();
   },
   methods: {
+    helpHelp() {
+      window
+        .open(
+          "https://raw.githubusercontent.com/willie68/ReCoS-Remote-Command-Service/master/documentation/README.pdf",
+          "_blank"
+        )
+        .focus();
+    },
     connectWS() {
       console.log("Starting connection to WebSocket Server");
       let that = this;

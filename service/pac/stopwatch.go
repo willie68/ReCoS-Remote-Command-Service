@@ -55,15 +55,6 @@ func (s *StopwatchCommand) Init(a *Action, commandName string) (bool, error) {
 	s.format = "%0h:%0m:%0s"
 	s.done = make(chan bool)
 
-	/*	value, found := c.Parameters["analog"]
-		if found {
-			var ok bool
-			c.analog, ok = value.(bool)
-			if !ok {
-				return false, fmt.Errorf("Analog is in wrong format. Please use boolean as format")
-			}
-		}
-	*/
 	value, found := s.Parameters["format"]
 	if found {
 		var ok bool

@@ -1,5 +1,5 @@
 <template>
-  <ScrollPanel style="width: 98%; height: 400px" class="custom">
+  <ScrollPanel style="width: 100%; height: 400px" class="custom">
     <transition-group
       v-for="row of activePage.rows"
       :key="row"
@@ -19,7 +19,7 @@
             "
             v-tooltip="cellActions[(row - 1) * activePage.columns + (col - 1)].name"
           >
-            <img v-if="cellActions[(row - 1) * activePage.columns + (col - 1)].icon" :src="'assets/' + cellActions[(row - 1) * activePage.columns + (col - 1)].icon"/>
+            <img v-if="cellActions[(row - 1) * activePage.columns + (col - 1)].icon" :src="'assets/' + cellActions[(row - 1) * activePage.columns + (col - 1)].icon" width="80"/>
             <div v-if="!cellActions[(row - 1) * activePage.columns + (col - 1)].icon">{{ cellActions[(row - 1) * activePage.columns + (col - 1)].name }}</div>
           </Button>
           <Button
@@ -38,6 +38,7 @@
     v-on:save="assignAction($event)"
     v-on:cancel="this.dialogActionVisible = false"
     v-on:remove="removeAction()"
+    v-on:wizard="wizard()"
     :sourceValue="profile.actions"
     :selectByName="buttonActionSelected"
   ></SelectAction>
@@ -62,10 +63,18 @@ export default {
       cellActions: [{ name: "name" }],
       dialogActionVisible: false,
       buttonActionSelected: "",
+      actionWizardVisible: false,
     };
   },
   methods: {
     clickButton(index) {
+      console.log("buttonPanel: index:", index)
+      if (!this.activePage.cells) {
+        this.activePage.cells = new Array(0)
+      }
+      if (!this.activePage.cells[index]) {
+        this.activePage.cells[index] = ""
+      }
       console.log("button clicked: ", index, this.activePage.cells[index]);
       this.buttonActionSelected = this.activePage.cells[index];
       this.saveIndex = index;
@@ -91,6 +100,12 @@ export default {
       this.activePage.cells[this.saveIndex] = null;
       this.updateCellActions();
       this.dialogActionVisible = false;
+    },
+    wizard() {
+      //this.activePage.cells[this.saveIndex] = null;
+      this.emitter.emit("show-wizard", true);
+      this.dialogActionVisible = false;
+      this.updateCellActions();
     },
     getAction(index) {
       if (index < this.activePage.cells.length) {
@@ -118,7 +133,7 @@ export default {
 
 <style>
 .custom .p-scrollpanel-wrapper {
-  border-right: 9px solid #f4f4f4;
+  
 }
 
 .custom .p-scrollpanel-bar {

@@ -108,9 +108,11 @@ func InitOBS(extconfig map[string]interface{}) error {
 
 func (o *OBS) Connect() error {
 	obsws.SetReceiveTimeout(time.Second * 2)
-	o.c = obsws.Client{Host: o.host, Port: o.port, Password: o.password}
-	o.sessionActive = true
-	go o.doConnect()
+	if o.Active {
+		o.c = obsws.Client{Host: o.host, Port: o.port, Password: o.password}
+		o.sessionActive = true
+		go o.doConnect()
+	}
 	return nil
 }
 

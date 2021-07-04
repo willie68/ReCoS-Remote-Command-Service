@@ -122,7 +122,7 @@ actions:
           icon: ""
           title: ""
           parameters:
-            analog: true
+            graphical: true
             format: "15:04:05\r\n02 Jan 06"
             showseconds: true
       actions: []
@@ -224,7 +224,7 @@ actions:
           icon: ""
           title: clock
           parameters: 
-            analog: true
+            graphical: true
             design: berlin2
       actions: []
     - type: SINGLE
