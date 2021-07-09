@@ -5,7 +5,7 @@ go 1.16
 require (
 	github.com/BurntSushi/toml v0.3.1 // indirect
 	github.com/TheTitanrain/w32 v0.0.0-20200114052255-2654d97dbd3d
-	github.com/ajstarks/svgo v0.0.0-20210406150507-75cfd577ce75 // indirect
+	github.com/ajstarks/svgo v0.0.0-20210406150507-75cfd577ce75
 	github.com/amimof/huego v1.2.0
 	github.com/aphistic/golf v0.0.0-20180712155816-02c07f170c5a
 	github.com/aphistic/sweet v0.3.0 // indirect
@@ -20,7 +20,7 @@ require (
 	github.com/go-ole/go-ole v1.2.5
 	github.com/go-ping/ping v0.0.0-20210402232549-1726e5ede5b6
 	github.com/go-playground/validator/v10 v10.4.2
-	github.com/go-toast/toast v0.0.0-20190211030409-01e6764cf0a4 // indirect
+	github.com/go-toast/toast v0.0.0-20190211030409-01e6764cf0a4
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
 	github.com/google/uuid v1.2.0
 	github.com/gorilla/websocket v1.4.2
@@ -32,21 +32,21 @@ require (
 	github.com/micmonay/keybd_event v1.1.1
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/moutend/go-wca v0.1.2-0.20190422112502-0fa027b3d89a
-	github.com/muesli/go-obs-websocket v0.0.0-20200216195805-501318ebaadb // indirect
+	github.com/muesli/go-obs-websocket v0.0.0-20200216195805-501318ebaadb
 	github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d // indirect
 	github.com/onsi/gomega v1.10.1 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible
-	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e // indirect
+	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
 	github.com/skratchdot/open-golang v0.0.0-20200116055534-eef842397966
 	github.com/spf13/pflag v1.0.5
 	github.com/sqweek/dialog v0.0.0-20200911184034-8a3d98e8211d
-	github.com/srwiley/oksvg v0.0.0-20210320200257-875f767ac39a // indirect
-	github.com/srwiley/rasterx v0.0.0-20200120212402-85cb7272f5e9 // indirect
+	github.com/srwiley/oksvg v0.0.0-20210320200257-875f767ac39a
+	github.com/srwiley/rasterx v0.0.0-20200120212402-85cb7272f5e9
 	github.com/stretchr/testify v1.7.0 // indirect
 	github.com/thoas/go-funk v0.8.0
 	golang.org/x/crypto v0.0.0-20210322153248-0c34fe9e7dc2 // indirect
 	golang.org/x/image v0.0.0-20210220032944-ac19c3e999fb
-	golang.org/x/net v0.0.0-20210405180319-a5a99cb37ef4 // indirect
+	golang.org/x/net v0.0.0-20210405180319-a5a99cb37ef4
 	golang.org/x/sys v0.0.0-20210403161142-5e06dd20ab57
 	golang.org/x/text v0.3.6 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
