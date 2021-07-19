@@ -71,7 +71,7 @@ JsonArray profileArray;
 JsonArray pages;
 JsonArray actions;
 uint32_t wsCnt = 0;
-boolean reconnect = false; 
+boolean reconnect = false;
 //Basiswerte für Kalibrierung
 uint16_t xMin = 242;
 uint16_t yMin = 242;
@@ -102,7 +102,7 @@ void displayImage(const unsigned char * buf, uint16_t x, uint16_t y,
       cpix = convertColor(buf[2], buf[1], buf[0], 255, bgcolor);
     }
     //Serial.printf("w = %i, h = %i, c= %x\n",w,h,cpix);
-    tft.fillRect(x+4,y+4,72,72,cpix);
+    tft.fillRect(x + 4, y + 4, 72, 72, cpix);
   } else {
     tft.startWrite();
     for (uint16_t row = 0; row < h; row++) {
@@ -140,7 +140,7 @@ void wsSend(String profile, String command) {
     doc["profile"] = profile;
     doc["command"] = command;
     uint16_t n = serializeJson(doc, buf);
-    client.send(buf,n);
+    client.send(buf, n);
   }
   else
   {
@@ -159,8 +159,8 @@ void onEventsCallback(WebsocketsEvent event, String data)
     if (wsactive) {
       //client.close(CloseReason_NormalClosure);
       Serial.println("Reconnect");
-      reconnect = true;   
-   }
+      reconnect = true;
+    }
   }
   else if (event == WebsocketsEvent::GotPing)
   {
@@ -179,7 +179,7 @@ String httpGet(String path, String * mimeType) {
   if (WiFi.status() == WL_CONNECTED) {
     HTTPClient http;
     http.begin(SERVER, PORT, path);
-    http.collectHeaders(keys,1);
+    http.collectHeaders(keys, 1);
     int httpCode = http.GET();
     if (httpCode > 0) {
       if (httpCode == 200) {
@@ -205,12 +205,12 @@ String httpPost(String profile, String action) {
   if (WiFi.status() == WL_CONNECTED) {
     char msg[500];
     DynamicJsonDocument doc(500);
-    doc["profile"]=profile;
-    doc["action"]=action;
-    doc["comman"]="click";
-    serializeJson(doc,msg);
+    doc["profile"] = profile;
+    doc["action"] = action;
+    doc["comman"] = "click";
+    serializeJson(doc, msg);
     Serial.println(msg);
-    String path = String(API)+"/action/"+profile+"/"+action;
+    String path = String(API) + "/action/" + profile + "/" + action;
     HTTPClient http;
     http.begin(SERVER, PORT, path);
     int httpCode = http.POST(msg);
@@ -234,7 +234,7 @@ String httpPost(String profile, String action) {
 boolean getProfiles() {
   boolean result = false;
   String typ;
-  String res = httpGet(String(API) + String("/show"),&typ);
+  String res = httpGet(String(API) + String("/show"), &typ);
   if (res.startsWith("ERR:")) {
     Serial.println(res);
   } else {
@@ -253,7 +253,7 @@ boolean getProfiles() {
 boolean getProfile() {
   boolean result = false;
   String typ;
-  String res = httpGet(String(API) + String("/show/") + currentProfile,&typ);
+  String res = httpGet(String(API) + String("/show/") + currentProfile, &typ);
   if (res.startsWith("ERR:")) {
     Serial.println(res);
   } else {
@@ -288,20 +288,20 @@ void showPng(String img, uint16_t x, uint16_t y, uint16_t bg = ILI9341_BLACK) {
 void showBmp(const char * dbuf, uint16_t x, uint16_t y, uint16_t bg = ILI9341_BLACK) {
   BITMAPHDR bmh;
   uint16_t w, h;
-  memcpy((char *)&bmh,dbuf,sizeof(bmh));
+  memcpy((char *)&bmh, dbuf, sizeof(bmh));
   w = bmh.width;
   h = bmh.height;
   //Serial.printf("Width %i, Height %i\n",w,h);
   dbuf += bmh.imageOffset;
-  displayImage((const unsigned char *)dbuf, x, y, w, h, bmh.depth/8, false, false, bg);
+  displayImage((const unsigned char *)dbuf, x, y, w, h, bmh.depth / 8, false, false, bg);
 }
 
 
-void drawCenter(uint16_t x, uint16_t y, String txt){
+void drawCenter(uint16_t x, uint16_t y, String txt) {
   uint16_t l = txt.length();
-  uint8_t o = (l*6 < 80)?(80-l*6)/2:0;
-  tft.setCursor(x+o,y);
-  tft.print(txt.substring(0,79));
+  uint8_t o = (l * 6 < 80) ? (80 - l * 6) / 2 : 0;
+  tft.setCursor(x + o, y);
+  tft.print(txt.substring(0, 79));
 }
 
 void displayCell(uint8_t index, JsonObject action, JsonObject message, boolean updt) {
@@ -317,12 +317,12 @@ void displayCell(uint8_t index, JsonObject action, JsonObject message, boolean u
   if (img1 != "") img = img1;
   if (img != "") {
     if (img.endsWith(".svg")) {
-      img = String(API)+String(ICONS)+img;
+      img = String(API) + String(ICONS) + img;
     }
-    if (!img.startsWith("/")) img = String("/webclient/assets/")+img;
+    if (!img.startsWith("/")) img = String("/webclient/assets/") + img;
     img += String("?width=72&height=72");
     //Serial.println(img);
-    String data = httpGet(img,&typ);
+    String data = httpGet(img, &typ);
     //Serial.println(data.length());
     buf = data.c_str();
     if (data.startsWith("ERR:")) {
@@ -330,19 +330,19 @@ void displayCell(uint8_t index, JsonObject action, JsonObject message, boolean u
       Serial.println(img);
     } else {
       //Serial.println(typ);
-      if (typ.endsWith("/png")) showPng(data,x,y,ILI9341_BLUE);
-      if (typ.endsWith("/bmp")) showBmp(buf,x,y,ILI9341_BLUE);
+      if (typ.endsWith("/png")) showPng(data, x, y, ILI9341_BLUE);
+      if (typ.endsWith("/bmp")) showBmp(buf, x, y, ILI9341_BLUE);
     }
   }
   //Display Texte
-  String title = updt?message["title"]:action["title"];
-  String text = updt?message["text"].as<String>():"";
+  String title = updt ? message["title"] : action["title"];
+  String text = updt ? message["text"].as<String>() : "";
   String scol = action["fontcolor"];
   uint16_t col = ILI9341_BLACK;
   if (scol == "white") col = ILI9341_WHITE;
   tft.setTextColor(col);
-  if (title != "") drawCenter(x,y+20,title);
-  if (text != "") drawCenter(x,y+40,text);
+  if (title != "") drawCenter(x, y + 20, title);
+  if (text != "") drawCenter(x, y + 40, text);
 }
 
 
@@ -362,13 +362,13 @@ void showPage() {
   tft.fillScreen(ILI9341_WHITE);
   uint8_t row = 0;
   uint8_t col = 0;
-  String actionName,icon;
+  String actionName, icon;
   JsonObject action;
   JsonObject pag = getObject(pages, currentPage);
   JsonArray cells = pag["cells"].as<JsonArray>();
   uint16_t cnt = cells.size();
-  for (uint16_t i=0; i<cnt; i++) {
-    displayCell(i,getObject(actions,cells[i].as<String>()),actions[0],false);
+  for (uint16_t i = 0; i < cnt; i++) {
+    displayCell(i, getObject(actions, cells[i].as<String>()), actions[0], false);
   }
   active = true;
 }
@@ -376,8 +376,8 @@ void showPage() {
 void wsMessage(String msg) {
   if (!active) return;
   DynamicJsonDocument doc(2000);
-  uint16_t x,y;
-  
+  uint16_t x, y;
+
   DeserializationError   error = deserializeJson(doc, msg);
   if (error ) {
     Serial.println("JSON WS message: ");
@@ -392,12 +392,12 @@ void wsMessage(String msg) {
     } else {
       JsonArray cells = pag["cells"].as<JsonArray>();
       uint16_t cnt = cells.size();
-      for (uint16_t i=0; i<cnt; i++) {
+      for (uint16_t i = 0; i < cnt; i++) {
         if (cells[i].as<String>() == doc["action"].as<String>()) {
-          displayCell(i,getObject(actions,doc["action"].as<String>()),doc.as<JsonObject>(),true);
+          displayCell(i, getObject(actions, doc["action"].as<String>()), doc.as<JsonObject>(), true);
         }
       }
-    }  
+    }
   }
 }
 
@@ -406,14 +406,14 @@ void onTouchEvent(int16_t x, int16_t y, EV event) {
   Serial.println("Touch");
   if (event == EV::EVT_CLICK) {
     if (active) {
-      Serial.printf("Click %i,%i\n",x,y);
+      Serial.printf("Click %i,%i\n", x, y);
       JsonObject pag = getObject(pages, currentPage);
       JsonArray cells = pag["cells"].as<JsonArray>();
-      uint8_t col = x/80;
-      uint8_t row = (y/80);
-      Serial.printf("row = %i, col = %i \n",row,col);
+      uint8_t col = x / 80;
+      uint8_t row = (y / 80);
+      Serial.printf("row = %i, col = %i \n", row, col);
       Serial.println(cells.size());
-      String name = cells[row*3+col];
+      String name = cells[row * 3 + col];
       Serial.println(name);
       JsonObject action = getObject(actions, name);
       if (action["type"].as<String>() == "SINGLE") {
@@ -425,14 +425,14 @@ void onTouchEvent(int16_t x, int16_t y, EV event) {
   }
 }
 
-void switchPage(boolean forward){
+void switchPage(boolean forward) {
   uint8_t cnt = pages.size();
-  uint16_t cur = getIndex(pages,currentPage);
+  uint16_t cur = getIndex(pages, currentPage);
   if (cur < 0) {
-    cur=forward?0:cnt; 
+    cur = forward ? 0 : cnt;
   } else {
-    cur = forward?cur+1:cur-1;
-    if (cur >= cnt) cur=0;
+    cur = forward ? cur + 1 : cur - 1;
+    if (cur >= cnt) cur = 0;
     if (cur < 0) cur = cnt;
   }
   currentPage = pages[cur]["name"].as<String>();
@@ -443,7 +443,7 @@ void showProfiles() {
   active = false;
   tft.fillScreen(ILI9341_WHITE);
   tft.setTextColor(ILI9341_BLACK);
-  tft.setCursor(40,10);
+  tft.setCursor(40, 10);
   tft.print("Profile");
 }
 
@@ -451,7 +451,7 @@ void showConfig() {
   active = false;
   tft.fillScreen(ILI9341_YELLOW);
   tft.setTextColor(ILI9341_BLACK);
-  tft.setCursor(40,10);
+  tft.setCursor(40, 10);
   tft.print("Config");
 }
 
@@ -478,13 +478,13 @@ void setup()
   //Touchscreen vorbereiten
   touch.begin();
   touch.setRotation(TOUCH_ROTATION);
-  tevent.setResolution(tft.width(),tft.height());
+  tevent.setResolution(tft.width(), tft.height());
   tevent.setDrawMode(false);
   //Callback Funktionen registrieren
   tevent.registerOnAllEvents(onTouchEvent);
-  tevent.setSwipe(300,400);
+  tevent.setSwipe(300, 400);
   tevent.registerOnTouchSwipe(onTouchSwipe);
-  tevent.calibrate(xMin,yMin,xMax,yMax);
+  tevent.calibrate(xMin, yMin, xMax, yMax);
   // Connect to wifi
   WiFi.begin(SSID, PKEY);
 
@@ -509,17 +509,17 @@ void setup()
   client.onMessage([&](WebsocketsMessage message)
   {
     tevent.pollTouchScreen();
-   //Serial.print("."); 
-  wsCnt++;
-  if ((wsCnt % 100L) == 0) Serial.println(wsCnt);
-   wsMessage(message.data());
+    //Serial.print(".");
+    wsCnt++;
+    if ((wsCnt % 100L) == 0) Serial.println(wsCnt);
+    wsMessage(message.data());
   });
 
   // run callback when events are occuring
   client.onEvent(onEventsCallback);
   // try to connect to Websockets server
   wsactive = client.connect(SERVER, PORT, WEBSOCKET);
-  wsSend("none","change");
+  wsSend("none", "change");
   if (getProfiles()) {
     currentProfile = profileArray[PROFILEINDEX]["name"].as<String>();
     if (getProfile()) {
@@ -527,7 +527,7 @@ void setup()
       showPage();
     }
   }
-  wsSend(currentProfile,"change");
+  wsSend(currentProfile, "change");
 }
 
 void loop()
