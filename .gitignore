@@ -23,6 +23,7 @@ service/cmd/__debug_bin
 3rd party/open-cue-service/
 webclient/RecosUI/public/assets/
 webclient/recosadmin/public/assets/
+webclient/recoscli2/**
 
 *.syso
 *.bak
@@ -32,6 +33,7 @@ service/devdata/sessions/sessions/
 
 service/web/webadmin/
 service/web/webclient/
+service/web/webclient2/
 
 service/recos-service.zip
 
@@ -51,3 +53,4 @@ integrations/streamdeck/StreamDeckService.zip
 3rd party/PSTools.zip
 
 integrations/streamdeck/StreamDeckService/StreamDeckService.csproj.user
+

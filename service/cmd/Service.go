@@ -641,7 +641,7 @@ func checkVersion() {
 
 	json.Unmarshal([]byte(versionStr), &thisVersion)
 	go func() {
-		background := time.NewTicker(time.Second * time.Duration(1))
+		background := time.NewTicker(time.Second * time.Duration(60))
 		for _ = range background.C {
 			name, err := os.Hostname()
 			if err != nil {
