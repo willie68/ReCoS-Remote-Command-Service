@@ -3,6 +3,7 @@ package models
 import (
 	"bytes"
 	"encoding/gob"
+	"fmt"
 )
 
 // Profile is the container for different pages. In UI you can switch between Profiles. Every Profile consist of a name and different pages to navigate between
@@ -164,6 +165,16 @@ func (p *Profile) Copy() Profile {
 		profile.Pages = append(profile.Pages, page.Copy())
 	}
 	return profile
+}
+
+// GetAction getting the named action from this profile or an error
+func (p *Profile) GetAction(actionName string) (*Action, error) {
+	for _, action := range p.Actions {
+		if action.Name == actionName {
+			return action, nil
+		}
+	}
+	return nil, fmt.Errorf("no action with name %s found.", actionName)
 }
 
 // Copy make a deep copy of this action
