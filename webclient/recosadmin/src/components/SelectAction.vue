@@ -38,7 +38,7 @@
       />
     </template>
   </Dialog>
-  <Upload :visible="dialogUploadVisible" />
+  <Upload :visible="dialogUploadVisible" filetype=".act"/>
 </template>
 
 <script>

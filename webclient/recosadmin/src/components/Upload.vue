@@ -5,7 +5,7 @@
       url="./upload.php"
       @upload="onUpload"
       :multiple="true"
-      accept=".act"
+      :accept="filetype"
       :maxFileSize="1000000"
     >
       <template #empty>
@@ -21,6 +21,7 @@ export default {
   components: {},
   props: {
     visible: Boolean,
+    filetype: String,
   },
   data() {
     return {
