@@ -24,6 +24,7 @@ import ConfirmDialog from 'primevue/confirmdialog';
 import Dialog from 'primevue/dialog'
 import Dropdown from 'primevue/dropdown'
 import Fieldset from 'primevue/fieldset'
+import FileUpload from 'primevue/fileupload';
 import Listbox from 'primevue/listbox'
 import Menu from 'primevue/menu'
 import InputNumber from 'primevue/inputnumber'
@@ -102,6 +103,7 @@ app.component('ConfirmDialog', ConfirmDialog)
 app.component('Dialog', Dialog)
 app.component('Dropdown', Dropdown)
 app.component('Fieldset', Fieldset)
+app.component('FileUpload', FileUpload)
 app.component('InputNumber', InputNumber)
 app.component('InputText', InputText)
 app.component('Listbox', Listbox)

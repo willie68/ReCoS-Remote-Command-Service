@@ -32,7 +32,6 @@ func ProfilesRoutes() *chi.Mux {
 	router.With(handler.AuthCheck()).Delete("/{profileName}", DeleteProfile)
 	router.Get("/{profileName}/export", GetExportProfile)
 	router.Get("/{profileName}/actions/{actionName}/export", GetExportAction)
-	router.With(handler.AuthCheck()).Post("/{profileName}/actions/import", PostImportAction)
 	return router
 }
 
@@ -266,36 +265,14 @@ func GetExportAction(response http.ResponseWriter, request *http.Request) {
 		api.Err(response, request, err)
 		return
 	}
-	// Create a buffer to write our archive to.
-	buf := new(bytes.Buffer)
 
-	// Create a new zip archive.
-	w := zip.NewWriter(buf)
-
-	filename := fmt.Sprintf("%s.yaml", actionName)
-	body, err := yaml.Marshal(action)
+	body, err := json.Marshal(action)
 	if err != nil {
-		clog.Logger.Debug("Error reading profile: \n" + err.Error())
+		clog.Logger.Debug("Error serialising action: \n" + err.Error())
 		api.Err(response, request, err)
 		return
 	}
 
-	f, err := w.Create(filename)
-	if err != nil {
-		log.Fatal(err)
-	}
-	_, err = f.Write(body)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Make sure to check the error on Close.
-	err = w.Close()
-	if err != nil {
-		clog.Logger.Debug("Error writing action: \n" + err.Error())
-		api.Err(response, request, err)
-		return
-	}
-	response.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s.zip\"", actionName))
-	render.Data(response, request, buf.Bytes())
+	response.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s.json\"", actionName))
+	render.Data(response, request, body)
 }

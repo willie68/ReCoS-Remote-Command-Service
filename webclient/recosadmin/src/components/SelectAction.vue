@@ -11,10 +11,10 @@
       listStyle="max-height:150px"
     />
     <template #footer>
-      <Button
-        label="Wizard"
+      <SplitButton
+        label="Create"
         icon="pi pi-flag"
-        class="p-button-text"
+        :model="createMenuItems"
         @click="wizard"
       />
       <Button
@@ -38,12 +38,16 @@
       />
     </template>
   </Dialog>
+  <Upload :visible="dialogUploadVisible" />
 </template>
 
 <script>
+import Upload from "./Upload.vue";
 export default {
   name: "SelectAction",
-  components: {},
+  components: {
+    Upload,
+  },
   props: {
     sourceValue: {
       type: Array,
@@ -52,12 +56,23 @@ export default {
     visible: Boolean,
     selectByName: String,
   },
-  emits: ["cancel", "save" , "remove"],
+  emits: ["cancel", "save", "remove"],
   data() {
     return {
       selectedAction: {},
       dialogVisible: false,
+      dialogUploadVisible: false,
       isNameOK: true,
+      createMenuItems: [
+        {
+          label: "Import",
+          icon: "pi pi-cloud-upload",
+          class: "p-button-text",
+          command: () => {
+            this.importAction();
+          },
+        },
+      ],
     };
   },
   methods: {
@@ -81,6 +96,9 @@ export default {
       this.isNameOK = !this.profiles
         .map((elem) => elem.toLowerCase())
         .includes(name.toLowerCase());
+    },
+    importAction() {
+      this.dialogUploadVisible = true;
     },
   },
   beforeUpdate() {
