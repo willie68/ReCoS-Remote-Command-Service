@@ -273,6 +273,6 @@ func GetExportAction(response http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	response.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s.json\"", actionName))
+	response.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s.act\"", actionName))
 	render.Data(response, request, body)
 }

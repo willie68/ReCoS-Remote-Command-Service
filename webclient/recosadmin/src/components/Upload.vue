@@ -5,7 +5,7 @@
       url="./upload.php"
       @upload="onUpload"
       :multiple="true"
-      accept="image/*"
+      accept=".act"
       :maxFileSize="1000000"
     >
       <template #empty>
