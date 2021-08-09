@@ -41,6 +41,7 @@
     v-on:wizard="wizard()"
     :sourceValue="profile.actions"
     :selectByName="buttonActionSelected"
+    :profileName="profile.name"
   ></SelectAction>
 </template>
 

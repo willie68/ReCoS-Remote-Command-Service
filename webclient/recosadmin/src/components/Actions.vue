@@ -4,13 +4,17 @@
       <Panel header="Actions" class="actions-panel-custom no-border">
         <template #icons>
           <button
-            class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
+            class="
+              p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0
+            "
             @click="addAction"
           >
             <span class="pi pi-plus"></span>
           </button>
           <button
-            class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
+            class="
+              p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0
+            "
             @click="deleteConfirm"
           >
             <span class="pi pi-trash"></span>
@@ -33,6 +37,19 @@
         :header="'Action: ' + activeActionName"
         class="actions-panel-custom no-border"
       >
+        <template #icons>
+          <Button
+            icon="pi pi-bars"
+            class="p-mr-1 p-button-sm"
+            @click="toggleActionMenu"
+          />
+          <Menu
+            id="overlay_menu"
+            ref="actionmenu"
+            :model="actionMenuItems"
+            :popup="true"
+          />
+        </template>
         <Action :action="activeAction" :profile="activeProfile"></Action>
       </Panel>
     </SplitterPanel>
@@ -69,9 +86,30 @@ export default {
       addActionDialog: false,
       actionNames: null,
       newActionName: null,
+      actionMenuItems: [
+        {
+          label: "Export",
+          icon: "pi pi-cloud-download",
+          class: "p-button-warning",
+          command: () => {
+            this.exportAction();
+          },
+        },
+      ],
+      profileURL: "",
     };
   },
+  mounted() {
+    this.profileURL = this.$store.state.baseURL + "profiles";
+  },
   methods: {
+    exportAction() {
+      console.log("export action: " + this.activeProfile.name + "#" + this.activeActionName);
+      window.open(this.profileURL + "/" + this.activeProfile.name + "/actions/" + this.activeActionName + "/export");
+    },
+    toggleActionMenu(event) {
+      this.$refs.actionmenu.toggle(event);
+    },
     checkChange(event) {
       let action = event.value;
       console.log("Actions: changed", JSON.stringify(action));

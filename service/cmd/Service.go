@@ -163,6 +163,7 @@ func main() {
 		}
 		running := true
 		startTime := time.Now()
+		count := 0
 		for running {
 			running = false
 			resp, _ := http.Get(fmt.Sprintf("http://127.0.0.1:%d/health/readyz", statPort))
@@ -171,12 +172,14 @@ func main() {
 				status = resp.Status
 				running = true
 			}
-			fmt.Printf("status: %s", status)
 			if time.Since(startTime) >= 100*time.Second {
 				panic("old process is not exiting")
 			}
 			if running {
 				time.Sleep(time.Second)
+			}
+			if count%60 == 0 {
+				fmt.Printf("service already running, waitung to stop, status: %s", status)
 			}
 		}
 	}
