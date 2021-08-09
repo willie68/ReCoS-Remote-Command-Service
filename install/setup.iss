@@ -3,7 +3,7 @@
 
 #define MyAppName "ReCoS"
 ;version number set by GoVersionSetter.
-#define MyAppVersion "0.3.95"
+#define MyAppVersion "0.3.96"
 #define MyAppPublisher "MCS Media Computer Software"
 #define MyAppURL "https://www.wk-music.de"
 #define MyAppExeName "recos-service.exe"
