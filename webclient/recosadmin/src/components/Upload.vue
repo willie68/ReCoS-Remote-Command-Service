@@ -57,10 +57,8 @@ export default {
   props: {
     visible: Boolean,
     filetype: String,
-    profileName: String,
-    actionName: String,
   },
-  emits: ["import", "cancel", "update:modelValue"],
+  emits: ["save", "cancel"],
   data() {
     return {
       dialogVisible: false,
@@ -68,29 +66,23 @@ export default {
       uploadURL: String,
       file: File,
       hasFile: false,
-      actionContent: "",
       action: { name: "", description: "" },
     };
   },
   mounted() {
-    this.profileURL = this.$store.state.baseURL + "profiles";
-    this.uploadURL =
-      this.profileURL +
-      "/" +
-      this.profileName +
-      "/actions/" +
-      this.actionName +
-      "/check";
     this.hasFile = false;
   },
   methods: {
     importFile() {
-      console.log("import: " + this.file.name);
+      this.$emit("save", this.action)
     },
     choose() {
       this.$refs.fileInput.click();
     },
     cancel() {
+      this.hasFile = false
+      this.file = null
+      this.action = { name: "", description: "" }
       this.$emit("cancel");
     },
     handleFileChange(e) {

@@ -15,7 +15,7 @@
         label="Create"
         icon="pi pi-flag"
         :model="createMenuItems"
-        @click="importAction"
+        @click="wizard"
       />
       <Button
         label="Remove"
@@ -38,7 +38,7 @@
       />
     </template>
   </Dialog>
-  <Upload :visible="dialogUploadVisible" filetype=".act" :profileName="profileName" @cancel="dialogUploadVisible = false"/>
+  <Upload :visible="dialogUploadVisible" filetype=".act" :profileName="profileName" @cancel="dialogUploadVisible = false" @save="doImport"/>
 </template>
 
 <script>
@@ -57,7 +57,7 @@ export default {
     selectByName: String,
     profileName: String,
   },
-  emits: ["cancel", "save", "remove"],
+  emits: ["cancel", "save", "remove", "wizard"],
   data() {
     return {
       selectedAction: {},
@@ -101,6 +101,12 @@ export default {
     importAction() {
       this.dialogUploadVisible = true;
     },
+    doImport(event) {
+      let newAction = event;
+      console.log("new action: " + JSON.stringify(newAction))
+      this.dialogUploadVisible = false;
+      this.emitter.emit("insertAction", newAction);
+    }
   },
   beforeUpdate() {
     console.log("SelectAction: BeforeUpdate");
