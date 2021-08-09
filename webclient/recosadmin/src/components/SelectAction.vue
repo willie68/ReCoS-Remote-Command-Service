@@ -15,7 +15,7 @@
         label="Create"
         icon="pi pi-flag"
         :model="createMenuItems"
-        @click="wizard"
+        @click="importAction"
       />
       <Button
         label="Remove"
@@ -38,7 +38,7 @@
       />
     </template>
   </Dialog>
-  <Upload :visible="dialogUploadVisible" filetype=".act"/>
+  <Upload :visible="dialogUploadVisible" filetype=".act" :profileName="profileName" @cancel="dialogUploadVisible = false"/>
 </template>
 
 <script>
@@ -55,6 +55,7 @@ export default {
     },
     visible: Boolean,
     selectByName: String,
+    profileName: String,
   },
   emits: ["cancel", "save", "remove"],
   data() {

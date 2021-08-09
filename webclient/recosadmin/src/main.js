@@ -17,6 +17,7 @@ import Button from "primevue/button"
 import Badge from 'primevue/badge'
 import BadgeDirective from 'primevue/badgedirective'
 import Calendar from 'primevue/calendar';
+import Card from 'primevue/card';
 import Checkbox from 'primevue/checkbox'
 import ColorPicker from 'primevue/colorpicker'
 import ConfirmationService from 'primevue/confirmationservice';
@@ -97,6 +98,7 @@ app.component('Badge', Badge)
 app.component('BadgeDirective', BadgeDirective)
 app.component('Button', Button)
 app.component('Calendar', Calendar)
+app.component('Card', Card)
 app.component('Checkbox', Checkbox)
 app.component('ColorPicker', ColorPicker)
 app.component('ConfirmDialog', ConfirmDialog)
