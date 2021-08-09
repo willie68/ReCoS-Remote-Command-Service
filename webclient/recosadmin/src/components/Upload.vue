@@ -15,7 +15,7 @@
             ref="fileInput"
             type="file"
             multiple=""
-            accept=".act"
+            :accept="filetype"
             @change="handleFileChange"
           />
           <span

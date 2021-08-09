@@ -1,18 +1,14 @@
 package routes
 
 import (
-	"archive/zip"
-	"bytes"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"sort"
 	"strings"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
-	"gopkg.in/yaml.v3"
 	"wkla.no-ip.biz/remote-desk-service/api"
 	"wkla.no-ip.biz/remote-desk-service/api/handler"
 	"wkla.no-ip.biz/remote-desk-service/config"
@@ -193,38 +189,15 @@ func GetExportProfile(response http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	// Create a buffer to write our archive to.
-	buf := new(bytes.Buffer)
-
-	// Create a new zip archive.
-	w := zip.NewWriter(buf)
-
-	filename := fmt.Sprintf("%s.yaml", profileName)
-	body, err := yaml.Marshal(profile)
+	body, err := json.Marshal(profile)
 	if err != nil {
 		clog.Logger.Debug("Error reading profile: \n" + err.Error())
 		api.Err(response, request, err)
 		return
 	}
 
-	f, err := w.Create(filename)
-	if err != nil {
-		log.Fatal(err)
-	}
-	_, err = f.Write(body)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Make sure to check the error on Close.
-	err = w.Close()
-	if err != nil {
-		clog.Logger.Debug("Error writing profile: \n" + err.Error())
-		api.Err(response, request, err)
-		return
-	}
-	response.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s.zip\"", profileName))
-	render.Data(response, request, buf.Bytes())
+	response.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s.profile\"", profileName))
+	render.Data(response, request, body)
 }
 
 func getProfile(profileName string) (models.Profile, bool) {
@@ -273,6 +246,6 @@ func GetExportAction(response http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	response.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s.act\"", actionName))
+	response.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s.action\"", actionName))
 	render.Data(response, request, body)
 }

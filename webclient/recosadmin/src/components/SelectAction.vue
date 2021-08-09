@@ -38,7 +38,7 @@
       />
     </template>
   </Dialog>
-  <Upload :visible="dialogUploadVisible" filetype=".act" :profileName="profileName" @cancel="dialogUploadVisible = false" @save="doImport"/>
+  <Upload :visible="dialogUploadVisible" filetype=".action" :profileName="profileName" @cancel="dialogUploadVisible = false" @save="doImport"/>
 </template>
 
 <script>
