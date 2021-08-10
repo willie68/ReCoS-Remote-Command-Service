@@ -1,37 +1,9 @@
 <template>
-  <div>
-    <b>{{ title }}</b>
-    <label> Profile</label>
-    <select
-      v-model="profileName"
-      :disabled="readonly"
-      @change="changeProfile()"
-    >
-      <option
-        v-for="item in items"
-        :value="item.name"
-        :key="item.name"
-        v-text="item.name"
-        :title="item.description"
-      ></option>
-    </select>
-    <button
-      v-for="page in toolbarPages"
-      :value="page.name"
-      :key="page.name"
-      :title="page.description"
-      @click="changePage(page.name)"
-      class="pagebuttons"
-    >
-      <img v-if="page.icon" :src="buildImageSrc(page.icon)" height="20"/>
-      <span v-if="!page.icon">{{ page.name }}</span>
-    </button>
-    <button @click="helpHelp()" class="pagebuttons">
-      <img src="assets/help.svg" height="20"/>
-    </button>
-
-  </div>
   <div class="display" ref="display">
+    <AppConfig
+      v-on:pageChanged="saveNewPage($event)"
+      v-on:profileChanged="saveNewProfile($event)"
+    />
     <div
       class="row"
       v-for="(row, x) in cellactions"
@@ -89,6 +61,7 @@
 </template>
 
 <script>
+import AppConfig from "./components/AppConfig.vue";
 import Action from "./components/Action.vue";
 import Display from "./components/Display.vue";
 import None from "./components/None.vue";
@@ -96,6 +69,7 @@ import None from "./components/None.vue";
 export default {
   name: "App",
   components: {
+    AppConfig,
     Action,
     Display,
     None,
@@ -158,6 +132,7 @@ export default {
     },
   },
   mounted() {
+    document.title = "ReCoS Client";  
     this.servicePort = 9280;
     this.baseURL =
       window.location.protocol +
@@ -213,8 +188,8 @@ export default {
               console.log("Event:", event.data);
               // console.log("found action");
               if (jsonObject.command == "sendmessage") {
-                alert("Message from ReCoS Service: \r\n"+ jsonObject.text);
-              } 
+                alert("Message from ReCoS Service: \r\n" + jsonObject.text);
+              }
               that.$refs[jsonObject.action].saveImg = jsonObject.imageurl;
               that.$refs[jsonObject.action].saveTitle = jsonObject.title;
               that.$refs[jsonObject.action].saveText = jsonObject.text;
@@ -250,6 +225,15 @@ export default {
     toggleModal() {
       this.showModal = !this.showModal;
     },
+    saveNewProfile(profile) {
+      console.log("profile changed: " + JSON.stringify(profile));
+      this.activeProfile = profile;
+      this.profileName = profile.name;
+      var message = { profile: this.profileName, command: "change" };
+      this.connection.send(JSON.stringify(message));
+      this.activePage = this.activeProfile.pages[0];
+      this.changePage(this.activePage.name);
+    },
     changeProfile() {
       fetch(this.showURL + "/" + this.profileName)
         .then((res) => res.json())
@@ -261,6 +245,10 @@ export default {
           this.changePage(this.activePage.name);
         })
         .catch((err) => console.log(err.message));
+    },
+    saveNewPage(page) {
+      console.log("page changed: " + JSON.stringify(page));
+      this.changePage(page.name);
     },
     changePage(pageName) {
       // console.log("change page to: ", pageName);
@@ -323,8 +311,8 @@ export default {
     },
     buildImageSrc(data) {
       if (!data) {
-        console.log("no data")
-        return "data:image/bmp;base64,Qk1CAAAAAAAAAD4AAAAoAAAAAQAAAAEAAAABAAEAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wCAAAAA"
+        console.log("no data");
+        return "data:image/bmp;base64,Qk1CAAAAAAAAAD4AAAAoAAAAAQAAAAEAAAABAAEAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wCAAAAA";
       }
       if (data.startsWith("/")) {
         return this.baseURL + data;
@@ -350,13 +338,13 @@ export default {
 
 .display {
   position: absolute;
-  top: 32px;
+  top: 0;
   bottom: 0;
   width: 100%;
   background: black;
 }
 
-.pagebuttons{
+.pagebuttons {
   height: 32px;
 }
 

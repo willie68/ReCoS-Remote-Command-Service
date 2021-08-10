@@ -21,3 +21,6 @@ var IconMapperAssets embed.FS
 
 //go:embed data/credits.html
 var CreditsAsset string
+
+//go:embed version/version.json
+var VersionJson string

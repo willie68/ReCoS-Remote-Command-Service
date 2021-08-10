@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"crypto/md5"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -162,6 +163,7 @@ func main() {
 		}
 		running := true
 		startTime := time.Now()
+		count := 0
 		for running {
 			running = false
 			resp, _ := http.Get(fmt.Sprintf("http://127.0.0.1:%d/health/readyz", statPort))
@@ -170,12 +172,14 @@ func main() {
 				status = resp.Status
 				running = true
 			}
-			fmt.Printf("status: %s", status)
 			if time.Since(startTime) >= 100*time.Second {
 				panic("old process is not exiting")
 			}
 			if running {
 				time.Sleep(time.Second)
+			}
+			if count%60 == 0 {
+				fmt.Printf("service already running, waitung to stop, status: %s", status)
 			}
 		}
 	}
@@ -635,18 +639,52 @@ func getApikey() string {
 }
 
 func checkVersion() {
-	name, err := os.Hostname()
-	if err != nil {
-		name = "n.n."
-	}
-	clog.Logger.Infof("Hostname: %s", name)
-	url := fmt.Sprintf("http://wkla.no-ip.biz/willie/downloader/version.php?ID=%d&AppUUID=\"%s\"&host=\"%s\"", serviceConfig.AppID, serviceConfig.AppUUID, name)
-	resp, err := http.Get(url)
-	if err != nil {
-		clog.Logger.Alertf("error connectiing to version service: %v", err)
-	}
-	if resp.StatusCode != 200 {
-		clog.Logger.Errorf("can'T connect to: \"%s\"\r\n%v", url, resp.Status)
-	}
+	versionStr := web.VersionJson
+	var thisVersion config.Version
 
+	json.Unmarshal([]byte(versionStr), &thisVersion)
+	go func() {
+		background := time.NewTicker(time.Second * time.Duration(60))
+		for _ = range background.C {
+			name, err := os.Hostname()
+			if err != nil {
+				name = "n.n."
+			}
+			clog.Logger.Infof("Hostname: %s", name)
+			url := fmt.Sprintf("http://wkla.no-ip.biz/willie/downloader/version.php?ID=%d&AppUUID=\"%s\"&host=\"%s\"", serviceConfig.AppID, serviceConfig.AppUUID, name)
+			resp, err := http.Get(url)
+			if err != nil {
+				clog.Logger.Alertf("error connecting to version service: %v", err)
+				continue
+			}
+			if resp.StatusCode != 200 {
+				clog.Logger.Errorf("can't connect to: \"%s\"\r\n%v", url, resp.Status)
+				continue
+			}
+			data, err := ioutil.ReadAll(resp.Body)
+			if err != nil {
+				clog.Logger.Errorf("Error loading version: %v", err)
+				return
+			}
+			var srvVersion map[string]interface{}
+			err = json.Unmarshal(data, &srvVersion)
+			if err != nil {
+				clog.Logger.Errorf("Error unmarshalling version: %v", err)
+				return
+			}
+			version, err := config.ParseVersion(srvVersion["version"].(string))
+			if err != nil {
+				clog.Logger.Errorf("Error parsing version: %v", err)
+				return
+			}
+			if version.Patch == 0 {
+				version.Patch = version.Minor
+				version.Minor = 0
+			}
+			if version.IsGreaterThan(thisVersion) {
+				clog.Logger.Infof("New version availble: %s", version.String())
+			}
+			background.Stop()
+		}
+	}()
 }

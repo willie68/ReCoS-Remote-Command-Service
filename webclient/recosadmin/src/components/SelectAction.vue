@@ -11,10 +11,10 @@
       listStyle="max-height:150px"
     />
     <template #footer>
-      <Button
-        label="Wizard"
+      <SplitButton
+        label="Create"
         icon="pi pi-flag"
-        class="p-button-text"
+        :model="createMenuItems"
         @click="wizard"
       />
       <Button
@@ -38,12 +38,16 @@
       />
     </template>
   </Dialog>
+  <Upload :visible="dialogUploadVisible" filetype=".action" :profileName="profileName" @cancel="dialogUploadVisible = false" @save="doImport"/>
 </template>
 
 <script>
+import Upload from "./Upload.vue";
 export default {
   name: "SelectAction",
-  components: {},
+  components: {
+    Upload,
+  },
   props: {
     sourceValue: {
       type: Array,
@@ -51,13 +55,25 @@ export default {
     },
     visible: Boolean,
     selectByName: String,
+    profileName: String,
   },
-  emits: ["cancel", "save" , "remove"],
+  emits: ["cancel", "save", "remove", "wizard"],
   data() {
     return {
       selectedAction: {},
       dialogVisible: false,
+      dialogUploadVisible: false,
       isNameOK: true,
+      createMenuItems: [
+        {
+          label: "Import",
+          icon: "pi pi-cloud-upload",
+          class: "p-button-text",
+          command: () => {
+            this.importAction();
+          },
+        },
+      ],
     };
   },
   methods: {
@@ -82,6 +98,15 @@ export default {
         .map((elem) => elem.toLowerCase())
         .includes(name.toLowerCase());
     },
+    importAction() {
+      this.dialogUploadVisible = true;
+    },
+    doImport(event) {
+      let newAction = event;
+      console.log("new action: " + JSON.stringify(newAction))
+      this.dialogUploadVisible = false;
+      this.emitter.emit("insertAction", newAction);
+    }
   },
   beforeUpdate() {
     console.log("SelectAction: BeforeUpdate");

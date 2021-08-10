@@ -45,6 +45,15 @@ export default {
       profileDirty: false,
     };
   },
+  created() {
+    this.emitter.on('insertAction', (action) => this.addAction(action))
+  },
+  methods: {
+    addAction(action) {
+      console.log("Profile: addAction: " + JSON.stringify(action))
+      this.activeProfile.actions.push(action)
+    }
+  },
   watch: {
     profile(newProfile) {
       if (newProfile) {

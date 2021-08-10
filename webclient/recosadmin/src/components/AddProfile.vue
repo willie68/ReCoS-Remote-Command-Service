@@ -34,6 +34,12 @@
     </div>
     <template #footer>
       <Button
+        label="Import"
+        icon="pi pi-cloud-upload"
+        class="p-button-text"
+        @click="this.importAction();"
+      />
+      <Button
         label="Cancel"
         icon="pi pi-times"
         class="p-button-text"
@@ -48,12 +54,16 @@
       />
     </template>
   </Dialog>
+  <Upload :visible="dialogUploadVisible" filetype=".profile" @cancel="dialogUploadVisible = false" @save="doImport"/>
 </template>
 
 <script>
+import Upload from "./Upload.vue";
 export default {
   name: "AddProfile",
-  components: {},
+  components: {
+    Upload,
+  },
   props: {
     profile: {},
     visible: Boolean,
@@ -63,11 +73,22 @@ export default {
   data() {
     return {
       dialogProfileVisible: false,
+      dialogUploadVisible: false,
       addProfile: { name: "", description: "" },
       isNameOK: true,
     };
   },
   methods: {
+    importAction() {
+      this.dialogUploadVisible = true;
+    },
+    doImport(event) {
+      let newProfile = event;
+      console.log("new profile: " + JSON.stringify(newProfile))
+      this.dialogUploadVisible = false;
+      this.addProfile = newProfile;
+      //this.emitter.emit("insertAction", newAction);
+    },
     cancel() {
       this.$emit("cancel");
     },
