@@ -132,6 +132,7 @@ export default {
     },
   },
   mounted() {
+    document.title = "ReCoS Client";  
     this.servicePort = 9280;
     this.baseURL =
       window.location.protocol +

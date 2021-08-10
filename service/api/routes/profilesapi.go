@@ -201,6 +201,7 @@ func GetExportProfile(response http.ResponseWriter, request *http.Request) {
 }
 
 func getProfile(profileName string) (models.Profile, bool) {
+
 	for _, profile := range config.Profiles {
 		if strings.EqualFold(profile.Name, profileName) {
 			return profile, true

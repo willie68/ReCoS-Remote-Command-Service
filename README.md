@@ -56,9 +56,11 @@ http://localhost:9280/webclient on the same computer.
 
 <img src="documentation/assets/webclient.png" alt="webclient" style="zoom:50%;" />
 
-The client has a small toolbar and a big button area, presenting the different actions. But let us start at the very beginning. First, everything is organized in a **profile**. You can have different profiles for different clients, or different scenarios. One client can only present one profile at a time, but you can have different profiles in different browser open. As an example, you can have a special profile for your Phone and another for the Pad and a really big one for the PC. And all can be active at the same time. But to emphasize again, you can of course also operate the same profile on 2 different devices at the same time. When starting the client, the first profile is selected. You can select profiles using the Profile Combobox.
+The client has a a big button area, presenting the different actions. But let us start at the very beginning. First, everything is organized in a **profile**. You can have different profiles for different clients, or different scenarios. One client can only present one profile at a time, but you can have different profiles in different browser open. As an example, you can have a special profile for your Phone and another for the Pad and a really big one for the PC. And all can be active at the same time. But to emphasize again, you can of course also operate the same profile on 2 different devices at the same time. When starting the client, the first profile is selected. You can select profiles using the Profile Combobox in the settings page. To open it simply press the button in the upper right corner.
 
-Each profile has different **pages** for further structuring. When the client starts, the first page is automatically selected. A page then consists of rows and columns. You can set the size in the Admin Client. The more rows and columns you have, the smaller the individual actions become. The page adapts its actions to the possible space. Pages can be changed directly via the toolbar (shown as buttons) or via special actions. Whether a page appears at the top of the bar can be set in the page configuration. If the page has no icon, only the name is displayed.
+<img src="documentation/assets/client_settings.png" alt="webclient" style="zoom:50%;" />
+
+Each profile has different **pages** for further structuring. When the client starts, the first page is automatically selected. A page then consists of rows and columns. You can set the size in the Admin Client. The more rows and columns you have, the smaller the individual actions become. The page adapts its actions to the possible space. Pages can be changed directly via the settings (shown as buttons) or via special actions. Whether a page appears in the settings dialog it can be set in the page configuration. If the page has no icon, only the name is displayed.
 
 In the client area you will see 2 types of buttons and maybe some empty space. First, all buttons with the gray background are buttons that you can press. (**Single** Action)This is the default behavior. On Press the underlying commands will be executed on the computer where the service is running.
 
@@ -66,7 +68,7 @@ The buttons with the black background are for display purposes only. (**Display*
 
 The empty fields are waiting for you so that you can store something there.
 
-If you see a field with the red warning Action not defined, there is a misconfiguration. You may have deleted an action, but not removed it from the button.
+If you see a field with the red warning "Action not defined", there is a misconfiguration. You may have deleted an action, but not removed it from the button.
 
 <img src="documentation/assets/action_not_found.png" alt="action_not_found" style="zoom: 50%;" />
 

@@ -5,12 +5,11 @@
     position="top"
     class="p-sidebar-sm"
   >
-    <div class="p-fluid">
-      <div class="p-field p-grid">
-        <label for="profiles" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"
-          >Profiles</label
-        >
-        <div class="p-col-12 p-md-10">
+  <h3>ReCoS Client</h3>
+    <table>
+      <tr>
+        <td>Profiles</td>
+        <td>
           <Dropdown
             id="profiles"
             v-tooltip="'select the profile to edit'"
@@ -19,31 +18,37 @@
             :options="profiles"
             placeholder="Select a Profile"
           />
-        </div>
-      </div>
-    </div>
-    <label class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Pages</label>
-    <Button
-      v-for="page in toolbarPages"
-      :value="page.name"
-      :key="page.name"
-      :title="page.description"
-      :label="page.name"
-      @click="changePage(page.name)"
-      class="p-ml-1"
-    >
-      <img v-if="page.icon" :src="buildImageSrc(page.icon)" height="20" />
-    </Button>
+        </td>
+      </tr>
+      <tr v-if="toolbarPages.length > 1">
+        <td>Pages</td>
+        <td>
+          <Button
+            v-for="page in toolbarPages"
+            :value="page.name"
+            :key="page.name"
+            :title="page.description"
+            :label="page.name"
+            @click="changePage(page.name)"
+            class="pagebutton"
+          >
+            <img v-if="page.icon" :src="buildImageSrc(page.icon)" height="20" />
+            <span v-if="page.name"> {{ page.name }}</span>
+          </Button>
+        </td>
+      </tr>
+    </table>
   </Sidebar>
+
   <Button
-    style="position: absolute; top: 4px; left: 4px; z-index: 10000"
+    style="position: absolute; top: 8px; left: 8px; z-index: 10000"
     icon="pi pi-bars"
     class="p-mr-1 p-button-sm"
     @click="toggleHelpMenu"
   />
   <Menu id="overlay_menu" ref="helpmenu" :model="helpMenuItems" :popup="true" />
   <Button
-    style="position: absolute; top: 4px; right: 4px; z-index: 10000"
+    style="position: absolute; top: 8px; right: 0px; z-index: 10000"
     icon="pi pi-cog"
     @click="visible = true"
     v-if="!visible"
@@ -79,7 +84,7 @@ export default {
   name: "AppConfig",
   components: {},
   emits: ["profileChanged", "pageChanged"],
-  props: [  ],
+  props: [],
   data() {
     return {
       profileURL: "",
@@ -133,8 +138,11 @@ export default {
               that.activeProfile = data;
               //console.log(JSON.stringify(that.activeProfile))
               this.$emit("profileChanged", that.activeProfile);
-              if (that.activeProfile.pages && (that.activeProfile.pages.length > 0)) {
-                  that.changePage(that.activeProfile.pages[0].name)
+              if (
+                that.activeProfile.pages &&
+                that.activeProfile.pages.length > 0
+              ) {
+                that.changePage(that.activeProfile.pages[0].name);
               }
             })
             .catch((err) => console.log(err.message));
@@ -295,4 +303,11 @@ export default {
 </script>
 
 <style>
+.p-sidebar-top {
+  height: 15rem !important;
+}
+
+.pagebutton {
+  margin: 4px !important;
+}
 </style>
