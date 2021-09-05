@@ -7,6 +7,8 @@ import (
 	"sort"
 	"strings"
 
+	"wkla.no-ip.biz/remote-desk-service/pkg/transformer"
+
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
 	"wkla.no-ip.biz/remote-desk-service/api"
@@ -28,6 +30,8 @@ func ProfilesRoutes() *chi.Mux {
 	router.With(handler.AuthCheck()).Delete("/{profileName}", DeleteProfile)
 	router.Get("/{profileName}/export", GetExportProfile)
 	router.Get("/{profileName}/actions/{actionName}/export", GetExportAction)
+	router.Get("/{profileName}/pages/{pageName}/export", GetExportPage)
+	router.With(handler.AuthCheck()).Post("/{profileName}/combine/", PostCombine)
 	return router
 }
 
@@ -249,4 +253,81 @@ func GetExportAction(response http.ResponseWriter, request *http.Request) {
 
 	response.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s.action\"", actionName))
 	render.Data(response, request, body)
+}
+
+// GetExportPage exporting a page from a profile as a file
+func GetExportPage(response http.ResponseWriter, request *http.Request) {
+	profileName, err := api.Param(request, "profileName")
+	if err != nil {
+		clog.Logger.Debug("Error reading profile name: \n" + err.Error())
+		api.Err(response, request, err)
+		return
+	}
+
+	profile, ok := getProfile(profileName)
+	if !ok {
+		clog.Logger.Debugf("Profile %s not found", profileName)
+		api.NotFound(response, request, "profile", profileName)
+		return
+	}
+
+	pageName, err := api.Param(request, "pageName")
+	if err != nil {
+		clog.Logger.Debug("Error reading page name: \n" + err.Error())
+		api.Err(response, request, err)
+		return
+	}
+
+	exchange, err := transformer.ExportPage(profile, pageName)
+	if err != nil {
+		clog.Logger.Debug("Error getting page: \n" + err.Error())
+		api.Err(response, request, err)
+		return
+	}
+
+	body, err := json.Marshal(exchange)
+	if err != nil {
+		clog.Logger.Debug("Error serialising action: \n" + err.Error())
+		api.Err(response, request, err)
+		return
+	}
+
+	response.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s.page\"", pageName))
+	render.Data(response, request, body)
+}
+
+// PostCombine combines an export file with a profile
+func PostCombine(response http.ResponseWriter, request *http.Request) {
+	profileName, err := api.Param(request, "profileName")
+	if err != nil {
+		clog.Logger.Debug("Error reading profile name: \n" + err.Error())
+		api.Err(response, request, err)
+		return
+	}
+
+	profile, ok := getProfile(profileName)
+	if !ok {
+		clog.Logger.Debugf("Profile %s not found", profileName)
+		api.NotFound(response, request, "profile", profileName)
+		return
+	}
+
+	decoder := json.NewDecoder(request.Body)
+	var profileExchange models.ProfileExchange
+	err = decoder.Decode(&profileExchange)
+	if err != nil {
+		clog.Logger.Debug("Error reading json body:" + err.Error())
+		api.Err(response, request, err)
+		return
+	}
+
+	newProfile, err := transformer.CombineProfile(profile, profileExchange)
+	if err != nil {
+		clog.Logger.Debug("Error reading json body:" + err.Error())
+		api.Err(response, request, err)
+		return
+	}
+
+	render.Status(request, http.StatusCreated)
+	render.JSON(response, request, newProfile)
 }

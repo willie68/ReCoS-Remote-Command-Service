@@ -6,12 +6,21 @@
           <button
             class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
             @click="addPage"
+            v-tooltip="'create a new page'"
           >
             <span class="pi pi-plus"></span>
           </button>
           <button
             class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
+            @click="importPage"
+            v-tooltip="'import a page'"
+          >
+            <span class="pi pi-cloud-upload"></span>
+          </button>
+          <button
+            class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
             @click="deleteConfirm"
+            v-tooltip="'delete a page'"
           >
             <span class="pi pi-trash"></span>
           </button>
@@ -35,7 +44,7 @@
     :excludeList="pageNames"
     v-on:save="saveNewPage($event)"
     v-on:cancel="this.addPageDialog = false"
-    ><template #sourceHeader>New Command</template></AddName
+    ><template #sourceHeader>New Page</template></AddName
   >
 </template>
 
