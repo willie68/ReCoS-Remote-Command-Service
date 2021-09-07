@@ -24,13 +24,13 @@ func ExportPage(p models.Profile, pageName string) (*models.ProfileExchange, err
 	}
 	exchange := models.ProfileExchange{
 		Type:    models.ExchangePage,
-		Pages:   []models.Page{*page},
+		Pages:   []*models.Page{page},
 		Actions: actions,
 	}
 	return &exchange, nil
 }
 
-func CombineProfile(profile models.Profile, e models.ProfileExchange) (*models.Profile, error) {
+func CombineProfile(profile models.Profile, e models.ProfileExchange) (*models.ProfileExchange, error) {
 	// adding actions to action and rename them is needed
 	for _, eaction := range e.Actions {
 		name := eaction.Name
@@ -49,8 +49,6 @@ func CombineProfile(profile models.Profile, e models.ProfileExchange) (*models.P
 					}
 				}
 			}
-
-			profile.Actions = append(profile.Actions, eaction)
 			break
 		}
 	}
@@ -65,11 +63,9 @@ func CombineProfile(profile models.Profile, e models.ProfileExchange) (*models.P
 				index++
 				continue
 			}
-
-			profile.Pages = append(profile.Pages, epage)
 			break
 		}
 	}
 
-	return &profile, nil
+	return &e, nil
 }
