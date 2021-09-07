@@ -23,9 +23,11 @@ func ExportPage(p models.Profile, pageName string) (*models.ProfileExchange, err
 		actions = append(actions, action)
 	}
 	exchange := models.ProfileExchange{
-		Type:    models.ExchangePage,
-		Pages:   []*models.Page{page},
-		Actions: actions,
+		Name:        pageName,
+		Description: page.Description,
+		Type:        models.ExchangePage,
+		Pages:       []*models.Page{page},
+		Actions:     actions,
 	}
 	return &exchange, nil
 }
