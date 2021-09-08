@@ -6,10 +6,86 @@
     This is the settings dialog. Take a look to all tabs with different
     settings.
     <TabView>
+      <TabPanel>
+        <template #header>
+          <img :src="'assets/recos.svg'" />
+          <span> ReCoS Password </span>
+        </template>
+        <div
+          class="p-field p-grid p-mb-2 p-mt-2"
+        >
+          <label
+            for="password"
+            class="p-col-12 p-mb-2 p-ml-2 p-md-2 p-mb-md-0"
+            >Password</label
+          >
+          <div class="p-col-12 p-md-8">
+            <Password
+              name="password"
+              v-model="pwd"
+              id="password"
+              :feedback="false"
+              autofocus
+              @input="checkpwd"
+            />
+          </div>
+        </div>
+        <div
+          class="p-field p-grid p-mb-2 p-mt-2"
+        >
+          <label
+            for="newpassword"
+            class="p-col-12 p-mb-2 p-ml-2 p-md-2 p-mb-md-0"
+            >new Password</label
+          >
+          <div class="p-col-12 p-md-8">
+            <Password
+              name="newpassword"
+              v-model="newpwd"
+              id="newpassword"
+              toggleMask
+              @input="checkpwd"
+            />
+          </div>
+        </div>
+        <div
+          class="p-field p-grid p-mb-2 p-mt-2"
+        >
+          <label
+            for="repeatpassword"
+            class="p-col-12 p-mb-2 p-ml-2 p-md-2 p-mb-md-0"
+            >Repeat</label
+          >
+          <div class="p-col-12 p-md-8">
+            <Password
+              name="repeatpassword"
+              v-model="rptpwd"
+              id="repeatpassword"
+              :feedback="false"
+              @input="checkpwd"
+              :class="{ 'p-valid': isPwdOK, 'p-invalid': !isPwdOK }"
+            />
+          </div>
+        </div>
+        <div
+          class="p-field p-grid p-mb-2 p-mt-2"
+        >
+          <label
+            class="p-col-12 p-mb-2 p-ml-2 p-md-2 p-mb-md-0"
+            ></label>
+          <div class="p-col-12 p-md-8">
+            <Button
+              label="Change password"
+              icon="pi pi-pencil"
+              @click="changepwd"
+              :disabled="!isPwdOK"
+            />
+          </div>
+        </div>
+      </TabPanel>
       <TabPanel v-for="info of settings.infos" :key="info.name">
         <template #header>
           <img :src="'assets/' + info.image" />
-          <i :src="info.image"></i>
           <span> {{ info.name }} </span>
         </template>
         <div
@@ -190,6 +266,7 @@ import ArgumentList from "./../wizard/ArgumentList.vue";
 import DropdownParameter from "./../wizard/DropdownParameter.vue";
 import SelectIcon from "./../components/SelectIcon.vue";
 import { ObjectUtils } from "primevue/utils";
+import Password from 'primevue/password';
 
 export default {
   name: "Settings",
@@ -197,6 +274,7 @@ export default {
     ArgumentList,
     DropdownParameter,
     SelectIcon,
+    Password,
   },
   props: {
     profile: {},
@@ -228,6 +306,10 @@ export default {
       selectIconDialog: false,
       iconDestination: "",
       iconlist: [],
+      pwd: "",
+      newpwd: "",
+      rptpwd: "",
+      isPwdOK: false,
     };
   },
   methods: {
@@ -412,6 +494,52 @@ export default {
         })
         .catch((err) => console.log(err.message));
     },
+    checkpwd() {
+      if (this.newpwd == this.rptpwd) {
+        this.isPwdOK = true
+      } else {
+        this.isPwdOK = false
+      }
+    },
+    changepwd() {
+      let url = this.$store.state.baseURL + "config/password";
+      let settings = new Map()
+      settings["password"] = this.pwd
+      settings["newpassword"] = this.newpwd
+      settings["repeatpassword"] = this.rptpwd
+
+      fetch(url, {
+          method: "POST",
+          body: JSON.stringify(settings),
+          headers: new Headers({
+            "Content-Type": "application/json",
+            Authorization: `Basic ${btoa(
+              `admin:${this.$store.state.password}`
+            )}`,
+          }),
+          mode: "cors",
+        })
+        .then((response) => {
+          if (!response.ok) {
+              response.json().then((err) => {
+                console.log(err);
+                this.$toast.add({
+                  severity: "error",
+                  summary: "Error on Change Password",
+                  detail: err.message,
+                });
+            });
+          } else {
+            console.log(JSON.stringify(response))
+            this.$toast.add({
+              severity: "warn",
+              summary: "Password changed",
+              detail: "Please restart the service and the client for the change to take effect. Please use the context menu on the service icon.",
+              life: 10000,
+            });
+          }
+        })
+    }
   },
   mounted() {
     this.iconlist = this.$store.state.iconlist;

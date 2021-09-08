@@ -3,7 +3,7 @@
 
 #define MyAppName "ReCoS"
 ;version number set by GoVersionSetter.
-#define MyAppVersion "0.3.97"
+#define MyAppVersion "0.3.98"
 #define MyAppPublisher "MCS Media Computer Software"
 #define MyAppURL "https://www.wk-music.de"
 #define MyAppExeName "recos-service.exe"
@@ -42,12 +42,17 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 [Files]
 Source: "..\service\recos-service.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\documentation\README.pdf"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\documentation\README-de.pdf"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\integrations\streamdeck\StreamDeckService\bin\Release\net5.0-windows\publish\*"; DestDir: "{app}\streamdeck"; Flags: ignoreversion recursesubdirs
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
+Name: "{group}\Readme english"; Filename: "{app}\README.pdf"
+Name: "{group}\Readme deutsch"; Filename: "{app}\README-de.pdf"
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: quicklaunchicon
 
 [Run]
-Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\{#MyAppExeName}"; Flags: nowait postinstall skipifsilent; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"
+Filename: "{app}\README.pdf"; Flags: nowait postinstall skipifsilent shellexec; Languages: english
+Filename: "{app}\README-de.pdf"; Flags: nowait postinstall skipifsilent shellexec; Languages: german

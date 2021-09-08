@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"image"
 	"image/png"
@@ -27,6 +28,7 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/api"
 	"wkla.no-ip.biz/remote-desk-service/api/handler"
 	"wkla.no-ip.biz/remote-desk-service/config"
+	"wkla.no-ip.biz/remote-desk-service/error/serror"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
 	"wkla.no-ip.biz/remote-desk-service/pac"
 	"wkla.no-ip.biz/remote-desk-service/pkg"
@@ -55,6 +57,7 @@ func ConfigRoutes() *chi.Mux {
 	router.With(handler.AuthCheck()).Post("/integrations/{integname}", PostInteg)
 	router.Get("/credits", GetCredits)
 	router.Get("/networks", GetNetworks)
+	router.With(handler.AuthCheck()).Post("/password", PostChangePassword)
 	initIconMapper()
 	return router
 }
@@ -447,4 +450,44 @@ func getNetworkList() []IpName {
 	}
 
 	return ips
+}
+
+// PostChangePassword post a new config
+func PostChangePassword(response http.ResponseWriter, request *http.Request) {
+	//	config.Save()
+	decoder := json.NewDecoder(request.Body)
+	var params map[string]interface{}
+	err := decoder.Decode(&params)
+	if err != nil {
+		clog.Logger.Errorf("Error reading json body: %v", err)
+		api.Err(response, request, err)
+		return
+	}
+
+	password, ok := params["password"]
+	if ok {
+		clog.Logger.Infof("password: %s", password)
+	}
+
+	newpassword, ok := params["newpassword"]
+	if ok {
+		clog.Logger.Infof("newpassword: %s", newpassword)
+	}
+
+	repeatpassword, ok := params["repeatpassword"]
+	if ok {
+		clog.Logger.Infof("repeat: %s", repeatpassword)
+	}
+	if password != config.Get().Password {
+		api.Err(response, request, serror.Unauthorized(nil))
+		return
+	}
+	if newpassword != repeatpassword {
+		api.Err(response, request, serror.BadRequest(errors.New("new password not identically")))
+		return
+	}
+	localConfig := config.Get()
+	localConfig.Password = newpassword.(string)
+	config.Save()
+	render.JSON(response, request, serror.New(http.StatusOK, "password changed"))
 }
