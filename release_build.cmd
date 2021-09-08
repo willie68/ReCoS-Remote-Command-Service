@@ -1,5 +1,5 @@
 @echo off
-".\3rd party\GoVersionSetter.exe" -i -m
+".\3rd party\GoVersionSetter.exe" -i
 ".\3rd party\GoVersionSetter.exe" -e npm -f ./webclient/recosadmin/package.json
 ".\3rd party\GoVersionSetter.exe" -e npm -f ./webclient/RecosUI/package.json
 ".\3rd party\GoVersionSetter.exe" -e iss -f ./install/setup.iss -o MyAppVersion

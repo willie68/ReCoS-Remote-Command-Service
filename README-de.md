@@ -1,95 +1,102 @@
 # Remote Command Service, ReCoS
 
-Remote Command Service is used to run apps, programs and scripts remotely from another device. Just like a macro keyboard, but with visual feedback and more interaction. This project consists of 3 different components. 
-One is the service, a small golang based micro service, which delivers all the functionality behind the UI. This service is responsible for the execution of the different actions. 
-On the other side there are two Web applications, build on top of VUE as the main UI Framework. One is the client controlling the actions, which can be started on the remote control device, one client is for the administration, normally started on the same device as the ReCoS service itself.. 
+Remote Command Service kurz ReCoS ist ein Programm, um Apps, Programme und Skripte aus der Ferne, von einem anderen Gerät aus, auszuführen zu können. Genau wie eine Makrotastatur, aber mit visuellem Feedback und mehr Interaktion. Du kannst mit deinem Handy oder Tablett auf deinem Rechner Programme starten, Tastatur Makros ausführen oder dir einfach nur die Uhrzeit anzeigen lassen. 
+Das Programm besteht aus 3 verschiedenen Komponenten.
+Zunächst ist da das Hauptprogramm, ein kleiner Golang-basierter Mikroservice, der alle Funktionen auf dem zu steuernden Rechner bereitstellt. Dieser Dienst läuft gewöhnlich im Hintergrund und sollte automatisch mit dem Rechner gestartet werden.
+Auf der anderen Seite gibt es zwei Webanwendungen. 
+Einmal der Client, der die Aktionen steuert, der auf dem steuernden Gerät gestartet werden kann, und ein Client der für die Konfiguration zuständig ist.
 
-Features:
+Folgende Funktionen können gesteuert werden: (Das ist natürlich nur ein Auszug aus den wichtigsten Funktionen)
 
-- Control Audio Volumes and Mic Gain.
-- controlling your obs, profiles, scene collections, scenes and streaming/recording functions
-- Execute Browser, File explorer and other Apps
-- Showing Date and Time with nice faces
-- Counting something, with persistence
-- showing Days up to an end date
-- rolling a dice (virtually)
-- showing and logging pc hardware sensors
-- controlling your smart home with product integrations like homematic or philips hue
-- using a virtual keyboard
-- controlling your media player
-- ping time to a server
-- soundboard: playing media files
-- random words: selecting a random word/phrase
-- taking a screen shot and save it to a folder
-- stopwatch: measure time
-- Count down timer
-- controlling your desktop windows. activate/move/minimize
+- Lautstärke und Mikrofon Gain.
+- OBS Studio integration: Steure Profile, Szenen und Stream und Aufnahme Funktionen 
+- Starte einen Browser, den Explorer oder irgendein anderes Programm auf Tastendruck
+- zeige dir ein Uhr in verschiedenen Designs an
+- Zähle Ereignisse auf Knopfdruck
+- zähle die Tage bis zu einem Ereigniss
+- lass die Würfel rollen
+- zeige dir Sensordaten deines PC an, CPU/GPU Auslastung oder Temperatur
+- Kontrolliere deine Smarthome Produkte wie Homematic(C) oder Philips Hue(C)
+- benutze die virtuelle Tastatur und sende belibige Tastenfolgen 
+- steuere deinen Media Player
+- zeig dir die Netzwerk Ping Zeit zu einem anderen Server an
+- mach dein eigenes Soundboard: spiele belibige Mediadateien ab
+- zufalls Wörter: lass dir aus einer Liste von Wörter zufällig eines auswählen
+- mache einen Screenshot und speichere diesen automatisch in einen Ordner deiner Wahl
+- zeige dir eine Stoppuhr an
+- benutze einen Countdown-Timer
+- Kontrolliere deinen Windows Desktop, aktiviere, verschiebe und minimiere Fenster 
 
 # Installation
 
-Installation is simple. Execute the installer. After installation you have to start the service itself. It's called `recos-service.exe`. Nothing else to do here. After the service is up, simply go to the web page http://localhost:9280/webadmin for the admin client. 
-
-For the normal execution client please use http://localhost:9280/webclient. On other machines simply change localhost to the ip of the computer where the service is running, like http://192.168.178.34/webclient
-
-# ReCoS Client - Web Client Interface
-
-## Connecting a client
-
-Conneting a client is simple. For strting the client directly on the same maschine as the ReCoS Service you can simply click on the taskicon menu for the WebClient.
+Die Installation ist einfach. Führ das Installationsprogramm aus. Nach der Installation startet der Dienst automatisch. Für den automatischen Start musst du nur im Kontextmenü Autostart wählen.
 
 ![taskbar_1](documentation/assets/taskbar_1.png)
 
-If you want to connect another device,  like your smartphone, you have to connect to the device where the ReCoS Service is running. To simplify this process, start the Webadmin from the menu above.
+Jetzt kannst du einfach den Admin-Client mit WebAdmin aufrufen.
 
-Then click on the help menu and than on the Menu Client QR Codes.
+Für den Client wählst du WebClient. Wenn du den Client auf einem anderen Gerät ausführen möchtest, schau im nächsten Kapitel.
+
+# ReCoS Client - Web Client Interface
+
+## Verbinde ein Gerät
+
+Einen Client zu verbinden ist einfach. Um den Client direkt auf derselben Maschine wie den ReCoS Service zu starten, klicke einfach auf das Task-Icon-Menü für den WebClient.
+
+
+![taskbar_1](documentation/assets/taskbar_1.png)
+
+Wenn Du ein anderes Gerät, wie dein Smartphone oder Tablett, verbinden möchten, musst du dich zunächst mit dem Gerät verbinden, auf dem der ReCoS-Dienst ausgeführt wird, vorrausgesetzt beide Geräte sind im gleichen Netzwerk. Um diesen Vorgang zu vereinfachen, kann dir ReCoS fertige QR Codes für die Verbindung generieren. Dazu starte den Webadmin über das obige Menü. Klicke auf das Hilfemenü und dann auf das Menü Client QR Codes.
 
 ![image-20210609175927254](documentation/assets/wc_02.png)
 
-Than this dialog will be visible, you can select one of your network interfaces and scan the QR Code for it. After executing this code, you will be redirected to the right web client. If there is a problem, simply use another entry. (Because not every interface is connected to your home network. Some are for internal use only, so you can't see them outside your PC. )
+Wenn dieser Dialog sichtbar ist, kannst du eine Netzwerkschnittstellen auswählen und den QR-Code dafür scannen. (Falls du keine Möglichkeit hast, einen QR Code auf dem Gerät zu scannen, kannst du auch einfach den Interbrowser auf dem Gerät starten und die Adresse, die unter dem QR Code steht, verwenden.) Nachdem du diesen Code ausgeführt hast, wirst du zur richtigen Webseite weitergeleitet. Wenn es ein Problem gibt, verwende einfach einen anderen Eintrag. (Nicht jede Schnittstelle ist mit deinem Heimnetzwerk verbunden. Einige sind nur für den internen Gebrauch. Das Programm kann aber leider den Unterschied nicht erkennen.)
 
 ![image-20210609180246724](documentation/assets/wc_03.png)
 
-## The client interface
+## Der WebClient
 
-This is the main ReCoS web client for executing the configured commands. After successful installation you can access it with 
-http://localhost:9280/webclient on the same computer.
+Dies ist der Haupt-ReCoS-Webclient zum Ausführen der konfigurierten Befehle. 
 
 <img src="documentation/assets/webclient.png" alt="webclient" style="zoom:50%;" />
 
-The client has a a big button area, presenting the different actions. But let us start at the very beginning. First, everything is organized in a **profile**. You can have different profiles for different clients, or different scenarios. One client can only present one profile at a time, but you can have different profiles in different browser open. As an example, you can have a special profile for your Phone and another for the Pad and a really big one for the PC. And all can be active at the same time. But to emphasize again, you can of course also operate the same profile on 2 different devices at the same time. When starting the client, the first profile is selected. You can select profiles using the Profile Combobox in the settings page. To open it simply press the button in the upper right corner.
+Der Client hat einen großen Schaltflächenbereich, der die verschiedenen Aktionen präsentiert. Aber fangen wir ganz am Anfang an. Zunächst ist alles in einem **Profil** organisiert. Du kannst unterschiedliche Profile für unterschiedliche Clients oder unterschiedliche Szenarien anlegen. Ein Client kann jeweils nur ein Profil präsentieren, aber du kannst verschiedene Profile gleichzeitig in verschiedenen Browsern geöffnet haben. Beispiel: Dukannst dir ein spezielles Profil für dein Telefon, ein Anderes für den Tablett und ein wirklich großes Profile für deinen PC anlegen. Und alle können gleichzeitig aktiv sein. Aber um es noch einmal zu betonen, Du kannst das gleiche Profil auch auf 2 verschiedenen Geräten gleichzeitig betreiben. Beim Starten des Clients wird immer das erste Profil ausgewählt. Du kannst das Profile mit der Profil-Combobox auf der Einstellungsseite auswählen. Zum Öffnen einfach den Button in der oberen rechten Ecke drücken.
 
 <img src="documentation/assets/client_settings.png" alt="webclient" style="zoom:50%;" />
 
-Each profile has different **pages** for further structuring. When the client starts, the first page is automatically selected. A page then consists of rows and columns. You can set the size in the Admin Client. The more rows and columns you have, the smaller the individual actions become. The page adapts its actions to the possible space. Pages can be changed directly via the settings (shown as buttons) or via special actions. Whether a page appears in the settings dialog it can be set in the page configuration. If the page has no icon, only the name is displayed.
+Jedes Profil hat unterschiedliche **Seiten** zur weiteren Strukturierung. Beim Starten des Clients wird automatisch die erste Seite ausgewählt. Eine Seite besteht dann aus Zeilen und Spalten. Du kannst die Größe der Seite im Admin-Client einstellen. Je mehr Zeilen und Spalten du hast, desto kleiner werden die einzelnen Aktionen. Die Seite passt ihre Aktionen dem möglichen Raum an. Seiten können direkt über die Einstellungen (dargestellt als Schaltflächen, im Bild oben Default und Audio) oder über spezielle Aktionen geändert werden. Ob eine Seite im Einstellungsdialog erscheint, kann in der Seitenkonfiguration eingestellt werden. Wenn die Seite kein Symbol hat, wird nur der Name angezeigt.
 
-In the client area you will see 2 types of buttons and maybe some empty space. First, all buttons with the gray background are buttons that you can press. (**Single** Action)This is the default behavior. On Press the underlying commands will be executed on the computer where the service is running.
+Im Client-Bereich siehst du 2 Arten von Schaltflächen und möglicherweise etwas Leerraum. Zunächst sind da die grau hinterlegten Tasten, die Du drücken kannst. (**Single** Action) Dies ist das Standardverhalten. Beim Drücken wird die zugrunde liegenden Aktion auf dem Computer ausgeführt.
 
-The buttons with the black background are for display purposes only. (**Display** Action) System states or other parameters are displayed there.
+Die schwarz hinterlegten Schaltflächen dienen nur zur Anzeige. (**Display** Action) Dort werden Systemzustände oder andere Parameter angezeigt.
 
-The empty fields are waiting for you so that you can store something there.
+Die leeren Felder warten darauf, das Du dort eine Aktion zuordnest.
 
-If you see a field with the red warning "Action not defined", there is a misconfiguration. You may have deleted an action, but not removed it from the button.
+(Wenn Du ein Feld mit der roten Warnung „Action not defined“ siehst, liegt eine Fehlkonfiguration vor. Möglicherweise hast Du eine Aktion gelöscht und vergessen diese von der Schaltfläche zu entfernen.)
 
 <img src="documentation/assets/action_not_found.png" alt="action_not_found" style="zoom: 50%;" />
 
-Buttons or actions can have several statuses. Depending on the situation, different icons are then displayed there. When a command is running, the hourglass is usually displayed. The turning position of the hourglass shows how many commands are currently being carried out. (Yes, actions can contain a command list)
-In the case of so-called **multi**-actions, this action runs through a list of actions. The 1st action is carried out with the 1st press, the 2nd with the 2nd press and so on. The respective status is represented by the icon of the corresponding action.
+Schaltflächen oder Aktionen können mehrere Zustände haben. Je nach Situation werden dort dann unterschiedliche Icons angezeigt. Wenn ein Befehl aktuell ausgeführt wird, wird normalerweise die Sanduhr angezeigt. Bei mehreren Kommandos pro Aktion zeigt die Stellung der Sanduhr an, wie viele Befehle gerade ausgeführt worden sind. (Ja, Aktionen können eine Befehlsliste enthalten)
 
-As already mentioned, an action can contain several commands. (The "Hello World" action contains e.g. 3 commands: start notepad, wait a few seconds, write "Hello ReCoS")
+Besondere Aktionen: Bei sogenannten **Multi**-Aktionen durchläuft die Aktion eine Liste von anderen Aktionen. Die 1. Aktion wird beim 1. Drücken ausgeführt, die 2. beim 2. Drücken und so weiter. Der jeweilige Status wird durch das Symbol der entsprechenden Aktion dargestellt.
 
-# ReCoS Admin - Web Admin Interface
+Wie bereits erwähnt, kann eine Aktion mehrere Befehle enthalten. (Die Aktion "Hello World" von der Demo enthält z.B. 3 Befehle: Notepad starten, einige Sekunden warten, "Hello ReCoS" schreiben)
 
-The WebAdmin is used to configure the ReCoS system.
+# ReCoS Admin - Die Konfiguration
 
-All modifying functions are password protected. You can set this password in the WebAdmin. The standard password is `recosadmin`. To change, go to the icon at the top right and select Settings
+Der WebAdmin dient zur Konfiguration des ReCoS Systems. 
+
+Alle modifizierenden Funktionen sind mit einem Passwort geschützt. Dieses Passwort kannst du im WebAdmin festlegen. Das Standardpasswort ist `recosadmin`. Zum Ändern gehst du auf das Icon rechts oben und wählst Settings
 
 ![taskbar_1](documentation/assets/pwd_2.png)
 
-In the following dialog you will find the password setting under the ReCoS Password tab
+Im folgende Dialog findest du die Passworteinstellung ubter dem Reiter ReCoS Password
+
+
 
 ![taskbar_1](documentation/assets/pwd_1.png)
 
-As usual, you have to enter your old password as well as your new password twice. To deactivate the password check, simply use a blank password.
+Wie üblich musst du hier sowohl dein altes Passwort wie auch 2x dein neues Passwort eingeben. Um die Passwortprüfung zu deaktivieren, benutze einfach ein leeres Passwort.
 
 ## Action Wizard
 
@@ -124,15 +131,15 @@ In the Admin Client you can then see what the wizard has generated for you.
 
 ![image-20210331160145334](documentation/assets/aw_05.png)
 
-## Exchange of profiles, actions and configured pages
+## Austauschen von Profilen, Aktionen und konfigurierten Seiten
 
-You can export and re-import entire profiles, pages and individual actions. (e.g. to share them with friends) For various actions, you have to assure that the actions will still work after an import. In the case of the "Execute program" command, the path to the executable file is usually in the configuration. This can of course be different on your system than the one on your friend's system.
+Ihr könnt sowohl ganze Profile, Seiten wie auch einzelne Aktionen exportieren und auch wieder importieren. (z.B. um Sie mit Freunden zu teilen) Bei verschiedenen Aktionen müsst ihr euch aber versichern, dass die Aktionen nach einem Import noch funktionieren. Bei dem Kommando "Programm ausführen" steht üblicherweise der Pfad zu der ausführbaren Datei in der Konfiguration. Dieses kann natürlich auf deinem System ein anderer sein als der auf dem System deines Freundes. 
 
 # ReCoS Service
 
-The service is the main component of the ReCoS. This is the unit of work, doing all the nice thing  s. But you will only see a little Icon in the taskbar. And there is a small context menu.
+The service is the main component of the ReCoS. This is the unit of work, doing all the nice things. But you will only see a little Icon in the taskbar. And there is a small context menu.
 
-as
+![image-20210412112204299](./documentation/assets/taskbar_1.png)
 
 Here you can directly start the web interface or the admin client. And you can register the service to automatically start on windows start. Next option is to edit the service.yaml file, which contains all configuration for the service itself. Normally you don't need to do here anything, but just in case...
 The last Menu entry is for shutting down the Service. 

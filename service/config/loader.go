@@ -23,8 +23,8 @@ var config = Config{
 var File = "config/service.yaml"
 
 // Get returns loaded config
-func Get() Config {
-	return config
+func Get() *Config {
+	return &config
 }
 
 // Load loads the config

@@ -167,6 +167,16 @@ func (p *Profile) Copy() Profile {
 	return profile
 }
 
+// HasAction checking if the profile has an action with that name
+func (p *Profile) HasAction(actionName string) bool {
+	for _, action := range p.Actions {
+		if action.Name == actionName {
+			return true
+		}
+	}
+	return false
+}
+
 // GetAction getting the named action from this profile or an error
 func (p *Profile) GetAction(actionName string) (*Action, error) {
 	for _, action := range p.Actions {
@@ -175,6 +185,26 @@ func (p *Profile) GetAction(actionName string) (*Action, error) {
 		}
 	}
 	return nil, fmt.Errorf("no action with name %s found.", actionName)
+}
+
+// HasPage checking if the profile has a page with that name
+func (p *Profile) HasPage(pageName string) bool {
+	for _, page := range p.Pages {
+		if page.Name == pageName {
+			return true
+		}
+	}
+	return false
+}
+
+// GetAction getting the named action from this profile or an error
+func (p *Profile) GetPage(pageName string) (*Page, error) {
+	for _, page := range p.Pages {
+		if page.Name == pageName {
+			return &page, nil
+		}
+	}
+	return nil, fmt.Errorf("no page with name %s found.", pageName)
 }
 
 // Copy make a deep copy of this action
