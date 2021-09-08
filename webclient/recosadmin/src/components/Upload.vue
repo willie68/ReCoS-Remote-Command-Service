@@ -44,7 +44,8 @@
         {{ action.name }}
       </template>
       <template #content>
-        {{ action.description }}
+        <span v-if="action.description"> {{ action.description }} </span><br/>
+        <span v-if="filename != ''"> Filename: {{ filename }} </span>
       </template>
     </Card>
   </Dialog>
@@ -67,6 +68,7 @@ export default {
       file: File,
       hasFile: false,
       action: { name: "", description: "" },
+      filename: "",
     };
   },
   mounted() {
@@ -88,6 +90,7 @@ export default {
     handleFileChange(e) {
       console.log("input: " + e.target.files[0]);
       this.file = e.target.files[0];
+      this.filename = this.file.name;
       this.hasFile = true;
       const reader = new FileReader();
       reader.onload = (res) => {

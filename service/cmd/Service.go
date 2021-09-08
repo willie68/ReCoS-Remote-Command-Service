@@ -357,7 +357,7 @@ func onReady() {
 		os.Exit(1)
 	}
 
-	serviceConfig = config.Get()
+	serviceConfig = *config.Get()
 	initConfig()
 
 	clog.Logger.Info("service is starting")

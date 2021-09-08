@@ -4,7 +4,18 @@
       <b>{{ profile.name }} # {{ activePage.name }}</b>
     </template>
     <template #icons>
-    </template>
+          <Button
+            icon="pi pi-bars"
+            class="p-mr-1 p-button-sm"
+            @click="togglePageMenu"
+          />
+          <Menu
+            id="overlay_menu"
+            ref="pagemenu"
+            :model="pageMenuItems"
+            :popup="true"
+          />
+        </template>
 
     <div class="p-fluid p-formgrid p-grid">
       <div class="p-field p-col">
@@ -92,10 +103,28 @@ export default {
       ],
       iconlist: [],
       selectIconDialog: false,
+      profileURL: "",
+      pageMenuItems: [
+        {
+          label: "Export",
+          icon: "pi pi-cloud-download",
+          class: "p-button-warning",
+          command: () => {
+            this.exportPage();
+          },
+        },
+      ],
     };
   },
   methods: {
     changePage() {},
+    exportPage() {
+      console.log("export page: " + this.profile.name + "#" + this.activePage.name);
+      window.open(this.profileURL + "/" + this.profile.name + "/pages/" + this.activePage.name + "/export");
+    },
+    togglePageMenu(event) {
+      this.$refs.pagemenu.toggle(event);
+    },
     saveIcon(icon) {
       console.log("Action: save icon: " + icon);
       this.activePage.icon = icon;
@@ -110,6 +139,7 @@ export default {
         that.iconlist = state.iconlist;
       }
     });
+    this.profileURL = this.$store.state.baseURL + "profiles";
   },
   beforeUnmount() {
     this.unsubscribe();

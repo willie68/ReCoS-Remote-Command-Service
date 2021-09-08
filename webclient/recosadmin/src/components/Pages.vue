@@ -6,12 +6,21 @@
           <button
             class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
             @click="addPage"
+            v-tooltip="'create a new page'"
           >
             <span class="pi pi-plus"></span>
           </button>
           <button
             class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
+            @click="importPage"
+            v-tooltip="'import a page'"
+          >
+            <span class="pi pi-cloud-upload"></span>
+          </button>
+          <button
+            class="p-panel-header-icon p-link p-mr-2 p-mt-0 p-mb-0 p-pt-0 p-pb-0"
             @click="deleteConfirm"
+            v-tooltip="'delete a page'"
           >
             <span class="pi pi-trash"></span>
           </button>
@@ -35,20 +44,23 @@
     :excludeList="pageNames"
     v-on:save="saveNewPage($event)"
     v-on:cancel="this.addPageDialog = false"
-    ><template #sourceHeader>New Command</template></AddName
+    ><template #sourceHeader>New Page</template></AddName
   >
+  <Upload :visible="dialogUploadVisible" filetype=".page" @cancel="dialogUploadVisible = false" @save="doImport"/>
 </template>
 
 <script>
 import PageSettings from "./PageSettings.vue";
 import AddName from "./AddName.vue";
 import { ObjectUtils } from "primevue/utils";
+import Upload from "./Upload.vue";
 
 export default {
   name: "Pages",
   components: {
     PageSettings,
     AddName,
+    Upload,
   },
   props: {
     profile: {},
@@ -57,19 +69,10 @@ export default {
     return {
       activeProfile: { name: "" },
       activePage: {},
-      actionMenuItems: [
-        {
-          label: "Add",
-          icon: "pi pi-plus",
-        },
-        {
-          label: "Delete",
-          icon: "pi pi-trash",
-        },
-      ],
       addPageDialog: false,
       pageNames: [],
       newPageName: "",
+      dialogUploadVisible: false,
     };
   },
   computed: {
@@ -85,6 +88,62 @@ export default {
     },
   },
   methods: {
+    importPage() {
+      console.log("show upload dialog")
+      this.dialogUploadVisible = true;
+    },
+    doImport(event) {
+      let newPages = event
+      let url = this.$store.state.baseURL + "profiles/"+ this.activeProfile.name + "/combine/";
+
+      fetch(url , {
+        method: "POST",
+        body: JSON.stringify(newPages),
+        headers: new Headers({
+          "Content-Type": "application/json",
+          Authorization: `Basic ${btoa(`admin:${this.$store.state.password}`)}`,
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            response.json().then((err) => {
+              console.log(err);
+              this.$toast.add({
+                severity: "error",
+                summary: "Error on Import",
+                detail: err.message,
+                life: 3000,
+              });
+            });
+          } else {
+            return response.json()
+          }
+        })
+        .then((newPages) => {
+          //console.log(data);
+          console.log("new page: " + JSON.stringify(newPages))
+          this.dialogUploadVisible = false;
+          let newPage = this.activePage
+          newPages.pages.forEach((page) => {
+            this.pageNames.push(page.name);
+            this.activeProfile.pages.push(page)
+            newPage = page
+          });
+          newPages.actions.forEach((action) => {
+            this.activeProfile.actions.push(action)
+          });
+          this.activePage = newPage;
+        })
+        .catch((err) => {
+          console.log(err.message);
+          this.$toast.add({
+            severity: "error",
+            summary: "Error on save",
+            detail: err.message,
+            life: 3000,
+          });
+        });
+    },
     newPage() {
       this.activePage = {
         name: "Your Name Here",
