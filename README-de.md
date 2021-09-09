@@ -100,36 +100,38 @@ Wie üblich musst du hier sowohl dein altes Passwort wie auch 2x dein neues Pass
 
 ## Action Wizard
 
-With the Action Wizard you can quickly and easily create new commands. You start the Action Wizard with this button.
+Mit dem Aktionsassistenten könnst du schnell und einfach neue Aktionen erstellen. Mit dieser Schaltfläche ![flag](documentation/assets/flag.png)starten Sie den Aktionsassistenten.
 
 ![image-20210331152330271](documentation/assets/aw_0.png)
 
-Or on the button assignments dialog:
+Oder im Schaltflächenzuordnungsdialog:
 
 ![image-20210606151436720](./documentation/assets/wz_02.png)
 
-First you will see this preface page:
+Zuerst siehst du diese Vorwortseite:
 
 ![image-20210331150718589](documentation/assets/aw_1.png)
 
-On the next page you can choose the command that should be generated. You can use the search field to search through the list of commands.
+Auf der nächsten Seite kannst du den Befehl auswählen, der generiert werden soll. Du kannst das Suchfeld verwenden, um die Liste der Befehle zu filtern.
 
 ![image-20210412110939373](documentation/assets/aw_2.png)
 
-Go on with Next. 
-In the next dialog you can provide some information about the command. You can assign a title for the button, assign an icon (a default is given directly by the command), and you can make various other settings depending on the command. Continue here with Next.
+Weiter mit Next.
+Im nächsten Dialog kannst du einige Angaben zum Befehl machen. Du kannst der Schaltfläche einen Titel geben, ein Symbol zuweisen (eine Vorgabe wird direkt durch den Befehl vorgegeben) und du kannst je nach Befehl verschiedene andere Einstellungen vornehmen. Weiter mit Next.
 
 ![image-20210331155924900](documentation/assets/aw_3a.png)
 
 ![image-20210331155948763](documentation/assets/aw_3b.png)
 
-On this last page you can determine where the action should be displayed. You can select different pages here, or create a new page. Simply click on a free button where the action should be stored. To save the action and the profile, please select Finish.
+Auf dieser letzten Seite kannst du festlegen, wo die Aktion angezeigt werden soll. Du kannst hier die bereits vorhandenen Seiten auswählen oder eine neue Seite erstellen. Klicke einfach auf einen freien Button, auf dem die Aktion gespeichert werden soll. Mit Finish wird jetzt die Seite und das Profil gespeichert.
 
 ![image-20210331160031731](documentation/assets/aw_4.png)
 
-In the Admin Client you can then see what the wizard has generated for you.
-
 ![image-20210331160145334](documentation/assets/aw_05.png)
+
+Im Admin Client im Bereich Actions siehst du dann, was der Assistent generiert hat.
+
+![image-20210331160145334](documentation/assets/aw_06.png)
 
 ## Austauschen von Profilen, Aktionen und konfigurierten Seiten
 

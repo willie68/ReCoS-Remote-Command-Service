@@ -93,7 +93,7 @@ As usual, you have to enter your old password as well as your new password twice
 
 ## Action Wizard
 
-With the Action Wizard you can quickly and easily create new commands. You start the Action Wizard with this button.
+With the Action Wizard you can quickly and easily create new commands. You start the Action Wizard with this button ![flag](documentation/assets/flag.png).
 
 ![image-20210331152330271](documentation/assets/aw_0.png)
 
@@ -105,7 +105,7 @@ First you will see this preface page:
 
 ![image-20210331150718589](documentation/assets/aw_1.png)
 
-On the next page you can choose the command that should be generated. You can use the search field to search through the list of commands.
+On the next page you can choose the command that should be generated. You can use the search field to filter the list of commands.
 
 ![image-20210412110939373](documentation/assets/aw_2.png)
 
@@ -120,9 +120,11 @@ On this last page you can determine where the action should be displayed. You ca
 
 ![image-20210331160031731](documentation/assets/aw_4.png)
 
+![image-20210331160145334](documentation/assets/aw_05.png)
+
 In the Admin Client you can then see what the wizard has generated for you.
 
-![image-20210331160145334](documentation/assets/aw_05.png)
+![image-20210331160145334](documentation/assets/aw_06.png)
 
 ## Exchange of profiles, actions and configured pages
 
