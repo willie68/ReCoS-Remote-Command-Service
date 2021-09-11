@@ -132,9 +132,9 @@ You can export and re-import entire profiles, pages and individual actions. (e.g
 
 # ReCoS Service
 
-The service is the main component of the ReCoS. This is the unit of work, doing all the nice thing  s. But you will only see a little Icon in the taskbar. And there is a small context menu.
+The service is the main component of the ReCoS. This is the unit of work, doing all the nice things. But you will only see a little Icon in the taskbar. And there is a small context menu.
 
-as
+![image-20210412112204299](./documentation/assets/taskbar_1.png)
 
 Here you can directly start the web interface or the admin client. And you can register the service to automatically start on windows start. Next option is to edit the service.yaml file, which contains all configuration for the service itself. Normally you don't need to do here anything, but just in case...
 The last Menu entry is for shutting down the Service. 
@@ -147,6 +147,8 @@ Various profiles can be stored in the ReCoS. Each profile consists on the one ha
 `description`: a user readable description
 `pages`: This are the different pages for showing up the actions
 `actions`: a list of different actions. An action can appear on different pages. But as it's the same action, the status/result will be the same.
+
+![image-20210412112204299](./documentation/assets/rs_01.png)
 
 ### Page
 
@@ -163,6 +165,8 @@ parameters:
 `rows`: Number of rows on the page
 `toolbar`: `show`, this page will appear in the toolbar to directly switch to, `hide`, if this page should appear in the toolbar. With the page command you can switch to this page.
 `cells`: List of names of the action per cell
+
+![image-20210412112204299](./documentation/assets/rs_02.png)
 
 ### Action
 
@@ -184,6 +188,10 @@ The following parameters are used:
 `commands`: list of commands for execution of this action
 `actions`: only apply in a MULTI action. For every stage there should be the name of the action which will be called, when the stage is executed. If a stage is executed, the icon of the last executed action (stage) will be displayed as the icon of the multi action and the title will be displayed on the text line. 
 
+![image-20210412112204299](./documentation/assets/rs_03.png)
+
+![image-20210412112204299](./documentation/assets/rs_04.png)
+
 ### Commands
 
 This is the unit of work, the part that is executed. This are the settings every command will use.
@@ -194,6 +202,8 @@ This is the unit of work, the part that is executed. This are the settings every
 `icon`: an icon, that is displayed when running this command
 `title`: a text that is displayed when running this command
 The other parameters defers from command to command.
+
+![image-20210412112204299](./documentation/assets/rs_05.png)
 
 #### No Operation
 
@@ -212,7 +222,7 @@ With this command, you can take control different audio devices for setting volu
 `type`: `AUDIOVOLUME`
 
 Parameter:
-`device`: the device that you would like to control. There are different devices in your system. Which one you can select, can be seen in the admin interface or on startup in the console. There are 2 defaults: `master` for the master output. This is on widows the one that you can control directly with the taskbar icon. And `mic` which is for the default input device. 
+`device`: the device that you would like to control. There are different devices in your system. Which one you can select, can be seen in the admin interface or on startup in the console. There are 2 defaults: `master` for the master output. This is on windows the one that you can control directly with the taskbar icon. And `mic` which is for the default input device. 
 `command`: this is the command you want to fire. `mute`, which toggles the mute state. `volume up` for increase and `volume down` for decreasing the volume of that device.
 
 #### Clock
