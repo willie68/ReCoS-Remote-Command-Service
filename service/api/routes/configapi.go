@@ -33,6 +33,7 @@ import (
 	"wkla.no-ip.biz/remote-desk-service/pac"
 	"wkla.no-ip.biz/remote-desk-service/pkg"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
+	"wkla.no-ip.biz/remote-desk-service/pkg/templates"
 	"wkla.no-ip.biz/remote-desk-service/web"
 )
 
@@ -58,6 +59,7 @@ func ConfigRoutes() *chi.Mux {
 	router.Get("/credits", GetCredits)
 	router.Get("/networks", GetNetworks)
 	router.With(handler.AuthCheck()).Post("/password", PostChangePassword)
+	router.Get("/templates", GetProfileTemplates)
 	initIconMapper()
 	return router
 }
@@ -490,4 +492,12 @@ func PostChangePassword(response http.ResponseWriter, request *http.Request) {
 	localConfig.Password = newpassword.(string)
 	config.Save()
 	render.JSON(response, request, serror.New(http.StatusOK, "password changed"))
+}
+
+/*
+GetProfileTemplates list of all possible profile templates
+*/
+func GetProfileTemplates(response http.ResponseWriter, request *http.Request) {
+	templates := templates.Templates()
+	render.JSON(response, request, templates)
 }

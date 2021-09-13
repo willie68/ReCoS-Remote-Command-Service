@@ -150,6 +150,11 @@ type Command struct {
 	Parameters map[string]interface{} `json:"parameters"`
 }
 
+type Template struct {
+	Name  string `json:"name"`
+	Group string `json:"group"`
+}
+
 // Copy make a deep copy of this profile
 func (p *Profile) Copy() Profile {
 	profile := Profile{

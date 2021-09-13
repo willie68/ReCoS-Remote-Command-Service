@@ -340,11 +340,11 @@ export default {
     },
   },
   created() {
-    this.upadteCommandTypes();
+    this.updateCommandTypes();
     let that = this;
     this.unsubscribe = this.$store.subscribe((mutation) => {
       if (mutation.type === "baseURL") {
-        that.upadteCommandTypes();
+        that.updateCommandTypes();
       }
     });
   },
@@ -465,7 +465,7 @@ export default {
         this.activeCommand.parameters[param].splice(index, 1);
       }
     },
-    upadteCommandTypes() {
+    updateCommandTypes() {
       let url = this.$store.state.baseURL + "config/commands";
       fetch(url)
         .then((res) => res.json())
