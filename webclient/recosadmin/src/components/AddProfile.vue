@@ -5,6 +5,31 @@
     </template>
     <div class="p-fluid">
       <div class="p-field p-grid">
+        <label for="template" class="p-col-24 p-mb-2 p-md-2 p-mb-md-0"
+          >template</label
+        >
+        <div class="p-col-24 p-md-10">
+          <Dropdown
+            v-model="selectedTemplate"
+            :options="templates"
+            optionLabel="label"
+            optionGroupLabel="label"
+            optionGroupChildren="items"
+            placeholder="select a template"
+            :filter="true"
+            filterPlaceholder="Find a template"
+            class="p-ml-2"
+            @change="changeTemplate"
+          >
+            <template #optiongroup="slotProps">
+              <div class="p-d-flex p-ai-center">
+                <div><b>{{ slotProps.option.label }}</b></div>
+              </div>
+            </template>
+          </Dropdown>
+        </div>
+      </div>
+      <div class="p-field p-grid">
         <label for="name" class="p-col-24 p-mb-2 p-md-2 p-mb-md-0">name</label>
         <div class="p-col-24 p-md-10">
           <InputText
@@ -29,36 +54,6 @@
             v-model="addProfile.description"
             class="p-ml-2"
           />
-        </div>
-      </div>
-      <div class="p-field p-grid">
-        <label for="template" class="p-col-24 p-mb-2 p-md-2 p-mb-md-0"
-          >template</label
-        >
-        <div class="p-col-24 p-md-10">
-          <Dropdown
-            v-model="selectedTemplate"
-            :options="templates"
-            optionLabel="name"
-            optionValue="name"
-            optionGroupLabel="label"
-            optionGroupChildren="items"
-            placeholder="select a template"
-            editable
-            :filter="true"
-            filterPlaceholder="Find a template"
-            class="p-ml-2"
-          >
-            <template #optiongroup="slotProps">
-              <div class="p-d-flex p-ai-center country-item">
-                <img
-                  src="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png"
-                  width="18"
-                />
-                <div>{{ slotProps.option.label }}</div>
-              </div>
-            </template>
-          </Dropdown>
         </div>
       </div>
     </div>
@@ -144,38 +139,6 @@ export default {
       isNameOK: true,
       selectedTemplate: "",
       temps: [],
-      groupedTemplates: [
-        {
-          label: "Elgato Streamdeck",
-          code: "DE",
-          items: [
-            { label: "Berlin", value: "Berlin" },
-            { label: "Frankfurt", value: "Frankfurt" },
-            { label: "Hamburg", value: "Hamburg" },
-            { label: "Munich", value: "Munich" },
-          ],
-        },
-        {
-          label: "USA",
-          code: "US",
-          items: [
-            { label: "Chicago", value: "Chicago" },
-            { label: "Los Angeles", value: "Los Angeles" },
-            { label: "New York", value: "New York" },
-            { label: "San Francisco", value: "San Francisco" },
-          ],
-        },
-        {
-          label: "Japan",
-          code: "JP",
-          items: [
-            { label: "Kyoto", value: "Kyoto" },
-            { label: "Osaka", value: "Osaka" },
-            { label: "Tokyo", value: "Tokyo" },
-            { label: "Yokohama", value: "Yokohama" },
-          ],
-        },
-      ],
     };
   },
   created() {
@@ -202,7 +165,21 @@ export default {
       this.$emit("cancel");
     },
     save() {
-      this.$emit("save", this.addProfile);
+      if (this.selectedTemplate) {
+        let url = this.$store.state.baseURL + "config/templates/"+this.selectedTemplate.name;
+        let that = this;
+        fetch(url)
+          .then((res) => res.json())
+          .then((data) => {
+            //console.log(data);
+            that.addProfile.pages = data.pages;
+            that.addProfile.actions = data.actions;
+            this.$emit("save", that.addProfile);
+          })
+          .catch((err) => console.log(err.message));
+      } else {
+        this.$emit("save", this.addProfile);
+      }
     },
     checkName(name) {
       if (name == "") {
@@ -223,6 +200,11 @@ export default {
           that.temps = data;
         })
         .catch((err) => console.log(err.message));
+    },
+    changeTemplate() {
+      this.addProfile.name = this.selectedTemplate.name
+      this.addProfile.description = this.selectedTemplate.description
+      console.log(this.selectedTemplate.name)
     },
   },
   watch: {

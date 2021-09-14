@@ -60,6 +60,7 @@ func ConfigRoutes() *chi.Mux {
 	router.Get("/networks", GetNetworks)
 	router.With(handler.AuthCheck()).Post("/password", PostChangePassword)
 	router.Get("/templates", GetProfileTemplates)
+	router.Get("/templates/{templatename}", GetProfileTemplate)
 	initIconMapper()
 	return router
 }
@@ -500,4 +501,18 @@ GetProfileTemplates list of all possible profile templates
 func GetProfileTemplates(response http.ResponseWriter, request *http.Request) {
 	templates := templates.Templates()
 	render.JSON(response, request, templates)
+}
+
+/*
+GetProfileTemplates list of all possible profile templates
+*/
+func GetProfileTemplate(response http.ResponseWriter, request *http.Request) {
+	tempName, err := api.Param(request, "templatename")
+	if err != nil {
+		clog.Logger.Errorf("Error reading template name: %v", err)
+		api.Err(response, request, err)
+		return
+	}
+	template := templates.GetTemplate(tempName)
+	render.JSON(response, request, template)
 }

@@ -1,0 +1,241 @@
+group: Phone
+label: Phone 5x3 Multi Page
+name: phone_5x3_mp
+description: This is the default configuration, just to have one starting point
+pages:
+    - name: Default
+      description: Some default command for every operating system
+      icon: ""
+      columns: 5
+      rows: 3
+      toolbar: ""
+      cells:
+        - Hello_World
+        - timer
+        - analogclock
+        - screenshot
+        - cpuload
+        - stopwatch
+        - changepage
+    - name: SecondPage
+      description: Second page
+      icon: ""
+      columns: 5
+      rows: 3
+      toolbar: ""
+      cells:
+        - back
+        - clock_0
+        - ""
+        - ""
+        - ""
+        - ""
+        - ""
+actions:
+    - type: SINGLE
+      name: Hello_World
+      title: Hello World
+      icon: chat.svg
+      description: Execute notepad and wirte Hello ReCoS to it.
+      fontsize: 0
+      fontcolor: '#00ff00'
+      outlined: false
+      runone: true
+      commands:
+        - id: EXECUTE_0
+          type: EXECUTE
+          name: execute
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            args: []
+            command: notepad.exe
+            waitOnClose: false
+        - id: DELAY_1
+          type: DELAY
+          name: delay
+          description: ""
+          icon: ""
+          title: delay
+          parameters:
+            time: 3
+        - id: KEYS_2
+          type: KEYS
+          name: typeit
+          description: ""
+          icon: ""
+          title: typeit
+          parameters:
+            keys: Hello ReCoS
+            layout: de
+      actions: []
+    - type: SINGLE
+      name: timer
+      title: Timer 10 sec
+      icon: alarm_bell.svg
+      description: timer counting down 10 sec
+      fontsize: 0
+      fontcolor: ""
+      outlined: false
+      runone: true
+      commands:
+        - id: TIMER_4
+          type: TIMER
+          name: timer
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            finished: Fertig
+            format: noch %ds
+            time: 10
+      actions: []
+    - type: DISPLAY
+      name: analogclock
+      title:
+      icon: ""
+      description: ""
+      fontsize: 0
+      fontcolor: white
+      outlined: false
+      runone: true
+      commands:
+        - id: CLOCK_5
+          type: CLOCK
+          name: clock
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            graphical: true
+            format: "15:04:05\r\n02 Jan 06"
+            showseconds: true
+      actions: []
+    - type: SINGLE
+      name: screenshot
+      title: Screenshot
+      icon: monitor.svg
+      description: doing a screenshot
+      fontsize: 0
+      fontcolor: ""
+      outlined: false
+      runone: true
+      commands:
+        - id: SCREENSHOT_6
+          type: SCREENSHOT
+          name: screenshot
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            display: 1
+            saveto: e:/temp/screenshot
+      actions: []
+    - type: DISPLAY
+      name: cpuload
+      title: CPU Load
+      icon: company.svg
+      description: cpu usage
+      fontsize: 0
+      fontcolor: white
+      outlined: true
+      runone: true
+      commands:
+        - id: HARDWAREMONITOR_7
+          type: HARDWAREMONITOR
+          name: cpu
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            color: '#ffff00'
+            display: graph
+            format: '%0.1f %'
+            sensor: CPU/Intel Core i7-10750H/Load/CPU Total
+            ymax: 100
+            ymin: 0
+      actions: []
+    - type: SINGLE
+      name: stopwatch
+      title: Stopwatch
+      icon: timer.svg
+      description: simple stop watch
+      fontsize: 0
+      fontcolor: white
+      outlined: true
+      runone: true
+      commands:
+        - id: STOPWATCH_8
+          type: STOPWATCH
+          name: stp1
+          description: ""
+          icon: ""
+          title: ""
+          parameters:
+            format: 'Mom: %0m:%0s'
+      actions: []
+    - type: SINGLE
+      name: changepage
+      title: page 2
+      icon: 
+      description: goto page 2
+      fontsize: 0
+      fontcolor: white
+      outlined: true
+      runone: true
+      commands:
+        - id: PAGE_10
+          type: PAGE
+          name: Back
+          description: ""
+          icon: ""
+          title: Back
+          parameters:
+            page: SecondPage
+      actions: []
+    - type: SINGLE
+      name: back
+      title: back
+      icon: 
+      description: back to default page
+      fontsize: 0
+      fontcolor: white
+      outlined: true
+      runone: true
+      commands:
+        - id: PAGE_10
+          type: PAGE
+          name: Back
+          description: ""
+          icon: ""
+          title: Back
+          parameters:
+            page: Default
+      actions: []
+    - type: DISPLAY
+      name: clock_0
+      title: ""
+      icon: clock.svg
+      description: new CLOCK action created by ActionWizard
+      fontsize: 10
+      fontcolor: '#000000'
+      outlined: false
+      runone: true
+      commands:
+        - id: ""
+          type: CLOCK
+          name: clock_0
+          description: new CLOCK command created by ActionWizard
+          icon: ""
+          title: ""
+          parameters:
+            color: ""
+            dateformat: ""
+            design: berlin2
+            format: ""
+            graphical: true
+            showdate: false
+            showseconds: false
+            timezone: ""
+      actions: []
