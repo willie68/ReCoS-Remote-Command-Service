@@ -1,6 +1,6 @@
 group: Elgato
 label: Streamdeck Single Page
-name: streamdeck_sp
+name: streamdeck
 description: This is the default configuration, just to have one starting point
 pages:
     - name: Default

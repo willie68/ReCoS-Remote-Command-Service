@@ -1,3 +1,5 @@
+group: ""
+label: ""
 name: default
 description: This is the default configuration, just to have one starting point
 pages:
@@ -61,7 +63,9 @@ actions:
           icon: ""
           title: typeit
           parameters:
+            keylayout: de
             keys: Hello ReCoS
+            keystrokes: Hello World
             layout: de
       actions: []
     - type: SINGLE
@@ -121,8 +125,8 @@ actions:
           icon: ""
           title: ""
           parameters:
-            graphical: true
             format: "15:04:05\r\n02 Jan 06"
+            graphical: true
       actions: []
     - type: SINGLE
       name: screenshot

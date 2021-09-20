@@ -1,6 +1,6 @@
 group: Elgato
 label: Streamdeck Mini Single Page
-name: streamdeck_mini_sp
+name: streamdeck_mini
 description: This is the default configuration, just to have one starting point
 pages:
     - name: Default

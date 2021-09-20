@@ -1,3 +1,5 @@
+group: ""
+label: ""
 name: streamdeck
 description: This is the default configuration, just to have one starting point
 pages:
@@ -9,23 +11,11 @@ pages:
       toolbar: ""
       cells:
         - Hello_World
-        - clocks
         - timer
         - analogclock
+        - screenshot
         - cpuload
         - stopwatch
-    - name: clocks
-      description: clocks only
-      icon: ""
-      columns: 5
-      rows: 3
-      toolbar: hide
-      cells:
-        - Back
-        - none
-        - clock
-        - analogclock
-        - clockBerlin
 actions:
     - type: SINGLE
       name: Hello_World
@@ -66,25 +56,6 @@ actions:
             layout: de
       actions: []
     - type: SINGLE
-      name: clocks
-      title: Clocks
-      icon: clock.svg
-      description: Goto clocks page
-      fontsize: 0
-      fontcolor: ""
-      outlined: false
-      runone: true
-      commands:
-        - id: PAGE_3
-          type: PAGE
-          name: page
-          description: ""
-          icon: ""
-          title: ""
-          parameters:
-            page: clocks
-      actions: []
-    - type: SINGLE
       name: timer
       title: Timer 10 sec
       icon: alarm_bell.svg
@@ -107,7 +78,7 @@ actions:
       actions: []
     - type: DISPLAY
       name: analogclock
-      title:
+      title: ""
       icon: ""
       description: ""
       fontsize: 0
@@ -122,8 +93,8 @@ actions:
           icon: ""
           title: ""
           parameters:
-            graphical: true
             format: "15:04:05\r\n02 Jan 06"
+            graphical: true
             showseconds: true
       actions: []
     - type: SINGLE
@@ -188,61 +159,4 @@ actions:
           title: ""
           parameters:
             format: 'Mom: %0m:%0s'
-      actions: []
-    - type: DISPLAY
-      name: clock
-      title: text clock
-      icon: 
-      description: ""
-      fontsize: 0
-      fontcolor: "#ffffff"
-      outlined: false
-      runone: false
-      commands:
-        - id: CLOCK_9
-          type: CLOCK
-          name: clock
-          description: ""
-          icon: ""
-          title: clock
-          parameters: {}
-      actions: []
-    - type: DISPLAY
-      name: clockBerlin
-      title:
-      icon: 
-      description: ""
-      fontsize: 0
-      fontcolor: "#ffffff"
-      outlined: false
-      runone: false
-      commands:
-        - id: CLOCK_9
-          type: CLOCK
-          name: clockBerlin
-          description: ""
-          icon: ""
-          title: clock
-          parameters: 
-            graphical: true
-            design: berlin2
-      actions: []
-    - type: SINGLE
-      name: Back
-      title: ""
-      icon: arrow_left.svg
-      description: ""
-      fontsize: 0
-      fontcolor: ""
-      outlined: false
-      runone: false
-      commands:
-        - id: PAGE_10
-          type: PAGE
-          name: Back
-          description: ""
-          icon: ""
-          title: Back
-          parameters:
-            page: Default
       actions: []
