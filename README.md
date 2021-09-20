@@ -126,6 +126,14 @@ In the Admin Client you can then see what the wizard has generated for you.
 
 ![image-20210331160145334](documentation/assets/aw_06.png)
 
+## Creating a new Profile
+
+![image-20210331160145334](documentation/assets/cp_01.png)A new profile can be created using the Add menu item in the Profile menu.
+
+![image-20210331160145334](documentation/assets/cp_02.png)
+
+Here you can enter a name and a description. Predefined profiles can be created using templates. In addition to the name and description, these also contain pages and actions that have already been configured. So you can quickly create a profile for your stream deck, for example.
+
 ## Exchange of profiles, actions and configured pages
 
 You can export and re-import entire profiles, pages and individual actions. (e.g. to share them with friends) For various actions, you have to assure that the actions will still work after an import. In the case of the "Execute program" command, the path to the executable file is usually in the configuration. This can of course be different on your system than the one on your friend's system.

@@ -133,6 +133,16 @@ Im Admin Client im Bereich Actions siehst du dann, was der Assistent generiert h
 
 ![image-20210331160145334](documentation/assets/aw_06.png)
 
+## Erzeugung eine neuen Profiles
+
+![image-20210920132030225](documentation/assets/cp_01.png)
+
+Über den Menüpunkt Add im Profile Menü kann ein neues Profile angelegt werden.
+
+![image-20210920132144398](documentation/assets/cp_02.png)
+
+Hier kannst Du einen Namen und eine Beschreibung hinterlegen. Über template können vordefinierte Profile erzeugt werden. Diese beinhalten dann neben Name und Beschreibung auch bereits fertig konfigurierte Seiten und Aktionen. Somit kannst Du z.B. für dein Streamdeck schnell ein Profile erstellen. 
+
 ## Austauschen von Profilen, Aktionen und konfigurierten Seiten
 
 Ihr könnt sowohl ganze Profile, Seiten wie auch einzelne Aktionen exportieren und auch wieder importieren. (z.B. um Sie mit Freunden zu teilen) Bei verschiedenen Aktionen müsst ihr euch aber versichern, dass die Aktionen nach einem Import noch funktionieren. Bei dem Kommando "Programm ausführen" steht üblicherweise der Pfad zu der ausführbaren Datei in der Konfiguration. Dieses kann natürlich auf deinem System ein anderer sein als der auf dem System deines Freundes. 
