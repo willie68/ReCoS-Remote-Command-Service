@@ -120,7 +120,5 @@ actions:
           title: ""
           parameters:
             keylayout: en
-            keys: '{esc}1+1{enter}'
-            keystrokes: asdasdasdasdasdasd
-            layout: de
+            keystrokes: '{esc}1+1{enter}'
       actions: []

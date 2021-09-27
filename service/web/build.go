@@ -24,3 +24,6 @@ var CreditsAsset string
 
 //go:embed version/version.json
 var VersionJson string
+
+//go:embed templates/*
+var Templates embed.FS

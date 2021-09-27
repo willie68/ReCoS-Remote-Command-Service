@@ -1,32 +1,21 @@
-group: ""
-label: ""
-name: default
+group: Phone
+label: Phone 5x3 Single Page
+name: phone_5x3_sp
 description: This is the default configuration, just to have one starting point
 pages:
     - name: Default
       description: Some default command for every operating system
       icon: ""
-      columns: 3
-      rows: 2
+      columns: 5
+      rows: 3
       toolbar: ""
       cells:
         - Hello_World
-        - clocks
         - timer
         - analogclock
+        - screenshot
         - cpuload
         - stopwatch
-    - name: clocks
-      description: clocks only
-      icon: ""
-      columns: 2
-      rows: 2
-      toolbar: hide
-      cells:
-        - Back
-        - none
-        - clock
-        - analogclock
 actions:
     - type: SINGLE
       name: Hello_World
@@ -34,7 +23,7 @@ actions:
       icon: chat.svg
       description: Execute notepad and wirte Hello ReCoS to it.
       fontsize: 0
-      fontcolor: ""
+      fontcolor: '#00ff00'
       outlined: false
       runone: true
       commands:
@@ -63,27 +52,8 @@ actions:
           icon: ""
           title: typeit
           parameters:
-            keylayout: de
             keystrokes: Hello ReCoS
-      actions: []
-    - type: SINGLE
-      name: clocks
-      title: Clocks
-      icon: clock.svg
-      description: Goto clocks page
-      fontsize: 0
-      fontcolor: ""
-      outlined: false
-      runone: true
-      commands:
-        - id: PAGE_3
-          type: PAGE
-          name: page
-          description: ""
-          icon: ""
-          title: ""
-          parameters:
-            page: clocks
+            keylayout: de
       actions: []
     - type: SINGLE
       name: timer
@@ -108,7 +78,7 @@ actions:
       actions: []
     - type: DISPLAY
       name: analogclock
-      title: Analogclock
+      title:
       icon: ""
       description: ""
       fontsize: 0
@@ -123,8 +93,9 @@ actions:
           icon: ""
           title: ""
           parameters:
-            format: "15:04:05\r\n02 Jan 06"
             graphical: true
+            format: "15:04:05\r\n02 Jan 06"
+            showseconds: true
       actions: []
     - type: SINGLE
       name: screenshot
@@ -153,7 +124,7 @@ actions:
       description: cpu usage
       fontsize: 0
       fontcolor: white
-      outlined: false
+      outlined: true
       runone: true
       commands:
         - id: HARDWAREMONITOR_7
@@ -176,7 +147,7 @@ actions:
       icon: timer.svg
       description: simple stop watch
       fontsize: 0
-      fontcolor: black
+      fontcolor: white
       outlined: true
       runone: true
       commands:
@@ -188,41 +159,4 @@ actions:
           title: ""
           parameters:
             format: 'Mom: %0m:%0s'
-      actions: []
-    - type: SINGLE
-      name: clock
-      title: text clock
-      icon: clock.svg
-      description: ""
-      fontsize: 0
-      fontcolor: ""
-      outlined: false
-      runone: false
-      commands:
-        - id: CLOCK_9
-          type: CLOCK
-          name: clock
-          description: ""
-          icon: ""
-          title: clock
-          parameters: {}
-      actions: []
-    - type: SINGLE
-      name: Back
-      title: ""
-      icon: ""
-      description: ""
-      fontsize: 0
-      fontcolor: ""
-      outlined: false
-      runone: false
-      commands:
-        - id: PAGE_10
-          type: PAGE
-          name: Back
-          description: ""
-          icon: ""
-          title: Back
-          parameters:
-            page: Default
       actions: []

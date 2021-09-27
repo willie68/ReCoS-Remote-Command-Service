@@ -9,6 +9,10 @@ import (
 // Profile is the container for different pages. In UI you can switch between Profiles. Every Profile consist of a name and different pages to navigate between
 type Profile struct {
 	// Name of this profile
+	Group string `json:"group"`
+	// Name of this profile
+	Label string `json:"label"`
+	// Name of this profile
 	Name string `json:"name"`
 	// Description of this action for information
 	Description string `json:"description"`
@@ -148,6 +152,13 @@ type Command struct {
 	Title string `json:"title"`
 	// Parameters of this command
 	Parameters map[string]interface{} `json:"parameters"`
+}
+
+type Template struct {
+	Label       string `json:"label"`
+	Name        string `json:"name"`
+	Group       string `json:"group"`
+	Description string `json:"description"`
 }
 
 // Copy make a deep copy of this profile

@@ -133,6 +133,16 @@ Im Admin Client im Bereich Actions siehst du dann, was der Assistent generiert h
 
 ![image-20210331160145334](documentation/assets/aw_06.png)
 
+## Erzeugung eine neuen Profiles
+
+![image-20210920132030225](documentation/assets/cp_01.png)
+
+Über den Menüpunkt Add im Profile Menü kann ein neues Profile angelegt werden.
+
+![image-20210920132144398](documentation/assets/cp_02.png)
+
+Hier kannst Du einen Namen und eine Beschreibung hinterlegen. Über template können vordefinierte Profile erzeugt werden. Diese beinhalten dann neben Name und Beschreibung auch bereits fertig konfigurierte Seiten und Aktionen. Somit kannst Du z.B. für dein Streamdeck schnell ein Profile erstellen. 
+
 ## Austauschen von Profilen, Aktionen und konfigurierten Seiten
 
 Ihr könnt sowohl ganze Profile, Seiten wie auch einzelne Aktionen exportieren und auch wieder importieren. (z.B. um Sie mit Freunden zu teilen) Bei verschiedenen Aktionen müsst ihr euch aber versichern, dass die Aktionen nach einem Import noch funktionieren. Bei dem Kommando "Programm ausführen" steht üblicherweise der Pfad zu der ausführbaren Datei in der Konfiguration. Dieses kann natürlich auf deinem System ein anderer sein als der auf dem System deines Freundes. 
@@ -147,7 +157,7 @@ Der Service ist der Hauptbestandteil des ReCoS. Der Service ist die Stelle, die 
 - **Autostart:** Du kannst den Dienst so registrieren, dass er beim Windows-Start automatisch gestartet wird. 
 - **Edit config:** Die nächste Option besteht darin, die Datei service.yaml zu bearbeiten, die die gesamte Konfiguration für den Dienst selbst enthält. Normalerweise brauchst du hier nichts zu tun, aber nur für den Fall... 
 - **Show log:** Ähnliches gilt für das Log. 
-- Mit **Hilfe** bist du bestimmt hier hin gekommen. 
+- Mit **Help (Hilfe)** bist du bestimmt hier hin gekommen. 
 - Und **Restart** startet den Service neu. 
 - **Quit:** Der letzte Menüeintrag dient zum Beenden des Dienstes.
 
@@ -186,7 +196,7 @@ Eine Aktion ist der Teil, der definiert, was zu tun ist, wenn eine Schaltfläche
 Folgende Parameter werden verwendet:
 
 **`Name`**: ist der Name der Aktion
-**`type`**: **`SINGLE`** ist eine Einzelaktion. Die Aktion startet immer die Befehlsliste.
+**`Type`**: **`SINGLE`** ist eine Einzelaktion. Die Aktion startet immer die Befehlsliste.
 **`DISPLAY`** ist für die reine Anzeige. Es werden nur Text, Symbole oder Bilder angezeigt, Du kannst jedoch nicht damit interagieren.
 **`MULTI`** ist die dritte Option. Hier kannst du  mehrere Schritte definieren und auf jedem Schritt eine Aktion definieren, die beim Aktivieren dieses Schrittes ausgelöst wird. 
 **`Title`**: der Titel der Aktion, die von der Benutzeroberfläche verwendet wird
@@ -723,28 +733,28 @@ Zweitens: Fügen Sie die URL Ihres Homematic-Systems in der Systemkonfiguration 
 
 ## OBS Studio - Open Broadcaster Software
 
-With ReCoS you can control some parts of your OBS Software.  This integration supports the OBS Studio. First you have to install the obs-websocket plugin.  At the moment only the version 4.9.0 is supported. (https://github.com/Palakis/obs-websocket/releases/tag/4.9.0) 
+Mit ReCoS können Sie einige Bereiche Ihrer OBS-Software steuern. Diese Integration unterstützt OBS Studio. Zuerst müssen Sie in OBS das obs-websocket-Plugin installieren. Zur Zeit wird nur die Version 4.9.0 unterstützt. (https://github.com/Palakis/obs-websocket/releases/tag/4.9.0) 
 
-To activate the integration simply go to the settings page.
+Um die Integration zu aktivieren, gehen Sie einfach auf die Einstellungsseite.
 
-![image-20210605120558644](\documentation\assets\obs_01.png)The host is the pc where the obs is installed. Normally this is the same pc, so 127.0.0.1 should work. The default port is 4444. (If you don't change it in the settings of the plugin) On the password field use the password you setup in the plugin settings (or leave it empty, if no password was been set.)
+![image-20210605120558644](\documentation\assets\obs_01.png)Der Host ist der PC, auf dem das obs installiert ist. Normalerweise ist dies derselbe PC, also sollte 127.0.0.1 funktionieren. Der Standardport ist 4444. (Wenn Sie ihn in den Einstellungen des Plugins nicht ändern) Verwenden Sie im Passwortfeld das Passwort, das Sie in den Plugin-Einstellungen festgelegt haben (oder lassen Sie es leer, wenn kein Passwort festgelegt wurde.)
 
-Thats all for setting up the integration.
+Mehr ist für die Einrichtung der Integration nicht zutun.
 
 # For the nerds
 
-## Profile configuration
+## Profile Konfiguration
 
-Every profile has it's own configuration file. The file is usually located in the Profiles folder. This file is written in yaml and has the following sections:
+Jedes Profil hat seine eigene Konfigurationsdatei. Die Datei befindet sich normalerweise im Ordner Profile. Diese Datei ist in yaml geschrieben und hat die folgenden Abschnitte:
 
-In the root you will find the following parameters
+Im Root findest Du die folgenden Parameter
 
-`name`: The name of the profile
-`description`: a user readable description
-`pages`: This are the different pages for showing up the actions
-`actions`: a list of different actions. An action can appear on different pages. But as it's the same action, the status/result will be the same.
+`name`: Der Name des Profils
+`description`: eine vom Benutzer lesbare Beschreibung
+`pages`: Dies sind die verschiedenen Seiten zum Anzeigen der Aktionen
+`actions`: eine Liste verschiedener Aktionen. Eine Aktion kann auf verschiedenen Seiten erscheinen. Da es sich jedoch um dieselbe Aktion handelt, ist der Status/das Ergebnis gleich.
 
-This is an example
+Hier ein Beispiel
 
 ```yaml
 name: default
