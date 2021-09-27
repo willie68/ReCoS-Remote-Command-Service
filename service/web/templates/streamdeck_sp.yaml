@@ -52,8 +52,8 @@ actions:
           icon: ""
           title: typeit
           parameters:
-            keys: Hello ReCoS
-            layout: de
+            keystrokey: Hello ReCoS
+            keylayout: de
       actions: []
     - type: SINGLE
       name: timer

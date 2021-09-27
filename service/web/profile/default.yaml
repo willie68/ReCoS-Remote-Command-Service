@@ -74,9 +74,7 @@ actions:
           title: typeit
           parameters:
             keylayout: de
-            keys: Hello ReCoS
             keystrokes: Hello ReCoS{enter}
-            layout: de
       actions: []
     - type: SINGLE
       name: clocks

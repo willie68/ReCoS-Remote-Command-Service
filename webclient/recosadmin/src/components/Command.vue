@@ -291,7 +291,7 @@ export default {
   watch: {
     command(command) {
       if (command) {
-        console.log("Command: changing command to " + command.name);
+        console.log("Command: changing command to " + command.name + ", " + JSON.stringify(command));
         this.activeCommand = command;
       } else {
         this.activeCommand = { name: "", parameters: [] };

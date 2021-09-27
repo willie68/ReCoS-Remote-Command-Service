@@ -64,9 +64,7 @@ actions:
           title: typeit
           parameters:
             keylayout: de
-            keys: Hello ReCoS
-            keystrokes: Hello World
-            layout: de
+            keystrokes: Hello ReCoS
       actions: []
     - type: SINGLE
       name: clocks
