@@ -5,8 +5,9 @@
       <InputText id="name" type="text" v-model="activeAction.name" />
     </div>
     <div class="p-field p-col">
-      <label for="rows">Type</label>
+      <label for="types">Type</label>
       <Dropdown
+        id="types"
         v-model="activeAction.type"
         :options="enumActionTypes"
         placeholder="select a type"
@@ -43,6 +44,7 @@
     <div class="p-field p-col">
       <label for="fontcolor">Font color</label>
       <ColorPicker
+        id="fontcolor"
         v-model="activeAction.fontcolor"
         :inline="false"
         defaultColor="#FFFFFF"

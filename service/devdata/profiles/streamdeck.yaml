@@ -1,3 +1,5 @@
+group: ""
+label: ""
 name: streamdeck
 description: This is the default configuration, just to have one starting point
 pages:
@@ -9,23 +11,11 @@ pages:
       toolbar: ""
       cells:
         - Hello_World
-        - clocks
         - timer
         - analogclock
+        - screenshot
         - cpuload
         - stopwatch
-    - name: clocks
-      description: clocks only
-      icon: ""
-      columns: 5
-      rows: 3
-      toolbar: hide
-      cells:
-        - Back
-        - none
-        - clock
-        - analogclock
-        - clockBerlin
 actions:
     - type: SINGLE
       name: Hello_World
@@ -62,27 +52,8 @@ actions:
           icon: ""
           title: typeit
           parameters:
-            keys: Hello ReCoS
-            layout: de
-      actions: []
-    - type: SINGLE
-      name: clocks
-      title: Clocks
-      icon: clock.svg
-      description: Goto clocks page
-      fontsize: 0
-      fontcolor: ""
-      outlined: false
-      runone: true
-      commands:
-        - id: PAGE_3
-          type: PAGE
-          name: page
-          description: ""
-          icon: ""
-          title: ""
-          parameters:
-            page: clocks
+            keylayout: de
+            keystrokes: Hello ReCoS
       actions: []
     - type: SINGLE
       name: timer
@@ -94,7 +65,7 @@ actions:
       outlined: false
       runone: true
       commands:
-        - id: TIMER_4
+        - id: TIMER_3
           type: TIMER
           name: timer
           description: ""
@@ -107,7 +78,7 @@ actions:
       actions: []
     - type: DISPLAY
       name: analogclock
-      title:
+      title: ""
       icon: ""
       description: ""
       fontsize: 0
@@ -115,15 +86,15 @@ actions:
       outlined: false
       runone: true
       commands:
-        - id: CLOCK_5
+        - id: CLOCK_4
           type: CLOCK
           name: clock
           description: ""
           icon: ""
           title: ""
           parameters:
-            graphical: true
             format: "15:04:05\r\n02 Jan 06"
+            graphical: true
             showseconds: true
       actions: []
     - type: SINGLE
@@ -136,7 +107,7 @@ actions:
       outlined: false
       runone: true
       commands:
-        - id: SCREENSHOT_6
+        - id: SCREENSHOT_5
           type: SCREENSHOT
           name: screenshot
           description: ""
@@ -156,7 +127,7 @@ actions:
       outlined: true
       runone: true
       commands:
-        - id: HARDWAREMONITOR_7
+        - id: HARDWAREMONITOR_6
           type: HARDWAREMONITOR
           name: cpu
           description: ""
@@ -166,7 +137,7 @@ actions:
             color: '#ffff00'
             display: graph
             format: '%0.1f %'
-            sensor: CPU/Intel Core i7-10750H/Load/CPU Total
+            sensor: CPU/Intel Core i7-6820HQ/Load/CPU Total
             ymax: 100
             ymin: 0
       actions: []
@@ -175,12 +146,12 @@ actions:
       title: Stopwatch
       icon: timer.svg
       description: simple stop watch
-      fontsize: 0
+      fontsize: 14
       fontcolor: white
-      outlined: true
+      outlined: false
       runone: true
       commands:
-        - id: STOPWATCH_8
+        - id: STOPWATCH_7
           type: STOPWATCH
           name: stp1
           description: ""
@@ -188,61 +159,4 @@ actions:
           title: ""
           parameters:
             format: 'Mom: %0m:%0s'
-      actions: []
-    - type: DISPLAY
-      name: clock
-      title: text clock
-      icon: 
-      description: ""
-      fontsize: 0
-      fontcolor: "#ffffff"
-      outlined: false
-      runone: false
-      commands:
-        - id: CLOCK_9
-          type: CLOCK
-          name: clock
-          description: ""
-          icon: ""
-          title: clock
-          parameters: {}
-      actions: []
-    - type: DISPLAY
-      name: clockBerlin
-      title:
-      icon: 
-      description: ""
-      fontsize: 0
-      fontcolor: "#ffffff"
-      outlined: false
-      runone: false
-      commands:
-        - id: CLOCK_9
-          type: CLOCK
-          name: clockBerlin
-          description: ""
-          icon: ""
-          title: clock
-          parameters: 
-            graphical: true
-            design: berlin2
-      actions: []
-    - type: SINGLE
-      name: Back
-      title: ""
-      icon: arrow_left.svg
-      description: ""
-      fontsize: 0
-      fontcolor: ""
-      outlined: false
-      runone: false
-      commands:
-        - id: PAGE_10
-          type: PAGE
-          name: Back
-          description: ""
-          icon: ""
-          title: Back
-          parameters:
-            page: Default
       actions: []

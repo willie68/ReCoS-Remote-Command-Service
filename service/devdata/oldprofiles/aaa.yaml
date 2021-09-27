@@ -270,9 +270,7 @@ actions:
           title: ""
           parameters:
             keylayout: en
-            keys: '{esc}1+1{enter}'
-            keystrokes: asdasdasdasdasdasd
-            layout: de
+            keystrokes: '{esc}1+1{enter}'
       actions: []
     - type: SINGLE
       name: window_ctrl
@@ -316,8 +314,8 @@ actions:
           icon: ""
           title: ""
           parameters:
-            keys: '{esc}1+1{enter}'
-            layout: de
+            keystrokes: '{esc}1+1{enter}'
+            keylayout: de
         - id: DELAY_23
           type: DELAY
           name: delay3

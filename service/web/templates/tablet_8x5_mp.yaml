@@ -1,42 +1,36 @@
-name: default
+group: Tablet
+label: Tablet 8x5 Multi Page
+name: tablet_8x5_mp
 description: This is the default configuration, just to have one starting point
 pages:
     - name: Default
       description: Some default command for every operating system
-      icon: view_mode_small_icons.svg
-      columns: 3
-      rows: 2
+      icon: ""
+      columns: 8
+      rows: 5
       toolbar: ""
       cells:
         - Hello_World
-        - clocks
         - timer
         - analogclock
+        - screenshot
         - cpuload
         - stopwatch
-        - Audio
-    - name: clocks
-      description: clocks only
-      icon: clock.svg
-      columns: 2
-      rows: 2
-      toolbar: hide
-      cells:
-        - Back
-        - none
-        - clock
-        - analogclock
-    - name: Audio
-      description: commands for audio volume 
-      icon: audio_volume_none.svg
-      columns: 2
-      rows: 2
+        - changepage
+    - name: SecondPage
+      description: Second page
+      icon: ""
+      columns: 8
+      rows: 5
       toolbar: ""
       cells:
-        - audiovolume_0
-        - audiovolume_1
-        - audiovolume_3
-        - audiovolume_2
+        - back
+        - clock_0
+        - ""
+        - ""
+        - ""
+        - ""
+        - ""
 actions:
     - type: SINGLE
       name: Hello_World
@@ -44,7 +38,7 @@ actions:
       icon: chat.svg
       description: Execute notepad and wirte Hello ReCoS to it.
       fontsize: 0
-      fontcolor: ""
+      fontcolor: '#00ff00'
       outlined: false
       runone: true
       commands:
@@ -73,27 +67,8 @@ actions:
           icon: ""
           title: typeit
           parameters:
+            keystrokes: Hello ReCoS
             keylayout: de
-            keystrokes: Hello ReCoS{enter}
-      actions: []
-    - type: SINGLE
-      name: clocks
-      title: Clocks
-      icon: clock.svg
-      description: Goto clocks page
-      fontsize: 0
-      fontcolor: ""
-      outlined: false
-      runone: true
-      commands:
-        - id: PAGE_3
-          type: PAGE
-          name: page
-          description: ""
-          icon: ""
-          title: ""
-          parameters:
-            page: clocks
       actions: []
     - type: SINGLE
       name: timer
@@ -118,7 +93,7 @@ actions:
       actions: []
     - type: DISPLAY
       name: analogclock
-      title: Analogclock
+      title:
       icon: ""
       description: ""
       fontsize: 0
@@ -135,6 +110,7 @@ actions:
           parameters:
             graphical: true
             format: "15:04:05\r\n02 Jan 06"
+            showseconds: true
       actions: []
     - type: SINGLE
       name: screenshot
@@ -163,7 +139,7 @@ actions:
       description: cpu usage
       fontsize: 0
       fontcolor: white
-      outlined: false
+      outlined: true
       runone: true
       commands:
         - id: HARDWAREMONITOR_7
@@ -174,9 +150,11 @@ actions:
           title: ""
           parameters:
             color: '#ffff00'
-            display: both
+            display: graph
             format: '%0.1f %'
-            sensor: ""
+            sensor: CPU/Intel Core i7-10750H/Load/CPU Total
+            ymax: 100
+            ymin: 0
       actions: []
     - type: SINGLE
       name: stopwatch
@@ -184,7 +162,7 @@ actions:
       icon: timer.svg
       description: simple stop watch
       fontsize: 0
-      fontcolor: black
+      fontcolor: white
       outlined: true
       runone: true
       commands:
@@ -198,32 +176,33 @@ actions:
             format: 'Mom: %0m:%0s'
       actions: []
     - type: SINGLE
-      name: clock
-      title: text clock
-      icon: clock.svg
-      description: ""
+      name: changepage
+      title: page 2
+      icon: 
+      description: goto page 2
       fontsize: 0
-      fontcolor: ""
-      outlined: false
-      runone: false
+      fontcolor: white
+      outlined: true
+      runone: true
       commands:
-        - id: CLOCK_9
-          type: CLOCK
-          name: clock
+        - id: PAGE_10
+          type: PAGE
+          name: Back
           description: ""
           icon: ""
-          title: clock
-          parameters: {}
+          title: Back
+          parameters:
+            page: SecondPage
       actions: []
     - type: SINGLE
-      name: Back
-      title: ""
-      icon: ""
-      description: ""
+      name: back
+      title: back
+      icon: 
+      description: back to default page
       fontsize: 0
-      fontcolor: ""
-      outlined: false
-      runone: false
+      fontcolor: white
+      outlined: true
+      runone: true
       commands:
         - id: PAGE_10
           type: PAGE
@@ -234,102 +213,29 @@ actions:
           parameters:
             page: Default
       actions: []
-    - type: SINGLE
-      name: Audio
+    - type: DISPLAY
+      name: clock_0
       title: ""
-      icon: ""
-      description: ""
-      fontsize: 0
-      fontcolor: ""
-      outlined: false
-      runone: false
-      commands:
-        - id: PAGE_10
-          type: PAGE
-          name: Audio
-          description: ""
-          icon: ""
-          title: Back
-          parameters:
-            page: Audio
-      actions: []
-    - type: SINGLE
-      name: audiovolume_0
-      title: Mute Mic
-      icon: ""
-      description: new AUDIOVOLUME action created by ActionWizard
+      icon: clock.svg
+      description: new CLOCK action created by ActionWizard
       fontsize: 10
       fontcolor: '#000000'
       outlined: false
       runone: true
       commands:
-        - id: AUDIOVOLUME_0
-          type: AUDIOVOLUME
-          name: audiovolume_0
-          description: new AUDIOVOLUME command created by ActionWizard
+        - id: ""
+          type: CLOCK
+          name: clock_0
+          description: new CLOCK command created by ActionWizard
           icon: ""
           title: ""
           parameters:
-            command: mute
-            device: mic
-      actions: []
-    - type: SINGLE
-      name: audiovolume_1
-      title: Mute Master
-      icon: ""
-      description: new AUDIOVOLUME action created by ActionWizard
-      fontsize: 10
-      fontcolor: '#000000'
-      outlined: false
-      runone: true
-      commands:
-        - id: AUDIOVOLUME_1
-          type: AUDIOVOLUME
-          name: audiovolume_1
-          description: new AUDIOVOLUME command created by ActionWizard
-          icon: ""
-          title: ""
-          parameters:
-            command: mute
-            device: master
-      actions: []
-    - type: SINGLE
-      name: audiovolume_2
-      title: Master Volume Down
-      icon: ""
-      description: new AUDIOVOLUME action created by ActionWizard
-      fontsize: 10
-      fontcolor: '#000000'
-      outlined: false
-      runone: true
-      commands:
-        - id: AUDIOVOLUME_2
-          type: AUDIOVOLUME
-          name: audiovolume_2
-          description: new AUDIOVOLUME command created by ActionWizard
-          icon: ""
-          title: ""
-          parameters:
-            command: volume down
-            device: master
-      actions: []
-    - type: SINGLE
-      name: audiovolume_3
-      title: Master Volume Up
-      icon: ""
-      description: new AUDIOVOLUME action created by ActionWizard
-      fontsize: 10
-      fontcolor: '#000000'
-      outlined: false
-      runone: true
-      commands:
-        - id: AUDIOVOLUME_3
-          type: AUDIOVOLUME
-          name: audiovolume_3
-          description: new AUDIOVOLUME command created by ActionWizard
-          icon: ""
-          title: ""
-          parameters:
-            command: volume up
-            device: master
+            color: ""
+            dateformat: ""
+            design: berlin2
+            format: ""
+            graphical: true
+            showdate: false
+            showseconds: false
+            timezone: ""
       actions: []

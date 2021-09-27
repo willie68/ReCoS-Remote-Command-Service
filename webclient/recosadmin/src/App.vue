@@ -63,6 +63,7 @@
     v-on:save="saveNewProfile($event)"
     v-on:cancel="this.dialogProfileVisible = false"
     :profiles="profiles"
+    style="{width: '60vw'}"
   ></AddProfile>
   <Toast position="top-right" />
   <ConfirmDialog></ConfirmDialog>

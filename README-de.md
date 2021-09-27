@@ -100,36 +100,48 @@ Wie üblich musst du hier sowohl dein altes Passwort wie auch 2x dein neues Pass
 
 ## Action Wizard
 
-With the Action Wizard you can quickly and easily create new commands. You start the Action Wizard with this button.
+Mit dem Aktionsassistenten könnst du schnell und einfach neue Aktionen erstellen. Mit dieser Schaltfläche ![flag](documentation/assets/flag.png)starten Sie den Aktionsassistenten.
 
 ![image-20210331152330271](documentation/assets/aw_0.png)
 
-Or on the button assignments dialog:
+Oder im Schaltflächenzuordnungsdialog:
 
 ![image-20210606151436720](./documentation/assets/wz_02.png)
 
-First you will see this preface page:
+Zuerst siehst du diese Vorwortseite:
 
 ![image-20210331150718589](documentation/assets/aw_1.png)
 
-On the next page you can choose the command that should be generated. You can use the search field to search through the list of commands.
+Auf der nächsten Seite kannst du den Befehl auswählen, der generiert werden soll. Du kannst das Suchfeld verwenden, um die Liste der Befehle zu filtern.
 
 ![image-20210412110939373](documentation/assets/aw_2.png)
 
-Go on with Next. 
-In the next dialog you can provide some information about the command. You can assign a title for the button, assign an icon (a default is given directly by the command), and you can make various other settings depending on the command. Continue here with Next.
+Weiter mit Next.
+Im nächsten Dialog kannst du einige Angaben zum Befehl machen. Du kannst der Schaltfläche einen Titel geben, ein Symbol zuweisen (eine Vorgabe wird direkt durch den Befehl vorgegeben) und du kannst je nach Befehl verschiedene andere Einstellungen vornehmen. Weiter mit Next.
 
 ![image-20210331155924900](documentation/assets/aw_3a.png)
 
 ![image-20210331155948763](documentation/assets/aw_3b.png)
 
-On this last page you can determine where the action should be displayed. You can select different pages here, or create a new page. Simply click on a free button where the action should be stored. To save the action and the profile, please select Finish.
+Auf dieser letzten Seite kannst du festlegen, wo die Aktion angezeigt werden soll. Du kannst hier die bereits vorhandenen Seiten auswählen oder eine neue Seite erstellen. Klicke einfach auf einen freien Button, auf dem die Aktion gespeichert werden soll. Mit Finish wird jetzt die Seite und das Profil gespeichert.
 
 ![image-20210331160031731](documentation/assets/aw_4.png)
 
-In the Admin Client you can then see what the wizard has generated for you.
-
 ![image-20210331160145334](documentation/assets/aw_05.png)
+
+Im Admin Client im Bereich Actions siehst du dann, was der Assistent generiert hat.
+
+![image-20210331160145334](documentation/assets/aw_06.png)
+
+## Erzeugung eine neuen Profiles
+
+![image-20210920132030225](documentation/assets/cp_01.png)
+
+Über den Menüpunkt Add im Profile Menü kann ein neues Profile angelegt werden.
+
+![image-20210920132144398](documentation/assets/cp_02.png)
+
+Hier kannst Du einen Namen und eine Beschreibung hinterlegen. Über template können vordefinierte Profile erzeugt werden. Diese beinhalten dann neben Name und Beschreibung auch bereits fertig konfigurierte Seiten und Aktionen. Somit kannst Du z.B. für dein Streamdeck schnell ein Profile erstellen. 
 
 ## Austauschen von Profilen, Aktionen und konfigurierten Seiten
 
@@ -137,111 +149,124 @@ Ihr könnt sowohl ganze Profile, Seiten wie auch einzelne Aktionen exportieren u
 
 # ReCoS Service
 
-The service is the main component of the ReCoS. This is the unit of work, doing all the nice things. But you will only see a little Icon in the taskbar. And there is a small context menu.
+Der Service ist der Hauptbestandteil des ReCoS. Der Service ist die Stelle, die all die schönen Dinge tut. Allerdings siehst du davon nur ein kleines Symbol in der Taskleiste. Und dort gibt es ein kleines Kontextmenü.
 
 ![image-20210412112204299](./documentation/assets/taskbar_1.png)
 
-Here you can directly start the web interface or the admin client. And you can register the service to automatically start on windows start. Next option is to edit the service.yaml file, which contains all configuration for the service itself. Normally you don't need to do here anything, but just in case...
-The last Menu entry is for shutting down the Service. 
+- **WebAdmin, WebClient**: Du kannst direkt das Webinterface oder den Admin-Client starten. 
+- **Autostart:** Du kannst den Dienst so registrieren, dass er beim Windows-Start automatisch gestartet wird. 
+- **Edit config:** Die nächste Option besteht darin, die Datei service.yaml zu bearbeiten, die die gesamte Konfiguration für den Dienst selbst enthält. Normalerweise brauchst du hier nichts zu tun, aber nur für den Fall... 
+- **Show log:** Ähnliches gilt für das Log. 
+- Mit **Help (Hilfe)** bist du bestimmt hier hin gekommen. 
+- Und **Restart** startet den Service neu. 
+- **Quit:** Der letzte Menüeintrag dient zum Beenden des Dienstes.
 
-## Profile configuration
+## Profilkonfiguration
 
-Various profiles can be stored in the ReCoS. Each profile consists on the one hand of a list of actions and on the other hand of the pages that represent these actions. Each profile has a name and a list of actions and pages. You can also add a description after.
+Im ReCoS können verschiedene Profile hinterlegt werden. Jedes Profil besteht zum einen aus einer Liste von Aktionen und zum anderen aus den Seiten, die diese Aktionen auf einer Oberfläche repräsentieren. Jedes Profil hat einen Namen und eine Liste von Aktionen und Seiten.
 
-`name`: The name of the profile
-`description`: a user readable description
-`pages`: This are the different pages for showing up the actions
-`actions`: a list of different actions. An action can appear on different pages. But as it's the same action, the status/result will be the same.
+`name`: Der Name des Profils
+`description`: eine vom Benutzer lesbare Beschreibung
+`pages`: Dies sind die verschiedenen Seiten zum Anzeigen der Aktionen
+`actions`: eine Liste verschiedener Aktionen. Eine Aktion kann auf verschiedenen Seiten erscheinen. Da es sich jedoch um dieselbe Aktion handelt, ist der Status/das Ergebnis gleich.
 
-### Page
+![image-20210412112204299](./documentation/assets/rs_01.png)
 
-A page is a view component mainly showing with rows and columns. Each of this cells will than visualize an action. The cells list will link to an action by name in the action list. The index of an action of a cell is calculated as 
+### Seiten
+
+Eine Seite ist eine Ansichtskomponente, die mit Zeilen und Spalten angezeigt wird. Jede dieser Zellen visualisiert dann eine Aktion. Die Zellenliste wird über den Namen in der Aktionsliste mit einer Aktion verknüpft. Der Index einer Aktion einer Zelle wird berechnet als
 
 `index = (cell.row * page.rows) + cell.column`
 
-parameters:
+Parameter:
 
-`name`: The name of the page
-`description`: a user readable description
-`icon`: the icon of this page
-`columns`: Number of columns on the page
-`rows`: Number of rows on the page
-`toolbar`: `show`, this page will appear in the toolbar to directly switch to, `hide`, if this page should appear in the toolbar. With the page command you can switch to this page.
-`cells`: List of names of the action per cell
+`name`: Der Name der Seite
+`icon`: das Icon dieser Seite
+`rows`: Anzahl der Zeilen auf der Seite
+`columns`: Anzahl der Spalten auf der Seite
+`toolbar`: `show`, diese Seite erscheint in der Toolbar, um direkt zu wechseln, `hide`, wenn diese Seite in der Toolbar erscheinen soll. Mit dem Seitenbefehl können Sie auf diese Seite wechseln.
+`cells`: Liste der Namen der Aktion pro Zelle (Im UI als Buttonfeld angezeigt)
 
-### Action
+![image-20210412112204299](./documentation/assets/rs_02.png)
 
-An action is the part, which defines, what to do if a button is triggered. 
+### Aktionen
 
-The following parameters are used:
+Eine Aktion ist der Teil, der definiert, was zu tun ist, wenn eine Schaltfläche ausgelöst wird.
 
-`type`: **`SINGLE`** is a single shot action. The action is always starting the command list. 
-**`DISPLAY`** is a display only cell. It will only show Text, Icons, or images, but you can't interact with it.
-**`MULTI`** is the third option. Here you can define 3 or more stages, and on every stage you can define an action, which is fired on activating this stage. As you can see, a simple on/off switch is a Multi Action with 2 Stages.
-`name`: s the name of the action
-`title`: the title of the action used by the UI
-`description`: user defined description of this action
-`runone`: is true or false. On true, if the action is fired twice, all commands of the first execution must be finished before the second execution will take place. On false, the execution will start directly without checking the previous action execution state.
-`icon`: the icon which will be displayed on the cell
-`fontsize`: the size of the title and the text, defaults to 14
-`fontcolor`: the color of the title and the text, defaults to black
-`outlined`: true or false, sometime reading a black text on a black ground is a little bit difficult. lining out can help.
-`commands`: list of commands for execution of this action
-`actions`: only apply in a MULTI action. For every stage there should be the name of the action which will be called, when the stage is executed. If a stage is executed, the icon of the last executed action (stage) will be displayed as the icon of the multi action and the title will be displayed on the text line. 
+Folgende Parameter werden verwendet:
+
+**`Name`**: ist der Name der Aktion
+**`Type`**: **`SINGLE`** ist eine Einzelaktion. Die Aktion startet immer die Befehlsliste.
+**`DISPLAY`** ist für die reine Anzeige. Es werden nur Text, Symbole oder Bilder angezeigt, Du kannst jedoch nicht damit interagieren.
+**`MULTI`** ist die dritte Option. Hier kannst du  mehrere Schritte definieren und auf jedem Schritt eine Aktion definieren, die beim Aktivieren dieses Schrittes ausgelöst wird. 
+**`Title`**: der Titel der Aktion, die von der Benutzeroberfläche verwendet wird
+**`Description`:** benutzerdefinierte Beschreibung dieser Aktion
+**`Icon`:** das Symbol, das auf der Zelle angezeigt wird
+**`Fontsize`:** die Größe des Titels und des Textes, standardmäßig 14
+**`Fontcolor`:** die Farbe des Titels und des Textes, standardmäßig schwarz
+**`Outlined`:** wahr oder falsch, manchmal ist das Lesen eines schwarzen Textes auf schwarzem Grund etwas schwierig. Outline  kann dort helfen.
+**`Only run once`:** ist wahr oder falsch. Wenn "runonce" wahr ist und die Aktion zweimal ausgelöst wird, müssen alle Befehle der ersten Ausführung beendet sein, bevor die zweite Ausführung stattfindet. Bei false wird die Ausführung direkt gestartet, ohne den vorherigen Ausführungsstatus der Aktion zu überprüfen. Evtl. laufen dann beide Ausführungen parallel.
+**`Commands`:** Liste der Befehle zur Ausführung dieser Aktion
+**`Actions`:** Gilt nur in einer MULTI-Aktion. Für jede Stufe sollte der Name der Aktion stehen, die aufgerufen wird, wenn die Stufe ausgeführt wird. Wird eine Stufe ausgeführt, wird das Icon der zuletzt ausgeführten Aktion (Stufe) als Icon der Multiaktion angezeigt und der Titel wird in der Textzeile angezeigt.
+
+![image-20210412112204299](./documentation/assets/rs_03.png)
+
+![image-20210412112204299](./documentation/assets/rs_04.png)
 
 ### Commands
 
-This is the unit of work, the part that is executed. This are the settings every command will use.
+Commands sind die Kommandos, also der Teil, der ausgeführt wird. Dies sind die Einstellungen, die in allen Befehlen gleich sind.
 
-`type`: the type of the command
-`name`: names the command
-`description`: a user readable description
-`icon`: an icon, that is displayed when running this command
-`title`: a text that is displayed when running this command
-The other parameters defers from command to command.
+**`Name`:** benennt den Befehl
+**`Title`:** ein Text, der angezeigt wird, wenn dieser Befehl ausgeführt wird
+**`Type`:** der Typ des Befehls
+**`Icon`:** ein Icon, das beim Ausführen dieses Befehls angezeigt wird
+**`Description`:** eine vom Benutzer lesbare Beschreibung
+Die anderen Parameter sind von Befehl zu Befehl verschieden.
+
+![image-20210412112204299](./documentation/assets/rs_05.png)
 
 #### No Operation
 
-Do nothing. (But you can change the text and the icon ;-) )
+Tut nichts. (Du kannst aber den Text und das Symbol ändern ;-) )
 
 `Type`: `NOOP`
 
-`Parameter`:  none
+`Parameter`: keine
 
 #### Audiocontrol
 
-taking control over your audio devices.
+Übernimmt die Kontrolle über Ihre Audiogeräte.
 
-With this command, you can take control different audio devices for setting volume and mute. 
+Mit diesem Befehl können Sie verschiedene Audiogeräte steuern,  Einstellen von Lautstärke oder Stummschaltung.
 
 `type`: `AUDIOVOLUME`
 
 Parameter:
-`device`: the device that you would like to control. There are different devices in your system. Which one you can select, can be seen in the admin interface or on startup in the console. There are 2 defaults: `master` for the master output. This is on widows the one that you can control directly with the taskbar icon. And `mic` which is for the default input device. 
-`command`: this is the command you want to fire. `mute`, which toggles the mute state. `volume up` for increase and `volume down` for decreasing the volume of that device.
+`device`: das Gerät, das Sie steuern möchten. Es gibt verschiedene Geräte in Ihrem System. Welche Sie auswählen können, sehen Sie in der Admin-Oberfläche. Es gibt 2 Voreinstellungen: `master` für den Master-Ausgang. Dies ist bei Windows diejenige, die Sie direkt mit dem Taskleistensymbol steuern können. Und `mic`, welches das Standardeingabegerät darstellt.
+`Befehl`: Dies ist der Befehl, den Sie abfeuern möchten. `mute`, um den Mute-Status umzuschalten. `volume up` zum Erhöhen und `volume down` zum Verringern der Lautstärke dieses Geräts.
 
 #### Clock
 
 <img src="documentation\assets\clock_analog.png" alt="image-20210405121355233" style="zoom:50%;" /><img src="documentation\assets\clock_digital_2.png" alt="image-20210405121453465" style="zoom:50%;" /><img src="documentation\assets\clock_digital_1.png" alt="image-20210405121419437" style="zoom:50%;" /><img src="documentation\assets\clock_berlin.png" alt="image-20210405121311659" style="zoom:50%;" />
 
-Just a clock in different designs.
+Nur eine Uhr in verschiedenen Designs.
 
-`type`: `CLOCK`
+`Type`: `UHR`
 
-`Parameter`: 
+`Parameter`:
 
-`format`: the format of the time in Golang format syntax, defaults: 15:04:05
-`dateformat`: the format of the date in Golang format syntax, used by different designs, defaults: 02.01
-`analog`: true or false, shows an analog clock
-`timezone`: string with the name of the timezone of the IANA Timezone database (https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
-`design`: the design of the clock. `analog` is for a analog clock, `digital` showing a nice digital clock, `berlin` is showing the berlin clock (https://en.wikipedia.org/wiki/Mengenlehreuhr).
-There is another Berlin clock, called `berlin2`, which is created in svg format. It's usually better for smaller resolutions. 
+`format`: das Format der Uhrzeit in der Golang-Format-Syntax, Standardwerte: 15:04:05
+`timezone:` String mit dem Namen der Zeitzone der IANA Timezone Database (https://en.wikipedia.org/wiki/List_of_tz_database_time_zones), die verwendet werden soll.
+`dateformat`: das Format des Datums in der Golang-Format-Syntax, das von verschiedenen Designs verwendet wird, Standardwerte: 02.01
+`graphical`: wahr oder falsch, zeigt eine analoge Uhr an
+`showseconds`: Zeigt die Sekunden im Design an.
+`showdate`: Zeigt das Datum im Design formatiert mit dateformat an.
+`design`: das Design der Uhr. `analog` steht für eine analoge Uhr, `digital` zeigt eine schöne Digitaluhr, `berlin` zeigt die Berliner Uhr (https://en.wikipedia.org/wiki/Mengenlehreuhr).
+Es gibt eine weitere Berliner Uhr namens `berlin2`, die im SVG-Format erstellt wurde. Diese ist besser für kleinere Auflösungen.
+`color`: die Farbe der Segmente der Digitaluhr
 
-`showseconds`: showing the seconds in the design. 
-`showdate`: showing the date in the design formatted with dateformat. 
-`color`: the color of the segments of the digital clock
-
-Example 1: simple textual clock
+Beispiel 1: einfache Textuhr
 
 Parameter:
 
@@ -249,7 +274,7 @@ Parameter:
 format: "15:04:05 02 Jan 06"
 ```
 
-Example 2: showing a nice digital clock with red 7-segment digits 
+Beispiel 2: zeigt eine schöne Digitaluhr mit roten 7-Segment-Ziffern
 
 ```yaml
 format: "02-01"
@@ -262,53 +287,50 @@ color: "#ff0000"
 
 ![image-20210612171426789](documentation\assets\counter.png)
 
-just a simple counter.
+Ein einfacher Zähler mit bleibendem Wert.
 
-A simple counter, with persisting value.
+`Typ`: `ZÄHLER`
 
-`type`: `COUNTER`
-
-`Parameter`: 
-`persist`: true or false, if true, the counter will persist between service restarts
-`oldschool`: rendering an old school counter with 7-segment digits
-`color`: the color of the segments 
+`Parameter`:
+`persist`: wahr oder falsch, wenn wahr, bleibt der Zähler zwischen Dienstneustarts bestehen
+`oldschool`: Rendering eines Old-School-Zählers mit 7-Segment-Ziffern
+`color`: die Farbe der Segmente
 
 #### Days remain
 
 ![image-20210612173814698](documentation\assets\daysremain.png)
 
-show the days remains to a end date.
-
-This will show the days remain until a end date.
+Zeigt die verbleibenden Tage bis zu einem Enddatum an.
 
 `type`: `DAYSREMAIN`
 
-`Parameter`: 
+`Parameter`:
 
-`date`: end date in format "yyyy-mm-dd"
-`formatTitle`: the title message for the response, defaults %d
-`formatText`: the text message for the response, defaults %d
-`finished`: the message at the end of the days remain, defaults: finished
+`date`: Enddatum im Format "yyyy-mm-dd"
+`formatTitle`: die Titelnachricht für die Antwort, Standardwerte %d
+`formatText`: die Textnachricht für die Antwort, Standardwerte %d
+`finished`: die Nachricht am Ende der Tage bleibt, Standard: finished
 
 #### Delay
+
+Verzögert die Ausführung. Hiermit kann man 2 Kommandos, die in einer Aktion hintereinander kommen sollen, um eine gewisse Zeit verzögern.
 
 `type`: `DELAY`
 
 `Parameter`: 
 
-`time`: time to delay in Seconds
+`time`: die Verzögerung in Sekunden
 
 #### Dice
 
 ![](documentation\assets\dice.png)
 
-rolling the dice
-A simple dice implementation with nice ui and different values.
+Eine einfache Würfelimplementierung mit schöner Benutzeroberfläche und verschiedenen Werten.
 
 `type`: `DICE`
 
 `Parameter`: 
-`sides`: the number of sides of the dice. For sides <= 9a nice UI is implemented.
+`sides`: die Anzahl der Seiten des Würfels. Für Seiten <= 9 ist eine Benutzeroberfläche implementiert.
 
 #### Execute
 
@@ -316,71 +338,71 @@ A simple dice implementation with nice ui and different values.
 
 Parameter:
 
-`command`: the executable or shell script to execute, with or without path
-`args`: list of string arguments to this executable
-`waitOnClose`: waits until the executable is closed or script is finnished.
+`command`: die ausführbare Datei oder das auszuführende Shell-Skript, mit oder ohne Pfad
+`args`: Liste der String-Argumente für diese ausführbare Datei
+`waitOnClose`: Wartet mit der weiteren Ausführung, bis die ausführbare Datei geschlossen oder das Skript beendet ist.
 
 #### Hardware monitor
 
 ![](documentation\assets\cpu_load.png)
 
-This command connects to the openhardware monitor application on windows. With this you can get different sensors of your computer. For using the webserver of the openhardwaremonitor app, you have to activate the open hardware monitor integration in the settings. The url is the url to the app webserver added with data.json. the `updateperiod` is the update time in seconds. 
+Dieser Befehl stellt eine Verbindung mit der Openhardware-Monitoranwendung unter Windows her. Damit können Sie Werte verschiedener Sensoren Ihres Computers erhalten. Um den Webserver der openhardwaremonitor App nutzen zu können, müssen Sie in den Einstellungen die Open Hardware Monitor Integration aktivieren. Die `URL` ist die URL zum App-Webserver, der mit data.json hinzugefügt wurde. `updateperiod` ist die Aktualisierungszeit in Sekunden.
 
-If you have configured this, the service will evaluate on startup the connection and all possible sensor names. This list of names you will see in the log and in the configuration there is a file sensorlist.txt with all sensors names. The sensor name starts with the category, like CPU, GPU or Memory, followed by the hardware component. After that there is the sensor type like Clocks, Temperatures or Load, followed by the sensor name. 
+Wenn Sie dies konfiguriert haben, wertet der Dienst beim Start die Verbindung und alle möglichen Sensornamen aus. Diese Namensliste sehen Sie im Log und im Konfigurationsverzeichniss gibt es eine Datei sensorlist.txt mit allen Sensornamen. Der Sensorname beginnt mit der Kategorie, wie CPU, GPU oder Speicher, gefolgt von der Hardwarekomponente. Danach folgt der Sensortyp wie Clocks, Temperatures oder Load, gefolgt vom Sensornamen.
 
 `type`: `HARDWAREMONITOR`
 
 Parameter:
-`sensor`: the sensor name.
-`format`: the format string for the textual representation
-`display`: text, graph,  text shows only the textual representation, graph shows both
-`ymin`: the value for the floor of the graph
-`ymax`: the value for the bottom of the graph
-`color`: color of the graph
+`sensor`: der Sensorname.
+`format`: der Formatstring für die textuelle Darstellung
+`display`: Text, Grafik, Text zeigt nur die Textdarstellung, Grafik zeigt beides
+`ymin`: der Wert für den Boden des Graphen
+`ymax`: der Wert für den unteren Rand des Graphen
+`color`: Farbe des Graphen
 
 #### Homematic
 
-For integrating a homematic system to the ReCoS there are 3 different commands.
+Zur Einbindung eines homematic Systems in den ReCoS gibt es 3 verschiedene Befehle.
 
-First you have to configure your homematic in the service configuration. (See Installing Homematic)
+Zuerst müssen Sie Ihre homematic in der Servicekonfiguration konfigurieren. (Siehe Homematic installieren)
 
-After that you can use the 3 commands:
+Danach können Sie die 3 Befehle verwenden:
 
-Starting a **program** is very simple: simply using the name as the name for the program.
+Das Starten eines Programms (**program**) ist sehr einfach: Verwenden Sie einfach den Namen als Namen für das Programm.
 
-`name` is the name of the hm program.
+`name` ist der Name des hm-Programms.
 
-A **Switch** is for using the button as a switch. Simply on/off. For both states you can add a different icon. The text field of the button always shows the actual state. (Even if you switch the device via other software/hardware solutions) 
+Ein **Switch** dient zur Verwendung der Taste als Schalter. Einfach an/aus. Für beide Zustände können Sie ein anderes Symbol hinzufügen. Das Textfeld der Schaltfläche zeigt immer den aktuellen Zustand an. (Auch wenn Sie das Gerät über andere Software-/Hardwarelösungen wechseln)
 
-`name` is the name of the "device: channel".
+`name` ist der Name des "Geräts: Kanal".
 
-`officon`: the icon showed if the switch is off
+`officon`: das Symbol wird angezeigt, wenn der Schalter ausgeschaltet ist
 
-`onicon`: the icon showed if the switch is on.
+`onicon`: Das Symbol wird angezeigt, wenn der Schalter eingeschaltet ist.
 
-For **dimmer** and **shutter** you can use the third command. 
-`name` is the device/channel.
-action: can have the different actions:
-   `set value`: setting a value directly (in percent)
-   `up`: incrementing the value in percent steps. The step size is configurable via `value` .
-   `down`: decrementing the value in percent steps. The step size is configurable via `value` .
-`value`: the value or the step size.
+Für **dimmer** und **shutter** können Sie den dritten Befehl verwenden.
+`name` ist das Gerät/der Kanal.
+`action`: kann die verschiedenen Aktionen haben:
+   `set value`: Wert direkt einstellen (in Prozent)
+   `up`: Erhöht den Wert in Prozentschritten. Die Schrittweite ist über `value` konfigurierbar.
+   `down`: Verringern des Wertes in Prozentschritten. Die Schrittweite ist über `value` konfigurierbar.
+`value`: der Wert oder die Schrittweite.
 
-For all commands it is necessary that the names of devices/channels are unique.
+Für alle Befehle ist es erforderlich, dass die Namen der Geräte/Kanäle eindeutig sind.
 
 #### Keys
 
-Sending keys to the active application. This command is emulating a keyboard input by sending key strokes of a keyboard to the active application. You can use different keyboard layouts and there are some macros defining special keys.
+Senden von Tastaturbefehlen an die aktive Anwendung. Dieser Befehl emuliert eine Tastatureingabe, indem er Tastenanschläge einer Tastatur an die aktive Anwendung sendet. Sie können verschiedene Tastaturlayouts verwenden und es gibt einige Makros, die Sondertasten definieren.
 
 `type`: `KEYS`
 
-`keylayout`: defining the layout of the keyboard used to send the data. en for English (us) "qwerty" and de for a German "qwertz" keyboard layout. Default is "de"
+`keylayout`: Definiert das Layout der Tastatur, die zum Senden der Daten verwendet wird. en für Englisch (us) "qwerty" und de für ein deutsches "qwertz"-Tastaturlayout. Standard ist "de"
 
-`keystrokes`: are the string with the keys used to send. For special keys there are defined special macros. Every macro starts with an "{" and ends than with "}". If you want to send the "{" as a character simply double this. ("{" -> "{{"). 
+`keystrokes`: sind die Zeichenfolgen mit den Tasten, die zum Senden verwendet werden. Für Sondertasten sind spezielle Makros definiert. Jedes Makro beginnt mit einem "{" und endet dann mit "}". Wenn Sie das "{" als Zeichen senden möchten, verdoppeln Sie dies einfach. ("{" -> "{{").
 
-Another specialized character is the "~" char. It will lead into a 1 second delay between the typing. To get the "~" Character, simple double it.
+Ein weiteres spezialisiertes Zeichen ist das Zeichen "~". Dies führt zu einer Verzögerung von 1 Sekunde zwischen den Eingaben. Um das Zeichen "~" zu erhalten, verdoppeln Sie es einfach.
 
-The following macros are defined: 
+Folgende Makros sind definiert:
 
 | Macro               | Keyboard key          |
 | ------------------- | --------------------- |
@@ -408,143 +430,144 @@ The following macros are defined:
 
 #### Mediacontrol
 
-taking control over your system media player. With this commands you can control the system media player. On windows normally the actual startet media program like windows media player, spotify or even vlc can be controlled with this commands. 
+die Kontrolle über Ihren System-Media-Player übernehmen. Mit diesen Befehlen können Sie den Mediaplayer des Systems steuern. Unter Windows kann mit diesen Befehlen normalerweise das aktuell gestartete Medienprogramm wie Windows Media Player, Spotify oder auch vlc gesteuert werden.
 
-The available commands are Start, Stop, Next and Previous. 
+Die verfügbaren Befehle sind Start, Stop, Next und Previous.
 
 `type`: `MEDIAPLAY`
 
 Parameter:
-`command`: this is the command you want to fire. `start`, which starts the media player or pause it, if it's already started. `stop` for stopping the player and `next` and  `previous` for going to the next/previous part.
+`command`: Dies ist der Befehl, den Sie abfeuern möchten. `start`, startet den Mediaplayer oder pausiert ihn, wenn er bereits gestartet ist. `stop` um den Player zu stoppen und `next` und `previg` um zum nächsten/vorherigen Teil zu gehen.
 
 #### OBS - Open Broadcaster Software
 
-This is a set of commands to control your obs installation.
+Dies ist eine Reihe von Befehlen, um Ihre obs-Installation zu steuern.
 
 ##### OBS Start/Stop
 
-Start/Stop recording or streaming
+Start/Stop Aufnahme oder Streaming
 
 `type`: `OBSSTARTSTOP`
 
 Parameter:
-`mode`: recording or streaming, the mode to start/stop
+`mode`: `recording` oder `streaming`, the mode to start/stop
 
 ##### OBS Profile
 
-switching the profile of obs
+ändert das aktuelle Profil von OBS
 
 `type`: `OBSPROFILE`
 
 Parameter:
-`profile`: the name of the profile to switch to
+`profile`: der Name des zu aktivierenden Profiles
 
 ##### OBS Scene Collection
 
-switching the scene collection of obs
+ändert die aktuelle Scenenkollection 
 
 `type`: `OBSSCENECOLLECTION`
 
 Parameter:
-`scenecollection`: the name of the scene collection to switch to
+`scenecollection`: der Name Scenenkollektion
 
 ##### OBS Scene 
 
-switching the scene of obs with different commands.
+ändert die aktuelle Szene mit verschiedenen Kommandos.
 
 `type`: `OBSSCENE`
 
 Parameter:
-`scenecommand`: the command to execute, possible commands are:
+`scenecommand`: das Szenenkommando, möglich sind:
 
-- `next`: switching to the next scene in the scene list, at the end it will roll over to the first scene
-- `previous`: switching to the previous scene in the scene list, at the end it will roll over to the last scene
-- `first, last`: switching to the first/last scene in the scene list
-- `switch`: switching to a named scene in the scene list
+- `next`: wechselt zur nächsten Szene in der Liste, am Ende wechselt es wieder zur 1. Szene
+- `previous`: wechselt zur vorherigen Szene in der Liste, am Anfang wechselt es wieder zur letzten Szene
+- `first, last`: wechselt direkt zur 1. oder letzten Szene in der Liste
+- `switch`: wechselt zur der Szene mit dem angegebenen Namen
 
 #### Page
 
-Switch to another page.
+Wechselt zu einer anderen Seite im ReCoS UI.
 
 `type`: `PAGE`
 
 Parameter:
-`page`: the name of the page to switch to
+`page`: Name der Seite zu der gewechselt werden soll.
 
 #### Philips Hue 
 
-2 Commandos for controlling Philips hue lights and groups.
+enthält 2 Kommandos zur Kontrolle von Philips Hue.
 
 ##### Philips Hue Lights
 
 `type`: `PHUELIGHTS` 
 
 Parameter:
-`name`: the name of the hue light, group, room or zone.  If a light is accessed the keyword "Light:" will be in front of the parameter, otherwise the keyword "Group:"
-`brightness`: the brightness of the light  (1..254, 0 for unused)
-`saturation`: the saturation of the light (1..254, 0 for unused)
-`hue`: the hue of the light, this is a color value ranging from 1..65535, 0 for unused
-`colortemp`: the color temperature of the light, this is a value ranging from 2000..6500, 0 for unused
-`color`: the color of the light
+
+`name`: der Name des Farbtonlichts, der Gruppe, des Raums oder der Zone. Wird auf eine Leuchte zugegriffen, wird dem Parameter das Schlüsselwort "Licht:" vorangestellt, ansonsten das Schlüsselwort "Gruppe:"
+`brightness`: die Helligkeit des Lichts (1..254, 0 für ungenutzt)
+`saturation`: die Sättigung des Lichts (1..254, 0 für ungenutzt)
+`hue`: der Farbton des Lichts, dies ist ein Farbwert im Bereich von 1..65535, 0 für ungenutzt
+`colortemp`: die Farbtemperatur des Lichts, dies ist ein Wert im Bereich von 2000..6500, 0 für unbenutzt
+`color`: die Farbe des Lichts
 
 ##### Philips Hue Scenes
 
 `type`: `PHUESCENES`
 
 Parameter:
-`name`: the name of the hue group, room or zone.  
-`scene`: the scene to apply to
-`brightness`: the brightness of the group  (1..254, 0 for unused)
 
-**ATTENTION**: As names of the lights, groups, scenes ... are used here to identify the object, please be sure that in the definition of those the names are unique. Otherwise ReCoS maybe control only one of those.
+`name`: der Name der hue Gruppe, des Raums oder der Zone.
+`Szene`: die Szene, auf die angewendet werden soll
+`brightness`: die Helligkeit der Gruppe (1..254, 0 für unbenutzt)
+
+**ACHTUNG**: Da hier Namen der Leuchten, Gruppen, Szenen ... zur Identifizierung des Objekts verwendet werden, achten Sie bitte darauf, dass bei der Definition diese Namen eindeutig sind. Ansonsten kontrolliert ReCoS nur den ersten davon.
 
 #### Play audio
 
 ![image-20210409114913298](documentation/assets/playaudio.png)
 
-Playing an audio file. Available formats are: wav, mp3, ogg and flac. With a bunch full of this commands you can create your own soundboard.
+Abspielen einer Audiodatei. Verfügbare Formate sind: wav, mp3, ogg und flac. Mit einer Seite voll von diesen Befehle können Sie Ihr eigenes Soundboard erstellen.
 
 `type`: `PLAYAUDIO`
 
 Parameter:
-`file`: the name and path to the audio file, which should be played. 
+`file`: Name und Pfad der Audiodatei, die abgespielt werden soll.  
 
 #### Ping
 
 ![image-20210331150154168](documentation/assets/ping.png)
 
-Shows ping times to a server.
-Here you can test your connection to a server. Ping will test the connection to a server, You can use an IP Address or a server name (without any http...) If you put this command to an display action you can set a period so that the command will automatically start every #period seconds a test.  The result is the actual ping time in ms.
+Zeigt einem Server Ping-Zeiten an. 
+
+Hier können Sie Ihre Verbindung zu einem Server testen. Ping testet die Verbindung zu einem Server. Sie können eine IP-Adresse oder einen Servernamen (ohne http...) verwenden. Zeitraum Sekunden ein Test. Das Ergebnis ist die tatsächliche Ping-Zeit in ms.
 
 `type`: `PING`
 
 Parameter:
 
-`name`: the URL to ping to. You can use the Internet address name (without the protocol) or a simple IP address
-`period`: the period in seconds when the command should automatically be executed. 
+`name`: die URL zum Pingen. Sie können den Internet-Adressnamen (ohne Protokoll) oder eine einfache IP-Adresse verwenden
+`period`: der Zeitraum in Sekunden, in dem der Befehl automatisch ausgeführt werden soll 
 
 #### Random words
 
 ![image-20210331164704159](documentation/assets/rndwords.png)
 
-Choose a random word/phrase out of a list
+Wähle ein zufälliges Wort/eine zufällige Phrase aus einer Liste
 
 `type`: `RNDWORDS`
 
 `Parameter`: 
-`words`: The list of words/phrases to choose one randomly from
+`words`: Die Liste der Wörter/Phrasen, aus denen man zufällig einen auswählen kann 
 
 #### Screen shot
 
-taking a screen shot.
-
-With this command, you can take a screen shot. 
+Mit diesem Befehl können Sie einen Screenshot machen.
 
 `type`: `SCREENSHOT`
 
 Parameter:
-`saveto`: the folder, where the screen shot will be saved. File name format is `screen_<#number>_<display>.png`
-`display`: optional, the number of the display, if you want to store screen shot of every display please use -1. Getting the right display, simply do a screen shot with display = -1. Than look at the screen shots and look in the name at the last number of the right image. That is your display.
+`saveto`: der Ordner, in dem der Screenshot gespeichert wird. Das Dateinamenformat ist `screen_<#number>_<display>.png`
+`display`: optional, die Nummer des Displays, wenn Sie Screenshots jedes Displays speichern möchten, verwenden Sie bitte -1. Um die richtige Anzeige zu erhalten, machen Sie einfach einen Screenshot mit display = -1. Dann schauen Sie sich die Screenshots an und schauen Sie im Namen auf die letzte Zahl des rechten Bildes. Das ist Ihre Anzeige. 
 
 #### Send message
 
@@ -552,17 +575,17 @@ Parameter:
 
 Parameter:
 
-`receiver`: the receiver of this message. `client` is for all clients having this particular action active, `service` is for the service itself. (Or more the user sitting on the service related desktop)
-`message`: the message to send
+`receiver`: der Empfänger dieser Nachricht. `client` ist für alle Clients, die diese spezielle Aktion aktiv haben, `service` ist für den Dienst selbst. (Oder der Benutzer, der auf dem dienstbezogenen Desktop sitzt)
+`message`: die zu sendende Nachricht 
 
 #### Show text
 
-Showtext will show a text on the button, and the icon of this command, if set, will be displayed as the title, too. 
+Showtext zeigt einen Text auf der Schaltfläche an, und das Symbol dieses Befehls, falls festgelegt, wird auch als Titel angezeigt.
 
 `type`: SHOWTEXT
 
 Parameter:
-`text`: the text to show in the text field of the button. 
+`text`: der Text, der im Textfeld der Schaltfläche angezeigt werden soll. 
 
 #### Start Browser
 
@@ -570,19 +593,19 @@ Parameter:
 
 Parameter:
 
-`url`: the URL to show in the system browser. On Windows if you choose a normal file system folder, it will automatically start the explorer on this path.
+`url`: die URL, die im Systembrowser angezeigt werden soll. Wenn Sie unter Windows einen normalen Dateisystemordner auswählen, wird der Explorer automatisch auf diesem Pfad gestartet. 
 
-Example 1
+Beispiel 1 
 
-start a new browser windows with a url:
+Starten Sie ein neues Browserfenster mit einer URL: 
 
 ```yaml
 url: https://www.wk-music.de
 ```
 
-Example 2
+Beispiel 2
 
-on windows: start a new explorer windows with a filepath
+unter Windows: Startet ein neues Explorer-Fenster mit einem Dateipfad
 
 ```yaml
 url: c:\windows
@@ -592,148 +615,146 @@ url: c:\windows
 
 #### Stopwatch
 
-A simple textual stopwatch.
+Eine einfache Textstoppuhr.
 
 `type`: `STOPWATCH`
 
 `Parameter`: 
 
-`format`: the format of the time. The `%` character signifies that the next character is a  modifier that specifies a particular duration unit. The following is the full list of modifiers supported by go-durationfmt:
+`format`: das Format der Zeit. Das Zeichen `%` bedeutet, dass das nächste Zeichen ein Modifikator ist, der eine bestimmte Dauereinheit angibt. Im Folgenden finden Sie die vollständige Liste der Modifikatoren, die von go-durationfmt unterstützt werden:
 
-- `%y` - # of years
-- `%w` - # of weeks
-- `%d` - # of days
-- `%h` - # of hours
-- `%m` - # of minutes
-- `%s` - # of seconds
-- `%%` - print a percent sign
+- `%y` - Anzahl der Jahre
+- `%w` - Anzahl Wochen
+- `%d` - Anzahl Tage
+- `%h` - Anzahl Stunden
+- `%m` - Anzahl Minuten
+- `%s` - Anzahl Sekunden
+- `%%` - ein Prozentzeichen drucken
 
-You can place a `0` before the `h`, `m`, and `s` modifiers to zeropad those values to two digits. Zeropadding is undefined for the other modifiers.
+Sie können eine `0` vor die `h`, `m` und `s`-Modifikatoren setzen, um diese Werte mit Nullen auf zwei Stellen aufzufüllen. Für die anderen Modifikatoren ist Zeropadding nicht definiert.
 
 #### Timer
 
-Starting a timer with a response every second. You can define the format of the timer message and the message on finish.
+Starten eines Timers mit einer Antwort jede Sekunde. Sie können das Format der Timer-Nachricht und der Nachricht bei Beendigung festlegen.
 
 `type`: TIMER
 
 `Parameter`: 
 
-`time`: time to delay in Seconds
-`format`: the message for the response, defaults %d seconds
-`finished`: the message at the end of the timer, defaults: finished
+`time`: Verzögerungszeit in Sekunden
+`format`: die Nachricht für die Antwort, standardmäßig %d Sekunden
+`finished`: die Meldung am Ende des Timers, Vorgabe: finished
 
 #### WindowCtrl
 
-Controlling Application Main Window.
+Steuerung des Hauptfensters einer Anwendung.
 
-With this command, you can control the main window of an application.
+Mit diesem Befehl können Sie das Hauptfenster einer Anwendung steuern.
 
 `type`: `WINDOWCTRL`
 
 Parameter:
-`caption`: the caption of the application window
-`command`: the command to execute on this window. Possible values are:
-	`minimize`: for minimizing the application window
-	`activate`: for activating the application window again. (restore it if minimized and active/bring it to front) 
-	`move  x y`: moving the window to the new position x,y
+`caption`: die Beschriftung des Anwendungsfensters
+`command`: der Befehl, der in diesem Fenster ausgeführt werden soll. Mögliche Werte sind:
+	`minimize`: zum Minimieren des Anwendungsfensters
+	`activate`: zum erneuten Aktivieren des Anwendungsfensters. (Stellen Sie es wieder her, wenn es minimiert und aktiv ist / nach vorne bringen)
+	`move  x y`: Verschieben des Fensters an die neue Position x,y 
 
-# Installing 3'rd Party products
+# Installieren von Produkten von Drittanbietern
 
-For other 3'rd party products there is an so called integration for accessing the different parts. Here you can find some remarks on these integration.  
+Für andere Produkte von Drittanbietern gibt es eine sogenannte Integration für den Zugriff auf die verschiedenen Teile. Hier finden Sie einige Anmerkungen zu dieser Integration. 
 
 ## Elagto Stream Deck (c)
 
-The stream deck integration instrumented an Elgato stream deck for the ReCoS system. Since only one application can access the hardware, it is necessary that you deactivate and close the original stream deck application. You can then simply activate the stream deck integration in the section settings in the admin client.
+Die Stream-Deck-Integration ist die Brücke zu einem Elgato-Stream-Deck für das ReCoS-System. Da nur eine Anwendung auf die Hardware zugreifen kann, müssen Sie die ursprüngliche Stream-Deck-Anwendung deaktivieren und schließen. Die Streamdeck-Integration können Sie dann einfach in den Abschnittseinstellungen im Admin-Client aktivieren.
 
 <img src="documentation/assets/sd_1.png" alt="sd_1" style="zoom: 50%;" /> 
 
-The second parameter is optional. You can add here the profile, the stream deck will present. But there are defaults for it. For a normal stream deck (15 Button version, no matter whether revision 1 or 2) the default profile is called `streamdeck`. A profile with the name `streamdeck_mini` is expected for the Stream deck mini. The `streamdeck_xl` profile is expected for the XL. The following applies to all three, if the profile is not found and no profile is specified, the `default` profile is used. So that the profiles in the surface correspond to the display in the stream deck, you should create the rows and columns accordingly. For the normal stream deck the configuration is 3x5 (rows / cols) for the Mini 2x3 and for the XL 4x8. Other profile configurations also work, but it is possible that not all buttons are displayed on the stream deck or that they remain empty.
+Der zweite Parameter ist optional. Sie können hier ein Profil hinzufügen, das das Stream-Deck präsentiert. Wird kein Profil ausgewählt. gibt es Voreinstellungen. Für ein normales Streamdeck (15 Button Version, egal ob Revision 1 oder 2) heißt das Standardprofil `streamdeck`. Für das Streamdeck mini wird ein Profil mit dem Namen `streamdeck_mini` erwartet. Für den XL wird das Profil `streamdeck_xl` erwartet. Für alle drei gilt Folgendes: Wenn das Profil nicht gefunden und kein Profil angegeben ist, wird das `default`-Profil verwendet. Damit die Profile in der Fläche der Darstellung im stream deck entsprechen, sollten Sie die Zeilen und Spalten entsprechend anlegen. Für das normale Stream-Deck ist die Konfiguration 3x5 (Reihen / Spalten) für den Mini 2x3 und für den XL 4x8. Andere Profilkonfigurationen funktionieren auch, aber es ist möglich, dass nicht alle Schaltflächen auf dem Stream-Deck angezeigt werden oder leer bleiben.
 
-## Installation of OpenHardwareMonitor
+## Installation von OpenHardwareMonitor
 
-For hardware sensor reading ReCoS uses the OpenHardwareMonitor Software. (https://openhardwaremonitor.org/) To use this, simply install the software. After installation, go to Option/Remote Web Server/Port. 
+Für das Auslesen von Hardware-Sensoren verwendet ReCoS die OpenHardwareMonitor-Software. (https://openhardwaremonitor.org/) Um dies zu nutzen, installieren Sie einfach die Software. Gehen Sie nach der Installation zu Option/Remote Webserver/Port.
 
 ![ohm_02](documentation/assets/ohm_02.png)
 
 ![ohm_03](documentation/assets/ohm_03.png)
 
-As Port number enter 12999 (which is the default for Combination of ReCoS and OHM)
+Geben Sie als Portnummer 12999 ein (das ist die Standardeinstellung für die Kombination von ReCoS und OHM)
 
-After that simply activate the OHM Web server via Option/Remote Web Server/Run.
-The OHM should be available after restart of windows, so please tick the following options on. Now everything of the OHM side is ready. The ReCoS service will now automatically connect to the OHM and get all Sensors. 
+Danach aktivieren Sie einfach den OHM Webserver über Option/Remote Web Server/Run.
+Das OHM sollte nach einem Neustart von Windows verfügbar sein, also kreuzen Sie bitte die folgenden Optionen an. Jetzt ist alles von der OHM-Seite fertig. Der ReCoS-Dienst verbindet sich nun automatisch mit dem OHM und erhält alle Sensoren. 
 
 ![ohm_04](documentation/assets/ohm_04.png)
 
-If you have already installed the OHM (maybe for another App) and you can't reconfigure the port option, you can simply change the port for ReCoS in the admin client. Same for the url, when you want to get sensors from another Computer.
+Wenn Sie das OHM bereits installiert haben (evtl. für eine andere App) und Sie die Port-Option nicht neu konfigurieren können, können Sie einfach den Port für ReCoS im Admin-Client ändern. Gleiches gilt für die URL, wenn Sie Sensoren von einem anderen Computer abrufen möchten.
 
 ![image-20210607172406040](documentation/assets/ohm_05.png)
 
 ## Installation Philips Hue
 
-First of all, a new user must be created for the ReCoS installation. To do this, please start your browser and go to the clip page of your Hue Bridge. 
+Zunächst muss für die ReCoS-Installation ein neuer Benutzer angelegt werden. Starten Sie dazu bitte Ihren Browser und rufen Sie die Clip-Seite Ihrer Hue Bridge auf.
 
 http: // <IP address of the Hue Bridge> /debug/clip.html
 
 ![image-20210412161232901](documentation/assets/clip_1.png)
 
-Now please post the following to the bridge.
+Jetzt bitte folgendes auf die Brücke posten.
 URL: /api
 
-Message Body: {"devicetype":"recos#hue_user"}
+Nachrichtentext: {"devicetype":"recos#hue_user"}
 
-With the first attempt an error message appears.
+Beim ersten Versuch erscheint eine Fehlermeldung.
 
 ![image-20210412161801279](documentation/assets/clip_2.png)
 
-Please press the big button on the Philips Hue Bridge and post the same thing again.
+Bitte den großen Knopf auf der Philips Hue Bridge drücken und das gleiche nochmal posten.
 
 ![](documentation/assets/clip_3.png)
 
-Then copy the username from the answer:
+Kopieren Sie dann den Benutzernamen aus der Antwort:
 
 ![image-20210412162002314](documentation/assets/clip_4.png)
 
-Now you have to change the ReCoS configuration. To do this, please start the admin client via the context menu.
+Nun müssen Sie die ReCoS-Konfiguration ändern. Dazu starten Sie bitte den Admin-Client über das Kontextmenü.
 
-![image-20210416104722050](documentation/assets/philips_hue_config.png)
-
-![image-20210607171938223](documentation/assets/philips_hue_config_02.png)Please enter the generated user name here as the `username` and change the `ipaddress` accordingly.
-`updateperiod` is the time span in seconds in which ReCoS polls the bridge for changes.
+![image-20210607171938223](documentation/assets/philips_hue_config_02.png)Bitte geben Sie hier den generierten Benutzernamen als `Benutzername` ein und ändern Sie die `IP-Adresse` entsprechend.
+`update period` ist die Zeitspanne in Sekunden, in der ReCoS die Bridge auf Änderungen abfragt.
 
 ## Homematic
 
-For using the Hometmatic system for commands, you simply have to do 2 Things:
-First you have to add the xmlapi addon to your homematic. 
+Um das Hometmatic-System für Befehle zu verwenden, müssen Sie nur 2 Dinge tun:
+Zuerst musst du das xmlapi Addon zu deiner Homematic hinzufügen.
 https://github.com/homematic-community/XML-API
 
-Second: add the url of your homematic system in the system config (via admin client/settings) and set the active state to true. After a redstart of the ReCoS you can use the homematic commands. 
+Zweitens: Fügen Sie die URL Ihres Homematic-Systems in der Systemkonfiguration hinzu (über Admin-Client/Einstellungen) und setzen Sie den aktiven Zustand auf true. Nach einem Neustart des ReCoS können Sie die homematic-Befehle verwenden.
 
 ![image-20210607172549951](documentation/assets/hm_01.png)
 
 ## OBS Studio - Open Broadcaster Software
 
-With ReCoS you can control some parts of your OBS Software.  This integration supports the OBS Studio. First you have to install the obs-websocket plugin.  At the moment only the version 4.9.0 is supported. (https://github.com/Palakis/obs-websocket/releases/tag/4.9.0) 
+Mit ReCoS können Sie einige Bereiche Ihrer OBS-Software steuern. Diese Integration unterstützt OBS Studio. Zuerst müssen Sie in OBS das obs-websocket-Plugin installieren. Zur Zeit wird nur die Version 4.9.0 unterstützt. (https://github.com/Palakis/obs-websocket/releases/tag/4.9.0) 
 
-To activate the integration simply go to the settings page.
+Um die Integration zu aktivieren, gehen Sie einfach auf die Einstellungsseite.
 
-![image-20210605120558644](\documentation\assets\obs_01.png)The host is the pc where the obs is installed. Normally this is the same pc, so 127.0.0.1 should work. The default port is 4444. (If you don't change it in the settings of the plugin) On the password field use the password you setup in the plugin settings (or leave it empty, if no password was been set.)
+![image-20210605120558644](\documentation\assets\obs_01.png)Der Host ist der PC, auf dem das obs installiert ist. Normalerweise ist dies derselbe PC, also sollte 127.0.0.1 funktionieren. Der Standardport ist 4444. (Wenn Sie ihn in den Einstellungen des Plugins nicht ändern) Verwenden Sie im Passwortfeld das Passwort, das Sie in den Plugin-Einstellungen festgelegt haben (oder lassen Sie es leer, wenn kein Passwort festgelegt wurde.)
 
-Thats all for setting up the integration.
+Mehr ist für die Einrichtung der Integration nicht zutun.
 
 # For the nerds
 
-## Profile configuration
+## Profile Konfiguration
 
-Every profile has it's own configuration file. The file is usually located in the Profiles folder. This file is written in yaml and has the following sections:
+Jedes Profil hat seine eigene Konfigurationsdatei. Die Datei befindet sich normalerweise im Ordner Profile. Diese Datei ist in yaml geschrieben und hat die folgenden Abschnitte:
 
-In the root you will find the following parameters
+Im Root findest Du die folgenden Parameter
 
-`name`: The name of the profile
-`description`: a user readable description
-`pages`: This are the different pages for showing up the actions
-`actions`: a list of different actions. An action can appear on different pages. But as it's the same action, the status/result will be the same.
+`name`: Der Name des Profils
+`description`: eine vom Benutzer lesbare Beschreibung
+`pages`: Dies sind die verschiedenen Seiten zum Anzeigen der Aktionen
+`actions`: eine Liste verschiedener Aktionen. Eine Aktion kann auf verschiedenen Seiten erscheinen. Da es sich jedoch um dieselbe Aktion handelt, ist der Status/das Ergebnis gleich.
 
-This is an example
+Hier ein Beispiel
 
 ```yaml
 name: default

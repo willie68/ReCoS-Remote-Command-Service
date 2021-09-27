@@ -93,7 +93,7 @@ As usual, you have to enter your old password as well as your new password twice
 
 ## Action Wizard
 
-With the Action Wizard you can quickly and easily create new commands. You start the Action Wizard with this button.
+With the Action Wizard you can quickly and easily create new commands. You start the Action Wizard with this button ![flag](documentation/assets/flag.png).
 
 ![image-20210331152330271](documentation/assets/aw_0.png)
 
@@ -105,7 +105,7 @@ First you will see this preface page:
 
 ![image-20210331150718589](documentation/assets/aw_1.png)
 
-On the next page you can choose the command that should be generated. You can use the search field to search through the list of commands.
+On the next page you can choose the command that should be generated. You can use the search field to filter the list of commands.
 
 ![image-20210412110939373](documentation/assets/aw_2.png)
 
@@ -120,9 +120,19 @@ On this last page you can determine where the action should be displayed. You ca
 
 ![image-20210331160031731](documentation/assets/aw_4.png)
 
+![image-20210331160145334](documentation/assets/aw_05.png)
+
 In the Admin Client you can then see what the wizard has generated for you.
 
-![image-20210331160145334](documentation/assets/aw_05.png)
+![image-20210331160145334](documentation/assets/aw_06.png)
+
+## Creating a new Profile
+
+![image-20210331160145334](documentation/assets/cp_01.png)A new profile can be created using the Add menu item in the Profile menu.
+
+![image-20210331160145334](documentation/assets/cp_02.png)
+
+Here you can enter a name and a description. Predefined profiles can be created using templates. In addition to the name and description, these also contain pages and actions that have already been configured. So you can quickly create a profile for your stream deck, for example.
 
 ## Exchange of profiles, actions and configured pages
 
@@ -130,12 +140,17 @@ You can export and re-import entire profiles, pages and individual actions. (e.g
 
 # ReCoS Service
 
-The service is the main component of the ReCoS. This is the unit of work, doing all the nice thing  s. But you will only see a little Icon in the taskbar. And there is a small context menu.
+The service is the main component of the ReCoS. This is the unit of work, doing all the nice things. But you will only see a little Icon in the taskbar. And there is a small context menu.
 
-as
+![image-20210412112204299](./documentation/assets/taskbar_1.png)
 
-Here you can directly start the web interface or the admin client. And you can register the service to automatically start on windows start. Next option is to edit the service.yaml file, which contains all configuration for the service itself. Normally you don't need to do here anything, but just in case...
-The last Menu entry is for shutting down the Service. 
+- **WebAdmin, WebClient**: Here you can directly start the web interface or the admin client. 
+- **Autostart:** And you can register the service to automatically start on windows start. 
+- **Edit config:**  Next option is to edit the service.yaml file, which contains all configuration for the service itself. Usually you don't need to do anything here, but just in case ...
+- **Show log:** The same applies to the log. 
+- You surely got here with **help**.
+- And **Restart** restarts the service.
+- **Quit:** The last Menu entry is for shutting down the Service.  
 
 ## Profile configuration
 
@@ -145,6 +160,8 @@ Various profiles can be stored in the ReCoS. Each profile consists on the one ha
 `description`: a user readable description
 `pages`: This are the different pages for showing up the actions
 `actions`: a list of different actions. An action can appear on different pages. But as it's the same action, the status/result will be the same.
+
+![image-20210412112204299](./documentation/assets/rs_01.png)
 
 ### Page
 
@@ -162,36 +179,44 @@ parameters:
 `toolbar`: `show`, this page will appear in the toolbar to directly switch to, `hide`, if this page should appear in the toolbar. With the page command you can switch to this page.
 `cells`: List of names of the action per cell
 
+![image-20210412112204299](./documentation/assets/rs_02.png)
+
 ### Action
 
 An action is the part, which defines, what to do if a button is triggered. 
 
 The following parameters are used:
 
-`type`: **`SINGLE`** is a single shot action. The action is always starting the command list. 
+**`Name`**: s the name of the action
+**`Type`**: **`SINGLE`** is a single shot action. The action is always starting the command list. 
 **`DISPLAY`** is a display only cell. It will only show Text, Icons, or images, but you can't interact with it.
 **`MULTI`** is the third option. Here you can define 3 or more stages, and on every stage you can define an action, which is fired on activating this stage. As you can see, a simple on/off switch is a Multi Action with 2 Stages.
-`name`: s the name of the action
-`title`: the title of the action used by the UI
-`description`: user defined description of this action
-`runone`: is true or false. On true, if the action is fired twice, all commands of the first execution must be finished before the second execution will take place. On false, the execution will start directly without checking the previous action execution state.
-`icon`: the icon which will be displayed on the cell
-`fontsize`: the size of the title and the text, defaults to 14
-`fontcolor`: the color of the title and the text, defaults to black
-`outlined`: true or false, sometime reading a black text on a black ground is a little bit difficult. lining out can help.
-`commands`: list of commands for execution of this action
-`actions`: only apply in a MULTI action. For every stage there should be the name of the action which will be called, when the stage is executed. If a stage is executed, the icon of the last executed action (stage) will be displayed as the icon of the multi action and the title will be displayed on the text line. 
+**`Title`**: the title of the action used by the UI
+**`Description`**: user defined description of this action
+**`Icon`**: the icon which will be displayed on the cell
+**`Fontsize`**: the size of the title and the text, defaults to 14
+**`Fontcolor`**: the color of the title and the text, defaults to black
+**`Outlined`**: true or false, sometime reading a black text on a black ground is a little bit difficult. lining out can help.
+**`Only run once`**: is true or false. On true, if the action is fired twice, all commands of the first execution must be finished before the second execution will take place. On false, the execution will start directly without checking the previous action execution state.
+**`Commands`**: list of commands for execution of this action
+**`Actions`**: only apply in a MULTI action. For every stage there should be the name of the action which will be called, when the stage is executed. If a stage is executed, the icon of the last executed action (stage) will be displayed as the icon of the multi action and the title will be displayed on the text line. 
+
+![image-20210412112204299](./documentation/assets/rs_03.png)
+
+![image-20210412112204299](./documentation/assets/rs_04.png)
 
 ### Commands
 
 This is the unit of work, the part that is executed. This are the settings every command will use.
 
-`type`: the type of the command
-`name`: names the command
-`description`: a user readable description
-`icon`: an icon, that is displayed when running this command
-`title`: a text that is displayed when running this command
+**`name`**: names the command
+**`Title`:** a text that is displayed when running this command
+**`Type`**: the type of the command
+**`Icon`:** an icon, that is displayed when running this command
 The other parameters defers from command to command.
+**`Description`:** a user readable description
+
+![image-20210412112204299](./documentation/assets/rs_05.png)
 
 #### No Operation
 
@@ -210,7 +235,7 @@ With this command, you can take control different audio devices for setting volu
 `type`: `AUDIOVOLUME`
 
 Parameter:
-`device`: the device that you would like to control. There are different devices in your system. Which one you can select, can be seen in the admin interface or on startup in the console. There are 2 defaults: `master` for the master output. This is on widows the one that you can control directly with the taskbar icon. And `mic` which is for the default input device. 
+`device`: the device that you would like to control. There are different devices in your system. Which one you can select, can be seen in the admin interface or on startup in the console. There are 2 defaults: `master` for the master output. This is on windows the one that you can control directly with the taskbar icon. And `mic` which is for the default input device. 
 `command`: this is the command you want to fire. `mute`, which toggles the mute state. `volume up` for increase and `volume down` for decreasing the volume of that device.
 
 #### Clock
