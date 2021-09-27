@@ -52,8 +52,8 @@ actions:
           icon: ""
           title: typeit
           parameters:
-            keystrokes: Hello ReCoS
             keylayout: de
+            keystrokes: Hello ReCoS
       actions: []
     - type: SINGLE
       name: timer
@@ -65,7 +65,7 @@ actions:
       outlined: false
       runone: true
       commands:
-        - id: TIMER_4
+        - id: TIMER_3
           type: TIMER
           name: timer
           description: ""
@@ -86,7 +86,7 @@ actions:
       outlined: false
       runone: true
       commands:
-        - id: CLOCK_5
+        - id: CLOCK_4
           type: CLOCK
           name: clock
           description: ""
@@ -107,7 +107,7 @@ actions:
       outlined: false
       runone: true
       commands:
-        - id: SCREENSHOT_6
+        - id: SCREENSHOT_5
           type: SCREENSHOT
           name: screenshot
           description: ""
@@ -127,7 +127,7 @@ actions:
       outlined: true
       runone: true
       commands:
-        - id: HARDWAREMONITOR_7
+        - id: HARDWAREMONITOR_6
           type: HARDWAREMONITOR
           name: cpu
           description: ""
@@ -137,7 +137,7 @@ actions:
             color: '#ffff00'
             display: graph
             format: '%0.1f %'
-            sensor: CPU/Intel Core i7-10750H/Load/CPU Total
+            sensor: CPU/Intel Core i7-6820HQ/Load/CPU Total
             ymax: 100
             ymin: 0
       actions: []
@@ -146,12 +146,12 @@ actions:
       title: Stopwatch
       icon: timer.svg
       description: simple stop watch
-      fontsize: 0
+      fontsize: 14
       fontcolor: white
-      outlined: true
+      outlined: false
       runone: true
       commands:
-        - id: STOPWATCH_8
+        - id: STOPWATCH_7
           type: STOPWATCH
           name: stp1
           description: ""

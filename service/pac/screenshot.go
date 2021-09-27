@@ -95,7 +95,7 @@ func (s *ScreenshotCommand) Execute(a *Action, requestMessage models.Message) (b
 			found := true
 			filename := ""
 			for count := 0; found; count++ {
-				filename = fmt.Sprintf("%s/screen_%d_%d.svg", folder, count, i)
+				filename = fmt.Sprintf("%s/screen_%d_%d.png", folder, count, i)
 				_, err := os.Stat(filename)
 				if os.IsNotExist(err) {
 					found = false
