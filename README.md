@@ -144,8 +144,13 @@ The service is the main component of the ReCoS. This is the unit of work, doing 
 
 ![image-20210412112204299](./documentation/assets/taskbar_1.png)
 
-Here you can directly start the web interface or the admin client. And you can register the service to automatically start on windows start. Next option is to edit the service.yaml file, which contains all configuration for the service itself. Normally you don't need to do here anything, but just in case...
-The last Menu entry is for shutting down the Service. 
+- **WebAdmin, WebClient**: Here you can directly start the web interface or the admin client. 
+- **Autostart:** And you can register the service to automatically start on windows start. 
+- **Edit config:**  Next option is to edit the service.yaml file, which contains all configuration for the service itself. Usually you don't need to do anything here, but just in case ...
+- **Show log:** The same applies to the log. 
+- You surely got here with **help**.
+- And **Restart** restarts the service.
+- **Quit:** The last Menu entry is for shutting down the Service.  
 
 ## Profile configuration
 
@@ -182,19 +187,19 @@ An action is the part, which defines, what to do if a button is triggered.
 
 The following parameters are used:
 
-`type`: **`SINGLE`** is a single shot action. The action is always starting the command list. 
+**`Name`**: s the name of the action
+**`Type`**: **`SINGLE`** is a single shot action. The action is always starting the command list. 
 **`DISPLAY`** is a display only cell. It will only show Text, Icons, or images, but you can't interact with it.
 **`MULTI`** is the third option. Here you can define 3 or more stages, and on every stage you can define an action, which is fired on activating this stage. As you can see, a simple on/off switch is a Multi Action with 2 Stages.
-`name`: s the name of the action
-`title`: the title of the action used by the UI
-`description`: user defined description of this action
-`runone`: is true or false. On true, if the action is fired twice, all commands of the first execution must be finished before the second execution will take place. On false, the execution will start directly without checking the previous action execution state.
-`icon`: the icon which will be displayed on the cell
-`fontsize`: the size of the title and the text, defaults to 14
-`fontcolor`: the color of the title and the text, defaults to black
-`outlined`: true or false, sometime reading a black text on a black ground is a little bit difficult. lining out can help.
-`commands`: list of commands for execution of this action
-`actions`: only apply in a MULTI action. For every stage there should be the name of the action which will be called, when the stage is executed. If a stage is executed, the icon of the last executed action (stage) will be displayed as the icon of the multi action and the title will be displayed on the text line. 
+**`Title`**: the title of the action used by the UI
+**`Description`**: user defined description of this action
+**`Icon`**: the icon which will be displayed on the cell
+**`Fontsize`**: the size of the title and the text, defaults to 14
+**`Fontcolor`**: the color of the title and the text, defaults to black
+**`Outlined`**: true or false, sometime reading a black text on a black ground is a little bit difficult. lining out can help.
+**`Only run once`**: is true or false. On true, if the action is fired twice, all commands of the first execution must be finished before the second execution will take place. On false, the execution will start directly without checking the previous action execution state.
+**`Commands`**: list of commands for execution of this action
+**`Actions`**: only apply in a MULTI action. For every stage there should be the name of the action which will be called, when the stage is executed. If a stage is executed, the icon of the last executed action (stage) will be displayed as the icon of the multi action and the title will be displayed on the text line. 
 
 ![image-20210412112204299](./documentation/assets/rs_03.png)
 
@@ -204,12 +209,12 @@ The following parameters are used:
 
 This is the unit of work, the part that is executed. This are the settings every command will use.
 
-`type`: the type of the command
-`name`: names the command
-`description`: a user readable description
-`icon`: an icon, that is displayed when running this command
-`title`: a text that is displayed when running this command
+**`name`**: names the command
+**`Title`:** a text that is displayed when running this command
+**`Type`**: the type of the command
+**`Icon`:** an icon, that is displayed when running this command
 The other parameters defers from command to command.
+**`Description`:** a user readable description
 
 ![image-20210412112204299](./documentation/assets/rs_05.png)
 
