@@ -16,12 +16,11 @@ import (
 	"syscall"
 	"time"
 
-	"wkla.no-ip.biz/remote-desk-service/api"
-	"wkla.no-ip.biz/remote-desk-service/api/handler"
-	"wkla.no-ip.biz/remote-desk-service/api/routes"
-	"wkla.no-ip.biz/remote-desk-service/error/serror"
-	"wkla.no-ip.biz/remote-desk-service/health"
 	"wkla.no-ip.biz/remote-desk-service/icon"
+	"wkla.no-ip.biz/remote-desk-service/internal/api"
+	"wkla.no-ip.biz/remote-desk-service/internal/apiv1"
+	"wkla.no-ip.biz/remote-desk-service/internal/health"
+	"wkla.no-ip.biz/remote-desk-service/internal/serror"
 	"wkla.no-ip.biz/remote-desk-service/pac"
 	"wkla.no-ip.biz/remote-desk-service/pkg/audio"
 	"wkla.no-ip.biz/remote-desk-service/pkg/autostart"
@@ -34,14 +33,14 @@ import (
 
 	"github.com/getlantern/systray"
 	"github.com/go-toast/toast"
-	config "wkla.no-ip.biz/remote-desk-service/config"
+	config "wkla.no-ip.biz/remote-desk-service/internal/config"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
 	"github.com/go-chi/render"
 	"github.com/skratchdot/open-golang/open"
-	"wkla.no-ip.biz/remote-desk-service/crypt"
+	"wkla.no-ip.biz/remote-desk-service/internal/crypt"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
 
 	flag "github.com/spf13/pflag"
@@ -96,10 +95,10 @@ func apiRoutes() *chi.Mux {
 	)
 
 	router.Route("/", func(r chi.Router) {
-		r.Mount(baseURL+"/config", routes.ConfigRoutes())
-		r.Mount(baseURL+"/profiles", routes.ProfilesRoutes())
-		r.Mount(baseURL+"/show", routes.ShowRoutes())
-		r.Mount(baseURL+"/action", routes.ActionRoutes())
+		r.Mount(baseURL+"/config", apiv1.ConfigRoutes())
+		r.Mount(baseURL+"/profiles", apiv1.ProfilesRoutes())
+		r.Mount(baseURL+"/show", apiv1.ShowRoutes())
+		r.Mount(baseURL+"/action", apiv1.ActionRoutes())
 		r.Mount("/health", health.Routes())
 	})
 
@@ -533,7 +532,7 @@ func initConfig() {
 	portStr := strconv.Itoa(serviceConfig.Port)
 	ioutil.WriteFile(statFile, []byte(portStr), 0644)
 
-	handler.AuthenticationConfig.Password = serviceConfig.Password
+	api.AuthenticationConfig.Password = serviceConfig.Password
 
 	var err error
 	serviceConfig.Profiles, err = config.ReplaceConfigdir(serviceConfig.Profiles)

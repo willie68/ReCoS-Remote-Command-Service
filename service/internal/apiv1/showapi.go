@@ -1,4 +1,4 @@
-package routes
+package apiv1
 
 import (
 	"net/http"
@@ -8,8 +8,8 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
-	"wkla.no-ip.biz/remote-desk-service/api"
-	"wkla.no-ip.biz/remote-desk-service/config"
+	"wkla.no-ip.biz/remote-desk-service/internal/config"
+	"wkla.no-ip.biz/remote-desk-service/internal/utils/httputils"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
 	"wkla.no-ip.biz/remote-desk-service/pac"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
@@ -48,10 +48,10 @@ func GetUIProfilesEndpoint(response http.ResponseWriter, request *http.Request) 
 
 // GetUIProfileEndpoint getting all profile names
 func GetUIProfileEndpoint(response http.ResponseWriter, request *http.Request) {
-	profileName, err := api.Param(request, "profileName")
+	profileName, err := httputils.Param(request, "profileName")
 	if err != nil {
 		clog.Logger.Debug("Error reading profile name: \n" + err.Error())
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 	for _, profile := range config.Profiles {
@@ -102,37 +102,37 @@ func GetUIProfileEndpoint(response http.ResponseWriter, request *http.Request) {
 
 // GetGraphics getting the graphics of the id
 func GetGraphics(response http.ResponseWriter, request *http.Request) {
-	profileName, err := api.Param(request, "profileName")
+	profileName, err := httputils.Param(request, "profileName")
 	if err != nil {
 		clog.Logger.Debug("Error reading profile name: \n" + err.Error())
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
-	actionName, err := api.Param(request, "actionName")
+	actionName, err := httputils.Param(request, "actionName")
 	if err != nil {
 		clog.Logger.Debug("Error reading action name: \n" + err.Error())
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
-	commandName, err := api.Param(request, "commandName")
+	commandName, err := httputils.Param(request, "commandName")
 	if err != nil {
 		clog.Logger.Debug("Error reading command name: \n" + err.Error())
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
-	id, err := api.Param(request, "id")
+	id, err := httputils.Param(request, "id")
 	if err != nil {
 		clog.Logger.Debug("Error reading id: \n" + err.Error())
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 	width := 0
-	widthStr, err := api.Query(request, "width")
+	widthStr, err := httputils.Query(request, "width")
 	if err == nil {
 		width, _ = strconv.Atoi(widthStr)
 	}
 	height := 0
-	heightStr, err := api.Query(request, "height")
+	heightStr, err := httputils.Query(request, "height")
 	if err == nil {
 		height, _ = strconv.Atoi(heightStr)
 	}
@@ -140,7 +140,7 @@ func GetGraphics(response http.ResponseWriter, request *http.Request) {
 	graphicsInfo, err := pac.Graphics(profileName, actionName, commandName, id, width, height)
 	if err != nil {
 		clog.Logger.Debug("Error reading action name: \n" + err.Error())
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 

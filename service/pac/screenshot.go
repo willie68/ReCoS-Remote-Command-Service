@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/kbinani/screenshot"
-	"wkla.no-ip.biz/remote-desk-service/api"
+	"wkla.no-ip.biz/remote-desk-service/internal/api"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )

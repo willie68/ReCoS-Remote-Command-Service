@@ -1,4 +1,4 @@
-package api
+package httputils
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
 	"github.com/go-playground/validator/v10"
-	"wkla.no-ip.biz/remote-desk-service/error/serror"
+	"wkla.no-ip.biz/remote-desk-service/internal/serror"
 )
 
 // Validate validator

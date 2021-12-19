@@ -1,4 +1,4 @@
-package routes
+package apiv1
 
 import (
 	"bytes"
@@ -25,10 +25,10 @@ import (
 	"github.com/srwiley/oksvg"
 	"github.com/srwiley/rasterx"
 	"gopkg.in/yaml.v3"
-	"wkla.no-ip.biz/remote-desk-service/api"
-	"wkla.no-ip.biz/remote-desk-service/api/handler"
-	"wkla.no-ip.biz/remote-desk-service/config"
-	"wkla.no-ip.biz/remote-desk-service/error/serror"
+	"wkla.no-ip.biz/remote-desk-service/internal/api"
+	"wkla.no-ip.biz/remote-desk-service/internal/config"
+	"wkla.no-ip.biz/remote-desk-service/internal/serror"
+	"wkla.no-ip.biz/remote-desk-service/internal/utils/httputils"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
 	"wkla.no-ip.biz/remote-desk-service/pac"
 	"wkla.no-ip.biz/remote-desk-service/pkg"
@@ -53,12 +53,12 @@ func ConfigRoutes() *chi.Mux {
 	router.Get("/icons/{mapper}/{key}", GetIconMapperKey)
 	router.Get("/commands", GetCommands)
 	router.Get("/icons/{iconname}", GetIcon)
-	router.With(handler.AuthCheck()).Get("/check", GetCheck)
+	router.With(api.AuthCheck()).Get("/check", GetCheck)
 	router.Get("/integrations", GetInteg)
-	router.With(handler.AuthCheck()).Post("/integrations/{integname}", PostInteg)
+	router.With(api.AuthCheck()).Post("/integrations/{integname}", PostInteg)
 	router.Get("/credits", GetCredits)
 	router.Get("/networks", GetNetworks)
-	router.With(handler.AuthCheck()).Post("/password", PostChangePassword)
+	router.With(api.AuthCheck()).Post("/password", PostChangePassword)
 	router.Get("/templates", GetProfileTemplates)
 	router.Get("/templates/{templatename}", GetProfileTemplate)
 	initIconMapper()
@@ -107,7 +107,7 @@ func GetIcons(response http.ResponseWriter, request *http.Request) {
 		files, err := web.WebClientAssets.ReadDir("webclient/assets")
 		if err != nil {
 			clog.Logger.Debug("Error reading icon files:" + err.Error())
-			api.Err(response, request, err)
+			httputils.Err(response, request, err)
 			return
 		}
 
@@ -144,10 +144,10 @@ func GetIcon(response http.ResponseWriter, request *http.Request) {
 			clog.Logger.Debugf("Error reading icon width: %v", err)
 		}
 	}
-	iconName, err := api.Param(request, "iconname")
+	iconName, err := httputils.Param(request, "iconname")
 	if err != nil {
 		clog.Logger.Debugf("Error reading icon name: %v", err)
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 	index := strings.Index(iconName, ".")
@@ -165,7 +165,7 @@ func GetIcon(response http.ResponseWriter, request *http.Request) {
 			handleFile(response, request, value)
 		} else {
 			clog.Logger.Debugf("Error reading icon: %v", err)
-			api.Err(response, request, err)
+			httputils.Err(response, request, err)
 			return
 		}
 	}
@@ -180,7 +180,7 @@ func GetIcon(response http.ResponseWriter, request *http.Request) {
 	err = png.Encode(&b, rgba)
 	if err != nil {
 		clog.Logger.Debugf("Error encoding icon: %v", err)
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 	}
 
 	ctype := mime.TypeByExtension(".png")
@@ -204,7 +204,7 @@ func GetIconMapperKey(response http.ResponseWriter, request *http.Request) {
 	value := defaultIcon
 	var iconMapper map[string]string
 
-	mapperName, err := api.Param(request, "mapper")
+	mapperName, err := httputils.Param(request, "mapper")
 	if err != nil {
 		clog.Logger.Debugf("Error reading mapper name: %v", err)
 		valueOK = false
@@ -220,10 +220,10 @@ func GetIconMapperKey(response http.ResponseWriter, request *http.Request) {
 		}
 	}
 
-	keyName, err := api.Param(request, "key")
+	keyName, err := httputils.Param(request, "key")
 	if err != nil {
 		clog.Logger.Debugf("Error reading mapper key: %v", err)
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 	if valueOK {
@@ -250,7 +250,7 @@ func handleFile(response http.ResponseWriter, request *http.Request, value strin
 	file, err := web.WebClientAssets.Open("webclient/assets/" + value)
 	if err != nil {
 		clog.Logger.Debugf("Error reading file: %v", err)
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 	defer file.Close()
@@ -258,7 +258,7 @@ func handleFile(response http.ResponseWriter, request *http.Request, value strin
 	filestat, err := file.Stat()
 	if err != nil {
 		clog.Logger.Debugf("Error reading file: %v", err)
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 
@@ -285,7 +285,7 @@ func GetCommands(response http.ResponseWriter, request *http.Request) {
 	types, err := pac.EnrichTypes(types, profile)
 	if err != nil {
 		clog.Logger.Errorf("Error reading commands files: %v", err)
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 	render.JSON(response, request, types)
@@ -345,10 +345,10 @@ func GetInteg(response http.ResponseWriter, request *http.Request) {
 
 // PostInteg post a new config
 func PostInteg(response http.ResponseWriter, request *http.Request) {
-	integName, err := api.Param(request, "integname")
+	integName, err := httputils.Param(request, "integname")
 	if err != nil {
 		clog.Logger.Errorf("Error reading integ name: %v", err)
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 
@@ -357,7 +357,7 @@ func PostInteg(response http.ResponseWriter, request *http.Request) {
 	err = decoder.Decode(&params)
 	if err != nil {
 		clog.Logger.Errorf("Error reading json body: %v", err)
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 	localConfig := config.Get()
@@ -366,7 +366,7 @@ func PostInteg(response http.ResponseWriter, request *http.Request) {
 	if !ok {
 		err := fmt.Errorf("error getting integ config for name: %s", integName)
 		clog.Logger.Error(err.Error())
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 	for k, v := range params {
@@ -374,7 +374,7 @@ func PostInteg(response http.ResponseWriter, request *http.Request) {
 		if !ok {
 			err := fmt.Errorf("error parameter not found: %s", k)
 			clog.Logger.Error(err.Error())
-			api.Err(response, request, err)
+			httputils.Err(response, request, err)
 			return
 		}
 		integConfig[k] = v
@@ -463,7 +463,7 @@ func PostChangePassword(response http.ResponseWriter, request *http.Request) {
 	err := decoder.Decode(&params)
 	if err != nil {
 		clog.Logger.Errorf("Error reading json body: %v", err)
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 
@@ -482,11 +482,11 @@ func PostChangePassword(response http.ResponseWriter, request *http.Request) {
 		clog.Logger.Infof("repeat: %s", repeatpassword)
 	}
 	if password != config.Get().Password {
-		api.Err(response, request, serror.Unauthorized(nil))
+		httputils.Err(response, request, serror.Unauthorized(nil))
 		return
 	}
 	if newpassword != repeatpassword {
-		api.Err(response, request, serror.BadRequest(errors.New("new password not identically")))
+		httputils.Err(response, request, serror.BadRequest(errors.New("new password not identically")))
 		return
 	}
 	localConfig := config.Get()
@@ -507,10 +507,10 @@ func GetProfileTemplates(response http.ResponseWriter, request *http.Request) {
 GetProfileTemplates list of all possible profile templates
 */
 func GetProfileTemplate(response http.ResponseWriter, request *http.Request) {
-	tempName, err := api.Param(request, "templatename")
+	tempName, err := httputils.Param(request, "templatename")
 	if err != nil {
 		clog.Logger.Errorf("Error reading template name: %v", err)
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 	template := templates.GetTemplate(tempName)
