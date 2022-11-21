@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"wkla.no-ip.biz/remote-desk-service/api"
 	durationfmt "wkla.no-ip.biz/remote-desk-service/internal"
+	"wkla.no-ip.biz/remote-desk-service/internal/api"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
 )
 

@@ -1,4 +1,4 @@
-package routes
+package apiv1
 
 import (
 	"encoding/json"
@@ -11,10 +11,10 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
-	"wkla.no-ip.biz/remote-desk-service/api"
-	"wkla.no-ip.biz/remote-desk-service/api/handler"
-	"wkla.no-ip.biz/remote-desk-service/config"
-	"wkla.no-ip.biz/remote-desk-service/error/serror"
+	"wkla.no-ip.biz/remote-desk-service/internal/api"
+	"wkla.no-ip.biz/remote-desk-service/internal/config"
+	"wkla.no-ip.biz/remote-desk-service/internal/serror"
+	"wkla.no-ip.biz/remote-desk-service/internal/utils/httputils"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
 	"wkla.no-ip.biz/remote-desk-service/pac"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
@@ -24,14 +24,14 @@ import (
 func ProfilesRoutes() *chi.Mux {
 	router := chi.NewRouter()
 	router.Get("/", GetProfiles)
-	router.With(handler.AuthCheck()).Post("/", PostProfile)
-	router.With(handler.AuthCheck()).Put("/{profileName}", PutProfile)
+	router.With(api.AuthCheck()).Post("/", PostProfile)
+	router.With(api.AuthCheck()).Put("/{profileName}", PutProfile)
 	router.Get("/{profileName}", GetProfile)
-	router.With(handler.AuthCheck()).Delete("/{profileName}", DeleteProfile)
+	router.With(api.AuthCheck()).Delete("/{profileName}", DeleteProfile)
 	router.Get("/{profileName}/export", GetExportProfile)
 	router.Get("/{profileName}/actions/{actionName}/export", GetExportAction)
 	router.Get("/{profileName}/pages/{pageName}/export", GetExportPage)
-	router.With(handler.AuthCheck()).Post("/{profileName}/combine/", PostCombine)
+	router.With(api.AuthCheck()).Post("/{profileName}/combine/", PostCombine)
 	return router
 }
 
@@ -50,10 +50,10 @@ func GetProfiles(response http.ResponseWriter, request *http.Request) {
 
 // GetProfile getting a profile
 func GetProfile(response http.ResponseWriter, request *http.Request) {
-	profileName, err := api.Param(request, "profileName")
+	profileName, err := httputils.Param(request, "profileName")
 	if err != nil {
 		clog.Logger.Debug("Error reading profile name: \n" + err.Error())
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 	for _, profile := range config.Profiles {
@@ -71,20 +71,20 @@ func PostProfile(response http.ResponseWriter, request *http.Request) {
 	err := decoder.Decode(&profile)
 	if err != nil {
 		clog.Logger.Debug("Error reading json body:" + err.Error())
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 
 	if config.HasProfile(profile.Name) {
 		msg := fmt.Sprintf("profile already exists: %s", profile.Name)
-		api.Err(response, request, serror.BadRequest(nil, "profile-exists", msg))
+		httputils.Err(response, request, serror.BadRequest(nil, "profile-exists", msg))
 		return
 	}
 
 	err = config.SaveProfileFile(profile)
 	if err != nil {
 		clog.Logger.Debug("Error saving profile:" + err.Error())
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 
@@ -102,10 +102,10 @@ func PostProfile(response http.ResponseWriter, request *http.Request) {
 
 // PutProfile create a new profile
 func PutProfile(response http.ResponseWriter, request *http.Request) {
-	profileName, err := api.Param(request, "profileName")
+	profileName, err := httputils.Param(request, "profileName")
 	if err != nil {
 		clog.Logger.Debug("Error reading profile name: \n" + err.Error())
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 
@@ -114,21 +114,21 @@ func PutProfile(response http.ResponseWriter, request *http.Request) {
 	err = decoder.Decode(&profile)
 	if err != nil {
 		clog.Logger.Debug("Error reading json body:" + err.Error())
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 
 	if profileName != profile.Name {
 		msg := fmt.Sprintf("profile names not equal: %s != %s", profileName, profile.Name)
 		clog.Logger.Debug(msg)
-		api.Err(response, request, serror.BadRequest(nil, "profile-name", msg))
+		httputils.Err(response, request, serror.BadRequest(nil, "profile-name", msg))
 		return
 	}
 
 	err = config.UpdateProfileFile(profile)
 	if err != nil {
 		clog.Logger.Debug("Error saving profile:" + err.Error())
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 
@@ -146,10 +146,10 @@ func PutProfile(response http.ResponseWriter, request *http.Request) {
 
 // DeleteProfile getting a profile
 func DeleteProfile(response http.ResponseWriter, request *http.Request) {
-	profileName, err := api.Param(request, "profileName")
+	profileName, err := httputils.Param(request, "profileName")
 	if err != nil {
 		clog.Logger.Debug("Error reading profile name: \n" + err.Error())
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 
@@ -159,13 +159,13 @@ func DeleteProfile(response http.ResponseWriter, request *http.Request) {
 			profile, err := config.RemoveProfile(profileName)
 			if err != nil {
 				clog.Logger.Debug("Error deleting profile: \n" + err.Error())
-				api.Err(response, request, err)
+				httputils.Err(response, request, err)
 				return
 			}
 			err = config.DeleteProfileFile(profileName)
 			if err != nil {
 				clog.Logger.Debug("Error deleting profile file: \n" + err.Error())
-				api.Err(response, request, err)
+				httputils.Err(response, request, err)
 				return
 			}
 			render.JSON(response, request, profile)
@@ -173,30 +173,30 @@ func DeleteProfile(response http.ResponseWriter, request *http.Request) {
 		}
 	}
 
-	api.NotFound(response, request, "profile", profileName)
+	httputils.NotFound(response, request, "profile", profileName)
 	return
 }
 
 // GetExportProfile getting a profile
 func GetExportProfile(response http.ResponseWriter, request *http.Request) {
-	profileName, err := api.Param(request, "profileName")
+	profileName, err := httputils.Param(request, "profileName")
 	if err != nil {
 		clog.Logger.Debug("Error reading profile name: \n" + err.Error())
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 
 	profile, ok := getProfile(profileName)
 	if !ok {
 		clog.Logger.Debugf("Profile %s not found", profileName)
-		api.NotFound(response, request, "profile", profileName)
+		httputils.NotFound(response, request, "profile", profileName)
 		return
 	}
 
 	body, err := json.Marshal(profile)
 	if err != nil {
 		clog.Logger.Debug("Error reading profile: \n" + err.Error())
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 
@@ -216,38 +216,38 @@ func getProfile(profileName string) (models.Profile, bool) {
 
 // GetExportAction exporting a action from a profile as a file
 func GetExportAction(response http.ResponseWriter, request *http.Request) {
-	profileName, err := api.Param(request, "profileName")
+	profileName, err := httputils.Param(request, "profileName")
 	if err != nil {
 		clog.Logger.Debug("Error reading profile name: \n" + err.Error())
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 
 	profile, ok := getProfile(profileName)
 	if !ok {
 		clog.Logger.Debugf("Profile %s not found", profileName)
-		api.NotFound(response, request, "profile", profileName)
+		httputils.NotFound(response, request, "profile", profileName)
 		return
 	}
 
-	actionName, err := api.Param(request, "actionName")
+	actionName, err := httputils.Param(request, "actionName")
 	if err != nil {
 		clog.Logger.Debug("Error reading action name: \n" + err.Error())
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 
 	action, err := profile.GetAction(actionName)
 	if err != nil {
 		clog.Logger.Debug("Error getting action: \n" + err.Error())
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 
 	body, err := json.Marshal(action)
 	if err != nil {
 		clog.Logger.Debug("Error serialising action: \n" + err.Error())
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 
@@ -257,38 +257,38 @@ func GetExportAction(response http.ResponseWriter, request *http.Request) {
 
 // GetExportPage exporting a page from a profile as a file
 func GetExportPage(response http.ResponseWriter, request *http.Request) {
-	profileName, err := api.Param(request, "profileName")
+	profileName, err := httputils.Param(request, "profileName")
 	if err != nil {
 		clog.Logger.Debug("Error reading profile name: \n" + err.Error())
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 
 	profile, ok := getProfile(profileName)
 	if !ok {
 		clog.Logger.Debugf("Profile %s not found", profileName)
-		api.NotFound(response, request, "profile", profileName)
+		httputils.NotFound(response, request, "profile", profileName)
 		return
 	}
 
-	pageName, err := api.Param(request, "pageName")
+	pageName, err := httputils.Param(request, "pageName")
 	if err != nil {
 		clog.Logger.Debug("Error reading page name: \n" + err.Error())
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 
 	exchange, err := transformer.ExportPage(profile, pageName)
 	if err != nil {
 		clog.Logger.Debug("Error getting page: \n" + err.Error())
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 
 	body, err := json.Marshal(exchange)
 	if err != nil {
 		clog.Logger.Debug("Error serialising action: \n" + err.Error())
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 
@@ -298,17 +298,17 @@ func GetExportPage(response http.ResponseWriter, request *http.Request) {
 
 // PostCombine combines an export file with a profile
 func PostCombine(response http.ResponseWriter, request *http.Request) {
-	profileName, err := api.Param(request, "profileName")
+	profileName, err := httputils.Param(request, "profileName")
 	if err != nil {
 		clog.Logger.Debug("Error reading profile name: \n" + err.Error())
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 
 	profile, ok := getProfile(profileName)
 	if !ok {
 		clog.Logger.Debugf("Profile %s not found", profileName)
-		api.NotFound(response, request, "profile", profileName)
+		httputils.NotFound(response, request, "profile", profileName)
 		return
 	}
 
@@ -317,14 +317,14 @@ func PostCombine(response http.ResponseWriter, request *http.Request) {
 	err = decoder.Decode(&profileExchange)
 	if err != nil {
 		clog.Logger.Debug("Error reading json body:" + err.Error())
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 
 	newProfile, err := transformer.CombineProfile(profile, profileExchange)
 	if err != nil {
 		clog.Logger.Debug("Error reading json body:" + err.Error())
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 

@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"wkla.no-ip.biz/remote-desk-service/config"
+	"wkla.no-ip.biz/remote-desk-service/internal/config"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
 	"wkla.no-ip.biz/remote-desk-service/pkg/hardware"
 )

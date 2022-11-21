@@ -1,4 +1,4 @@
-package routes
+package apiv1
 
 import (
 	"encoding/json"
@@ -6,7 +6,7 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
-	"wkla.no-ip.biz/remote-desk-service/api"
+	"wkla.no-ip.biz/remote-desk-service/internal/utils/httputils"
 	clog "wkla.no-ip.biz/remote-desk-service/logging"
 	"wkla.no-ip.biz/remote-desk-service/pac"
 	"wkla.no-ip.biz/remote-desk-service/pkg/models"
@@ -22,16 +22,16 @@ func ActionRoutes() *chi.Mux {
 
 // PostProfileActionEndpoint getting all profile names
 func PostProfileActionEndpoint(response http.ResponseWriter, request *http.Request) {
-	profileName, err := api.Param(request, "profileName")
+	profileName, err := httputils.Param(request, "profileName")
 	if err != nil {
 		clog.Logger.Debug("Error reading profile name: \n" + err.Error())
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
-	actionName, err := api.Param(request, "actionName")
+	actionName, err := httputils.Param(request, "actionName")
 	if err != nil {
 		clog.Logger.Debug("Error reading action name: \n" + err.Error())
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 	clog.Logger.Debugf("Action: %s:%s", profileName, actionName)
@@ -40,14 +40,14 @@ func PostProfileActionEndpoint(response http.ResponseWriter, request *http.Reque
 	err = decoder.Decode(&message)
 	if err != nil {
 		clog.Logger.Debug("Error reading json body:" + err.Error())
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 
 	ok, err := pac.Execute(profileName, actionName, message)
 	if err != nil {
 		clog.Logger.Debug("Error reading action name: \n" + err.Error())
-		api.Err(response, request, err)
+		httputils.Err(response, request, err)
 		return
 	}
 
