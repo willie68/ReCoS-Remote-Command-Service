@@ -1,0 +1,27 @@
+{
+    "dependencies": {
+        "mitt": "^3.0.0",
+        "pinia": "^2.0.24",
+        "primeflex": "^3.3.0",
+        "primeicons": "^6.0.1",
+        "primevue": "^3.20.0",
+        "vue": "^3.2.41"
+    },
+    "devDependencies": {
+        "@rushstack/eslint-patch": "^1.1.4",
+        "@vitejs/plugin-vue": "^3.1.2",
+        "@vue/eslint-config-prettier": "^7.0.0",
+        "eslint": "^8.22.0",
+        "eslint-plugin-vue": "^9.3.0",
+        "prettier": "^2.7.1",
+        "vite": "^3.1.8"
+    },
+    "name": "recos-admin",
+    "scripts": {
+        "build": "vite build",
+        "dev": "vite",
+        "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
+        "preview": "vite preview"
+    },
+    "version": "0.3.107"
+}

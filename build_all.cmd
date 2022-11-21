@@ -2,11 +2,12 @@
 ".\3rd party\GoVersionSetter.exe" -i
 ".\3rd party\GoVersionSetter.exe" -e npm -f ./webclient/recosadmin/package.json
 ".\3rd party\GoVersionSetter.exe" -e npm -f ./webclient/RecosUI/package.json
+".\3rd party\GoVersionSetter.exe" -e npm -f ./webclient/ReCoS-Admin/package.json
 ".\3rd party\GoVersionSetter.exe" -e iss -f ./install/setup.iss -o MyAppVersion
 ".\3rd party\GoVersionSetter.exe" -e vs -f ./integrations/streamdeck/StreamDeckService/StreamDeckService.csproj
 ".\3rd party\GoVersionSetter.exe" -e gores -f ./service/winres/winres.json -o RT_MANIFEST/#1/0409/identity/version,RT_VERSION/#1/0000/fixed/file_version,RT_VERSION/#1/0000/fixed/product_version,RT_VERSION/#1/0000/info/0409/ProductVersion,RT_VERSION/#1/0000/info/0409/FileVersion
 ".\3rd party\GoVersionSetter.exe" -e go -f ./service/web/version/version.json
-
+pause
 call sync_assets.cmd
 
 echo build web client
