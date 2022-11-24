@@ -13,5 +13,7 @@
 			"path": "../ReCoS-Admin"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"editor.tabSize": 2
+	}
 }

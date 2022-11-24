@@ -24,7 +24,7 @@ extconfig:
         password: akteon00
         port: 4444
     openhardwaremonitor:
-        active: true
+        active: false
         updateperiod: 5
         url: http://127.0.0.1:12999/data.json
     philipshue:

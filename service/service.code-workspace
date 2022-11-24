@@ -8,6 +8,15 @@
 		},
 		{
 			"path": "..\\..\\..\\ext-git-sources\\go-obs-websocket2"
+		},
+		{
+			"path": "../webclient/recosadmin"
+		},
+		{
+			"path": "../webclient/ReCoS-Admin"
+		},
+		{
+			"path": "../webclient/RecosUI"
 		}
 	]
 }
