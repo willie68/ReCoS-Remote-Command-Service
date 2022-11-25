@@ -2,7 +2,9 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import "./assets/main.css";
 import mitt from "mitt";
+
 import PrimeVue from "primevue/config";
+
 import "primevue/resources/themes/vela-blue/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
