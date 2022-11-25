@@ -101,7 +101,7 @@ export default {
         body: JSON.stringify(newPages),
         headers: new Headers({
           "Content-Type": "application/json",
-          Authorization: `Basic ${btoa(`admin:${this.$store.state.password}`)}`,
+          Authorization: `Basic ${btoa(`admin:${this.$appStore.password}`)}`,
         }),
       })
         .then((response) => {
@@ -216,15 +216,8 @@ export default {
     },
   },
   mounted() {},
-  created() {
-    //    this.unsubscribe = this.$store.subscribe((mutation, state) => {
-    //      if (mutation.type === "baseURL") {
-    //      }
-    //    });
-  },
-  beforeUnmount() {
-    // this.unsubscribe();
-  },
+  created() {},
+  beforeUnmount() {},
   watch: {
     profile(profile) {
       if (profile && profile.name != "") {

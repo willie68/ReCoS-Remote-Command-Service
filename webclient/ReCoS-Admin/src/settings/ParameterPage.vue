@@ -9,8 +9,7 @@ export default {
   data() {
     return {};
   },
-  beforeUnmount() {
-  },
+  beforeUnmount() {},
   updated() {},
   mounted() {},
   methods: {},

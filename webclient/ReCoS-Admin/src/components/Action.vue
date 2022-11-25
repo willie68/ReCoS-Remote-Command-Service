@@ -165,16 +165,7 @@ export default {
     },
   },
   mounted() {
-    this.iconlist = this.$store.state.iconlist;
-    let that = this;
-    this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type === "iconlist") {
-        that.iconlist = state.iconlist;
-      }
-    });
-  },
-  beforeUnmount() {
-    this.unsubscribe();
+    this.iconlist = this.$iconlist;
   },
 };
 </script>

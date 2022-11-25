@@ -479,17 +479,9 @@ export default {
       this.selectIconDialog = false;
     },
   },
-  beforeUnmount() {
-    this.unsubscribe();
-  },
+  beforeUnmount() {},
   mounted() {
-    this.iconlist = this.store.state.iconlist;
-    let that = this;
-    this.unsubscribe = this.store.subscribe((mutation, state) => {
-      if (mutation.type === "iconlist") {
-        that.iconlist = state.iconlist;
-      }
-    });
+    this.iconlist = this.$iconlist;
     if (this.command) {
       console.log("Command: monuted: " + JSON.stringify(this.command));
       this.activeCommand = this.command;

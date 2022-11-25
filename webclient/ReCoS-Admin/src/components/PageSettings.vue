@@ -132,18 +132,10 @@ export default {
     },
   },
   mounted() {
-    this.iconlist = this.$store.state.iconlist;
-    let that = this;
-    this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type === "iconlist") {
-        that.iconlist = state.iconlist;
-      }
-    });
+    this.iconlist = this.$iconlist;
     this.profileURL = this.$baseURL + "profiles";
   },
-  beforeUnmount() {
-    this.unsubscribe();
-  },
+  beforeUnmount() {},
   created() {},
   watch: {
     page(page) {

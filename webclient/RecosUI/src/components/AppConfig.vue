@@ -55,7 +55,7 @@
     class="p-button-sm"
   />
   <Dialog header="About" v-model:visible="helpAboutVisible">
-    This is ReCoS V{{ this.$store.state.packageVersion }} <br />For more info
+    This is ReCoS V{{ this.$appVersion }} <br />For more info
     see:<br />
     <a
       href="https://github.com/willie68/ReCoS-Remote-Command-Service"
@@ -167,18 +167,8 @@ export default {
     },
   },
   mounted() {
-    let servicePort = this.$store.state.servicePort;
-    let basepath =
-      window.location.protocol +
-      "//" +
-      window.location.hostname +
-      ":" +
-      servicePort +
-      "/api/v1/";
-    this.$store.commit("baseURL", basepath);
-    console.log(`Updating to ${basepath}`);
     let that = this;
-    that.profileURL = basepath + "profiles";
+    that.profileURL = this.$baseURL + "profiles";
     console.log("page profiles url:" + that.profileURL);
 
     fetch(that.profileURL)

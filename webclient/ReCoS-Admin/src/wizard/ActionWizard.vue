@@ -223,7 +223,7 @@ export default {
       myHeaders.append("Content-Type", "application/json");
       myHeaders.append(
         "Authorization",
-        `Basic ${btoa(`admin:${this.$store.state.password}`)}`
+        `Basic ${btoa(`admin:${this.$appStore.password}`)}`
       );
       myHeaders.append("X-mcs-profile", this.activeProfile.name);
 
@@ -245,17 +245,9 @@ export default {
     },
   },
   mounted() {
-    this.iconlist = this.$store.state.iconlist;
-    let that = this;
-    this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type === "iconlist") {
-        that.iconlist = state.iconlist;
-      }
-    });
+    this.iconlist = this.$iconlist;
   },
-  beforeUnmount() {
-    this.unsubscribe();
-  },
+  beforeUnmount() {},
   watch: {
     visible(visible) {
       this.dialogVisible = visible;

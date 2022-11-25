@@ -1,6 +1,6 @@
 <template>
   <div class="footer">
-    ReCoS Admin V{{ this.appVersion }} - Remote Command Service - (C) 2022 Wilfried Klaas
+    ReCoS Admin V{{ this.$appVersion }} - Remote Command Service - (C) 2022 Wilfried Klaas
   </div>
 </template>
 

@@ -1,15 +1,10 @@
 @import './base.css';
 
-.no-border {
-  border-width: 0 !important ;
-}
-
 #app {
-  max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
-
   font-weight: normal;
+  width: 100%;
 }
 
 a,

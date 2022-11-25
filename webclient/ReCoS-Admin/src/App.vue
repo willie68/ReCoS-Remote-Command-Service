@@ -1,5 +1,5 @@
 <template>
-  <Toolbar class="p-pb-1 p-pt-1">
+  <Toolbar>
     <template #left>
       <b>ReCoS Admin</b>
       <p class="p-ml-6">Profiles:</p>
@@ -79,7 +79,7 @@
     v-on:cancel="this.settingsVisible = false"
   ></Settings>
   <Dialog header="About" v-model:visible="helpAboutVisible">
-    This is ReCoS V{{ this.store.state.packageVersion }} <br/>For more info see:<br />
+    This is ReCoS V{{ this.$appVersion }} <br/>For more info see:<br />
     <a
       href="https://github.com/willie68/ReCoS-Remote-Command-Service"
       target="_blank"
@@ -111,8 +111,6 @@ import AddProfile from "./components/AddProfile.vue";
 import ActionWizard from "./wizard/ActionWizard.vue";
 import Settings from "./settings/Settings.vue";
 import QRCodes from "./components/QRCodes.vue";
-import { useAppStore } from "@/stores/app";
-import { provide } from "vue";
 
 export default {
   components: {
@@ -215,9 +213,7 @@ export default {
       credits: "",
     };
   },
-  setup() {
-    provide("store", useAppStore());
-  },
+  setup() {},
   computed: {
     activeProfileName: {
       get: function () {
@@ -229,7 +225,7 @@ export default {
           this.profileName = newProfile;
           fetch(this.profileURL + "/" + this.profileName, {
             method: "GET",
-            headers: this.store.state.authheader,
+            headers: this.$appStore.authheader,
           })
             .then((res) => res.json())
             .then((data) => {
@@ -251,15 +247,13 @@ export default {
           that.isPwdOK = false;
           fetch(this.$baseURL + "config/check", {
             method: "GET",
-            headers: new Headers({
-              Authorization: `Basic ${btoa(`admin:${newPassword}`)}`,
-            }),
+            headers: this.$appStore.authheader,
           })
             .then((response) => {
               if (response.ok) {
                 console.log("authentication check ok");
                 that.isPwdOK = true;
-                that.$store.commit("password", newPassword);
+                that.$appStore.setPassword(newPassword);
               }
             })
             .catch((err) => {
@@ -290,14 +284,6 @@ export default {
           life: 3000,
         });
       });
-    let iconurl = this.$baseURL + "config/icons";
-    fetch(iconurl)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("icon list: " + data);
-        app.config.globalProperties.iconlist = data;
-      })
-      .catch((err) => console.log(err.message));
     fetch(this.$baseURL + "config/credits")
       .then((response) => {
         return response.text();
@@ -316,7 +302,7 @@ export default {
       this.qrCodesVisible = true;
     },
     startWebClient() {
-      let servicePort = this.$store.state.servicePort;
+      let servicePort = this.$appStore.servicePort;
       let url =
         window.location.protocol +
         "//" +
@@ -361,7 +347,7 @@ export default {
             console.log("APP: no authentication needed");
             that.isPWDNeeded = false;
             that.isPwdOK = true;
-            that.$store.commit("password", "");
+            that.$appStore.setPassword("");
           } else {
             console.log("APP: authentication needed");
           }
@@ -411,7 +397,7 @@ export default {
         body: JSON.stringify(this.activeProfile),
         headers: new Headers({
           "Content-Type": "application/json",
-          Authorization: `Basic ${btoa(`admin:${this.$store.state.password}`)}`,
+          Authorization: `Basic ${btoa(`admin:${this.$appStore.password}`)}`,
         }),
       })
         .then((response) => {
@@ -446,7 +432,7 @@ export default {
         body: JSON.stringify(profile),
         headers: new Headers({
           "Content-Type": "application/json",
-          Authorization: `Basic ${btoa(`admin:${this.$store.state.password}`)}`,
+          Authorization: `Basic ${btoa(`admin:${this.$appStore.password}`)}`,
         }),
       })
         .then((response) => {
@@ -479,9 +465,7 @@ export default {
       console.log("Delete profile:" + this.activeProfile.name);
       fetch(this.profileURL + "/" + this.activeProfile.name, {
         method: "DELETE",
-        headers: new Headers({
-          Authorization: `Basic ${btoa(`admin:${this.$store.state.password}`)}`,
-        }),
+        headers: this.$appStore.authheader,
       })
         .then((response) => {
           if (!response.ok) {

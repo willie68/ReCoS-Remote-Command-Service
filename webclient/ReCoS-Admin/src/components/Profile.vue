@@ -1,5 +1,5 @@
 <template>
-  <div class="p-pb-1 p-pt-1 p-pl-2">
+  <div>
     <div class="p-fluid p-mt-2">
       <div class="p-field p-grid">
         <label for="description" class="p-col-2 p-mb-2 p-md-2 p-mb-0 p-ml-2"

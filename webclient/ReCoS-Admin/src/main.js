@@ -1,6 +1,5 @@
 import { createApp } from "vue";
 import App from "./App.vue";
-import { createPinia } from "pinia";
 import "./assets/main.css";
 import mitt from "mitt";
 import PrimeVue from "primevue/config";
@@ -44,11 +43,11 @@ import ToastService from "primevue/toastservice";
 import Toolbar from "primevue/toolbar";
 import Tooltip from "primevue/tooltip";
 
+import "./stores/app.js";
+import { appStore } from "./stores/app.js";
+
 const emitter = mitt();
 const app = createApp(App);
-const pinia = createPinia();
-
-app.use(pinia);
 
 app.config.globalProperties.emitter = emitter;
 app.config.globalProperties.$servicePort = 9280;
@@ -61,6 +60,17 @@ let basepath =
   "/api/v1/";
 app.config.globalProperties.$baseURL = basepath;
 app.config.globalProperties.$appVersion = "0";
+appStore.baseURL = basepath;
+
+app.config.globalProperties.$appStore = appStore;
+
+let iconurl = basepath + "config/icons";
+fetch(iconurl)
+  .then((res) => res.json())
+  .then((data) => {
+    app.config.globalProperties.$iconlist = data;
+  })
+  .catch((err) => console.log(err.message));
 
 app.directive("badge", BadgeDirective);
 app.directive("tooltip", Tooltip);

@@ -315,9 +315,7 @@ export default {
           body: JSON.stringify(this.settings.settings[info.name]),
           headers: new Headers({
             "Content-Type": "application/json",
-            Authorization: `Basic ${btoa(
-              `admin:${this.$store.state.password}`
-            )}`,
+            Authorization: `Basic ${btoa(`admin:${this.$appStore.password}`)}`,
           }),
           mode: "cors",
         })
@@ -473,7 +471,7 @@ export default {
         mode: "cors",
         headers: new Headers({
           "Content-Type": "application/json",
-          Authorization: `Basic ${btoa(`admin:${this.$store.state.password}`)}`,
+          Authorization: `Basic ${btoa(`admin:${this.$appStore.password}`)}`,
         }),
       })
         .then((res) => res.json())
@@ -502,9 +500,7 @@ export default {
           body: JSON.stringify(settings),
           headers: new Headers({
             "Content-Type": "application/json",
-            Authorization: `Basic ${btoa(
-              `admin:${this.$store.state.password}`
-            )}`,
+            Authorization: `Basic ${btoa(`admin:${this.$appStore.password}`)}`,
           }),
           mode: "cors",
         })
@@ -531,17 +527,9 @@ export default {
     }
   },
   mounted() {
-    this.iconlist = this.$store.state.iconlist;
-    let that = this;
-    this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type === "iconlist") {
-        that.iconlist = state.iconlist;
-      }
-    });
+    this.iconlist = this.$iconlist;
   },
-  beforeUnmount() {
-    this.unsubscribe();
-  },
+  beforeUnmount() {},
   watch: {
     visible(visible) {
       this.dialogVisible = visible;
