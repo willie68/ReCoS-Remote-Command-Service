@@ -3,9 +3,43 @@
     <template #left>
       <b>ReCoS Admin</b>
       <p class="p-ml-6">Profiles:</p>
+      <Dropdown
+        v-tooltip="'select the profile to edit'"
+        class="p-ml-1 dropdownwidth"
+        v-model="activeProfileName"
+        :options="profiles"
+        placeholder="Select a Profile"
+      />
+      <SplitButton
+        v-tooltip="'Save'"
+        icon="pi pi-save"
+        :model="profileMenuItems"
+        class="p-button-warning"
+        @click="saveProfile()"
+      ></SplitButton>
+      <Button
+        v-tooltip="'start Action Wizard'"
+        icon="pi pi-flag"
+        class="p-mr-1 p-button-warning"
+        @click="this.emitter.emit('show-wizard', true)"
+      />
+      <div v-if="profileDirty">*</div>
     </template>
 
     <template #right>
+      <span v-if="isPWDNeeded" class="p-input-icon-right">
+        Password
+        <InputText
+          ref="pwd"
+          v-model="password"
+          :type="pwdType"
+          name="password"
+          :class="{ 'p-valid': isPwdOK, 'p-invalid': !isPwdOK }"
+        />
+        <i class="pi pi-eye-slash" @click="togglePwdView()" />
+        <i v-if="!showPwd" class="pi pi-eye-slash" @click="togglePwdView()" />
+        <i v-if="showPwd" class="pi pi-eye" @click="togglePwdView()" />
+      </span>
       <Button
         icon="pi pi-eye"
         class="p-mr-1"
@@ -22,8 +56,28 @@
     </template>
   </Toolbar>
 
+  <Profile :profile="activeProfile"></Profile>
   <AppFooter></AppFooter>
+  <AddProfile
+    :visible="dialogProfileVisible"
+    v-on:save="saveNewProfile($event)"
+    v-on:cancel="this.dialogProfileVisible = false"
+    :profiles="profiles"
+    style="{width: '60vw'}"
+  ></AddProfile>
   <Toast position="top-right" />
+  <ConfirmDialog></ConfirmDialog>
+  <ActionWizard
+    :visible="actionWizardVisible"
+    v-on:save="saveWizardProfile($event)"
+    v-on:cancel="this.actionWizardVisible = false"
+    :profile="activeProfile"
+  ></ActionWizard>
+  <Settings
+    :visible="settingsVisible"
+    v-on:save="saveSettings($event)"
+    v-on:cancel="this.settingsVisible = false"
+  ></Settings>
   <Dialog header="About" v-model:visible="helpAboutVisible">
     This is ReCoS V{{ this.$appVersion }} <br/>For more info see:<br />
     <a
@@ -46,14 +100,26 @@
       />
     </template>
   </Dialog>
+  <QRCodes :visible="qrCodesVisible" v-on:close="this.qrCodesVisible = false">
+  </QRCodes>
 </template>
 
 <script>
+import Profile from "./components/Profile.vue";
 import AppFooter from "./components/AppFooter.vue";
+import AddProfile from "./components/AddProfile.vue";
+import ActionWizard from "./wizard/ActionWizard.vue";
+import Settings from "./settings/Settings.vue";
+import QRCodes from "./components/QRCodes.vue";
 
 export default {
   components: {
+    Profile,
     AppFooter,
+    AddProfile,
+    ActionWizard,
+    Settings,
+    QRCodes,
   },
   data() {
     return {
