@@ -1,18 +1,17 @@
 <template>
   <Toolbar>
-    <template #left>
+    <template #start>
       <b>ReCoS Admin</b>
-      <p class="p-ml-6">Profiles:</p>
+      <p class="ml-6">Profiles:</p>
     </template>
 
-    <template #right>
+    <template #end>
       <Button
         icon="pi pi-eye"
-        class="p-mr-1"
         @click="startWebClient"
         v-tooltip="'Show web client'"
       />
-      <Button icon="pi pi-bars" class="p-mr-1" @click="toggleHelpMenu" />
+      <Button icon="pi pi-bars" @click="toggleHelpMenu" />
       <Menu
         id="overlay_menu"
         ref="helpmenu"
