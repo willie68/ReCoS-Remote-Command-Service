@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "./webclient/RecosUI"
+		},
+		{
+			"path": "../Virtual-TPS"
+		},
+		{
+			"path": "./webclient/ReCoS-Admin"
+		},
+		{
+			"path": "./service"
+		}
+	],
+	"settings": {
+		"editor.tabSize": 2
+	}
+}

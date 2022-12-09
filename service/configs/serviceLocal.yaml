@@ -2,7 +2,7 @@ port: 9280
 sslport: 0
 serviceURL: http://127.0.0.1:9280
 secretfile: ""
-password: ""
+password: "akteon00"
 appid: 73
 appuuid: dev_system
 healthcheck:

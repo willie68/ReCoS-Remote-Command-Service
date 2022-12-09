@@ -2,16 +2,20 @@
   <Toolbar>
     <template #start>
       <b>ReCoS Admin</b>
-      <p class="ml-6">Profiles:</p>
+      <p class="ml-6">active Profile: {{ this.activeProfile.name }}</p>
     </template>
 
     <template #end>
       <Button
         icon="pi pi-eye"
         @click="startWebClient"
-        v-tooltip="'Show web client'"
+        v-tooltip.bottom="'Start web client'"
       />
-      <Button icon="pi pi-bars" @click="toggleHelpMenu" />
+      <Button
+        icon="pi pi-bars" 
+        @click="toggleHelpMenu"
+        v-tooltip.bottom="'Show main menu'"
+      />
       <Menu
         id="overlay_menu"
         ref="helpmenu"
@@ -22,9 +26,14 @@
   </Toolbar>
 
   <AppFooter></AppFooter>
-  <Toast position="top-right" />
-  <Dialog header="About" v-model:visible="helpAboutVisible">
-    This is ReCoS V{{ this.$appVersion }} <br/>For more info see:<br />
+  <Toast position="bottom-right" />
+  <Dialog
+    header="About"
+    v-model:visible="helpAboutVisible"
+    :style="{ width: '20vw' }"
+  >
+    <Image src="./assets/recos.svg" alt="ReCoS image" width="80" /><br />
+    This is ReCoS V{{ this.$appVersion }} <br />For more info see:
     <a
       href="https://github.com/willie68/ReCoS-Remote-Command-Service"
       target="_blank"
@@ -34,7 +43,11 @@
       <Button label="OK" icon="pi pi-check" @click="closeHelpAbout" autofocus />
     </template>
   </Dialog>
-  <Dialog header="Credits" v-model:visible="helpCreditsVisible">
+  <Dialog
+    header="Credits" 
+    v-model:visible="helpCreditsVisible"
+    :style="{ width: '30vw' }"
+  >
     <div v-html="credits"></div>
     <template #footer>
       <Button
@@ -45,14 +58,25 @@
       />
     </template>
   </Dialog>
+  <QRCodes :visible="qrCodesVisible" v-on:close="this.qrCodesVisible = false">
+  </QRCodes>
+  <Settings
+    :visible="settingsVisible"
+    v-on:save="saveSettings($event)"
+    v-on:cancel="this.settingsVisible = false"
+  ></Settings>
 </template>
 
 <script>
 import AppFooter from "./components/AppFooter.vue";
+import QRCodes from "./components/QRCodes.vue";
+import Settings from "./settings/Settings.vue";
 
 export default {
   components: {
     AppFooter,
+    QRCodes,
+    Settings,
   },
   data() {
     return {
