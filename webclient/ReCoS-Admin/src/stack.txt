@@ -1,0 +1,48 @@
+      <Dropdown
+        v-tooltip="'select the profile to edit'"
+        class="ml-1 dropdownwidth"
+        v-model="activeProfileName"
+        :options="profiles"
+        placeholder="Select a Profile"
+      />
+      <SplitButton
+        v-tooltip="'Save'"
+        icon="pi pi-save"
+        :model="profileMenuItems"
+        class="p-button-warning"
+        @click="saveProfile()"
+      ></SplitButton>
+      <Button
+        v-tooltip="'start Action Wizard'"
+        icon="pi pi-flag"
+        class="p-mr-1 p-button-warning"
+        @click="this.emitter.emit('show-wizard', true)"
+      />
+      <div v-if="profileDirty">*</div>
+      <span v-if="isPWDNeeded" class="p-input-icon-right">
+        Password
+        <InputText
+          ref="pwd"
+          v-model="password"
+          :type="pwdType"
+          name="password"
+          :class="{ 'p-valid': isPwdOK, 'p-invalid': !isPwdOK }"
+        />
+        <i class="pi pi-eye-slash" @click="togglePwdView()" />
+        <i v-if="!showPwd" class="pi pi-eye-slash" @click="togglePwdView()" />
+        <i v-if="showPwd" class="pi pi-eye" @click="togglePwdView()" />
+      </span>
+      <Button
+        icon="pi pi-eye"
+        class="p-mr-1"
+        @click="startWebClient"
+        v-tooltip="'Show web client'"
+      />
+      <Button icon="pi pi-bars" class="p-mr-1" @click="toggleHelpMenu" />
+      <Menu
+        id="overlay_menu"
+        ref="helpmenu"
+        :model="helpMenuItems"
+        :popup="true"
+      />
+

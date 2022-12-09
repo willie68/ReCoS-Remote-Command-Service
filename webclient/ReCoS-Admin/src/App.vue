@@ -172,7 +172,7 @@ export default {
     },
     password: {
       get: function () {
-        return this.store.state.password;
+        return this.$appStore.password;
       },
       set: function (newPassword) {
         if (newPassword) {

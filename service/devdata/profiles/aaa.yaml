@@ -1,3 +1,5 @@
+group: ""
+label: ""
 name: aaa
 description: This is the default configuration, just to have one starting point
 pages:
@@ -322,7 +324,7 @@ actions:
       outlined: false
       runone: true
       commands:
-        - id: ""
+        - id: DICE_14
           type: DICE
           name: dice_1
           description: new DICE command created by ActionWizard

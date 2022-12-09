@@ -11,6 +11,9 @@
 		},
 		{
 			"path": "../ReCoS-Admin"
+		},
+		{
+			"path": "../../service"
 		}
 	],
 	"settings": {
